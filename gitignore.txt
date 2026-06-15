@@ -1,0 +1,70 @@
+# =========================
+# Git 내부 폴더
+# =========================
+.git/
+
+# =========================
+# Eclipse Workspace
+# =========================
+.metadata/
+**/.metadata/
+Servers/
+Servers2/
+**/Servers/
+*.launch
+*.prefs
+*.snap
+*.index
+*.dat
+*.lock
+*.lock_info
+
+# =========================
+# Eclipse Project Setting
+# =========================
+.settings/
+**/.settings/
+.project
+.classpath
+.factorypath
+
+# =========================
+# Java Build Output
+# =========================
+*.class
+bin/
+build/
+target/
+out/
+**/build/
+**/bin/
+**/target/
+
+# =========================
+# Tomcat / WTP
+# =========================
+.metadata/.plugins/org.eclipse.wst.server.core/
+**/.plugins/org.eclipse.wst.server.core/
+wtpwebapps/
+work/
+tmp/
+
+# =========================
+# Log
+# =========================
+*.log
+LOG
+LOG.old
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE / Cache
+# =========================
+.cache/
+*.ser
+*.xmi
