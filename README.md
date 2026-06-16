@@ -23,10 +23,10 @@ ShoppingMall-project는 쇼핑몰 화면 설계서를 기반으로 제작하는 
 
 | 이름 | 담당 파트 |
 |---|---|
-| 허민재 | 메인, 상품 프로세스, 회사 소개 |
-| 양지웅 | 회원 인증, 마이페이지 |
-| 정인길 | 고객센터, 약관/정책 |
-| 최수빈 | 관리자 웹 시스템 |
+| 허민재 | ... |
+| 양지웅 | ... |
+| 정인길 |... |
+| 최수빈 | ... |
 
 ---
 
@@ -34,122 +34,68 @@ ShoppingMall-project는 쇼핑몰 화면 설계서를 기반으로 제작하는 
 
 ### 👤 허민재 - 메인, 상품 프로세스 및 회사 소개
 
-사용자가 처음 진입하는 쇼핑몰 메인 화면과 상품 구매 흐름, 회사 소개 페이지를 담당합니다.
+페이지를 담당합니다.
 
 #### 담당 영역
 
 - 쇼핑몰 메인 화면
-- 상품 목록, 상세, 검색 결과 화면
-- 장바구니, 주문/결제, 주문 완료 화면
-- 회사 소개 및 기업 정보 관련 화면
 
 #### 담당 페이지
 
 ```plaintext
 index.html
-product/list.html
-product/view.html
-product/search.html
-product/cart.html
-product/order.html
-product/complete.html
-company/
 ```
 
 ---
 
 ### 👤 양지웅 - 회원 인증 및 마이페이지
 
-사용자의 가입, 로그인 기능과 로그인 이후 개인 활동 내역을 확인하는 마이페이지 영역을 담당합니다.
+영역을 담당합니다.
 
 #### 담당 영역
 
 - 로그인 및 회원가입
-- 약관 동의
-- 주문내역, 포인트, 쿠폰 조회
-- 리뷰, 문의 내역 관리
-- 회원정보 수정
 
 #### 담당 페이지
 
 ```plaintext
 member/login.html
-member/signup.html
-member/register.html
-my/home.html
-my/ordered.html
-my/point.html
-my/coupon.html
-my/review.html
-my/qna.html
-my/info.html
 ```
 
 ---
 
 ### 👤 정인길 - 고객센터 및 약관/정책
 
-게시판 중심의 고객센터 화면과 쇼핑몰 운영에 필요한 약관 및 정책 페이지를 담당합니다.
+ 페이지를 담당합니다.
 
 #### 담당 영역
 
 - 고객센터 메인
-- 공지사항 목록 및 상세보기
-- FAQ 목록 및 상세보기
-- 1:1 문의 목록, 상세보기, 글쓰기
-- 구매자/판매자 약관 및 개인정보처리방침
+
 
 #### 담당 페이지
 
 ```plaintext
 cs/index.html
-cs/notice/list.html
-cs/notice/view.html
-cs/faq/list.html
-cs/faq/view.html
-cs/qna/list.html
-cs/qna/view.html
-cs/qna/write.html
-policy/buyer.html
-policy/seller.html
-policy/finance.html
-policy/location.html
-policy/privacy.html
+
 ```
 
 ---
 
 ### 👤 최수빈 - Admin 관리자 웹 시스템
 
-쇼핑몰 운영진과 판매자가 사용하는 관리자 백오피스 화면을 담당합니다.
+화면을 담당합니다.
 
 #### 담당 영역
 
 - 관리자 메인 대시보드
-- 환경설정 및 배너 관리
-- 상품 목록 및 상품 등록
-- 공지사항, FAQ, 문의 관리
-- 고객 게시글 답변 처리
+
 
 #### 담당 페이지
 
 ```plaintext
 admin/index.html
-admin/config/info.html
-admin/config/banner.html
-admin/product/list.html
-admin/product/register.html
-admin/cs/notice/list.html
-admin/cs/notice/view.html
-admin/cs/notice/write.html
-admin/cs/notice/modify.html
-admin/cs/faq/list.html
-admin/cs/faq/view.html
-admin/cs/faq/write.html
-admin/cs/faq/modify.html
-admin/cs/qna/list.html
-admin/cs/qna/view.html
-admin/cs/qna/reply.html
+
 ```
 
 ---
