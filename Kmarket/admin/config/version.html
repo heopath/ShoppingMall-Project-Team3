@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>버전관리</title>
+    <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/logout">로그아웃</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+
+        <aside class="sidebar">
+            <ul class="admin-menu">
+
+                <li class="menu-title" onclick="toggleConfigMenu()">
+                    ⚙ 환경설정
+                </li>
+
+                <li class="sub-menu-wrap open" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu">
+                            <a href="/admin/config/basic">- 기본설정</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/config/banner">- 배너관리</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/config/policy">- 약관관리</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/config/category">- 카테고리</a>
+                        </li>
+                        <li class="sub-menu active">
+                            <a href="/admin/config/version">- 버전관리</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="/admin/shop/list">👥 상점관리</a>
+                </li>
+                <li>
+                    <a href="/admin/member/list">👤 회원관리</a>
+                </li>
+                <li>
+                    <a href="/admin/product/list">📦 상품관리</a>
+                </li>
+                <li>
+                    <a href="/admin/order/list">🧾 주문관리</a>
+                </li>
+                <li>
+                    <a href="/admin/cs/list">💬 고객센터</a>
+                </li>
+
+            </ul>
+        </aside>
+
+        <main class="content">
+
+            <div class="page-title">
+                <h2>버전관리</h2>
+                <span>HOME &gt; 환경설정 &gt; 버전관리</span>
+            </div>
+
+            <section class="version-section">
+
+                <h3>버전목록</h3>
+
+                <p class="version-desc">
+                    사이트 버전 목록 입니다.
+                </p>
+
+                <table class="version-table">
+                    <thead>
+                    <tr>
+                        <th class="check-cell">
+                            <input type="checkbox">
+                        </th>
+                        <th>번호</th>
+                        <th>버전</th>
+                        <th>작성자</th>
+                        <th>등록일시</th>
+                        <th>변경내역</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td class="check-cell">
+                            <input type="checkbox">
+                        </td>
+                        <td>1</td>
+                        <td>0.0.1-SNAPSHOT</td>
+                        <td>chhako503</td>
+                        <td>2024.10.13 17:12:00</td>
+                        <td>
+                            <a href="#" class="version-link">[ 확인 ]</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="check-cell">
+                            <input type="checkbox">
+                        </td>
+                        <td>2</td>
+                        <td>0.0.2-SNAPSHOT</td>
+                        <td>chhako503</td>
+                        <td>2024.10.14 17:12:00</td>
+                        <td>
+                            <a href="#" class="version-link">[ 확인 ]</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="check-cell">
+                            <input type="checkbox">
+                        </td>
+                        <td>3</td>
+                        <td>0.0.3-SNAPSHOT</td>
+                        <td>chhako503</td>
+                        <td>2024.10.15 17:12:00</td>
+                        <td>
+                            <a href="#" class="version-link">[ 확인 ]</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="check-cell">
+                            <input type="checkbox">
+                        </td>
+                        <td>4</td>
+                        <td>0.0.4-SNAPSHOT</td>
+                        <td>chhako503</td>
+                        <td>2024.10.16 17:12:00</td>
+                        <td>
+                            <a href="#" class="version-link">[ 확인 ]</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="version-bottom">
+                    <button type="button" class="btn-delete">선택삭제</button>
+
+                    <div class="pagination">
+                        <a href="#">이전</a>
+                        <a href="#">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">다음</a>
+                    </div>
+
+                    <button type="button" class="btn-register">등록</button>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+
+</div>
+
+<script>
+    function toggleConfigMenu() {
+        const menu = document.getElementById("configMenu");
+
+        if (menu.style.display === "none" || menu.style.display === "") {
+            menu.style.display = "block";
+        } else {
+            menu.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
