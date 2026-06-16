@@ -1,0 +1,99 @@
+/* =========================================================
+   10. 기본설정 페이지 테이블
+   - basic.jsp에 적용
+========================================================= */
+.config-section {
+    width: 100%;
+    margin-bottom: 22px;
+}
+
+.config-table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #b9cbb0;
+    background: #fff;
+}
+
+.config-table th {
+    height: 34px;
+    padding: 0 12px;
+    background: #f1f8ed;
+    border-bottom: 1px solid #d7e4d1;
+    color: #555;
+    text-align: left;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.config-table td {
+    height: 37px;
+    padding: 6px 10px;
+    border-bottom: 1px solid #d7e4d1;
+    color: #444;
+    font-size: 12px;
+}
+
+.config-table td:first-child {
+    width: 125px;
+    background: #fbfef9;
+    color: #111;
+    text-align: center;
+    font-weight: bold;
+}
+
+.config-table input[type="text"] {
+    width: 260px;
+    height: 27px;
+    padding: 0 8px;
+    border: 1px solid #bdd5b4;
+    border-radius: 2px;
+    color: #333;
+    font-size: 12px;
+}
+
+.config-table input[type="text"]:focus {
+    border-color: #31aa00;
+    outline: none;
+}
+
+.file-btn {
+    height: 25px;
+    padding: 0 10px;
+    border: 1px solid #bdd5b4;
+    border-radius: 2px;
+    background: #f7fff2;
+    color: #333;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.file-btn:hover {
+    border-color: #31aa00;
+    color: #249600;
+}
+
+.btn-area {
+    margin-top: 8px;
+    text-align: right;
+}
+
+.submit-btn {
+    min-width: 80px;
+    height: 31px;
+    padding: 0 14px;
+    border: 1px solid #31aa00;
+    border-radius: 4px;
+    background: #f0faea;
+    color: #249600;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #31aa00;
+    color: #fff;
+}
+
+

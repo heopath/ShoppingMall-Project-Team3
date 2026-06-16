@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>관리자 배너관리</title>
-    <link rel="stylesheet" href="../../css/admin.css">
+    <link rel="stylesheet" href="../../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin/config/banner.css">
 </head>
 <body>
 
@@ -191,12 +192,82 @@
 
                 <div class="banner-btn-area">
                     <button type="button" class="delete-btn">선택삭제</button>
-                    <button type="button" class="register-btn">배너등록</button>
+                    <button type="button" class="register-btn" id="openBannerModal">배너등록</button>
                 </div>
 
             </section>
 
+            
         </main>
+        <!-- 배너 등록 모달 -->
+<div id="bannerModal" class="modal-overlay">
+    <div class="banner-modal">
+        <div class="banner-modal-header">
+            <h3>배너등록</h3>
+            <button type="button" class="modal-close" id="closeBannerModal">X</button>
+        </div>
+
+        <div class="banner-modal-body">
+            <table class="banner-form-table">
+                <tr>
+                    <th>배너이름</th>
+                    <td><input type="text" placeholder="배너이름입력"></td>
+                </tr>
+                <tr>
+                    <th>배너크기</th>
+                    <td><input type="text" placeholder="배너크기입력"></td>
+                </tr>
+                <tr>
+                    <th>배경색</th>
+                    <td><input type="text" placeholder="배너배경색입력"></td>
+                </tr>
+                <tr>
+                    <th>배너링크</th>
+                    <td><input type="text" placeholder="배너링크입력"></td>
+                </tr>
+                <tr>
+                    <th>배너위치</th>
+                    <td>
+                        <select>
+                            <option>선택</option>
+                            <option>MAIN1</option>
+                            <option>MAIN2</option>
+                            <option>SUB1</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>노출날짜</th>
+                    <td class="inline-fields">
+                        <input type="text" placeholder="년-월-일">
+                        <span>~</span>
+                        <input type="text" placeholder="년-월-일">
+                    </td>
+                </tr>
+                <tr>
+                    <th>노출시간</th>
+                    <td class="inline-fields">
+                        <input type="text" placeholder="시-분-초">
+                        <span>~</span>
+                        <input type="text" placeholder="시-분-초">
+                    </td>
+                </tr>
+                <tr>
+                    <th>배너파일</th>
+                    <td class="file-row">
+                        <input type="file">
+                        <span class="file-guide">노출 위치에 맞는 크기 권장</span>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="banner-modal-btn-area">
+                <button type="button" class="banner-submit-btn">등록하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     </div>
 
     <footer>
@@ -208,8 +279,31 @@
 <script>
     function toggleConfigMenu() {
         const menu = document.getElementById("configMenu");
-        menu.classList.toggle("close");
+
+        if (menu.style.display === "none" || menu.style.display === "") {
+            menu.style.display = "block";
+        } else {
+            menu.style.display = "none";
+        }
     }
+
+    const bannerModal = document.getElementById("bannerModal");
+    const openBannerModal = document.getElementById("openBannerModal");
+    const closeBannerModal = document.getElementById("closeBannerModal");
+
+    openBannerModal.addEventListener("click", function () {
+        bannerModal.classList.add("show");
+    });
+
+    closeBannerModal.addEventListener("click", function () {
+        bannerModal.classList.remove("show");
+    });
+
+    bannerModal.addEventListener("click", function (e) {
+        if (e.target === bannerModal) {
+            bannerModal.classList.remove("show");
+        }
+    });
 </script>
 
 </body>

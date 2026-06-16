@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>버전관리</title>
-    <link rel="stylesheet" href="../../css/admin.css">
+    <link rel="stylesheet" href="../../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin/config/version.css">
 </head>
 <body>
 
@@ -106,7 +107,7 @@
                         <td>chhako503</td>
                         <td>2024.10.13 17:12:00</td>
                         <td>
-                            <a href="#" class="version-link">[ 확인 ]</a>
+                            <a href="#" class="version-link openVersionView">[ 확인 ]</a>
                         </td>
                     </tr>
 
@@ -164,12 +165,81 @@
                         <a href="#">다음</a>
                     </div>
 
-                    <button type="button" class="btn-register">등록</button>
+                    <button type="button" class="btn-register" id="openVersionWriteModal">등록</button>
                 </div>
 
             </section>
 
+            
         </main>
+
+        <!-- 버전확인 모달 -->
+<div id="versionViewModal" class="modal-overlay">
+    <div class="version-modal version-view-modal">
+        <div class="version-modal-header">
+            <h3>버전확인</h3>
+            <button type="button" class="modal-close" id="closeVersionViewModal">X</button>
+        </div>
+
+        <div class="version-modal-body">
+            <table class="version-modal-table">
+                <tr>
+                    <th>버전</th>
+                    <td>0.0.1-SNAPSHOT</td>
+                </tr>
+                <tr>
+                    <th>변경내역</th>
+                    <td>
+                        <ul class="version-history-list">
+                            <li>프로젝트 생성 전 전체 구조 설계</li>
+                            <li>회원가입 / 로그인 / 장바구니 모듈</li>
+                            <li>관리자 상품 등록 완료</li>
+                            <li>쇼핑몰 메인 및 카테고리 UI 시안 구성</li>
+                            <li>개발용 파일 및 세부 사항 처리</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="version-modal-btn-area">
+                <button type="button" class="version-green-btn" id="bottomCloseVersionViewModal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 버전등록 모달 -->
+<div id="versionWriteModal" class="modal-overlay">
+    <div class="version-modal version-write-modal">
+        <div class="version-modal-header">
+            <h3>버전등록</h3>
+            <button type="button" class="modal-close" id="closeVersionWriteModal">X</button>
+        </div>
+
+        <div class="version-modal-body">
+            <table class="version-modal-table">
+                <tr>
+                    <th>버전</th>
+                    <td>
+                        <input type="text" class="version-input" placeholder="버전입력하기">
+                    </td>
+                </tr>
+                <tr>
+                    <th>변경내역</th>
+                    <td>
+                        <textarea class="version-textarea" placeholder="변경내역작성하기"></textarea>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="version-modal-btn-area">
+                <button type="button" class="version-green-btn">등록하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     </div>
 
     <footer>
@@ -188,6 +258,51 @@
             menu.style.display = "none";
         }
     }
+
+    // 버전확인 모달
+    const versionViewModal = document.getElementById("versionViewModal");
+    const openVersionViewButtons = document.querySelectorAll(".openVersionView");
+    const closeVersionViewModal = document.getElementById("closeVersionViewModal");
+    const bottomCloseVersionViewModal = document.getElementById("bottomCloseVersionViewModal");
+
+    openVersionViewButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            versionViewModal.classList.add("show");
+        });
+    });
+
+    closeVersionViewModal.addEventListener("click", function () {
+        versionViewModal.classList.remove("show");
+    });
+
+    bottomCloseVersionViewModal.addEventListener("click", function () {
+        versionViewModal.classList.remove("show");
+    });
+
+    versionViewModal.addEventListener("click", function (e) {
+        if (e.target === versionViewModal) {
+            versionViewModal.classList.remove("show");
+        }
+    });
+
+    // 버전등록 모달
+    const versionWriteModal = document.getElementById("versionWriteModal");
+    const openVersionWriteModal = document.getElementById("openVersionWriteModal");
+    const closeVersionWriteModal = document.getElementById("closeVersionWriteModal");
+
+    openVersionWriteModal.addEventListener("click", function () {
+        versionWriteModal.classList.add("show");
+    });
+
+    closeVersionWriteModal.addEventListener("click", function () {
+        versionWriteModal.classList.remove("show");
+    });
+
+    versionWriteModal.addEventListener("click", function (e) {
+        if (e.target === versionWriteModal) {
+            versionWriteModal.classList.remove("show");
+        }
+    });
 </script>
 
 </body>
