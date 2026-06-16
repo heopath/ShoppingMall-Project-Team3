@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>카테고리</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/member/login">로그인</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+
+        <aside class="sidebar">
+            <ul class="admin-menu">
+
+                <li class="menu-title" onclick="toggleConfigMenu()">
+                    ⚙ 환경설정
+                </li>
+
+                <li class="sub-menu-wrap open" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu">
+                            <a href="/admin/config/basic">- 기본설정</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/config/banner">- 배너관리</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/config/policy">- 약관관리</a>
+                        </li>
+                        <li class="sub-menu active">
+                            <a href="/admin/config/category">- 카테고리</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/config/version">- 버전관리</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="/admin/shop/list">👥 상점관리</a>
+                </li>
+                <li>
+                    <a href="/admin/member/list">👤 회원관리</a>
+                </li>
+                <li>
+                    <a href="/admin/product/list">📦 상품관리</a>
+                </li>
+                <li>
+                    <a href="/admin/order/list">🧾 주문관리</a>
+                </li>
+                <li>
+                    <a href="/admin/cs/list">💬 고객센터</a>
+                </li>
+
+            </ul>
+        </aside>
+
+        <main class="content">
+
+            <div class="page-title">
+                <h2>카테고리</h2>
+                <span>HOME &gt; 환경설정 &gt; 카테고리</span>
+            </div>
+
+            <section class="category-section">
+
+                <h3>카테고리 관리</h3>
+
+                <p class="category-desc">
+                    쇼핑몰 메인, 상품 페이지 사이드 카테고리 메뉴입니다.
+                </p>
+
+                <div class="category-box">
+
+                    <ul class="category-list">
+
+                        <li class="category-item open">
+                            <div class="category-main">
+                                <button type="button" class="category-toggle">▼</button>
+                                <span>여성패션</span>
+                                <button type="button" class="category-delete">삭제</button>
+                            </div>
+
+                            <ul class="category-sub-list">
+                                <li>
+                                    <span>브랜드의류</span>
+                                    <button type="button">삭제</button>
+                                </li>
+                                <li>
+                                    <span>브랜드가방</span>
+                                    <button type="button">삭제</button>
+                                </li>
+                                <li>
+                                    <span>브랜드신발</span>
+                                    <button type="button">삭제</button>
+                                </li>
+                                <li>
+                                    <span>브랜드잡화</span>
+                                    <button type="button">삭제</button>
+                                </li>
+                                <li class="add-sub-category">
+                                    <button type="button">＋ 2차카테고리추가</button>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="category-item">
+                            <div class="category-main">
+                                <button type="button" class="category-toggle">▶</button>
+                                <span>남성패션</span>
+                                <button type="button" class="category-delete">삭제</button>
+                            </div>
+                        </li>
+
+                        <li class="category-item">
+                            <div class="category-main">
+                                <button type="button" class="category-toggle">▶</button>
+                                <span>식품</span>
+                                <button type="button" class="category-delete">삭제</button>
+                            </div>
+                        </li>
+
+                        <li class="category-item">
+                            <div class="category-main">
+                                <button type="button" class="category-toggle">▶</button>
+                                <span>생활 / 건강</span>
+                                <button type="button" class="category-delete">삭제</button>
+                            </div>
+                        </li>
+
+                        <li class="category-item">
+                            <div class="category-main">
+                                <button type="button" class="category-toggle">▶</button>
+                                <span>유아동</span>
+                                <button type="button" class="category-delete">삭제</button>
+                            </div>
+                        </li>
+
+                        <li class="category-item">
+                            <div class="category-main">
+                                <button type="button" class="category-toggle">▶</button>
+                                <span>가전</span>
+                                <button type="button" class="category-delete">삭제</button>
+                            </div>
+                        </li>
+
+                        <li class="add-main-category">
+                            <button type="button">＋ 1차카테고리추가</button>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <div class="category-info">
+                    카테고리 메뉴 순서를 변경할 때 드래그 앤 드롭으로 1차, 2차 카테고리 메뉴 이동 후 수정하기를 클릭합니다.
+                </div>
+
+                <div class="category-btn-area">
+                    <button type="button" class="category-save-btn">수정하기</button>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+
+</div>
+
+<script>
+    function toggleConfigMenu() {
+        const menu = document.getElementById("configMenu");
+
+        if (menu.style.display === "none" || menu.style.display === "") {
+            menu.style.display = "block";
+        } else {
+            menu.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

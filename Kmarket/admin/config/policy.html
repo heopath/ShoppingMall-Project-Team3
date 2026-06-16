@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>약관관리</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/member/login">로그인</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+
+        <aside class="sidebar">
+            <ul class="admin-menu">
+
+                <li class="menu-title" onclick="toggleConfigMenu()">
+                    ⚙ 환경설정
+                </li>
+
+                <li class="sub-menu-wrap open" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu">
+                            <a href="/admin/config/basic">- 기본설정</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/config/banner">- 배너관리</a>
+                        </li>
+                        <li class="sub-menu active">
+                            <a href="/admin/config/policy">- 약관관리</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/config/category">- 카테고리</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/config/version">- 버전관리</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="/admin/shop/list">👥 상점관리</a>
+                </li>
+                <li>
+                    <a href="/admin/member/list">👤 회원관리</a>
+                </li>
+                <li>
+                    <a href="/admin/product/list">📦 상품관리</a>
+                </li>
+                <li>
+                    <a href="/admin/order/list">🧾 주문관리</a>
+                </li>
+                <li>
+                    <a href="/admin/cs/list">💬 고객센터</a>
+                </li>
+
+            </ul>
+        </aside>
+
+        <main class="content">
+
+            <div class="page-title">
+                <h2>약관관리</h2>
+                <span>HOME &gt; 환경설정 &gt; 약관관리</span>
+            </div>
+
+            <section class="policy-section">
+
+                <article class="policy-box">
+                    <div class="policy-heading">
+                        <h3>구매회원 약관</h3>
+                    </div>
+
+                    <p class="policy-desc">회원가입 및 정책 페이지 노출 약관입니다.</p>
+
+                    <div class="policy-content">
+                        <div class="policy-label">약관내용</div>
+
+                        <div class="policy-text">
+                            <strong>제 1 조 (목적)</strong>
+                            <p>
+                                이 약관은 주식회사 케이마켓쇼핑몰이 운영하는 인터넷 쇼핑몰에서 제공하는
+                                전자상거래 관련 서비스의 이용과 관련하여 회사와 이용자의 권리, 의무 및
+                                책임사항을 규정함을 목적으로 합니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="policy-btn-area">
+                        <button type="button" class="policy-btn">수정하기</button>
+                    </div>
+                </article>
+
+                <article class="policy-box">
+                    <div class="policy-heading">
+                        <h3>판매회원 약관</h3>
+                    </div>
+
+                    <p class="policy-desc">판매회원 가입 및 정책 페이지 노출 약관입니다.</p>
+
+                    <div class="policy-content">
+                        <div class="policy-label">약관내용</div>
+
+                        <div class="policy-text">
+                            <strong>제 1 조 (목적)</strong>
+                            <p>
+                                이 약관은 판매자가 케이마켓에서 상품을 등록하고 판매하는 과정에서 필요한
+                                서비스 이용 조건, 판매자의 의무, 상품 관리 및 정산 기준을 규정함을 목적으로 합니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="policy-btn-area">
+                        <button type="button" class="policy-btn">수정하기</button>
+                    </div>
+                </article>
+
+                <article class="policy-box">
+                    <div class="policy-heading">
+                        <h3>전자금융거래 약관</h3>
+                    </div>
+
+                    <p class="policy-desc">전자금융 및 결제 페이지 노출 약관입니다.</p>
+
+                    <div class="policy-content">
+                        <div class="policy-label">약관내용</div>
+
+                        <div class="policy-text">
+                            <strong>제 1 조 (목적)</strong>
+                            <p>
+                                이 약관은 회사가 제공하는 전자지급결제대행 서비스 및 결제 관련 서비스의
+                                이용 조건과 절차, 회사와 이용자 간의 권리 및 책임사항을 정함을 목적으로 합니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="policy-btn-area">
+                        <button type="button" class="policy-btn">수정하기</button>
+                    </div>
+                </article>
+
+                <article class="policy-box">
+                    <div class="policy-heading">
+                        <h3>위치정보 이용약관</h3>
+                    </div>
+
+                    <p class="policy-desc">위치기반 서비스 제공을 위한 이용약관입니다.</p>
+
+                    <div class="policy-content">
+                        <div class="policy-label">약관내용</div>
+
+                        <div class="policy-text">
+                            <strong>제 1 조 (목적)</strong>
+                            <p>
+                                이 약관은 회사가 제공하는 위치정보 기반 서비스의 이용과 관련하여 회사와
+                                이용자의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="policy-btn-area">
+                        <button type="button" class="policy-btn">수정하기</button>
+                    </div>
+                </article>
+
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+
+</div>
+
+<script>
+    function toggleConfigMenu() {
+        const menu = document.getElementById("configMenu");
+
+        if (menu.style.display === "none" || menu.style.display === "") {
+            menu.style.display = "block";
+        } else {
+            menu.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
