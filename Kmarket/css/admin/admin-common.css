@@ -1,0 +1,318 @@
+/* =========================================================
+   1. 전체 초기화
+   - 모든 페이지 공통 기본 스타일
+   - index.html, basic.jsp, banner.jsp 전부 적용
+========================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "맑은 고딕", "Malgun Gothic", Arial, sans-serif;
+    font-size: 13px;
+    color: #333;
+    background: #f7faf4;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+button {
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   2. 관리자 전체 레이아웃
+   - 관리자 페이지 전체 폭 고정
+   - 기본설정/배너관리 페이지 넓이 차이 방지
+========================================================= */
+#admin-wrapper {
+    width: 960px;
+    min-width: 960px;
+    max-width: 960px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: #fff;
+    border-left: 1px solid #dbe8d4;
+    border-right: 1px solid #dbe8d4;
+
+    /* footer가 아래로 밀리도록 세로 flex 구성 */
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   3. 상단 헤더
+   - Kmarket 로고 / 홈 / 로그아웃 / 고객센터
+   - 상단 배너광고 영역 제거한 버전
+========================================================= */
+.admin-header {
+    position: relative;
+    height: 82px;
+    background: #fff;
+    border-bottom: 1px solid #d8e7d0;
+}
+
+.logo {
+    position: absolute;
+    left: 15px;
+    top: 25px;
+    width: 150px;
+    height: 35px;
+    line-height: 35px;
+    background: transparent;
+    color: #1e36d9;
+    font-size: 0;
+    font-weight: 800;
+}
+
+/* JSP에는 CI(로고)라고 있어도 화면에는 Kmarket으로 표시 */
+.logo::before {
+    content: "Kmarket";
+    font-size: 28px;
+    letter-spacing: -1px;
+}
+
+.top-menu {
+    position: absolute;
+    right: 15px;
+    top: 34px;
+    display: flex;
+    gap: 13px;
+}
+
+.top-menu a {
+    color: #566578;
+    font-size: 12px;
+}
+
+.top-menu a:hover {
+    color: #2ca300;
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   4. 본문 기본 구조
+   - 왼쪽 sidebar + 오른쪽 content
+========================================================= */
+.admin-body {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    background: #fff;
+}
+
+
+/* =========================================================
+   5. 왼쪽 사이드바
+   - index.html / basic.jsp / banner.jsp 공통 메뉴
+   - 환경설정 클릭 시 하위메뉴 열기/닫기
+========================================================= */
+.sidebar {
+    width: 190px;
+    min-width: 190px;
+    max-width: 190px;
+    flex-shrink: 0;
+    padding: 16px 14px 30px 14px;
+    border-right: 1px solid #e1eadc;
+    background: #fff;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.admin-menu {
+    width: 100%;
+}
+
+/* 1차 메뉴 공통 */
+.admin-menu > li {
+    width: 100%;
+    min-height: 40px;
+    line-height: 40px;
+    padding: 0 13px;
+    color: #111;
+    font-size: 13px;
+    font-weight: bold;
+    background: #fff;
+    border: 1px solid #d7e4d1;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+.admin-menu > li:last-child {
+    border-bottom: 1px solid #d7e4d1;
+}
+
+.admin-menu > li > a {
+    display: block;
+    color: inherit;
+}
+
+.admin-menu > li:hover {
+    background: #f0faea;
+    color: #249600;
+}
+
+/* 환경설정 1차 메뉴 */
+.admin-menu > .menu-title {
+    background: #31aa00;
+    border-color: #31aa00;
+    color: #fff;
+    font-size: 14px;
+}
+
+.admin-menu > .menu-title:hover {
+    background: #249600;
+    color: #fff;
+}
+
+/* 환경설정 하위 메뉴 감싸는 칸 */
+.admin-menu > .sub-menu-wrap {
+    display: block;
+    width: 100%;
+    min-height: 0;
+    line-height: normal;
+    padding: 0;
+    border: 1px solid #d7e4d1;
+    border-top: none;
+    border-bottom: none;
+    background: #fff;
+}
+
+/* JS에서 close 클래스가 붙으면 하위 메뉴 숨김 */
+.admin-menu > .sub-menu-wrap.close {
+    display: none;
+}
+
+.sub-menu-list {
+    width: 100%;
+}
+
+/* 환경설정 하위 메뉴 */
+.sub-menu-list .sub-menu {
+    width: 100%;
+    height: 31px;
+    line-height: 31px;
+    padding: 0 0 0 22px;
+    background: #fff;
+    border-bottom: 1px solid #d7e4d1;
+    color: #333;
+    font-size: 12px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.sub-menu-list .sub-menu a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: inherit;
+}
+
+.sub-menu-list .sub-menu:hover {
+    background: #eaf8e2;
+    color: #249600;
+}
+
+/* 현재 선택된 하위 메뉴 */
+.sub-menu-list .sub-menu.active {
+    background: #e8f8de;
+}
+
+.sub-menu-list .sub-menu.active a {
+    color: #249600;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   6. 오른쪽 공통 컨텐츠 영역
+   - 관리자 메인, 기본설정, 배너관리 공통
+========================================================= */
+.content {
+    flex: 1;
+    width: calc(960px - 190px);
+    max-width: calc(960px - 190px);
+    min-height: 760px;
+    padding: 22px 15px 40px;
+    background: #fff;
+    overflow: hidden;
+}
+
+/* 페이지 제목 영역 */
+.page-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 38px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #cddcc6;
+}
+
+.page-title h2 {
+    color: #111;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.page-title span {
+    padding-bottom: 8px;
+    color: #555;
+    font-size: 11px;
+}
+
+/* 공통 섹션 제목 */
+.summary-section,
+.status-section,
+.config-section,
+.banner-section,
+.board-section {
+    margin-top: 18px;
+}
+
+.summary-section h3,
+.status-section h3,
+.config-section h3,
+.banner-section h3,
+.board-box h3 {
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border-left: 3px solid #31aa00;
+    color: #111;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+
+
+
+/* =========================================================
+   12. 푸터
+   - 모든 관리자 페이지 하단
+========================================================= */
+footer {
+    height: 48px;
+    line-height: 48px;
+    padding-left: 14px;
+    background: #f7faf4;
+    border-top: 1px solid #d8e7d0;
+    color: #777;
+    font-size: 11px;
+}
+
+
+
+

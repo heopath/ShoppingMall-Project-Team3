@@ -1,0 +1,254 @@
+/* =========================
+   버전관리 페이지
+========================= */
+.version-section {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.version-section h3 {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #222;
+}
+
+.version-desc {
+    padding: 9px 12px;
+    margin-bottom: 10px;
+    border: 1px solid #e5e5e5;
+    background: #f7f7f7;
+    font-size: 12px;
+    color: #555;
+}
+
+.version-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #ccc;
+    font-size: 12px;
+    color: #333;
+}
+
+.version-table th {
+    height: 36px;
+    border-bottom: 1px solid #ddd;
+    background: #f8f8f8;
+    font-weight: bold;
+    text-align: center;
+}
+
+.version-table td {
+    height: 38px;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+}
+
+.version-table .check-cell {
+    width: 45px;
+}
+
+.version-link {
+    color: #333;
+    font-size: 12px;
+}
+
+.version-link:hover {
+    text-decoration: underline;
+}
+
+.version-bottom {
+    position: relative;
+    min-height: 45px;
+    margin-top: 10px;
+}
+
+.btn-delete {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 7px 14px;
+    border: none;
+    background: #bdbdbd;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-register {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 7px 22px;
+    border: none;
+    background: #9fc5f8;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: #999;
+}
+
+.btn-register:hover {
+    background: #6fa8dc;
+}
+
+.pagination {
+    padding-top: 10px;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 4px;
+    color: #111;
+    font-size: 13px;
+}
+
+.pagination a:hover {
+    text-decoration: underline;
+}
+
+
+
+
+
+/* =========================
+   버전관리 모달
+========================= */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 9999;
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+.version-modal {
+    background: #fff;
+    border: 1px solid #999;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.version-view-modal {
+    width: 560px;
+}
+
+.version-write-modal {
+    width: 560px;
+}
+
+.version-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 36px;
+    padding: 0 12px;
+    background: #3a3a3a;
+}
+
+.version-modal-header h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.modal-close {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.version-modal-body {
+    padding: 16px 16px 22px;
+}
+
+.version-modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #ddd;
+}
+
+.version-modal-table th {
+    width: 80px;
+    padding: 14px 12px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #f5f5f5;
+    text-align: left;
+    vertical-align: top;
+    font-size: 12px;
+    color: #333;
+}
+
+.version-modal-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 12px;
+    color: #333;
+    background: #fff;
+}
+
+.version-input {
+    width: 170px;
+    height: 28px;
+    padding: 0 8px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    color: #333;
+}
+
+.version-textarea {
+    width: 100%;
+    height: 115px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    resize: none;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #333;
+    box-sizing: border-box;
+}
+
+.version-history-list {
+    margin: 0;
+    padding-left: 14px;
+    line-height: 1.8;
+}
+
+.version-history-list li {
+    list-style: disc;
+    font-size: 12px;
+    color: #333;
+}
+
+.version-modal-btn-area {
+    margin-top: 18px;
+    text-align: center;
+}
+
+.version-green-btn {
+    min-width: 92px;
+    height: 32px;
+    border: none;
+    background: #35b34a;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.version-green-btn:hover {
+    background: #28953a;
+}
+
