@@ -4,21 +4,28 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>K-Market</title>
-        <link rel="stylesheet" href="./css/index1.css" />
+
+        <!-- bxSlider CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css" />
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="./css/main.css" />
     </head>
-    <body>
-        <!-- Top utility bar -->
+
+    <body id="top">
+        <!-- Top ad banner -->
         <div class="top-bar">
-            <div class="inner">
-                <a href="#">고객센터</a>
-                <a href="#">판매자센터</a>
-                <a href="#">앱 다운로드</a>
-            </div>
+            <a href="#" class="top-ad">
+                <img src="./images/main/vip_plcc_banner.png" alt="Kmarket 최상단 광고 배너" />
+            </a>
         </div>
 
         <!-- Header -->
         <header>
-            <a href="#" class="logo">K<span>market</span></a>
+            <a href="#" class="logo-img">
+                <img src="./images/main/header_logo.png" alt="Kmarket 로고" />
+            </a>
+
             <div class="search-box">
                 <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
                 <button aria-label="검색">
@@ -33,6 +40,7 @@
                     </svg>
                 </button>
             </div>
+
             <nav class="header-links">
                 <a href="#login">로그인</a>
                 <a href="#join">회원가입</a>
@@ -52,158 +60,247 @@
             </div>
         </nav>
 
-        <!-- Top banner -->
-        <div class="banner">
-            <div class="banner-img">
-                <div class="banner-text">
-                    <h2>오늘 하루, 특별한 가격</h2>
-                    <p>K market 단독 타임특가 · 무료배송 혜택</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main layout -->
-        <div class="main-layout">
-            <!-- Side category -->
+        <!-- Page layout : aside + right content -->
+        <div class="page-layout">
+            <!-- Left aside -->
             <aside class="side-cat">
-                <h3>카테고리</h3>
-                <ul>
-                    <li>
-                        <a href="#"><span class="icon">👕</span> 패션·의류·뷰티</a>
-                    </li>
-                    <li>
-                        <a href="#"><span class="icon">💻</span> 가전·디지털</a>
-                    </li>
-                    <li>
-                        <a href="#"><span class="icon">🍎</span> 식품·생필품</a>
-                    </li>
-                    <li>
-                        <a href="#"><span class="icon">🏠</span> 홈·문구·취미</a>
-                    </li>
-                </ul>
+                <!-- Category: 일반 영역, sticky 아님 -->
+                <div class="category-box">
+                    <h3>카테고리</h3>
+                    <ul class="category-list">
+                        <li>
+                            <a href="#"><span class="icon">👕</span> 패션·의류·뷰티</a>
+                        </li>
+                        <li>
+                            <a href="#"><span class="icon">💻</span> 가전·디지털</a>
+                        </li>
+                        <li>
+                            <a href="#"><span class="icon">🍎</span> 식품·생필품</a>
+                        </li>
+                        <li>
+                            <a href="#"><span class="icon">🏠</span> 홈·문구·취미</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Best products: 이 부분만 sticky -->
+                <div class="side-best-sticky">
+                    <div class="side-best">
+                        <h3>베스트 상품</h3>
+
+                        <div class="side-best-list">
+                            <a href="#" class="side-best-item best-first">
+                                <span class="rank">01</span>
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+                                <span class="txt">
+                                    <b>베스트 인기상품</b>
+                                    <em>27,000원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">02</span>
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+                                <span class="txt">
+                                    <b>상품명 2위</b>
+                                    <em>13,000원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">03</span>
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+                                <span class="txt">
+                                    <b>상품명 3위</b>
+                                    <em>22,320원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">04</span>
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+                                <span class="txt">
+                                    <b>상품명 4위</b>
+                                    <em>18,900원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">05</span>
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+                                <span class="txt">
+                                    <b>상품명 5위</b>
+                                    <em>9,900원</em>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </aside>
 
-            <!-- Visual slider -->
-            <div class="visual">
-                <div class="visual-main">
-                    <div class="ph">
-                        <div class="mtn">🏔️</div>
-                        <p>메인 비주얼 배너 (1280 x 320)</p>
-                    </div>
-                    <div class="dots">
-                        <span></span><span></span><span class="active"></span><span></span><span></span>
-                    </div>
+            <!-- Right content -->
+            <main class="content-area">
+                <!-- Visual slider -->
+                <div class="visual">
+                    <ul class="main-slider">
+                        <li>
+                            <a href="#">
+                                <img src="./images/main/slider_item1.jpg" alt="여름 대비 상품 배너" />
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="./images/main/slider_item2.jpg" alt="캠핑 용품전 배너" />
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="./images/main/slider_item3.jpg" alt="건강 음료 배너" />
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="./images/main/slider_item4.jpg" alt="장마철 대비 상품 배너" />
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="./images/main/slider_item5.jpg" alt="제습기 기획전 배너" />
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-        </div>
 
-        <!-- Best products -->
-        <section class="sec">
-            <div class="sec-head">
-                <h2>베스트 상품</h2>
-                <span class="more">더보기 ›</span>
-            </div>
-            <div class="best-grid">
-                <div class="best-main">
-                    <div class="thumb">
-                        <span class="rank-badge">01</span>
-                        <svg width="60" height="60" viewBox="0 0 24 24" fill="#ccc">
-                            <path
-                                d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                            />
-                        </svg>
+                <!-- Hit products -->
+                <section class="sec" id="hit">
+                    <div class="sec-head">
+                        <h2>히트상품</h2>
+                        <span class="more">더보기 ›</span>
                     </div>
-                    <div class="info">
-                        <div class="name">베스트 1위 인기상품 이름이 들어가는 영역입니다</div>
-                        <div class="price-row">
-                            <span class="coupon-label">쿠폰적용가</span>
-                            <span class="old-price">30,000원</span>
-                            <span class="discount">10%</span>
-                            <span class="price">27,000원</span>
+                    <p class="sec-sub">상품 썸네일 기준, 조회수가 많은 순서로 8건 출력</p>
+                    <div class="hit-grid" id="hitGrid"></div>
+                </section>
+
+                <!-- Recommended products -->
+                <section class="sec" id="recommend">
+                    <div class="sec-head">
+                        <h2>추천상품</h2>
+                        <span class="more">더보기 ›</span>
+                    </div>
+                    <p class="sec-sub">상품평점이 높은 순서로 8건 출력</p>
+                    <div class="hit-grid" id="recommendGrid"></div>
+                </section>
+
+                <!-- New products -->
+                <section class="sec" id="new">
+                    <div class="sec-head">
+                        <h2>최신상품</h2>
+                        <span class="more">더보기 ›</span>
+                    </div>
+                    <p class="sec-sub">상품 등록 날짜가 최신 순서로 8건 출력</p>
+                    <div class="hit-grid" id="newGrid"></div>
+                </section>
+
+                <!-- Discount products -->
+                <section class="sec" id="discount">
+                    <div class="sec-head">
+                        <h2>할인상품</h2>
+                        <span class="more">더보기 ›</span>
+                    </div>
+                    <p class="sec-sub">할인율이 높은 순서로 8건 출력</p>
+                    <div class="hit-grid" id="discountGrid"></div>
+                </section>
+
+                <!-- Member menu -->
+                <section class="sec" id="member-menu">
+                    <div class="member-box">
+                        <div class="member-text">
+                            <h3>회원이 되면 더 많은 혜택이 기다려요</h3>
+                            <p>로그인하면 맞춤 추천 상품과 쿠폰 혜택을 확인할 수 있어요.</p>
                         </div>
-                        <div class="reward">꼭멤버 최대 <b>1,350원</b> 적립</div>
-                        <span class="free-ship">무료배송</span>
+                        <div class="member-actions">
+                            <a href="#login" class="btn btn-primary">로그인</a>
+                            <a href="#join" class="btn btn-outline">회원가입</a>
+                            <a href="#mypage" class="btn btn-outline">마이페이지</a>
+                            <a href="#admin" class="btn btn-admin">관리자 페이지</a>
+                        </div>
                     </div>
-                </div>
-                <div class="best-list">
-                    <!-- generate items 2-5 -->
-                    SCRIPT_BEST_PLACEHOLDER
-                </div>
-            </div>
-        </section>
-
-        <!-- Hit products -->
-        <section class="sec" id="hit">
-            <div class="sec-head">
-                <h2>히트상품</h2>
-                <span class="more">더보기 ›</span>
-            </div>
-            <p class="sec-sub">상품 썸네일(thumb2) 기준, 조회수가 많은 순서로 8건 출력</p>
-            <div class="hit-grid">SCRIPT_HIT_PLACEHOLDER</div>
-        </section>
-
-        <!-- Recommended products -->
-        <section class="sec" id="recommend">
-            <div class="sec-head">
-                <h2>추천상품</h2>
-                <span class="more">더보기 ›</span>
-            </div>
-            <p class="sec-sub">상품평점이 높은 순서로 8건 출력</p>
-            <div class="hit-grid" id="recommendGrid"></div>
-        </section>
-
-        <!-- New products -->
-        <section class="sec" id="new">
-            <div class="sec-head">
-                <h2>최신상품</h2>
-                <span class="more">더보기 ›</span>
-            </div>
-            <p class="sec-sub">상품 등록 날짜가 최신 순서로 8건 출력</p>
-            <div class="hit-grid" id="newGrid"></div>
-        </section>
-
-        <!-- Discount products -->
-        <section class="sec" id="discount">
-            <div class="sec-head">
-                <h2>할인상품</h2>
-                <span class="more">더보기 ›</span>
-            </div>
-            <p class="sec-sub">할인율(discount)이 많은 순서로 8건 출력</p>
-            <div class="hit-grid" id="discountGrid"></div>
-        </section>
-
-        <!-- Member menu -->
-        <section class="sec" id="member-menu">
-            <div class="member-box">
-                <div class="member-text">
-                    <h3>회원이 되면 더 많은 혜택이 기다려요</h3>
-                    <p>로그인하면 맞춤 추천 상품과 쿠폰 혜택을 확인할 수 있어요.</p>
-                </div>
-                <div class="member-actions">
-                    <a href="#login" class="btn btn-primary">로그인</a>
-                    <a href="#join" class="btn btn-outline">회원가입</a>
-                    <a href="#mypage" class="btn btn-outline">마이페이지</a>
-                    <a href="#admin" class="btn btn-admin">관리자 페이지</a>
-                </div>
-            </div>
-        </section>
+                </section>
+            </main>
+        </div>
 
         <!-- Footer -->
         <footer>
             <div class="footer-inner">
                 <nav class="footer-links">
-                    <a href="#about" id="about">회사소개</a>
+                    <a href="#about">회사소개</a>
                     <a href="#terms">서비스이용약관</a>
                     <a href="#privacy">개인정보처리방침</a>
                     <a href="#finance">전자금융거래약관</a>
                 </nav>
-                <div class="footer-info">
-                    <p>K market(주) · 대표 : 김철학 · 사업자등록번호 000-00-00000</p>
-                    <p>주소 : 서울특별시 어딘가 123 K마켓빌딩 · 고객센터 1234-5678</p>
+
+                <div class="footer-company">
+                    <div class="footer-logo-box">
+                        <img src="./images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
+                    </div>
+
+                    <div class="footer-info">
+                        <h4>(주)케이마켓</h4>
+                        <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
+                        <p>대표이사 : 홍길동</p>
+                        <p>사업자등록번호 : 123-45-12345</p>
+                    </div>
+
+                    <div class="footer-cs">
+                        <h4>고객센터</h4>
+                        <p>Tel : 1234-5678 평일 09:00~18:00</p>
+                        <p>전자금융거래 분쟁 담당 : 1234-1234</p>
+                        <p>365일 09:00~18:00</p>
+                    </div>
                 </div>
-                <p class="copyright">Copyright © 2025 김철학. All rights reserved.</p>
+
+                <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
             </div>
         </footer>
+
+        <!-- TOP button -->
+        <a href="#top" class="top-btn">
+            <img src="./images/main/top.png" alt="위로 이동" />
+        </a>
+
+        <!-- jQuery + bxSlider -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 
         <script>
             const cardSVG = `<svg viewBox="0 0 24 24" fill="#ccc"><path d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
@@ -212,30 +309,40 @@
                 const div = document.createElement("div");
                 div.className = "card";
                 div.innerHTML = `
-    <div class="thumb">${cardSVG}</div>
-    <div class="info">
-      <div class="name">상품명 ${rank}위 - 상품 설명 영역</div>
-      <div class="price-row">
-        <span class="old-price">30,000원</span>
-        <span class="discount">10%</span>
-        <span class="price">27,000원</span>
-      </div>
-      <span class="free-ship">무료배송</span>
-    </div>`;
+                    <div class="thumb">${cardSVG}</div>
+                    <div class="info">
+                        <div class="name">상품명 ${rank}위 - 상품 설명 영역</div>
+                        <div class="price-row">
+                            <span class="old-price">30,000원</span>
+                            <span class="discount">10%</span>
+                            <span class="price">27,000원</span>
+                        </div>
+                        <span class="free-ship">무료배송</span>
+                    </div>
+                `;
                 return div;
             }
 
-            const bestList = document.querySelector(".best-list");
-            bestList.innerHTML = "";
-            for (let i = 2; i <= 5; i++) bestList.appendChild(makeCard(i));
-
-            const hitGrid = document.querySelector(".hit-grid");
-            hitGrid.innerHTML = "";
-            for (let i = 1; i <= 8; i++) hitGrid.appendChild(makeCard(i));
-
-            ["recommendGrid", "newGrid", "discountGrid"].forEach((id) => {
+            ["hitGrid", "recommendGrid", "newGrid", "discountGrid"].forEach((id) => {
                 const grid = document.getElementById(id);
-                for (let i = 1; i <= 8; i++) grid.appendChild(makeCard(i));
+
+                for (let i = 1; i <= 8; i++) {
+                    grid.appendChild(makeCard(i));
+                }
+            });
+
+            $(function () {
+                $(".main-slider").bxSlider({
+                    mode: "horizontal",
+                    auto: true,
+                    pause: 3500,
+                    speed: 500,
+                    controls: true,
+                    pager: true,
+                    adaptiveHeight: false,
+                    touchEnabled: true,
+                    slideWidth: 985,
+                });
             });
         </script>
     </body>
