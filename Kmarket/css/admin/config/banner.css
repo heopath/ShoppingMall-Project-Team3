@@ -1,0 +1,346 @@
+/* =========================================================
+   11. 배너관리 페이지
+   - banner.jsp에 적용
+========================================================= */
+.banner-content {
+    padding-right: 15px;
+}
+
+.banner-section {
+    width: 100%;
+}
+
+.banner-tabs {
+    display: flex;
+    width: 100%;
+    height: 42px;
+    margin-bottom: 14px;
+    border: 1px solid #b9cbb0;
+    border-right: none;
+    background: #f1f8ed;
+    overflow: hidden;
+}
+
+.banner-tabs button {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    padding: 0 6px;
+    border: none;
+    border-right: 1px solid #b9cbb0;
+    background: #e8f3e2;
+    color: #222;
+    font-size: 11px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.banner-tabs button.active {
+    background: #fff;
+    color: #111;
+    font-weight: bold;
+}
+
+.banner-tabs button:hover {
+    background: #f7fff2;
+    color: #249600;
+}
+
+/* =========================================================
+   배너관리 테이블
+   - banner.jsp의 배너 목록 표
+========================================================= */
+.banner-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-top: 1px solid #b9cbb0;
+    background: #fff;
+}
+
+.banner-table th {
+    height: 38px;
+    padding: 6px 3px;
+    border-bottom: 1px solid #d7e4d1;
+    background: #f7fff2;
+    color: #111;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.banner-table td {
+    height: 74px;
+    padding: 8px 3px;
+    border-bottom: 1px solid #d7e4d1;
+    color: #333;
+    font-size: 11px;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    word-break: keep-all;
+}
+
+/* 컬럼 너비 비율: 총합 100% */
+.banner-table th:nth-child(1),
+.banner-table td:nth-child(1) {
+    width: 4%;
+}
+
+.banner-table th:nth-child(2),
+.banner-table td:nth-child(2) {
+    width: 5%;
+}
+
+.banner-table th:nth-child(3),
+.banner-table td:nth-child(3) {
+    width: 8%;
+}
+
+.banner-table th:nth-child(4),
+.banner-table td:nth-child(4) {
+    width: 20%;
+}
+
+.banner-table th:nth-child(5),
+.banner-table td:nth-child(5) {
+    width: 9%;
+}
+
+.banner-table th:nth-child(6),
+.banner-table td:nth-child(6) {
+    width: 11%;
+}
+
+.banner-table th:nth-child(7),
+.banner-table td:nth-child(7) {
+    width: 11%;
+}
+
+.banner-table th:nth-child(8),
+.banner-table td:nth-child(8) {
+    width: 7%;
+}
+
+.banner-table th:nth-child(9),
+.banner-table td:nth-child(9) {
+    width: 7%;
+}
+
+.banner-table th:nth-child(10),
+.banner-table td:nth-child(10) {
+    width: 18%;
+}
+
+.banner-thumb {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto;
+    border: 1px solid #cfdcc8;
+    background:
+            linear-gradient(45deg, transparent 49%, #cfdcc8 50%, transparent 51%),
+            linear-gradient(-45deg, transparent 49%, #cfdcc8 50%, transparent 51%),
+            #fafafa;
+}
+
+.banner-info {
+    text-align: left !important;
+    line-height: 18px;
+}
+
+.banner-info p {
+    color: #333;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.manage a {
+    display: block;
+    color: #111;
+    line-height: 20px;
+    font-size: 11px;
+}
+
+.manage a:hover {
+    color: #249600;
+    text-decoration: underline;
+}
+
+.banner-btn-area {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+}
+
+.delete-btn {
+    min-width: 78px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid #cfcfcf;
+    background: #d8d8d8;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background: #bcbcbc;
+}
+
+.register-btn {
+    min-width: 82px;
+    height: 32px;
+    padding: 0 14px;
+    border: 1px solid #31aa00;
+    border-radius: 4px;
+    background: #f0faea;
+    color: #249600;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.register-btn:hover {
+    background: #31aa00;
+    color: #fff;
+}
+
+
+
+
+/* =========================
+   배너등록 모달
+========================= */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 9999;
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+.banner-modal {
+    width: 760px;
+    background: #fff;
+    border: 1px solid #999;
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.banner-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 46px;
+    padding: 0 16px;
+    background: #3b3b3b;
+    color: #fff;
+}
+
+.banner-modal-header h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.modal-close {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.banner-modal-body {
+    padding: 24px 28px 30px;
+}
+
+.banner-form-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #ddd;
+}
+
+.banner-form-table th {
+    width: 110px;
+    padding: 12px 10px;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: left;
+    font-size: 13px;
+    color: #333;
+    background: #fff;
+}
+
+.banner-form-table td {
+    padding: 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.banner-form-table input[type="text"],
+.banner-form-table select {
+    width: 230px;
+    height: 30px;
+    padding: 0 8px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    color: #333;
+}
+
+.banner-form-table input[type="file"] {
+    font-size: 12px;
+}
+
+.inline-fields {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inline-fields input {
+    width: 120px !important;
+}
+
+.file-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.file-guide {
+    font-size: 12px;
+    color: #666;
+}
+
+.banner-modal-btn-area {
+    margin-top: 28px;
+    text-align: center;
+}
+
+.banner-submit-btn {
+    min-width: 120px;
+    height: 42px;
+    border: none;
+    background: #43b02a;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.banner-submit-btn:hover {
+    background: #369420;
+}
+
+
+
