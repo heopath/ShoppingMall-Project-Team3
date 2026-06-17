@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css" />
 
         <!-- Custom CSS -->
+        <link rel="stylesheet" href="../css/company/company_inc.css" />
         <link rel="stylesheet" href="../css/company/index.css" />
     </head>
 
@@ -21,11 +22,11 @@
                 </a>
 
                 <nav class="company-nav">
-                    <a href="#home" class="active">HOME</a>
-                    <a href="#culture">기업문화</a>
-                    <a href="#news">소식과 이야기</a>
-                    <a href="#recruit">채용</a>
-                    <a href="#media">미디어</a>
+                    <a href="./index.html" class="active">HOME</a>
+                    <a href="./culture.html">기업문화</a>
+                    <a href="./story.html">소식과 이야기</a>
+                    <a href="./recruit.html">채용</a>
+                    <a href="./media.html">미디어</a>
                 </nav>
             </div>
         </header>
@@ -337,12 +338,6 @@
                 });
             });
 
-            // HOME 하이라이트 고정
-            document.querySelectorAll(".company-nav a").forEach((link) => {
-                link.classList.remove("active");
-            });
-            document.querySelector('.company-nav a[href="#home"]').classList.add("active");
-
             const track = document.querySelector(".company-track");
             const viewport = document.querySelector(".company-viewport");
             const pages = document.querySelectorAll(".company-section");
@@ -428,28 +423,6 @@
                 },
                 { passive: false },
             );
-
-            document.querySelectorAll(".company-nav a").forEach((link) => {
-                link.addEventListener("click", (e) => {
-                    e.preventDefault();
-
-                    const targetId = link.getAttribute("href");
-                    const target = document.querySelector(targetId);
-
-                    if (!target) return;
-
-                    const targetIndex = Array.from(pages).indexOf(target);
-
-                    if (targetIndex !== -1) {
-                        viewport.style.overflow = "hidden";
-                        window.scrollTo({
-                            top: 0,
-                            behavior: "auto",
-                        });
-                        goToPage(targetIndex);
-                    }
-                });
-            });
 
             window.addEventListener("resize", () => {
                 const moveY = currentIndex * getPageHeight();
