@@ -21,7 +21,8 @@
     <div class="admin-body">
         <aside class="sidebar">
             <ul class="admin-menu">
-                <li onclick="toggleMenu('configMenu')">
+
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
                     ⚙ 환경설정
                 </li>
                 <li class="sub-menu-wrap close" id="configMenu">
@@ -34,24 +35,55 @@
                     </ul>
                 </li>
 
-                <li class="menu-title" onclick="toggleMenu('shopMenu')">
+                <li class="menu-title active"  onclick="toggleMenu(this, 'shopMenu')">
                     👥 상점관리
                 </li>
                 <li class="sub-menu-wrap" id="shopMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu">
-                            <a href="/admin/shop/list">- 상점목록</a>
-                        </li>
-                        <li class="sub-menu active">
-                            <a href="/admin/shop/sales">- 매출현황</a>
-                        </li>
+                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                        <li class="sub-menu active"><a href="/admin/shop/sales">- 매출현황</a></li>
                     </ul>
                 </li>
 
-                <li><a href="/admin/member/list">👤 회원관리</a></li>
-                <li><a href="/admin/product/list">📦 상품관리</a></li>
-                <li><a href="/admin/order/list">🧾 주문관리</a></li>
-                <li><a href="/admin/cs/list">💬 고객센터</a></li>
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">
+                    👤 회원관리
+                </li>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
+                    📦 상품관리
+                </li>
+                <li class="sub-menu-wrap close" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
+                    🧾 주문관리
+                </li>
+                <li class="sub-menu-wrap close" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">
+                    💬 고객센터
+                </li>
+                <li class="sub-menu-wrap close" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                    </ul>
+                </li>
+
             </ul>
         </aside>
 
@@ -170,11 +202,16 @@
 </div>
 
 <script>
-    // 좌측 사이드바 메뉴 토글 함수
-    function toggleMenu(menuId) {
+    // 1. 좌측 사이드바 메뉴 토글 함수
+    function toggleMenu(clickedTitle, menuId) {
         const menu = document.getElementById(menuId);
-        if(menu) {
-            menu.classList.toggle("close");
+
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
         }
     }
 </script>

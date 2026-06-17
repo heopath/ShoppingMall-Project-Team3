@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 목록</title>
+    <link rel="stylesheet" href="../../../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../../../css/admin/cs/notice/list.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/logout">로그아웃</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+
+        <aside class="sidebar">
+            <ul class="admin-menu">
+
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
+                    ⚙ 환경설정
+                </li>
+                <li class="sub-menu-wrap close" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">
+                    👥 상점관리
+                </li>
+                <li class="sub-menu-wrap close" id="shopMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">
+                    👤 회원관리
+                </li>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
+                    📦 상품관리
+                </li>
+                <li class="sub-menu-wrap close" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
+                    🧾 주문관리
+                </li>
+                <li class="sub-menu-wrap close" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title active" onclick="toggleMenu(this, 'csMenu')">
+                    💬 고객센터
+                </li>
+                <li class="sub-menu-wrap" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu active"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </aside>
+
+        <main class="content">
+
+            <div class="page-title">
+                <h2>공지사항 목록</h2>
+                <span>HOME &gt; 고객센터 &gt; 공지사항</span>
+            </div>
+
+            <section class="notice-section">
+
+                <div class="notice-search">
+                    <select>
+                        <option>유형선택</option>
+                        <option>고객서비스</option>
+                        <option>이벤트당첨</option>
+                        <option>안전거래</option>
+                        <option>위해상품</option>
+                    </select>
+                </div>
+
+                <table class="notice-table">
+                    <thead>
+                    <tr>
+                        <th class="check-cell"><input type="checkbox"></th>
+                        <th>번호</th>
+                        <th>유형</th>
+                        <th>제목</th>
+                        <th>조회</th>
+                        <th>날짜</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>100</td>
+                        <td>고객서비스</td>
+                        <td class="title-cell"><a href="/admin/cs/notice/view">[안내] 해외 결제 사칭 문자 주의</a></td>
+                        <td>120</td>
+                        <td>00.00.00</td>
+                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>99</td>
+                        <td>이벤트 당첨</td>
+                        <td class="title-cell"><a href="/admin/cs/notice/view">[발표] L&Live X SX쇼핑 상반기 이벤트 당첨자</a></td>
+                        <td>120</td>
+                        <td>00.00.00</td>
+                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>98</td>
+                        <td>안전거래</td>
+                        <td class="title-cell"><a href="/admin/cs/notice/view">[안내] 로젠택배 배송 / 교환 수거지연 안내</a></td>
+                        <td>120</td>
+                        <td>00.00.00</td>
+                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>97</td>
+                        <td>고객서비스</td>
+                        <td class="title-cell"><a href="/admin/cs/notice/view">[안내] 위치정보이용 약관 개정 공지</a></td>
+                        <td>120</td>
+                        <td>00.00.00</td>
+                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>93</td>
+                        <td>고객서비스</td>
+                        <td class="title-cell"><a href="/admin/cs/notice/view">[안내] 구글회원 이용약관 개정</a></td>
+                        <td>120</td>
+                        <td>00.00.00</td>
+                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>92</td>
+                        <td>위해상품</td>
+                        <td class="title-cell"><a href="/admin/cs/notice/view">[위해상품정보] 우주 주지표 지도점검 회사 수 주발</a></td>
+                        <td>120</td>
+                        <td>00.00.00</td>
+                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>91</td>
+                        <td>고객서비스</td>
+                        <td class="title-cell"><a href="/admin/cs/notice/view">[안내] 셀티온홈 시스템 점검에 따른 결제</a></td>
+                        <td>120</td>
+                        <td>00.00.00</td>
+                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="notice-bottom">
+                    <button type="button" class="notice-delete-btn">선택삭제</button>
+                    <div class="notice-pagination">
+                        <a href="#">이전</a><a href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a><a href="#">다음</a>
+                    </div>
+                    <a href="/admin/cs/notice/write" class="notice-write-btn">작성하기</a>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+
+</div>
+
+<script>
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+</script>
+
+</body>
+</html>
