@@ -1,0 +1,299 @@
+/* =========================================================
+   고객센터 > 공지사항 공통/list/write/view/modify
+========================================================= */
+
+/* 화면이 시안처럼 조금 더 낮게 시작하도록 */
+.notice-section,
+.notice-form-section,
+.notice-view-section {
+    width: 100%;
+    margin-top: 18px;
+}
+
+/* 목록 상단 유형선택 */
+.notice-search {
+    margin-bottom: 12px;
+}
+
+.notice-search select {
+    width: 105px;
+    height: 30px;
+    padding-left: 8px;
+    border: 1px solid #bdbdbd;
+    background: #fff;
+    font-size: 12px;
+    color: #333;
+}
+
+/* 목록 테이블 */
+.notice-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 2px solid #777;
+    font-size: 12px;
+    color: #333;
+}
+
+.notice-table th {
+    height: 36px;
+    border-bottom: 1px solid #ddd;
+    background: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+.notice-table td {
+    height: 39px;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.notice-table .check-cell,
+.notice-table th:nth-child(1),
+.notice-table td:nth-child(1) {
+    width: 45px;
+}
+
+.notice-table th:nth-child(2),
+.notice-table td:nth-child(2) { width: 65px; }
+.notice-table th:nth-child(3),
+.notice-table td:nth-child(3) { width: 100px; }
+.notice-table th:nth-child(5),
+.notice-table td:nth-child(5) { width: 70px; }
+.notice-table th:nth-child(6),
+.notice-table td:nth-child(6) { width: 90px; }
+.notice-table th:nth-child(7),
+.notice-table td:nth-child(7) { width: 75px; }
+
+.notice-table .title-cell {
+    text-align: left;
+    padding-left: 15px;
+}
+
+.notice-table .title-cell a {
+    color: #111;
+}
+
+.notice-table .title-cell a:hover {
+    text-decoration: underline;
+}
+
+.manage-cell a {
+    display: block;
+    color: #111;
+    font-size: 12px;
+    line-height: 17px;
+}
+
+.manage-cell a:hover {
+    text-decoration: underline;
+}
+
+/* 목록 하단 */
+.notice-bottom {
+    position: relative;
+    min-height: 50px;
+    margin-top: 18px;
+}
+
+.notice-delete-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 78px;
+    height: 32px;
+    border: none;
+    background: #bcbcbc;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.notice-write-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: inline-block;
+    width: 82px;
+    height: 32px;
+    line-height: 32px;
+    background: #9fc5f8;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.notice-pagination {
+    padding-top: 8px;
+    text-align: center;
+}
+
+.notice-pagination a {
+    margin: 0 5px;
+    color: #111;
+    font-size: 13px;
+}
+
+.notice-pagination a:hover {
+    text-decoration: underline;
+}
+
+/* 작성/수정 폼 */
+.notice-form-table,
+.notice-view-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 2px solid #777;
+    font-size: 12px;
+    color: #333;
+}
+
+.notice-form-table th,
+.notice-view-table th {
+    width: 90px;
+    padding: 13px 10px;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: left;
+    vertical-align: middle;
+    font-weight: bold;
+    background: #fff;
+}
+
+.notice-form-table td,
+.notice-view-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fff;
+}
+
+.notice-form-table .type-input {
+    width: 120px;
+    height: 30px;
+    padding: 0 8px;
+    border: 1px solid #bdbdbd;
+    font-size: 12px;
+}
+
+.notice-form-table .title-input {
+    width: 365px;
+    height: 30px;
+    padding: 0 8px;
+    border: 1px solid #bdbdbd;
+    font-size: 12px;
+}
+
+.notice-form-table textarea {
+    width: 365px;
+    height: 150px;
+    padding: 12px;
+    border: 1px solid #bdbdbd;
+    resize: none;
+    font-size: 12px;
+    line-height: 1.55;
+    color: #333;
+    font-family: inherit;
+}
+
+.notice-form-btn-area,
+.notice-view-btn-area {
+    margin-top: 24px;
+    text-align: right;
+}
+
+.notice-form-btn-area {
+    padding-right: 145px;
+}
+
+.btn-gray,
+.btn-blue {
+    display: inline-block;
+    min-width: 78px;
+    height: 34px;
+    line-height: 34px;
+    margin-left: 6px;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-gray {
+    background: #bcbcbc;
+}
+
+.btn-blue {
+    background: #9fc5f8;
+}
+
+.btn-gray:hover {
+    background: #999;
+}
+
+.btn-blue:hover {
+    background: #6fa8dc;
+}
+
+/* 보기 페이지 */
+.notice-view-table td {
+    height: 40px;
+}
+
+.notice-view-table .view-content {
+    height: 135px;
+    line-height: 1.65;
+    vertical-align: top;
+    padding-top: 18px;
+}
+
+.notice-view-table .view-content p {
+    margin-bottom: 10px;
+}
+
+.notice-view-btn-area {
+    padding-right: 0;
+}
+
+/* =========================================================
+   사이드바 동작 보정
+   - 메인 메뉴를 클릭했을 때만 초록색
+   - 다시 클릭해 접으면 초록색 제거
+   - 다른 메뉴를 클릭해도 기존 열린 메뉴는 닫히지 않음
+========================================================= */
+.admin-menu > li.menu-title {
+    background: #fff;
+    border-color: #d7e4d1;
+    color: #111;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.admin-menu > li.menu-title:hover {
+    background: #f0faea;
+    color: #249600;
+}
+
+.admin-menu > li.menu-title.active {
+    background: #31aa00;
+    border-color: #31aa00;
+    color: #fff;
+}
+
+.admin-menu > li.menu-title.active:hover {
+    background: #249600;
+    color: #fff;
+}
+
+.admin-menu > .sub-menu-wrap.close {
+    display: none;
+}
+
+.admin-menu > .sub-menu-wrap {
+    display: block;
+}
+
