@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 포인트관리</title>
+    <link rel="stylesheet" href="../../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin/member/point.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/logout">로그아웃</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+    <aside class="sidebar">
+        <ul class="admin-menu">
+
+            <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
+                ⚙ 환경설정
+            </li>
+            <li class="sub-menu-wrap close" id="configMenu">
+                <ul class="sub-menu-list">
+                    <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                    <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                    <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                    <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                    <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-title"  onclick="toggleMenu(this, 'shopMenu')">
+                👥 상점관리
+            </li>
+            <li class="sub-menu-wrap close" id="shopMenu">
+                <ul class="sub-menu-list">
+                    <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                    <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-title active" onclick="toggleMenu(this, 'memberMenu')">
+                👤 회원관리
+            </li>
+            <li class="sub-menu-wrap" id="memberMenu">
+                <ul class="sub-menu-list">
+                    <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                    <li class="sub-menu active"><a href="/admin/member/point">- 포인트관리</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
+                📦 상품관리
+            </li>
+            <li class="sub-menu-wrap close" id="productMenu">
+                <ul class="sub-menu-list">
+                    <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                    <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
+                🧾 주문관리
+            </li>
+            <li class="sub-menu-wrap close" id="orderMenu">
+                <ul class="sub-menu-list">
+                    <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">
+                💬 고객센터
+            </li>
+            <li class="sub-menu-wrap close" id="csMenu">
+                <ul class="sub-menu-list">
+                    <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                    <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                    <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </aside>
+
+        <main class="content">
+            <div class="page-title">
+                <h2>포인트관리</h2>
+                <span>HOME &gt; 회원관리 &gt; 포인트관리</span>
+            </div>
+
+            <section class="point-list-section">
+                <div class="search-wrap">
+                    <select class="search-select">
+                        <option>아이디</option>
+                        <option>이름</option>
+                        <option>이메일</option>
+                        <option>휴대폰</option>
+                    </select>
+                    <input type="text" placeholder="검색어입력" class="search-input">
+                    <button type="button" class="search-btn">검색</button>
+                </div>
+
+                <table class="point-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>번호</th>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>지급 포인트</th>
+                            <th>잔여 포인트</th>
+                            <th>지급 내용</th>
+                            <th>지급 날짜</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>5</td>
+                            <td>abc1234</td>
+                            <td>정우성</td>
+                            <td>1,000</td>
+                            <td>15,000</td>
+                            <td>구매확정 포인트 지급</td>
+                            <td>0000-00-00<br>00:00:00</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>4</td>
+                            <td>abc1234</td>
+                            <td>정우성</td>
+                            <td>1,000</td>
+                            <td>14,000</td>
+                            <td>이벤트 참여</td>
+                            <td>0000-00-00<br>00:00:00</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>3</td>
+                            <td>kang771</td>
+                            <td>강동원</td>
+                            <td>-17,000</td>
+                            <td>100</td>
+                            <td>주문 결제 사용</td>
+                            <td>0000-00-00<br>00:00:00</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td>eqpac112</td>
+                            <td>한예슬</td>
+                            <td>1,000</td>
+                            <td>3,500</td>
+                            <td>상품 리뷰 작성</td>
+                            <td>0000-00-00<br>00:00:00</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td>qeimn3</td>
+                            <td>이정재</td>
+                            <td>1,000</td>
+                            <td>2,700</td>
+                            <td>회원가입 축하</td>
+                            <td>0000-00-00<br>00:00:00</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="bottom-controls-point">
+                    <button type="button" class="btn-delete-select">선택삭제</button>
+                    <div class="pagination">
+                        <a href="#">이전</a>
+                        <a href="#" class="active">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">다음</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+</div>
+
+<script>
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
+
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+</script>
+
+</body>
+</html>

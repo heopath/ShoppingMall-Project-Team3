@@ -19,46 +19,74 @@
     </header>
 
     <div class="admin-body">
-        <aside class="sidebar">
-            <ul class="admin-menu">
-                <li class onclick="toggleMenu('configMenu')">
-                    ⚙ 환경설정
-                </li>
-                <li class="sub-menu-wrap close" id="configMenu">
-                    <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
-                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
-                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
-                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
-                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
-                    </ul>
-                </li>
+<aside class="sidebar">
+    <ul class="admin-menu">
 
-                <li class onclick="toggleMenu('shopMenu')">
-                    👥 상점관리
-                </li>
-                <li class="sub-menu-wrap close" id="shopMenu">
-                    <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
-                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
-                    </ul>
-                </li>
-
-                <li class="menu-title" onclick="toggleMenu('memberMenu')">
-                    👤 회원관리
-                </li>
-                <li class="sub-menu-wrap" id="memberMenu">
-                    <ul class="sub-menu-list">
-                        <li class="sub-menu active"><a href="/admin/member/list">- 회원목록</a></li>
-                        <li class="sub-menu"><a href="/admin/member/point">- 포인트관리</a></li>
-                    </ul>
-                </li>
-
-                <li><a href="/admin/product/list">📦 상품관리</a></li>
-                <li><a href="/admin/order/list">🧾 주문관리</a></li>
-                <li><a href="/admin/cs/list">💬 고객센터</a></li>
+        <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
+            ⚙ 환경설정
+        </li>
+        <li class="sub-menu-wrap close" id="configMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
             </ul>
-        </aside>
+        </li>
+
+        <li class="menu-title"  onclick="toggleMenu(this, 'shopMenu')">
+            👥 상점관리
+        </li>
+        <li class="sub-menu-wrap close" id="shopMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-title active" onclick="toggleMenu(this, 'memberMenu')">
+            👤 회원관리
+        </li>
+        <li class="sub-menu-wrap" id="memberMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu active"><a href="/admin/member/list">- 회원목록</a></li>
+                <li class="sub-menu"><a href="/admin/member/point">- 포인트관리</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
+            📦 상품관리
+        </li>
+        <li class="sub-menu-wrap close" id="productMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
+            🧾 주문관리
+        </li>
+        <li class="sub-menu-wrap close" id="orderMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">
+            💬 고객센터
+        </li>
+        <li class="sub-menu-wrap close" id="csMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+            </ul>
+        </li>
+
+    </ul>
+</aside>
 
         <main class="content">
             <div class="page-title">
@@ -225,7 +253,7 @@
                 </table>
 
                 <div class="bottom-controls-member">
-                    <button type="button" class="btn-modify-select">선택수정</button>
+                    <button type="button" class="btn-modify-select" id="openMemberModal">선택수정</button>
                     <div class="pagination">
                         <a href="#">이전</a>
                         <a href="#" class="active">1</a>
@@ -238,6 +266,85 @@
                 </div>
             </section>
         </main>
+        <div id="memberModal" class="modal-overlay">
+            <div class="shop-modal-container"> <div class="shop-modal-header">
+                    <h3>회원수정</h3>
+                    <button type="button" class="modal-close" id="closeMemberModal">X</button>
+                </div>
+
+                <div class="shop-modal-body">
+                    <table class="shop-form-table member-form-table">
+                        <tr>
+                            <th>아이디</th>
+                            <td><input type="text" class="input-w-medium" value="abc1234" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>이름</th>
+                            <td><input type="text" class="input-w-medium" value="홍길동"></td>
+                        </tr>
+                        <tr>
+                            <th>성별</th>
+                            <td>
+                                <label class="radio-label"><input type="radio" name="gender" checked> 남</label>
+                                <label class="radio-label"><input type="radio" name="gender"> 여</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>등급</th>
+                            <td>
+                                <input type="text" class="input-w-medium" value="FAMILY" readonly style="background: #f9f9f9; color: #888;">
+                                <span class="input-guide">등급 수정은 회원 목록에서 선택수정 가능</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>상태</th>
+                            <td class="status-normal">정상</td>
+                        </tr>
+                        <tr>
+                            <th>EMAIL</th>
+                            <td><input type="text" class="input-w-medium" value="abc1234@gmail.com"></td>
+                        </tr>
+                        <tr>
+                            <th>휴대폰</th>
+                            <td><input type="text" class="input-w-medium" value="010-1234-1001"></td>
+                        </tr>
+                        <tr>
+                            <th>우편번호</th>
+                            <td class="address-zipcode-wrap">
+                                <input type="text" class="input-w-medium" value="12345" readonly>
+                                <button type="button" class="btn-text-green">검색</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>기본주소</th>
+                            <td><input type="text" class="input-w-full" value="부산광역시 부산진구 부전동 123" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>상세주소</th>
+                            <td><input type="text" class="input-w-full" value="OO 빌딩 3층 301호"></td>
+                        </tr>
+                        <tr>
+                            <th>가입일</th>
+                            <td>0000-00-00 00:00:00</td>
+                        </tr>
+                        <tr>
+                            <th>최근로그인날짜</th>
+                            <td>0000-00-00 00:00:00</td>
+                        </tr>
+                        <tr>
+                            <th>기타</th>
+                            <td>
+                                <textarea class="member-textarea" placeholder="회원에대한기타정보입력"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="shop-modal-btn-area">
+                        <button type="button" class="btn-submit-green">수정하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -246,12 +353,42 @@
 </div>
 
 <script>
-    // 좌측 사이드바 메뉴 토글 함수
-    function toggleMenu(menuId) {
+    // 1. 좌측 사이드바 메뉴 토글 함수
+    function toggleMenu(clickedTitle, menuId) {
         const menu = document.getElementById(menuId);
-        if(menu) {
-            menu.classList.toggle("close");
+
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
         }
+    }
+    // 2. 회원수정 모달 동작 스크립트
+    const memberModal = document.getElementById("memberModal");
+    const openMemberModal = document.getElementById("openMemberModal");
+    const closeMemberModal = document.getElementById("closeMemberModal");
+
+    if(openMemberModal) {
+        openMemberModal.addEventListener("click", function () {
+            memberModal.classList.add("show");
+        });
+    }
+
+    if(closeMemberModal) {
+        closeMemberModal.addEventListener("click", function () {
+            memberModal.classList.remove("show");
+        });
+    }
+
+    if(memberModal) {
+        memberModal.addEventListener("click", function (e) {
+            // 어두운 바깥 배경 클릭 시 모달 닫기
+            if (e.target === memberModal) {
+                memberModal.classList.remove("show");
+            }
+        });
     }
 </script>
 
