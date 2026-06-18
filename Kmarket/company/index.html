@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css" />
 
         <!-- Custom CSS -->
+        <link rel="stylesheet" href="../css/company/company_inc.css" />
         <link rel="stylesheet" href="../css/company/index.css" />
     </head>
 
@@ -21,11 +22,11 @@
                 </a>
 
                 <nav class="company-nav">
-                    <a href="#home" class="active">HOME</a>
-                    <a href="#culture">기업문화</a>
-                    <a href="#news">소식과 이야기</a>
-                    <a href="#recruit">채용</a>
-                    <a href="#media">미디어</a>
+                    <a href="./index.html" class="active">HOME</a>
+                    <a href="./culture.html">기업문화</a>
+                    <a href="./story.html">소식과 이야기</a>
+                    <a href="./recruit.html">채용</a>
+                    <a href="./media.html">미디어</a>
                 </nav>
             </div>
         </header>
@@ -71,7 +72,7 @@
                                 <li>
                                     <article class="culture-card">
                                         <div class="culture-img">
-                                            <img src="../images/company/culture_1.jpg" alt="기업문화 이미지1" />
+                                            <img src="../images/company/culture_1.png" alt="기업문화 이미지1" />
                                         </div>
                                         <div class="culture-info">
                                             <h3>고객이 원하고 만족하는 서비스를 만들어요</h3>
@@ -86,7 +87,7 @@
                                 <li>
                                     <article class="culture-card">
                                         <div class="culture-img">
-                                            <img src="../images/company/culture_2.jpg" alt="기업문화 이미지2" />
+                                            <img src="../images/company/culture_2.png" alt="기업문화 이미지2" />
                                         </div>
                                         <div class="culture-info">
                                             <h3>새로운 쇼핑 경험을 함께 설계해요</h3>
@@ -101,7 +102,7 @@
                                 <li>
                                     <article class="culture-card">
                                         <div class="culture-img">
-                                            <img src="../images/company/culture_3.jpg" alt="기업문화 이미지3" />
+                                            <img src="../images/company/culture_3.png" alt="기업문화 이미지3" />
                                         </div>
                                         <div class="culture-info">
                                             <h3>브랜드와 고객을 더 가깝게 연결해요</h3>
@@ -116,7 +117,7 @@
                                 <li>
                                     <article class="culture-card">
                                         <div class="culture-img">
-                                            <img src="../images/company/culture_4.jpg" alt="기업문화 이미지4" />
+                                            <img src="../images/company/culture_4.png" alt="기업문화 이미지4" />
                                         </div>
                                         <div class="culture-info">
                                             <h3>함께 성장하는 쇼핑 플랫폼을 지향해요</h3>
@@ -225,7 +226,7 @@
                             <div class="history-list">
                                 <article class="history-item">
                                     <div class="history-thumb">
-                                        <img src="../images/company/history_1.jpg" alt="히스토리 이미지1" />
+                                        <img src="../images/company/history_1.png" alt="히스토리 이미지1" />
                                     </div>
                                     <div class="history-info">
                                         <span>2025년 03월</span>
@@ -236,7 +237,7 @@
 
                                 <article class="history-item">
                                     <div class="history-thumb">
-                                        <img src="../images/company/history_2.jpg" alt="히스토리 이미지2" />
+                                        <img src="../images/company/history_2.png" alt="히스토리 이미지2" />
                                     </div>
                                     <div class="history-info">
                                         <span>2025년 03월</span>
@@ -250,7 +251,7 @@
 
                                 <article class="history-item">
                                     <div class="history-thumb">
-                                        <img src="../images/company/history_3.jpg" alt="히스토리 이미지3" />
+                                        <img src="../images/company/history_3.png" alt="히스토리 이미지3" />
                                     </div>
                                     <div class="history-info">
                                         <span>2025년 03월</span>
@@ -268,7 +269,7 @@
                                 <h3>케이마켓과 함께 성장할 동료를 기다립니다.</h3>
                                 <p>더 좋은 쇼핑 경험을 만들고 싶은 분이라면 지금 케이마켓과 함께하세요.</p>
                             </div>
-                            <a href="#" class="recruit-btn">채용공고 보기</a>
+                            <a href="./recruit.html" class="recruit-btn">채용공고 보기</a>
                         </div>
                     </div>
                 </section>
@@ -337,12 +338,6 @@
                 });
             });
 
-            // HOME 하이라이트 고정
-            document.querySelectorAll(".company-nav a").forEach((link) => {
-                link.classList.remove("active");
-            });
-            document.querySelector('.company-nav a[href="#home"]').classList.add("active");
-
             const track = document.querySelector(".company-track");
             const viewport = document.querySelector(".company-viewport");
             const pages = document.querySelectorAll(".company-section");
@@ -378,6 +373,24 @@
                 setTimeout(() => {
                     isMoving = false;
                 }, 900);
+            }
+
+            // TOP 버튼 클릭 시 첫 화면으로 이동
+            const topBtn = document.querySelector(".top-btn");
+
+            if (topBtn) {
+                topBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                    });
+
+                    setTimeout(() => {
+                        goToPage(0);
+                    }, 100);
+                });
             }
 
             window.addEventListener(
@@ -428,28 +441,6 @@
                 },
                 { passive: false },
             );
-
-            document.querySelectorAll(".company-nav a").forEach((link) => {
-                link.addEventListener("click", (e) => {
-                    e.preventDefault();
-
-                    const targetId = link.getAttribute("href");
-                    const target = document.querySelector(targetId);
-
-                    if (!target) return;
-
-                    const targetIndex = Array.from(pages).indexOf(target);
-
-                    if (targetIndex !== -1) {
-                        viewport.style.overflow = "hidden";
-                        window.scrollTo({
-                            top: 0,
-                            behavior: "auto",
-                        });
-                        goToPage(targetIndex);
-                    }
-                });
-            });
 
             window.addEventListener("resize", () => {
                 const moveY = currentIndex * getPageHeight();
