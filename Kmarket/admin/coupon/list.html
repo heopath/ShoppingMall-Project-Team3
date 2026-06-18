@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 쿠폰목록</title>
+    <link rel="stylesheet" href="../../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin/coupon/list.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/logout">로그아웃</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+        <aside class="sidebar">
+            <ul class="admin-menu">
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">⚙ 환경설정</li>
+                <li class="sub-menu-wrap close" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">👥 상점관리</li>
+                <li class="sub-menu-wrap close" id="shopMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">👤 회원관리</li>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                        <li class="sub-menu"><a href="/admin/member/point">- 포인트관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">📦 상품관리</li>
+                <li class="sub-menu-wrap close" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">🧾 주문관리</li>
+                <li class="sub-menu-wrap close" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                        <li class="sub-menu"><a href="/admin/order/delivery">- 배송현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title active" onclick="toggleMenu(this, 'couponMenu')">🎟 쿠폰관리</li>
+                <li class="sub-menu-wrap" id="couponMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu active"><a href="/admin/coupon/list">- 쿠폰목록</a></li>
+                        <li class="sub-menu"><a href="/admin/coupon/issued">- 쿠폰발급현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">💬 고객센터</li>
+                <li class="sub-menu-wrap close" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <div class="page-title">
+                <h2>쿠폰목록</h2>
+                <span>HOME &gt; 쿠폰관리 &gt; 쿠폰목록</span>
+            </div>
+
+            <section class="coupon-section">
+                <div class="coupon-search-wrap">
+                    <select>
+                        <option>쿠폰번호</option>
+                        <option>쿠폰명</option>
+                        <option>발급처</option>
+                    </select>
+                    <input type="text" placeholder="검색어입력">
+                    <button type="button" class="search-btn">검색</button>
+                </div>
+
+                <table class="coupon-table">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox"></th>
+                        <th>쿠폰번호</th>
+                        <th>발급처</th>
+                        <th>쿠폰종류</th>
+                        <th>쿠폰명</th>
+                        <th>혜택</th>
+                        <th>사용기간</th>
+                        <th>발급일</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><a href="javascript:void(0)" class="coupon-no openCouponInfo">10121211341</a></td>
+                        <td>개별상품</td>
+                        <td>개별상품 할인</td>
+                        <td>10월 한달 감사 쿠폰 이벤트</td>
+                        <td>2,000 할인</td>
+                        <td>0000-00-00 ~<br>0000-00-00</td>
+                        <td>0000-00-00<br>00:00:00</td>
+                        <td><button type="button" class="small-btn">중단</button></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><a href="javascript:void(0)" class="coupon-no openCouponInfo">10121211342</a></td>
+                        <td>주문상품</td>
+                        <td>회원가입 축하 쿠폰</td>
+                        <td>신규회원 첫 구매 할인</td>
+                        <td>10% 할인</td>
+                        <td>0000-00-00 ~<br>0000-00-00</td>
+                        <td>0000-00-00<br>00:00:00</td>
+                        <td><button type="button" class="small-btn gray">종료</button></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><a href="javascript:void(0)" class="coupon-no openCouponInfo">10121211343</a></td>
+                        <td>배송비 무료</td>
+                        <td>배송비 무료 쿠폰</td>
+                        <td>배송비 무료 이벤트</td>
+                        <td>배송비 무료</td>
+                        <td>0000-00-00 ~<br>0000-00-00</td>
+                        <td>0000-00-00<br>00:00:00</td>
+                        <td><button type="button" class="small-btn">중단</button></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><a href="javascript:void(0)" class="coupon-no openCouponInfo">10121211344</a></td>
+                        <td>개별상품</td>
+                        <td>즉시 할인</td>
+                        <td>브랜드 특별 할인 쿠폰</td>
+                        <td>5,000 할인</td>
+                        <td>0000-00-00 ~<br>0000-00-00</td>
+                        <td>0000-00-00<br>00:00:00</td>
+                        <td><button type="button" class="small-btn gray">종료</button></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><a href="javascript:void(0)" class="coupon-no openCouponInfo">10121211345</a></td>
+                        <td>(주)다있어</td>
+                        <td>상품 할인 쿠폰</td>
+                        <td>구매 감사 쿠폰</td>
+                        <td>1,500 할인</td>
+                        <td>0000-00-00 ~<br>0000-00-00</td>
+                        <td>0000-00-00<br>00:00:00</td>
+                        <td><button type="button" class="small-btn gray">종료</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="coupon-bottom">
+                    <button type="button" class="delete-btn">선택삭제</button>
+                    <div class="pagination">
+                        <a href="#">이전</a>
+                        <a href="#">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">다음</a>
+                    </div>
+                    <button type="button" class="register-btn" id="openCouponRegister">쿠폰등록</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- 쿠폰정보 모달 -->
+        <div id="couponInfoModal" class="modal-overlay">
+            <div class="coupon-modal coupon-info-modal">
+                <div class="modal-header">
+                    <h3>쿠폰정보 <span>10121211341</span></h3>
+                    <button type="button" class="modal-close" id="closeCouponInfo">X</button>
+                </div>
+                <div class="modal-body">
+                    <table class="coupon-info-table">
+                        <tr>
+                            <th>쿠폰번호</th>
+                            <td>10121211341</td>
+                            <th>발급처</th>
+                            <td>(주)다있어</td>
+                        </tr>
+                        <tr>
+                            <th>쿠폰종류</th>
+                            <td colspan="3">개별상품 할인</td>
+                        </tr>
+                        <tr>
+                            <th>쿠폰명</th>
+                            <td colspan="3">10월 한달 감사 쿠폰 이벤트</td>
+                        </tr>
+                        <tr>
+                            <th>혜택</th>
+                            <td colspan="3">2,000 원 할인</td>
+                        </tr>
+                        <tr>
+                            <th>사용기간</th>
+                            <td colspan="3">0000-00-00 ~ 0000-00-00</td>
+                        </tr>
+                        <tr>
+                            <th>유의사항</th>
+                            <td colspan="3" class="notice-text">
+                                상품 중복 할인 쿠폰<br>
+                                - 상품 1개에 대해 사용 가능<br>
+                                - 판매자 즉시할인/상품할인 쿠폰과 중복 사용 가능<br><br>
+                                사용처<br>
+                                - (주)다있어
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="modal-btn-area">
+                        <button type="button" class="green-btn" id="bottomCloseCouponInfo">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 쿠폰등록 모달 -->
+        <div id="couponRegisterModal" class="modal-overlay">
+            <div class="coupon-modal coupon-register-modal">
+                <div class="modal-header">
+                    <h3>쿠폰등록</h3>
+                    <button type="button" class="modal-close" id="closeCouponRegister">X</button>
+                </div>
+                <div class="modal-body">
+                    <table class="coupon-form-table">
+                        <tr>
+                            <th>발급처</th>
+                            <td><input type="text" value="(주)다있어"></td>
+                        </tr>
+                        <tr>
+                            <th>쿠폰종류</th>
+                            <td>
+                                <select>
+                                    <option>종류선택</option>
+                                    <option>개별상품 할인</option>
+                                    <option>배송비 무료</option>
+                                    <option>회원가입 축하</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>쿠폰명</th>
+                            <td><input type="text"></td>
+                        </tr>
+                        <tr>
+                            <th>혜택</th>
+                            <td class="benefit-area">
+                                <label><input type="radio" name="benefit"> 1,000 할인</label>
+                                <label><input type="radio" name="benefit"> 2,000 할인</label>
+                                <label><input type="radio" name="benefit"> 3,000 할인</label>
+                                <label><input type="radio" name="benefit"> 4,000 할인</label>
+                                <label><input type="radio" name="benefit"> 5,000 할인</label>
+                                <label><input type="radio" name="benefit"> 10% 할인</label>
+                                <label><input type="radio" name="benefit"> 20% 할인</label>
+                                <label><input type="radio" name="benefit"> 30% 할인</label>
+                                <label><input type="radio" name="benefit"> 40% 할인</label>
+                                <label><input type="radio" name="benefit"> 50% 할인</label>
+                                <label><input type="radio" name="benefit"> 배송비 무료</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>사용기간</th>
+                            <td class="period-area">
+                                <input type="date">
+                                <span>~</span>
+                                <input type="date">
+                                <br>
+                                <span>또는 발급일로부터</span>
+                                <input type="text" class="day-input">
+                                <span>이내</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>유의사항</th>
+                            <td><textarea></textarea></td>
+                        </tr>
+                    </table>
+                    <div class="modal-btn-area">
+                        <button type="button" class="gray-btn" id="cancelCouponRegister">취소</button>
+                        <button type="button" class="green-btn">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+</div>
+
+<script>
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+
+    const couponInfoModal = document.getElementById("couponInfoModal");
+    const openCouponInfoButtons = document.querySelectorAll(".openCouponInfo");
+    const closeCouponInfo = document.getElementById("closeCouponInfo");
+    const bottomCloseCouponInfo = document.getElementById("bottomCloseCouponInfo");
+
+    openCouponInfoButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            couponInfoModal.classList.add("show");
+        });
+    });
+
+    closeCouponInfo.addEventListener("click", function () {
+        couponInfoModal.classList.remove("show");
+    });
+
+    bottomCloseCouponInfo.addEventListener("click", function () {
+        couponInfoModal.classList.remove("show");
+    });
+
+    couponInfoModal.addEventListener("click", function (e) {
+        if (e.target === couponInfoModal) {
+            couponInfoModal.classList.remove("show");
+        }
+    });
+
+    const couponRegisterModal = document.getElementById("couponRegisterModal");
+    const openCouponRegister = document.getElementById("openCouponRegister");
+    const closeCouponRegister = document.getElementById("closeCouponRegister");
+    const cancelCouponRegister = document.getElementById("cancelCouponRegister");
+
+    openCouponRegister.addEventListener("click", function () {
+        couponRegisterModal.classList.add("show");
+    });
+
+    closeCouponRegister.addEventListener("click", function () {
+        couponRegisterModal.classList.remove("show");
+    });
+
+    cancelCouponRegister.addEventListener("click", function () {
+        couponRegisterModal.classList.remove("show");
+    });
+
+    couponRegisterModal.addEventListener("click", function (e) {
+        if (e.target === couponRegisterModal) {
+            couponRegisterModal.classList.remove("show");
+        }
+    });
+</script>
+
+</body>
+</html>

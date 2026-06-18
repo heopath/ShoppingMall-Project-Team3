@@ -1,0 +1,245 @@
+/* =========================================================
+   쿠폰발급현황 페이지
+========================================================= */
+.issued-section {
+    width: 100%;
+    margin-top: 18px;
+}
+
+.issued-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 14px;
+}
+
+.issued-search-wrap select,
+.issued-search-wrap input {
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    background: #fff;
+    font-size: 12px;
+    color: #333;
+}
+
+.issued-search-wrap select {
+    width: 90px;
+    padding-left: 7px;
+}
+
+.issued-search-wrap input {
+    width: 130px;
+    padding: 0 8px;
+}
+
+.search-btn {
+    width: 55px;
+    height: 30px;
+    border: none;
+    background: #bfbfbf;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.issued-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #999;
+    font-size: 11px;
+    color: #333;
+}
+
+.issued-table th {
+    height: 35px;
+    border-bottom: 1px solid #dedede;
+    background: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+.issued-table td {
+    height: 56px;
+    border-bottom: 1px solid #e6e6e6;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.issued-table th:nth-child(1),
+.issued-table td:nth-child(1),
+.issued-table th:nth-child(2),
+.issued-table td:nth-child(2) {
+    width: 90px;
+}
+
+.issued-table th:nth-child(7),
+.issued-table td:nth-child(7) {
+    width: 85px;
+}
+
+.issued-table a {
+    color: #111;
+    text-decoration: underline;
+}
+
+.state.red {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.state.green {
+    color: #19a64a;
+    font-weight: bold;
+}
+
+.small-btn {
+    width: 38px;
+    height: 22px;
+    border: 1px solid #82b5ef;
+    background: #fff;
+    color: #2b7ed7;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.small-btn.gray {
+    border-color: #999;
+    background: #888;
+    color: #fff;
+}
+
+.issued-pagination {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.issued-pagination a {
+    margin: 0 5px;
+    color: #111;
+    font-size: 12px;
+}
+
+.issued-pagination a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   쿠폰정보 모달
+========================= */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+.coupon-modal {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid #777;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.coupon-info-modal {
+    width: 720px;
+}
+
+.coupon-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 34px;
+    padding: 0 12px;
+    background: #3a3a3a;
+    color: #fff;
+}
+
+.coupon-modal-header h3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.coupon-modal-header h3 span {
+    margin-left: 18px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.modal-close {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.coupon-modal-body {
+    padding: 22px 18px 28px;
+    background: #fff;
+}
+
+.coupon-info-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #dcdcdc;
+}
+
+.coupon-info-table th {
+    width: 105px;
+    height: 42px;
+    padding-left: 18px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #f1f1f1;
+    color: #333;
+    font-size: 12px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.coupon-info-table td {
+    height: 42px;
+    padding: 9px 14px;
+    border-bottom: 1px solid #e5e5e5;
+    color: #333;
+    font-size: 12px;
+}
+
+.coupon-info-table .unused {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.coupon-note {
+    line-height: 1.7;
+    vertical-align: top;
+}
+
+.coupon-info-btn-area {
+    margin-top: 26px;
+    text-align: center;
+}
+
+.green-btn {
+    width: 85px;
+    height: 36px;
+    border: none;
+    background: #2eb84a;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.green-btn:hover {
+    background: #24983c;
+}

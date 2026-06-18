@@ -1,0 +1,330 @@
+/* =========================================================
+   쿠폰목록 페이지
+========================================================= */
+.coupon-section {
+    width: 100%;
+    margin-top: 18px;
+}
+
+.coupon-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 14px;
+}
+
+.coupon-search-wrap select,
+.coupon-search-wrap input {
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    background: #fff;
+    font-size: 12px;
+    color: #333;
+}
+
+.coupon-search-wrap select {
+    width: 90px;
+    padding-left: 7px;
+}
+
+.coupon-search-wrap input {
+    width: 130px;
+    padding: 0 8px;
+}
+
+.search-btn {
+    width: 55px;
+    height: 30px;
+    border: none;
+    background: #bfbfbf;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.coupon-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #999;
+    font-size: 11px;
+    color: #333;
+}
+
+.coupon-table th {
+    height: 34px;
+    border-bottom: 1px solid #dedede;
+    background: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+.coupon-table td {
+    height: 56px;
+    border-bottom: 1px solid #e6e6e6;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.coupon-table th:nth-child(1),
+.coupon-table td:nth-child(1) {
+    width: 35px;
+}
+
+.coupon-table th:nth-child(2),
+.coupon-table td:nth-child(2) {
+    width: 90px;
+}
+
+.coupon-table th:nth-child(7),
+.coupon-table td:nth-child(7),
+.coupon-table th:nth-child(8),
+.coupon-table td:nth-child(8) {
+    width: 85px;
+}
+
+.coupon-no {
+    color: #111;
+    text-decoration: underline;
+}
+
+.small-btn {
+    width: 38px;
+    height: 22px;
+    border: 1px solid #82b5ef;
+    background: #fff;
+    color: #2b7ed7;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.small-btn.gray {
+    border-color: #999;
+    background: #888;
+    color: #fff;
+}
+
+.coupon-bottom {
+    position: relative;
+    min-height: 55px;
+    margin-top: 15px;
+}
+
+.delete-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 78px;
+    height: 32px;
+    border: none;
+    background: #bdbdbd;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.register-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 82px;
+    height: 32px;
+    border: none;
+    background: #9fc5f8;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.pagination {
+    padding-top: 9px;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 5px;
+    color: #111;
+    font-size: 12px;
+}
+
+/* =========================================================
+   모달 공통
+========================================================= */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 9999;
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+.coupon-modal {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid #777;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.coupon-info-modal {
+    width: 690px;
+}
+
+.coupon-register-modal {
+    width: 720px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 34px;
+    padding: 0 10px;
+    background: #3d3d3d;
+    color: #fff;
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.modal-header h3 span {
+    margin-left: 12px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.modal-close {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 16px 18px 24px;
+}
+
+.coupon-info-table,
+.coupon-form-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #dedede;
+}
+
+.coupon-info-table th,
+.coupon-form-table th {
+    width: 105px;
+    padding: 12px 10px;
+    border-bottom: 1px solid #e2e2e2;
+    background: #f2f2f2;
+    font-size: 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.coupon-info-table td,
+.coupon-form-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e2e2e2;
+    background: #fff;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.coupon-info-table .notice-text {
+    min-height: 105px;
+    vertical-align: top;
+    line-height: 1.7;
+}
+
+.coupon-form-table input[type="text"],
+.coupon-form-table input[type="date"],
+.coupon-form-table select {
+    height: 28px;
+    border: 1px solid #cfcfcf;
+    padding: 0 8px;
+    font-size: 12px;
+    color: #333;
+}
+
+.coupon-form-table input[type="text"] {
+    width: 330px;
+}
+
+.coupon-form-table select {
+    width: 135px;
+}
+
+.benefit-area {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    gap: 5px 13px;
+    align-items: center;
+}
+
+.benefit-area label {
+    white-space: nowrap;
+}
+
+.period-area input[type="date"] {
+    width: 125px;
+}
+
+.period-area .day-input {
+    width: 58px !important;
+    margin: 7px 5px 0 7px;
+}
+
+.period-area input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}
+
+.coupon-form-table textarea {
+    width: 330px;
+    height: 105px;
+    padding: 10px;
+    border: 1px solid #cfcfcf;
+    resize: none;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.modal-btn-area {
+    margin-top: 22px;
+    text-align: center;
+}
+
+.gray-btn,
+.green-btn {
+    min-width: 78px;
+    height: 34px;
+    border: none;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.gray-btn {
+    background: #bdbdbd;
+}
+
+.green-btn {
+    background: #2fb64d;
+}
+
+.gray-btn:hover {
+    background: #999;
+}
+
+.green-btn:hover {
+    background: #23943a;
+}
