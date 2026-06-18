@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 상품등록</title>
+    <link rel="stylesheet" href="../../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin/product/register.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/logout">로그아웃</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+        <aside class="sidebar">
+            <ul class="admin-menu">
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">⚙ 환경설정</li>
+                <li class="sub-menu-wrap close" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">👥 상점관리</li>
+                <li class="sub-menu-wrap close" id="shopMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">👤 회원관리</li>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                        <li class="sub-menu"><a href="/admin/member/point">- 포인트관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title active" onclick="toggleMenu(this, 'productMenu')">📦 상품관리</li>
+                <li class="sub-menu-wrap" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                        <li class="sub-menu active"><a href="/admin/product/register">- 상품등록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">🧾 주문관리</li>
+                <li class="sub-menu-wrap close" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">💬 고객센터</li>
+                <li class="sub-menu-wrap close" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <div class="page-title">
+                <h2>상품등록</h2>
+                <span>HOME &gt; 상품관리 &gt; 상품등록</span>
+            </div>
+
+            <section class="product-register-section">
+                <form>
+                    <div class="form-block">
+                        <h3>상품분류</h3>
+                        <p class="form-guide">1차, 2차 카테고리 기본분류는 반드시 선택하셔야 합니다.</p>
+                        <table class="register-table">
+                            <tr>
+                                <th>1차 분류</th>
+                                <td>
+                                    <select>
+                                        <option>1차분류 선택</option>
+                                        <option>패션</option>
+                                        <option>식품</option>
+                                        <option>가전</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>2차 분류</th>
+                                <td>
+                                    <select>
+                                        <option>2차분류 선택</option>
+                                        <option>상의</option>
+                                        <option>하의</option>
+                                        <option>신발</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="form-block">
+                        <h3>기본정보</h3>
+                        <p class="form-guide">기본정보는 반드시 입력하셔야 합니다.</p>
+                        <table class="register-table">
+                            <tr>
+                                <th>상품명</th>
+                                <td><input type="text" class="text-input"></td>
+                            </tr>
+                            <tr>
+                                <th>기본설명</th>
+                                <td><input type="text" class="text-input"></td>
+                            </tr>
+                            <tr>
+                                <th>제조사</th>
+                                <td><input type="text" class="text-input"></td>
+                            </tr>
+                            <tr>
+                                <th>소비자가</th>
+                                <td><input type="text" class="text-input small-input"> <span>원</span></td>
+                            </tr>
+                            <tr>
+                                <th>판매가</th>
+                                <td><input type="text" class="text-input small-input"> <span>원</span></td>
+                            </tr>
+                            <tr>
+                                <th>할인율</th>
+                                <td><input type="text" class="text-input small-input"> <span>%</span></td>
+                            </tr>
+                            <tr>
+                                <th>포인트</th>
+                                <td><input type="text" class="text-input small-input"> <span>점</span></td>
+                            </tr>
+                            <tr>
+                                <th>재고수량</th>
+                                <td><input type="text" class="text-input small-input"> <span>개</span></td>
+                            </tr>
+                            <tr>
+                                <th>배송비</th>
+                                <td><input type="text" class="text-input small-input"> <span>원</span></td>
+                            </tr>
+                            <tr>
+                                <th rowspan="4">상품 이미지</th>
+                                <td class="file-row">
+                                    <button type="button" class="file-btn">파일선택</button>
+                                    <span class="file-name">선택된 파일없음</span>
+                                    <span class="file-guide">크기 190 × 190, 상품 목록에 출력 될 이미지 입니다.</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="file-row">
+                                    <button type="button" class="file-btn">파일선택</button>
+                                    <span class="file-name">선택된 파일없음</span>
+                                    <span class="file-guide">크기 230 × 230, 상품 메인에 출력 될 이미지 입니다.</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="file-row">
+                                    <button type="button" class="file-btn">파일선택</button>
+                                    <span class="file-name">선택된 파일없음</span>
+                                    <span class="file-guide">크기 456 × 456, 상품 상세에 출력 될 이미지 입니다.</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="file-row">
+                                    <button type="button" class="file-btn">파일선택</button>
+                                    <span class="file-name">선택된 파일없음</span>
+                                    <span class="file-guide">크기 940px, 높이 제한없음, 크기 최대 1MB</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="form-block option-block">
+                        <h3>상품 선택정보</h3>
+                        <p class="form-guide option-guide">
+                            상품에 선택정보를 입력하세요.<br>
+                            예시) 옵션1 : 사이즈, 옵션1 항목 : XXL, XL, L, M, S (콤마로 구분)
+                        </p>
+                        <table class="option-table">
+                            <tr>
+                                <th>옵션1</th>
+                                <td><input type="text"></td>
+                                <th>옵션1 항목</th>
+                                <td><input type="text"></td>
+                            </tr>
+                            <tr>
+                                <th>옵션2</th>
+                                <td><input type="text"></td>
+                                <th>옵션2 항목</th>
+                                <td><input type="text"></td>
+                            </tr>
+                            <tr>
+                                <th>옵션3</th>
+                                <td><input type="text"></td>
+                                <th>옵션3 항목</th>
+                                <td><input type="text"></td>
+                            </tr>
+                        </table>
+                        <button type="button" class="option-add-btn">옵션 추가</button>
+                    </div>
+
+                    <div class="form-block notice-block">
+                        <h3>상품정보 제공고시</h3>
+                        <p class="form-guide">[전자상거래법 관련 상품정보 제공에 관한 고시] 항목에 의거 등록하는 정보입니다.</p>
+                        <table class="register-table">
+                            <tr>
+                                <th>상품상태</th>
+                                <td><input type="text" class="text-input" value="새상품"></td>
+                            </tr>
+                            <tr>
+                                <th>부가세 면세여부</th>
+                                <td><input type="text" class="text-input" value="과세상품"></td>
+                            </tr>
+                            <tr>
+                                <th>영수증 발행</th>
+                                <td><input type="text" class="text-input" value="발행가능 - 신용카드전표, 온라인현금영수증 등"></td>
+                            </tr>
+                            <tr>
+                                <th>사업자구분</th>
+                                <td><input type="text" class="text-input" value="사업자판매자"></td>
+                            </tr>
+                            <tr>
+                                <th>원산지</th>
+                                <td><input type="text" class="text-input" value="국내산"></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="yellow-guide">
+                        전자상거래등에서의 상품등의 정보 제공에 관한 고시에 따라 총 35개 상품군에 대해 상품 특성들을 양식에 따라 입력할 수 있습니다.
+                    </div>
+
+                    <div class="register-btn-area">
+                        <button type="button" class="submit-btn">등록하기</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+</div>
+
+<script>
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+</script>
+
+</body>
+</html>

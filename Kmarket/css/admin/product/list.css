@@ -1,0 +1,170 @@
+/* =========================================================
+   상품목록 페이지
+========================================================= */
+.product-list-section {
+    width: 100%;
+    margin-top: 18px;
+}
+
+.product-search-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 13px;
+    gap: 5px;
+}
+
+.product-search-wrap select {
+    width: 82px;
+    height: 31px;
+    padding-left: 7px;
+    border: 1px solid #bdbdbd;
+    background: #fff;
+    font-size: 12px;
+}
+
+.product-search-wrap input {
+    width: 135px;
+    height: 31px;
+    padding: 0 8px;
+    border: 1px solid #bdbdbd;
+    font-size: 12px;
+}
+
+.product-search-btn {
+    width: 55px;
+    height: 31px;
+    border: none;
+    background: #bfbfbf;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #999;
+    font-size: 11px;
+    color: #333;
+}
+
+.product-table th {
+    height: 34px;
+    border-bottom: 1px solid #ddd;
+    background: #fff;
+    text-align: center;
+    font-weight: bold;
+}
+
+.product-table td {
+    min-height: 58px;
+    padding: 7px 4px;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.product-table th:nth-child(1),
+.product-table td:nth-child(1) {
+    width: 32px;
+}
+
+.product-table th:nth-child(2),
+.product-table td:nth-child(2) {
+    width: 55px;
+}
+
+.product-table th:nth-child(3),
+.product-table td:nth-child(3) {
+    width: 78px;
+}
+
+.product-table th:nth-child(4),
+.product-table td:nth-child(4) {
+    width: 105px;
+}
+
+.thumb-box {
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    margin: 0 auto;
+    border: 1px solid #d0d0d0;
+    background: #f4f4f4;
+    color: #999;
+    font-size: 10px;
+}
+
+.product-name {
+    text-align: left !important;
+    padding-left: 8px !important;
+}
+
+.manage-cell a {
+    display: block;
+    color: #111;
+    line-height: 16px;
+    font-size: 11px;
+}
+
+.manage-cell a:hover {
+    text-decoration: underline;
+}
+
+.product-bottom {
+    position: relative;
+    min-height: 52px;
+    margin-top: 14px;
+}
+
+.product-delete-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 75px;
+    height: 32px;
+    border: none;
+    background: #bdbdbd;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.product-register-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: inline-block;
+    width: 80px;
+    height: 32px;
+    line-height: 32px;
+    background: #9fc5f8;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+}
+
+.product-delete-btn:hover {
+    background: #999;
+}
+
+.product-register-btn:hover {
+    background: #6fa8dc;
+}
+
+.product-pagination {
+    padding-top: 9px;
+    text-align: center;
+}
+
+.product-pagination a {
+    margin: 0 4px;
+    color: #111;
+    font-size: 12px;
+}
+
+.product-pagination a.active,
+.product-pagination a:hover {
+    font-weight: bold;
+    text-decoration: underline;
+}

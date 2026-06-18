@@ -1,0 +1,268 @@
+/* =========================================================
+   배송현황 페이지
+========================================================= */
+.delivery-section {
+    width: 100%;
+    margin-top: 18px;
+}
+
+.delivery-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 14px;
+}
+
+.delivery-search-wrap select,
+.delivery-search-wrap input {
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    background: #fff;
+    font-size: 12px;
+    color: #333;
+}
+
+.delivery-search-wrap select {
+    width: 90px;
+    padding-left: 7px;
+}
+
+.delivery-search-wrap input {
+    width: 130px;
+    padding: 0 8px;
+}
+
+.delivery-search-btn {
+    width: 55px;
+    height: 30px;
+    border: none;
+    background: #bfbfbf;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.delivery-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #999;
+    font-size: 12px;
+    color: #333;
+}
+
+.delivery-table th {
+    height: 35px;
+    border-bottom: 1px solid #dedede;
+    background: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+.delivery-table td {
+    height: 58px;
+    border-bottom: 1px solid #e6e6e6;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.delivery-table th:nth-child(1),
+.delivery-table td:nth-child(1) {
+    width: 95px;
+}
+
+.delivery-table th:nth-child(8),
+.delivery-table td:nth-child(8) {
+    width: 95px;
+}
+
+.invoice-link {
+    color: #111;
+    text-decoration: underline;
+}
+
+.delivery-view {
+    color: #3485df;
+    text-decoration: underline;
+}
+
+.fee-free {
+    color: #333;
+}
+
+.fee-blue {
+    color: #3485df;
+    font-weight: bold;
+}
+
+.fee-red {
+    color: #e84b4b;
+    font-weight: bold;
+}
+
+.fee-green {
+    color: #1ca344;
+    font-weight: bold;
+}
+
+.delivery-bottom {
+    position: relative;
+    min-height: 50px;
+    margin-top: 16px;
+}
+
+.delivery-delete-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 75px;
+    height: 32px;
+    border: none;
+    background: #bdbdbd;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.delivery-pagination {
+    padding-top: 9px;
+    text-align: center;
+}
+
+.delivery-pagination a {
+    margin: 0 5px;
+    color: #111;
+    font-size: 12px;
+}
+
+.delivery-pagination a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================================
+   배송상세 모달
+========================================================= */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 9999;
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+.delivery-modal {
+    position: absolute;
+    left: 50%;
+    top: 25px;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid #777;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.delivery-detail-modal {
+    width: 660px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 32px;
+    padding: 0 10px;
+    background: #3d3d3d;
+    color: #fff;
+}
+
+.modal-header h3 {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.modal-header h3 span {
+    margin-left: 12px;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.modal-close {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 14px 18px 22px;
+}
+
+.modal-body h4 {
+    margin: 12px 0 7px;
+    padding-left: 7px;
+    border-left: 3px solid #333;
+    font-size: 13px;
+    font-weight: bold;
+    color: #111;
+}
+
+.detail-product-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 2px solid #333;
+    font-size: 12px;
+}
+
+.detail-product-table th {
+    height: 30px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-weight: bold;
+}
+
+.detail-product-table td {
+    height: 48px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.modal-thumb {
+    width: 42px;
+    height: 36px;
+    margin: 0 auto;
+    border: 1px solid #cfcfcf;
+    color: #aaa;
+    font-size: 10px;
+    line-height: 36px;
+    text-align: center;
+}
+
+.detail-info-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 2px solid #333;
+    font-size: 12px;
+}
+
+.detail-info-table.second {
+    margin-top: 14px;
+}
+
+.detail-info-table th {
+    width: 105px;
+    height: 28px;
+    padding-left: 12px;
+    background: #f2f2f2;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: left;
+    font-weight: bold;
+}
+
+.detail-info-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
