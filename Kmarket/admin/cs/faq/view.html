@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자주묻는질문 보기</title>
+    <link rel="stylesheet" href="../../../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../../../css/admin/cs/faq/list.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/logout">로그아웃</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+
+        <aside class="sidebar">
+            <ul class="admin-menu">
+
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
+                    ⚙ 환경설정
+                </li>
+                <li class="sub-menu-wrap close" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">
+                    👥 상점관리
+                </li>
+                <li class="sub-menu-wrap close" id="shopMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">
+                    👤 회원관리
+                </li>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
+                    📦 상품관리
+                </li>
+                <li class="sub-menu-wrap close" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
+                    🧾 주문관리
+                </li>
+                <li class="sub-menu-wrap close" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title active" onclick="toggleMenu(this, 'csMenu')">
+                    💬 고객센터
+                </li>
+                <li class="sub-menu-wrap" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                        <li class="sub-menu active"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </aside>
+
+        <main class="content">
+
+            <div class="page-title">
+                <h2>자주묻는질문 보기</h2>
+                <span>HOME &gt; 고객센터 &gt; 자주묻는질문</span>
+            </div>
+
+            <section class="faq-view-section">
+                <table class="faq-view-table">
+                    <tr>
+                        <th>유형</th>
+                        <td>회원 - 가입</td>
+                    </tr>
+                    <tr>
+                        <th>제목</th>
+                        <td>개인회원과 법인회원 차이가 있나요?</td>
+                    </tr>
+                    <tr>
+                        <th>내용</th>
+                        <td class="content-cell">개인회원은 본인인증 후, 법인회원은 사업자등록번호를 기준으로 사업자 인증 후 가입가능합니다.
+
+개인회원에서 법인회원으로 전환은 불가하므로 법인회원으로 진행을 원하신다면 신규가입으로 진행을 해야합니다.</td>
+                    </tr>
+                </table>
+
+                <div class="faq-view-btn-area">
+                    <a href="#" class="btn-gray">삭제</a>
+                    <a href="/admin/cs/faq/modify" class="btn-gray">수정</a>
+                    <a href="/admin/cs/faq/list" class="btn-blue">목록</a>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+
+</div>
+
+<script>
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+</script>
+
+</body>
+</html>

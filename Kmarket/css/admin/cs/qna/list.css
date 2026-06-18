@@ -1,0 +1,229 @@
+/* =========================================================
+   QNA 공통
+========================================================= */
+.qna-section,
+.qna-view-section,
+.qna-reply-section {
+    width: 100%;
+    margin-top: 18px;
+}
+
+/* =========================================================
+   QNA 목록
+========================================================= */
+.qna-search {
+    margin-bottom: 12px;
+}
+
+.qna-search select {
+    width: 100px;
+    height: 32px;
+    margin-right: 6px;
+    padding-left: 8px;
+    border: 1px solid #bbb;
+    background: #fff;
+    font-size: 12px;
+    color: #333;
+}
+
+.qna-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #999;
+    font-size: 12px;
+    color: #333;
+}
+
+.qna-table th {
+    height: 36px;
+    border-bottom: 1px solid #dcdcdc;
+    background: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+.qna-table td {
+    height: 42px;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+}
+
+.qna-table .check-cell {
+    width: 45px;
+}
+
+.qna-table th:nth-child(2),
+.qna-table td:nth-child(2) {
+    width: 60px;
+}
+
+.qna-table th:nth-child(3),
+.qna-table td:nth-child(3),
+.qna-table th:nth-child(4),
+.qna-table td:nth-child(4) {
+    width: 85px;
+}
+
+.qna-table th:nth-child(6),
+.qna-table td:nth-child(6) {
+    width: 80px;
+}
+
+.qna-table th:nth-child(7),
+.qna-table td:nth-child(7) {
+    width: 85px;
+}
+
+.qna-table th:nth-child(8),
+.qna-table td:nth-child(8) {
+    width: 75px;
+}
+
+.qna-table .title-cell {
+    text-align: left;
+    padding-left: 15px;
+}
+
+.qna-table .title-cell a {
+    color: #111;
+}
+
+.qna-table .title-cell a:hover {
+    text-decoration: underline;
+}
+
+.state-ready a {
+    color: #111;
+}
+
+.state-ready a:hover {
+    text-decoration: underline;
+}
+
+.state-complete {
+    color: #2f80ed;
+    font-weight: bold;
+}
+
+.wave-row td {
+    height: 52px;
+    border-bottom: 1px solid #e5e5e5;
+    background:
+        radial-gradient(50% 8px at 25% 0, transparent 70%, #aaa 72%, transparent 74%) repeat-x,
+        radial-gradient(50% 8px at 75% 100%, transparent 70%, #aaa 72%, transparent 74%) repeat-x;
+    background-size: 60px 20px;
+    background-position: 0 14px, 0 28px;
+}
+
+.qna-bottom {
+    position: relative;
+    min-height: 55px;
+    margin-top: 15px;
+}
+
+.qna-delete-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 78px;
+    height: 34px;
+    border: none;
+    background: #bcbcbc;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.qna-delete-btn:hover {
+    background: #999;
+}
+
+.qna-pagination {
+    padding-top: 10px;
+    text-align: center;
+}
+
+.qna-pagination a {
+    margin: 0 4px;
+    color: #111;
+    font-size: 13px;
+}
+
+.qna-pagination a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================================
+   QNA 보기 / 답변
+========================================================= */
+.qna-view-table,
+.qna-reply-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #777;
+    margin-top: 48px;
+}
+
+.qna-view-table th,
+.qna-reply-table th {
+    width: 90px;
+    padding: 15px 0 15px 20px;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: left;
+    font-size: 13px;
+    font-weight: bold;
+    color: #111;
+    vertical-align: middle;
+}
+
+.qna-view-table td,
+.qna-reply-table td {
+    padding: 15px 0;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 12px;
+    color: #333;
+    line-height: 1.8;
+}
+
+.qna-view-table .content-cell,
+.qna-reply-table .content-cell {
+    min-height: 70px;
+    padding-top: 18px;
+    padding-bottom: 26px;
+    white-space: pre-line;
+}
+
+.qna-view-table .answer-cell {
+    min-height: 110px;
+    padding-top: 18px;
+    padding-bottom: 36px;
+    white-space: pre-line;
+}
+
+.qna-reply-table textarea {
+    width: 520px;
+    height: 120px;
+    padding: 13px;
+    border: 1px solid #bfbfbf;
+    resize: none;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #333;
+    font-family: inherit;
+}
+
+.qna-view-btn-area,
+.qna-reply-btn-area {
+    margin-top: 75px;
+    text-align: right;
+}
+
+.qna-reply-btn-area {
+    margin-top: 32px;
+}
+
+.qna-view-btn-area .btn-gray,
+.qna-reply-btn-area .btn-gray,
+.qna-reply-btn-area .btn-blue {
+    margin-left: 6px;
+}

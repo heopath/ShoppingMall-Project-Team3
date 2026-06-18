@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>채용하기 목록</title>
+    <link rel="stylesheet" href="../../../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../../../css/admin/cs/recruit/list.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/logout">로그아웃</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+
+        <aside class="sidebar">
+            <ul class="admin-menu">
+
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
+                    ⚙ 환경설정
+                </li>
+                <li class="sub-menu-wrap close" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">
+                    👥 상점관리
+                </li>
+                <li class="sub-menu-wrap close" id="shopMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">
+                    👤 회원관리
+                </li>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
+                    📦 상품관리
+                </li>
+                <li class="sub-menu-wrap close" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
+                    🧾 주문관리
+                </li>
+                <li class="sub-menu-wrap close" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title active" onclick="toggleMenu(this, 'csMenu')">
+                    💬 고객센터
+                </li>
+                <li class="sub-menu-wrap" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                        <li class="sub-menu active"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </aside>
+
+        <main class="content">
+
+            <div class="page-title">
+                <h2>채용하기 목록</h2>
+                <span>HOME &gt; 고객센터 &gt; 채용하기</span>
+            </div>
+
+            <section class="recruit-section">
+
+                <div class="recruit-search">
+                    <select>
+                        <option>채용부서</option>
+                        <option>IT</option>
+                        <option>경영지원</option>
+                        <option>영업</option>
+                        <option>마케팅</option>
+                    </select>
+                    <input type="text" placeholder="검색어입력">
+                    <button type="button" class="recruit-search-btn">검색</button>
+                </div>
+
+                <table class="recruit-table">
+                    <thead>
+                    <tr>
+                        <th class="check-cell"><input type="checkbox"></th>
+                        <th>번호</th>
+                        <th>채용부서</th>
+                        <th>경력사항</th>
+                        <th>채용형태</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>상태</th>
+                        <th>모집기간</th>
+                        <th>작성일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>120</td>
+                        <td>도서</td>
+                        <td>경력 4 ~ 5년</td>
+                        <td>정규직</td>
+                        <td class="title-cell">코드 검토역 기획</td>
+                        <td>관리자</td>
+                        <td class="status-open">모집중</td>
+                        <td>0000-00-00<br>~ 0000-00-00</td>
+                        <td>0000-00-00<br>00:00:00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>119</td>
+                        <td>IT</td>
+                        <td>경력 2 ~ 3년</td>
+                        <td>정규직</td>
+                        <td class="title-cell">IT 개발 서버 정규직 채용</td>
+                        <td>관리자</td>
+                        <td class="status-open">모집중</td>
+                        <td>0000-00-00<br>~ 0000-00-00</td>
+                        <td>0000-00-00<br>00:00:00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>118</td>
+                        <td>운영</td>
+                        <td>무관</td>
+                        <td>계약직</td>
+                        <td class="title-cell">단기 아르바이트 모집</td>
+                        <td>관리자</td>
+                        <td>마감</td>
+                        <td>0000-00-00<br>~ 0000-00-00</td>
+                        <td>0000-00-00<br>00:00:00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>117</td>
+                        <td>경영</td>
+                        <td>신입</td>
+                        <td>계약직</td>
+                        <td class="title-cell">경력지원 부분 공개 채용</td>
+                        <td>관리자</td>
+                        <td>마감</td>
+                        <td>0000-00-00<br>~ 0000-00-00</td>
+                        <td>0000-00-00<br>00:00:00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>113</td>
+                        <td>IT</td>
+                        <td>경력</td>
+                        <td>정규직</td>
+                        <td class="title-cell">웹 개발자 경력직 채용</td>
+                        <td>관리자</td>
+                        <td class="status-open">모집중</td>
+                        <td>0000-00-00<br>~ 0000-00-00</td>
+                        <td>0000-00-00<br>00:00:00</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="recruit-bottom">
+                    <button type="button" class="recruit-delete-btn">선택삭제</button>
+
+                    <div class="recruit-pagination">
+                        <a href="#">이전</a>
+                        <a href="#">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">다음</a>
+                    </div>
+
+                    <button type="button" class="recruit-register-btn" id="openRecruitModal">채용등록</button>
+                </div>
+
+            </section>
+
+        </main>
+
+        <div id="recruitModal" class="modal-overlay">
+            <div class="recruit-modal">
+                <div class="recruit-modal-header">
+                    <h3>채용등록</h3>
+                    <button type="button" class="modal-close" id="closeRecruitModal">X</button>
+                </div>
+
+                <div class="recruit-modal-body">
+                    <table class="recruit-form-table">
+                        <tr>
+                            <th>제목</th>
+                            <td><input type="text" class="recruit-input title-input"></td>
+                        </tr>
+                        <tr>
+                            <th>채용부서</th>
+                            <td>
+                                <select class="recruit-select">
+                                    <option>채용부서 선택</option>
+                                    <option>IT</option>
+                                    <option>경영지원</option>
+                                    <option>영업</option>
+                                    <option>마케팅</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>경력사항</th>
+                            <td>
+                                <select class="recruit-select">
+                                    <option>경력사항 선택</option>
+                                    <option>신입</option>
+                                    <option>경력</option>
+                                    <option>무관</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>채용형태</th>
+                            <td>
+                                <select class="recruit-select">
+                                    <option>채용형태 선택</option>
+                                    <option>정규직</option>
+                                    <option>계약직</option>
+                                    <option>인턴</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>모집기간</th>
+                            <td class="date-row">
+                                <input type="date" class="date-input">
+                                <span>~</span>
+                                <input type="date" class="date-input">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>비고</th>
+                            <td><textarea class="recruit-textarea"></textarea></td>
+                        </tr>
+                    </table>
+
+                    <div class="recruit-modal-btn-area">
+                        <button type="button" class="modal-cancel-btn" id="cancelRecruitModal">취소</button>
+                        <button type="button" class="modal-submit-btn">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+
+</div>
+
+<script>
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+
+    const recruitModal = document.getElementById("recruitModal");
+    const openRecruitModal = document.getElementById("openRecruitModal");
+    const closeRecruitModal = document.getElementById("closeRecruitModal");
+    const cancelRecruitModal = document.getElementById("cancelRecruitModal");
+
+    openRecruitModal.addEventListener("click", function () {
+        recruitModal.classList.add("show");
+    });
+
+    closeRecruitModal.addEventListener("click", function () {
+        recruitModal.classList.remove("show");
+    });
+
+    cancelRecruitModal.addEventListener("click", function () {
+        recruitModal.classList.remove("show");
+    });
+
+    recruitModal.addEventListener("click", function (e) {
+        if (e.target === recruitModal) {
+            recruitModal.classList.remove("show");
+        }
+    });
+</script>
+
+</body>
+</html>
