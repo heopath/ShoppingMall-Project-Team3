@@ -1,194 +1,204 @@
-/* =========================================================
-   7. 관리자 메인 - 집계현황 차트
-   - main.jsp에 적용
-========================================================= */
-.chart-area {
+/* ===============================
+   관리자 메인 전용
+=============================== */
+
+.admin-index-content {
+    min-height: 980px;
+}
+
+/* 공통 섹션 */
+.dashboard-section {
+    margin-bottom: 26px;
+}
+
+.dashboard-section h3 {
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #111;
+}
+
+/* ===============================
+   집계현황
+=============================== */
+.chart-wrap {
     display: flex;
-    gap: 18px;
     justify-content: space-between;
-    padding: 18px;
-    border: 1px solid #d7e4d1;
-    border-radius: 6px;
-    background: #fbfef9;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 6px 0 10px;
 }
 
 .bar-chart-box {
-    width: 56%;
+    width: 400px;
 }
 
-.legend {
-    margin-bottom: 14px;
-    text-align: center;
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    font-size: 11px;
     color: #555;
-    font-size: 12px;
 }
 
-.legend span,
-.pie-legend span {
+.legend-box {
     display: inline-block;
-    width: 10px;
-    height: 10px;
-    margin-left: 12px;
+    width: 8px;
+    height: 8px;
     margin-right: 4px;
-    vertical-align: -1px;
+    vertical-align: middle;
 }
 
-.blue {
-    background: #4f83c4;
-}
-
-.red {
-    background: #e64646;
-}
-
-.green {
-    background: #31aa00;
-}
-
-.purple {
-    background: #7b5ba7;
-}
+.legend-box.blue { background: #5d86c6; }
+.legend-box.red { background: #c65a5a; }
+.legend-box.green { background: #9dbd5a; }
+.legend-box.purple { background: #7f6ab3; }
 
 .bar-chart {
-    height: 230px;
     display: flex;
     align-items: flex-end;
-    gap: 26px;
-    padding-left: 22px;
-    border-left: 1px solid #b9cbb0;
-    border-bottom: 1px solid #b9cbb0;
-    background: linear-gradient(to top, #e1eadc 1px, transparent 1px);
-    background-size: 100% 46px;
+    justify-content: space-between;
+    height: 180px;
+    padding: 14px 16px 0;
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }
 
 .bar-group {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    gap: 5px;
+    width: 56px;
+    text-align: center;
+    font-size: 11px;
+    color: #666;
 }
 
-.bar-group p {
-    position: absolute;
-    bottom: -24px;
-    left: 0;
-    color: #555;
-    font-size: 12px;
+.bars {
+    height: 145px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 4px;
 }
 
 .bar {
-    width: 13px;
-    border-radius: 2px 2px 0 0;
+    width: 10px;
 }
 
-.blue-bar {
-    background: #4f83c4;
+.bar.blue { background: #5d86c6; }
+.bar.red { background: #c65a5a; }
+.bar.green { background: #9dbd5a; }
+
+.bar-group p {
+    margin-top: 6px;
 }
 
-.red-bar {
-    background: #e64646;
-}
-
-.green-bar {
-    background: #31aa00;
-}
-
-/* 막대그래프 높이값 */
-.h200 { height: 200px; }
-.h130 { height: 130px; }
-.h125 { height: 125px; }
-.h120 { height: 120px; }
-.h90 { height: 90px; }
-.h80 { height: 80px; }
-.h70 { height: 70px; }
-.h50 { height: 50px; }
-.h45 { height: 45px; }
-.h30 { height: 30px; }
-.h25 { height: 25px; }
-
+/* 원형차트 */
 .pie-chart-box {
-    width: 38%;
+    width: 240px;
     text-align: center;
 }
 
 .pie-chart {
-    width: 220px;
-    height: 220px;
-    margin: 0 auto 15px;
+    width: 145px;
+    height: 145px;
+    margin: 0 auto 12px;
     border-radius: 50%;
     background: conic-gradient(
-            #4f83c4 0deg 215deg,
-            #e64646 215deg 300deg,
-            #31aa00 300deg 335deg,
-            #7b5ba7 335deg 360deg
+        #5d86c6 0% 58%,
+        #c65a5a 58% 80%,
+        #9dbd5a 80% 92%,
+        #7f6ab3 92% 100%
     );
-    border: 1px solid #e1eadc;
 }
 
 .pie-legend {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 11px;
     color: #555;
-    font-size: 12px;
 }
 
-
-/* =========================================================
-   8. 관리자 메인 - 운영현황
-   - main.jsp에 적용
-========================================================= */
-.status-row,
-.status-table {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    margin-bottom: 14px;
-    border: 1px solid #d7e4d1;
-    border-radius: 6px;
-    background: #fff;
-    overflow: hidden;
+/* ===============================
+   운영현황
+=============================== */
+.operation-top {
+    display: flex;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }
 
-.status-row div,
-.status-table div {
-    min-height: 76px;
-    padding: 15px 7px;
+.operation-card {
+    flex: 1;
+    padding: 12px 8px;
     text-align: center;
-    border-right: 1px solid #e1eadc;
+    border-right: 1px solid #eee;
 }
 
-.status-row div:last-child,
-.status-table div:last-child {
-    border-right: none;
+.operation-card:last-child {
+    border-right: 0;
 }
 
-.status-row strong,
-.status-table strong {
-    display: block;
-    margin-bottom: 7px;
-    color: #111;
-    font-size: 13px;
-}
-
-.status-row b,
-.status-table b {
+.operation-card strong {
     display: block;
     margin-bottom: 8px;
-    color: #249600;
-    font-size: 18px;
-}
-
-.status-table p {
-    color: #666;
     font-size: 12px;
-    line-height: 21px;
+    color: #333;
 }
 
+.operation-card b {
+    color: #d93b3b;
+    font-size: 15px;
+}
 
-/* =========================================================
-   9. 관리자 메인 - 공지사항 / 고객문의
-   - main.jsp에 적용
-========================================================= */
+.operation-summary {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+.summary-item {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    border-right: 1px solid #eee;
+}
+
+.summary-item:last-child {
+    border-right: 0;
+}
+
+.summary-item strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 12px;
+}
+
+.summary-item b {
+    display: block;
+    margin-bottom: 8px;
+    color: #d93b3b;
+    font-size: 15px;
+}
+
+.summary-item p {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.summary-item p span {
+    color: #333;
+}
+
+/* ===============================
+   공지사항 / 고객문의
+=============================== */
 .board-section {
     display: flex;
     gap: 24px;
+    align-items: flex-start;
 }
 
 .board-box {
@@ -196,28 +206,48 @@
 }
 
 .board-box h3 {
-    padding-bottom: 8px;
-    border-bottom: 1px solid #cddcc6;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #111;
 }
 
-.board-box li {
+.board-list {
+    border-top: 1px solid #333;
+}
+
+.board-list li {
     display: flex;
-    justify-content: space-between;
-    height: 38px;
-    line-height: 38px;
-    border-bottom: 1px solid #e5eee0;
-    color: #444;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    border-bottom: 1px solid #e5e5e5;
     font-size: 12px;
 }
 
-.board-box li:hover span {
-    color: #249600;
+.board-list li a {
+    flex: 1;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.board-list li a:hover {
     text-decoration: underline;
 }
 
-.board-box em {
-    color: #777;
+.board-list li em {
+    min-width: 52px;
     font-style: normal;
+    color: #666;
+    text-align: center;
+    font-size: 11px;
 }
 
-
+.board-list li span {
+    min-width: 56px;
+    text-align: right;
+    color: #666;
+    font-size: 11px;
+}
