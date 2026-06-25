@@ -298,9 +298,11 @@ CREATE TABLE app_version (
 
 ---
 <details>
-<summary><b> 📊 SQL 테이블 상세 설명 </b></summary>
+<summary><b> 📊 테이블 구조 및 컬럼 설명 </b></summary>
 
-### 📊 SQL 테이블 상세 설명
+### 📊 테이블 구조 및 컬럼 설명
+
+본 프로젝트는 총 30개의 테이블로 구성되어 있으며, 주요 비즈니스 흐름을 담당하는 핵심 테이블 구조는 다음과 같습니다.
 
 member: 회원(USER, SELLER, ADMIN) 통합 관리 및 권한, 포인트 상태 저장
 
@@ -330,6 +332,296 @@ coupon / coupon_issue: 시스템 및 판매자 쿠폰 생성, 회원 발급 및 
 
 notice / faq / qna: 통합 고객센터 게시판 및 1:1 문의 답변 시스템
 
+#### 1. member
+| 컬럼명 | 설명 |
+|---|---|
+| `member_no` | 회원을 구분하는 내부 PK 번호 |
+| `member_id` | 일반 로그인 시 사용하는 아이디, 소셜 회원은 NULL 가능 |
+| `password` | BCrypt로 암호화하여 저장하는 비밀번호 |
+| `role` | USER, SELLER, ADMIN 권한 구분 |
+| `grade` | 회원 등급 정보 |
+| `point` | 현재 보유 포인트 총합 |
+| `status` | 정상, 중지, 휴면, 탈퇴 상태 |
+| `last_login_date` | 마지막 로그인 시각 |
+| `leave_date` | 회원 탈퇴 처리 시각 |
+
+#### 2. member_social
+| 컬럼명 | 설명 |
+|---|---|
+| `provider` | NAVER, KAKAO, GOOGLE 중 로그인 제공자 |
+| `provider_user_id` | 소셜 로그인 업체가 제공하는 회원 고유 식별값 |
+| `provider_email` | 소셜 로그인 과정에서 전달받은 이메일 |
+| `UNIQUE(provider, provider_user_id)` | 하나의 소셜 계정이 여러 KMarket 회원에 연결되는 것을 방지 |
+| `UNIQUE(member_no, provider)` | 한 회원이 같은 소셜 제공자를 중복 연동하는 것을 방지 |
+
+#### 3. policy
+| 컬럼명 | 설명 |
+|---|---|
+| `policy_type` | BUYER, SELLER, PRIVACY 등 약관 구분값 |
+| `required_yn` | 회원가입 시 반드시 동의해야 하는 약관인지 여부 |
+| `use_yn` | 현재 화면에 노출하여 사용하는 약관인지 여부 |
+
+#### 4. member_agreement
+| 컬럼명 | 설명 |
+|---|---|
+| `member_no` | 약관에 동의한 회원 번호 |
+| `policy_no` | 동의한 약관 번호 |
+| `agree_yn` | 동의 여부 |
+| `agree_date` | 동의한 날짜와 시간 |
+
+#### 5. seller_profile
+| 컬럼명 | 설명 |
+|---|---|
+| `member_no` | 판매자 계정과 1:1로 연결되는 회원 번호 |
+| `company_name` | 판매 상점의 상호명 |
+| `ceo_name` | 사업자 대표자명 |
+| `biz_no` | 사업자등록번호 |
+| `online_sale_no` | 통신판매업 신고번호 |
+| `status` | 운영준비, 승인대기, 운영중, 중단 상태 |
+
+#### 6. category
+| 컬럼명 | 설명 |
+|---|---|
+| `parent_no` | 2차 카테고리일 때 상위 1차 카테고리 번호 |
+| `depth` | 1은 1차 카테고리, 2는 2차 카테고리 |
+| `sort_order` | 화면에서 카테고리를 보여주는 순서 |
+| `use_yn` | 카테고리 사용 여부 |
+
+#### 7. product
+| 컬럼명 | 설명 |
+|---|---|
+| `seller_no` | 상품을 등록한 판매자 번호 |
+| `cate_no` | 상품이 속한 최종 2차 카테고리 번호 |
+| `basic_desc` | 상품 목록에 보여줄 한 줄 소개 |
+| `price` | 할인 전 상품 정가 |
+| `discount_rate` | 상품 할인율 |
+| `point` | 해당 상품 구매 시 적립되는 포인트 |
+| `stock` | 옵션이 없는 기본 상품 재고 |
+| `delivery_fee` | 해당 상품의 배송비 |
+| `detail_content` | 상품 상세 페이지 본문 |
+| `status` | 판매중, 판매중지, 품절, 삭제 상태 |
+| `view_count` | 상품 상세 조회수 |
+| `sold_count` | 누적 판매 수량 |
+
+#### 8. product_image
+| 컬럼명 | 설명 |
+|---|---|
+| `image_type` | THUMB1, THUMB2, THUMB3, MAIN, DETAIL 구분 |
+| `image_path` | 서버에 저장된 이미지 파일 경로 |
+| `sort_order` | 상세 이미지 출력 순서 |
+
+#### 9. product_option
+| 컬럼명 | 설명 |
+|---|---|
+| `option_name` | 색상, 사이즈, 용량 등 옵션 종류 |
+| `option_value` | 블랙, XL, 500ml 등 실제 선택값 |
+| `add_price` | 옵션 선택 시 추가되는 금액 |
+| `stock` | 해당 옵션 조합의 재고 |
+| `use_yn` | 옵션 사용 여부 |
+
+#### 10. product_notice
+| 컬럼명 | 설명 |
+|---|---|
+| `product_status` | 상품 상태 또는 제품 상태 안내 |
+| `tax_type` | 과세 여부 |
+| `receipt_type` | 현금영수증 발급 가능 여부 |
+| `business_type` | 판매자 사업자 구분 |
+| `origin` | 원산지 |
+| `as_info` | A/S 책임자 및 연락처 |
+| `detail_notice` | 기타 제공고시 상세 내용 |
+
+#### 11. cart
+| 컬럼명 | 설명 |
+|---|---|
+| `option_no` | 선택한 상품 옵션, 옵션이 없으면 NULL |
+| `quantity` | 장바구니에 담은 수량 |
+| `update_date` | 수량을 수정한 가장 최근 시간 |
+
+#### 12. orders
+| 컬럼명 | 설명 |
+|---|---|
+| `order_code` | 사용자에게 보여주는 주문번호 |
+| `orderer_name` | 주문 당시 주문자 이름 |
+| `orderer_hp` | 주문 당시 주문자 연락처 |
+| `total_price` | 상품 가격 합계 |
+| `discount_price` | 상품 자체 할인 금액 합계 |
+| `coupon_discount` | 쿠폰으로 할인된 금액 |
+| `point_use` | 주문 시 사용한 포인트 |
+| `point_save` | 주문 완료 후 적립될 포인트 |
+| `pay_price` | 실제 최종 결제 금액 |
+| `payment_method` | 신용카드, 계좌이체, 무통장입금, 카카오페이 등 |
+| `payment_status` | 결제대기, 결제완료, 결제취소, 환불완료 상태 |
+| `paid_date` | 결제가 완료된 시간 |
+| `cancel_date` | 결제 취소 또는 환불 처리 시간 |
+| `order_status` | 주문 전체의 대표 상태 |
+
+#### 13. delivery
+| 컬럼명 | 설명 |
+|---|---|
+| `seller_no` | 판매자별 배송 처리를 위한 판매자 번호 |
+| `courier` | 택배사명 |
+| `invoice_no` | 송장번호 |
+| `delivery_status` | 배송준비, 배송중, 배송완료 등 현재 상태 |
+| `ready_date` | 배송준비 상태가 된 시간 |
+| `shipped_date` | 배송이 시작된 시간 |
+| `delivered_date` | 배송완료 처리 시간 |
+| `memo` | 배송 요청사항 |
+
+#### 14. order_item
+| 컬럼명 | 설명 |
+|---|---|
+| `delivery_no` | 판매자별 배송 정보와 연결되는 번호 |
+| `option_name` | 주문 당시의 옵션명 |
+| `option_value` | 주문 당시의 옵션값 |
+| `product_name` | 주문 당시 상품명 스냅샷 |
+| `product_image` | 주문 당시 상품 썸네일 경로 |
+| `price` | 주문 당시 상품 정가 |
+| `discount_rate` | 주문 당시 할인율 |
+| `total_price` | 해당 주문상품의 최종 금액 |
+| `item_status` | 주문상품 단위 상태 |
+
+#### 15. order_claim
+| 컬럼명 | 설명 |
+|---|---|
+| `claim_type` | 반품 또는 교환 구분 |
+| `claim_reason` | 단순변심, 불량, 오배송 등 선택 사유 |
+| `detail_reason` | 사용자가 작성한 상세 사유 |
+| `status` | 신청, 승인, 반려, 수거중, 완료 상태 |
+| `process_date` | 최종 처리 완료 시간 |
+
+#### 16. claim_file
+| 컬럼명 | 설명 |
+|---|---|
+| `ori_name` | 사용자가 업로드한 원본 파일명 |
+| `new_name` | 서버에 저장될 때 변경한 파일명 |
+| `claim_no` | 해당 반품 또는 교환 신청 번호 |
+
+#### 17. product_review
+| 컬럼명 | 설명 |
+|---|---|
+| `order_item_no` | 구매한 주문상품 번호, 한 주문상품당 리뷰 1개 제한 |
+| `rating` | 1점부터 5점까지의 상품 평점 |
+| `content` | 리뷰 본문 |
+
+#### 18. review_image
+| 컬럼명 | 설명 |
+|---|---|
+| `image_path` | 서버에 저장된 리뷰 첨부 이미지 경로 |
+| `sort_order` | 리뷰 이미지 노출 순서 |
+
+#### 19. member_point
+| 컬럼명 | 설명 |
+|---|---|
+| `order_no` | 주문으로 발생한 포인트일 때 연결되는 주문번호 |
+| `point_type` | 적립, 사용, 차감, 환불 구분 |
+| `point_value` | 변동된 포인트 수치 |
+| `balance_point` | 변동 후 남은 포인트 |
+| `reason` | 포인트 지급·차감 이유 |
+| `expire_date` | 포인트 만료일 |
+
+#### 20. coupon
+| 컬럼명 | 설명 |
+|---|---|
+| `seller_no` | NULL이면 관리자가 발급한 공통 쿠폰 |
+| `coupon_type` | 개별상품할인, 주문상품할인, 배송비무료 구분 |
+| `benefit_type` | 금액할인, 비율할인, 무료배송 구분 |
+| `benefit_value` | 할인 금액 또는 할인율 |
+| `min_order_price` | 쿠폰 사용이 가능한 최소 주문 금액 |
+| `max_discount_price` | 비율 할인 시 최대 할인 가능 금액 |
+| `issue_limit` | 발급 가능한 최대 수량, NULL이면 제한 없음 |
+| `caution` | 쿠폰 사용 유의사항 |
+
+#### 21. coupon_issue
+| 컬럼명 | 설명 |
+|---|---|
+| `issue_code` | 회원별로 발급된 개별 쿠폰 식별번호 |
+| `order_no` | 쿠폰을 사용한 주문번호 |
+| `status` | 발급, 사용, 만료, 종료 상태 |
+| `used_date` | 쿠폰 사용 시간 |
+| `issue_date` | 쿠폰 발급 시간 |
+
+#### 22. banner
+| 컬럼명 | 설명 |
+|---|---|
+| `banner_size` | 배너 권장 가로·세로 크기 |
+| `bg_color` | 배너 배경색 값 |
+| `link_url` | 배너 클릭 시 이동할 주소 |
+| `banner_position` | MAIN1, PRODUCT1, MEMBER1, MY1 등 노출 위치 |
+| `image_path` | 서버에 저장된 배너 이미지 경로 |
+| `sort_order` | 같은 위치에서 배너가 출력되는 순서 |
+| `start_datetime` | 배너 노출 시작일시 |
+| `end_datetime` | 배너 노출 종료일시 |
+| `use_yn` | Y면 노출, N이면 숨김 |
+
+#### 23. cs_category
+| 컬럼명 | 설명 |
+|---|---|
+| `parent_no` | 2차 카테고리일 경우 상위 1차 카테고리 번호 |
+| `board_type` | COMMON, FAQ, QNA 중 적용 범위 |
+| `depth` | 1차 또는 2차 카테고리 구분 |
+| `sort_order` | 고객센터 메뉴 노출 순서 |
+| `use_yn` | 카테고리 사용 여부 |
+
+#### 24. notice
+| 컬럼명 | 설명 |
+|---|---|
+| `writer_no` | 공지사항을 작성한 관리자 회원번호 |
+| `notice_type` | 일반공지, 이벤트공지, 점검공지 등 공지 유형 |
+| `hit` | 공지사항 조회수 |
+
+#### 25. faq
+| 컬럼명 | 설명 |
+|---|---|
+| `cs_cate_no` | FAQ가 속하는 고객센터 카테고리 번호 |
+| `writer_no` | FAQ를 작성한 관리자 회원번호 |
+| `hit` | FAQ 조회수 |
+
+#### 26. qna
+| 컬럼명 | 설명 |
+|---|---|
+| `member_no` | 문의를 작성한 회원 번호 |
+| `order_no` | 주문 관련 문의일 때 연결되는 주문번호 |
+| `cs_cate_no` | 문의가 속하는 고객센터 카테고리 번호 |
+| `answer` | 관리자 답변 내용 |
+| `answer_member_no` | 답변을 작성한 관리자 회원번호 |
+| `status` | 검토중 또는 답변완료 상태 |
+| `answer_date` | 답변이 등록된 시간 |
+
+#### 27. recruit
+| 컬럼명 | 설명 |
+|---|---|
+| `writer_no` | 채용공고를 작성한 관리자 회원번호 |
+| `department` | 모집 부서 |
+| `career` | 신입, 경력 등 지원 경력 조건 |
+| `recruit_type` | 정규직, 계약직, 인턴 등 고용형태 |
+| `start_date` | 모집 시작일 |
+| `end_date` | 모집 마감일 |
+| `note` | 채용 공고 상세 내용 |
+| `status` | 모집중 또는 마감 상태 |
+
+#### 28. site_setting
+| 컬럼명 | 설명 |
+|---|---|
+| `setting_key` | site_name, company_tel처럼 설정을 구분하는 키 |
+| `setting_value` | 키에 대응하는 실제 설정값 |
+| `update_date` | 마지막 수정 시간 |
+
+#### 29. company_content
+| 컬럼명 | 설명 |
+|---|---|
+| `content_type` | INTRO, CULTURE, STORY, MEDIA 콘텐츠 구분 |
+| `image_path` | 콘텐츠 대표 이미지 경로 |
+| `video_url` | 유튜브 등 외부 영상 링크 |
+| `category_name` | 소식 또는 미디어의 세부 분류명 |
+| `use_yn` | 화면 노출 여부 |
+| `reg_date` | 최신글 5개 조회 시 기준이 되는 등록일 |
+
+#### 30. app_version
+| 컬럼명 | 설명 |
+|---|---|
+| `version_name` | v1.0.0 같은 버전명 |
+| `writer_no` | 버전 정보를 등록한 관리자 회원번호 |
+| `change_log` | 해당 버전에서 추가·수정된 내용 |
 </details>
 
 ---
