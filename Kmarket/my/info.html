@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>마이페이지 나의설정</title>
+    <link rel="stylesheet" href="./../css/main.css" />
+    <link rel="stylesheet" href="./../css/my/common.css" />
+    <link rel="stylesheet" href="./../css/my/info.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // 이메일 수정
+        document
+          .querySelector(".email-edit-btn")
+          .addEventListener("click", function () {
+            document
+              .querySelectorAll(".email-input, .email-select")
+              .forEach(function (el) {
+                el.disabled = false;
+              });
+          });
+
+        // 휴대폰 수정
+        document
+          .querySelector(".phone-edit-btn")
+          .addEventListener("click", function () {
+            document.querySelectorAll(".phone-input").forEach(function (el) {
+              el.disabled = false;
+            });
+          });
+      });
+    </script>
+  </head>
+  <body>
+    <header>
+      <a href="#" class="logo-img">
+        <img src="./../images/main/header_logo.png" alt="Kmarket 로고" />
+      </a>
+
+      <div class="search-box">
+        <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
+        <button aria-label="검색">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+              stroke="#fff"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="header-links">
+        <a href="#login">로그인</a>
+        <a href="#join">회원가입</a>
+        <a href="#mypage">마이페이지</a>
+        <a href="#cart">🛒 장바구니</a>
+      </nav>
+    </header>
+
+    <main class="main-layout">
+      <div class="mypage-layout">
+        <aside class="mypage-sidebar">
+          <h3>마이페이지</h3>
+
+          <ul>
+            <li><a href="#">전체주문내역</a></li>
+            <li><a href="#">포인트내역</a></li>
+            <li class="active"><a href="#">쿠폰</a></li>
+            <li><a href="#">나의리뷰</a></li>
+            <li><a href="#">문의하기</a></li>
+            <li><a href="#">나의설정</a></li>
+          </ul>
+        </aside>
+
+        <section class="mypage-content">
+          <div class="mypage-summary">
+            <div class="summary-card">
+              <strong>주문</strong>
+              <span>2</span>
+            </div>
+
+            <div class="summary-card">
+              <strong>쿠폰</strong>
+              <span>1</span>
+            </div>
+
+            <div class="summary-card">
+              <strong>포인트</strong>
+              <span>1,000</span>
+            </div>
+
+            <div class="summary-card">
+              <strong>문의</strong>
+              <span>1</span>
+            </div>
+          </div>
+
+          <div class="mypage-banner">810 × 86 배너 광고</div>
+
+          <!-- 배너 -->
+          <!-- <div class="mypage-banner">
+            <img src="../../images/mypage/banner.jpg" alt="광고 배너" />
+          </div> -->
+
+          <section class="mypage-section">
+            <div class="section-header">
+              <h3>나의 설정</h3>
+            </div>
+
+            <form class="setting-form">
+              <table class="setting-table">
+                <tbody>
+                  <tr>
+                    <th>사용자 ID</th>
+                    <td>chh****</td>
+                  </tr>
+
+                  <tr>
+                    <th>비밀번호</th>
+                    <td>
+                      <a href="#" class="setting-btn password-change-btn">
+                        비밀번호 수정
+                      </a>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th>이름</th>
+                    <td>김 * 학</td>
+                  </tr>
+
+                  <tr>
+                    <th>생년월일</th>
+                    <td>1983년 05월 03일</td>
+                  </tr>
+
+                  <tr>
+                    <th>Email</th>
+
+                    <td>
+                      <div class="email-wrap">
+                        <input
+                          type="text"
+                          value="chhak0503"
+                          class="email-input"
+                          disabled
+                        />
+
+                        <span>@</span>
+
+                        <input
+                          type="text"
+                          value="naver.com"
+                          class="email-input"
+                          disabled
+                        />
+
+                        <select disabled class="email-select">
+                          <option>직접입력</option>
+                          <option>naver.com</option>
+                          <option>gmail.com</option>
+                          <option>daum.net</option>
+                        </select>
+
+                        <button
+                          type="button"
+                          class="setting-btn email-edit-btn"
+                        >
+                          수정하기
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th>휴대폰</th>
+
+                    <td>
+                      <div class="phone-wrap">
+                        <input
+                          type="text"
+                          value="010"
+                          class="phone-input"
+                          disabled
+                        />
+
+                        <input
+                          type="text"
+                          value="1234"
+                          class="phone-input"
+                          disabled
+                        />
+
+                        <input
+                          type="text"
+                          value="5678"
+                          class="phone-input"
+                          disabled
+                        />
+
+                        <button
+                          type="button"
+                          class="setting-btn phone-edit-btn"
+                        >
+                          수정하기
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th>주소</th>
+
+                    <td>
+                      <div class="address-wrap">
+                        <div class="address-row">
+                          <input
+                            type="text"
+                            placeholder="우편번호"
+                            class="address-input postcode"
+                          />
+
+                          <button type="button" class="setting-btn">
+                            주소검색
+                          </button>
+                        </div>
+
+                        <input
+                          type="text"
+                          placeholder="기본주소입력"
+                          class="address-input"
+                        />
+
+                        <input
+                          type="text"
+                          placeholder="상세주소입력"
+                          class="address-input"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th>탈퇴</th>
+
+                    <td>
+                      <a
+                        href="
+                     #"
+                        class="withdraw-btn"
+                      >
+                        탈퇴하기
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="setting-submit-area">
+                <a href="#" class="setting-submit-btn"> 수정하기 </a>
+              </div>
+            </form>
+          </section>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <nav class="footer-links">
+          <a href="#about">회사소개</a>
+          <a href="#terms">서비스이용약관</a>
+          <a href="#privacy">개인정보처리방침</a>
+          <a href="#finance">전자금융거래약관</a>
+        </nav>
+
+        <div class="footer-company">
+          <div class="footer-logo-box">
+            <img src="../images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
+          </div>
+
+          <div class="footer-info">
+            <h4>(주)케이마켓</h4>
+            <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
+            <p>대표이사 : 홍길동</p>
+            <p>사업자등록번호 : 123-45-12345</p>
+          </div>
+
+          <div class="footer-cs">
+            <h4>고객센터</h4>
+            <p>Tel : 1234-5678 평일 09:00~18:00</p>
+            <p>전자금융거래 분쟁 담당 : 1234-1234</p>
+            <p>365일 09:00~18:00</p>
+          </div>
+        </div>
+
+        <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

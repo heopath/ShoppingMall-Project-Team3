@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>일반 회원가입 - K-MARKET</title>
+    <link rel="stylesheet" href="../css/member/register.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+  </head>
+  <body>
+    <header>
+      <a href="#" class="logo-img">
+        <img src="../images/main/header_logo.png" alt="Kmarket 로고" />
+      </a>
+
+      <div class="search-box">
+        <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
+        <button aria-label="검색">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+              stroke="#fff"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="header-links">
+        <a href="#login">로그인</a>
+        <a href="#join">회원가입</a>
+        <a href="#mypage">마이페이지</a>
+        <a href="#cart">🛒 장바구니</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <div class="form-container">
+        <div class="form-title-group">
+          <h2>회원정보 입력</h2>
+          <p>안전한 거래를 위해 본인의 정보를 정확히 입력해주세요.</p>
+        </div>
+
+        <form onsubmit="event.preventDefault()">
+          <div class="input-row success">
+            <label for="user-id">ID</label>
+            <input
+              type="text"
+              id="user-id"
+              class="input-field"
+              placeholder="아이디 입력"
+              required
+            />
+            <span class="guide-text">영문, 숫자 4~12자 설정</span>
+            <!-- <span class="valid-mark">✓</span> -->
+          </div>
+
+          <div class="input-row">
+            <label for="user-pw">비밀번호</label>
+            <input
+              type="password"
+              id="user-pw"
+              class="input-field"
+              placeholder="비밀번호 입력"
+              required
+            />
+            <span class="guide-text">영문, 숫자, 특수문자 8~12자 설정</span>
+          </div>
+
+          <div class="input-row">
+            <label for="user-pw-confirm">비밀번호 확인</label>
+            <input
+              type="password"
+              id="user-pw-confirm"
+              class="input-field"
+              placeholder="비밀번호 재입력"
+              required
+            />
+          </div>
+
+          <div class="input-row success">
+            <label for="user-name">이름</label>
+            <input
+              type="text"
+              id="user-name"
+              class="input-field"
+              placeholder="이름 입력"
+              required
+            />
+            <span class="valid-mark">✓</span>
+          </div>
+
+          <div class="input-row">
+            <label for="user-birth">생년월일</label>
+            <input type="date" id="user-birth" class="input-field" required />
+          </div>
+
+          <div class="input-row">
+            <label>성별</label>
+            <div class="gender-group">
+              <label class="gender-label">
+                <input type="radio" name="gender" value="M" checked /> 남
+              </label>
+              <label class="gender-label">
+                <input type="radio" name="gender" value="F" /> 여
+              </label>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <label for="user-email">EMAIL</label>
+            <div class="input-with-btn">
+              <input
+                type="email"
+                id="user-email"
+                class="input-field"
+                placeholder="이메일 주소 입력"
+                required
+              />
+              <button type="button" class="inline-btn">이메일 인증</button>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <label for="user-phone">휴대폰 번호</label>
+            <div class="input-with-btn">
+              <input
+                type="tel"
+                id="user-phone"
+                class="input-field"
+                placeholder="하이픈(-) 없이 입력"
+                required
+              />
+              <button type="button" class="inline-btn">휴대폰 인증</button>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <label>주소</label>
+            <div class="address-group">
+              <div class="input-with-btn">
+                <input
+                  type="text"
+                  class="input-field"
+                  placeholder="우편번호"
+                  readonly
+                />
+                <button type="button" class="inline-btn">우편번호 검색</button>
+              </div>
+              <input
+                type="text"
+                class="input-field"
+                placeholder="기본주소"
+                readonly
+              />
+              <input
+                type="text"
+                class="input-field"
+                placeholder="상세주소 입력"
+              />
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <!-- <button
+              type="button"
+              class="action-btn prev"
+              onclick="history.back()"
+            >
+              이전으로
+            </button> -->
+            <button type="submit" class="action-btn submit">회원가입</button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-inner">
+        <nav class="footer-links">
+          <a href="#about">회사소개</a>
+          <a href="#terms">서비스이용약관</a>
+          <a href="#privacy">개인정보처리방침</a>
+          <a href="#finance">전자금융거래약관</a>
+        </nav>
+
+        <div class="footer-company">
+          <div class="footer-logo-box">
+            <img src="../images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
+          </div>
+
+          <div class="footer-info">
+            <h4>(주)케이마켓</h4>
+            <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
+            <p>대표이사 : 홍길동</p>
+            <p>사업자등록번호 : 123-45-12345</p>
+          </div>
+
+          <div class="footer-cs">
+            <h4>고객센터</h4>
+            <p>Tel : 1234-5678 평일 09:00~18:00</p>
+            <p>전자금융거래 분쟁 담당 : 1234-1234</p>
+            <p>365일 09:00~18:00</p>
+          </div>
+        </div>
+
+        <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

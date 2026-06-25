@@ -1,0 +1,68 @@
+/* =========================
+   RESULT PAGE
+========================= */
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  margin-bottom: 24px;
+}
+
+.result-table th {
+  width: 140px;
+
+  padding: 16px 20px;
+
+  background: #f8fafc;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  text-align: left;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: #475569;
+}
+
+.result-table td {
+  padding: 16px 20px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  font-size: 14px;
+
+  color: #1e293b;
+}
+
+.result-table tr:last-child th,
+.result-table tr:last-child td {
+  border-bottom: none;
+}
+
+.result-id {
+  color: #2ece00 !important;
+  font-weight: 700;
+}
+
+.result-message {
+  padding: 16px;
+
+  background: #f0fdf4;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+
+  color: #64748b;
+
+  line-height: 1.6;
+
+  margin-bottom: 28px;
+}

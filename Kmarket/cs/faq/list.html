@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>자주묻는질문 목록</title>
+    <link rel="stylesheet" href="../../css/main.css" />
+    <link rel="stylesheet" href="../../css/cs/common.css" />
+    <link rel="stylesheet" href="../../css/cs/faq/list.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".faq-group").forEach(function (group) {
+          var btn = group.querySelector(".more-btn");
+          var hiddenItems = group.querySelectorAll(".hidden-item");
+
+          btn.addEventListener("click", function () {
+            var isOpen = btn.classList.contains("open");
+
+            hiddenItems.forEach(function (item) {
+              if (isOpen) {
+                item.classList.remove("show");
+              } else {
+                item.classList.add("show");
+              }
+            });
+
+            btn.classList.toggle("open");
+            btn.textContent = isOpen ? "더보기" : "간단히 보기";
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <header>
+      <a href="#" class="logo-img">
+        <img src="../../images/main/header_logo.png" alt="Kmarket 로고" />
+      </a>
+
+      <div class="search-box">
+        <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
+        <button aria-label="검색">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+              stroke="#fff"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="header-links">
+        <a href="#login">로그인</a>
+        <a href="#join">회원가입</a>
+        <a href="#mypage">마이페이지</a>
+        <a href="#cart">🛒 장바구니</a>
+      </nav>
+    </header>
+
+    <main class="main-layout">
+      <div class="breadcrumb">
+        <a href="#">홈</a>
+        <span>></span>
+        <span>자주묻는질문</span>
+      </div>
+
+      <div class="cs-layout">
+        <!-- 사이드 -->
+        <aside class="cs-sidebar">
+          <h3>자주묻는 질문</h3>
+
+          <ul>
+            <li class="active"><a href="#">회원</a></li>
+            <li><a href="#">쿠폰 / 이벤트</a></li>
+            <li><a href="#">주문 / 결제</a></li>
+            <li><a href="#">배송</a></li>
+            <li><a href="#">취소 / 반품 / 교환</a></li>
+            <li><a href="#">여행 / 숙박 / 항공</a></li>
+            <li><a href="#">안전거래</a></li>
+          </ul>
+        </aside>
+
+        <!-- 본문 -->
+        <section class="cs-content">
+          <div class="content-header">
+            <h2>회원</h2>
+            <p>회원관련 자주묻는 질문 입니다.</p>
+          </div>
+
+          <!-- 가입 -->
+
+          <div class="faq-group">
+            <h3 class="faq-title">가입</h3>
+
+            <ul class="faq-list">
+              <li>
+                <a href="./view.html">
+                  <span class="q-mark">Q</span>
+                  개인회원과 법인회원의 차이가 있나요?
+                </a>
+              </li>
+
+              <li>
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  회원가입은 무료인가요?
+                </a>
+              </li>
+
+              <li>
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  외국인도 가입 가능한가요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  휴면회원 정책이 있나요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  본인인증은 필수인가요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  회원가입 인증메일이 오지 않습니다.
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  아이디 중복 사용이 가능한가요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  법인회원 가입 절차가 궁금합니다.
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  만 14세 미만도 가입 가능한가요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  회원가입 혜택은 무엇인가요?
+                </a>
+              </li>
+            </ul>
+
+            <button class="more-btn">더보기</button>
+          </div>
+
+          <!-- 탈퇴 -->
+
+          <div class="faq-group">
+            <h3 class="faq-title">탈퇴</h3>
+
+            <ul class="faq-list">
+              <li>
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  회원 탈퇴 후 재가입 가능한가요?
+                </a>
+              </li>
+
+              <li>
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  탈퇴 후 개인정보는 삭제되나요?
+                </a>
+              </li>
+
+              <li>
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  탈퇴 시 쿠폰도 삭제되나요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  탈퇴 후 주문내역 조회가 가능한가요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  탈퇴 신청 취소가 가능한가요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  휴면계정과 탈퇴의 차이는 무엇인가요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  탈퇴 후 동일 아이디 사용이 가능한가요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  탈퇴 후 보유 포인트는 어떻게 되나요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  탈퇴 후 리뷰는 삭제되나요?
+                </a>
+              </li>
+
+              <li class="hidden-item">
+                <a href="#">
+                  <span class="q-mark">Q</span>
+                  탈퇴 후 문의내역은 확인 가능한가요?
+                </a>
+              </li>
+            </ul>
+
+            <button class="more-btn">더보기</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <nav class="footer-links">
+          <a href="#about">회사소개</a>
+          <a href="#terms">서비스이용약관</a>
+          <a href="#privacy">개인정보처리방침</a>
+          <a href="#finance">전자금융거래약관</a>
+        </nav>
+
+        <div class="footer-company">
+          <div class="footer-logo-box">
+            <img src="../images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
+          </div>
+
+          <div class="footer-info">
+            <h4>(주)케이마켓</h4>
+            <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
+            <p>대표이사 : 홍길동</p>
+            <p>사업자등록번호 : 123-45-12345</p>
+          </div>
+
+          <div class="footer-cs">
+            <h4>고객센터</h4>
+            <p>Tel : 1234-5678 평일 09:00~18:00</p>
+            <p>전자금융거래 분쟁 담당 : 1234-1234</p>
+            <p>365일 09:00~18:00</p>
+          </div>
+        </div>
+
+        <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

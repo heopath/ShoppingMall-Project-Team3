@@ -6,8 +6,14 @@
     <title>마이페이지 전체주문내역</title>
     <link rel="stylesheet" href="./../css/main.css" />
     <link rel="stylesheet" href="./../css/my/common.css" />
+    <!-- <link rel="stylesheet" href="./../css/my/order.css" /> -->
     <link rel="stylesheet" href="./../css/my/home.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
     <script src="../js/my/popup.js"></script>
+    <script src="../js/my/searchDate.js"></script>
   </head>
   <body>
     <header>
@@ -44,7 +50,7 @@
           <h3>마이페이지</h3>
 
           <ul>
-            <li><a href="#">전체주문내역</a></li>
+            <li class="active"><a href="#">전체주문내역</a></li>
             <li><a href="#">포인트내역</a></li>
             <li><a href="#">쿠폰</a></li>
             <li><a href="#">나의리뷰</a></li>
@@ -83,11 +89,43 @@
             <img src="../../images/mypage/banner.jpg" alt="광고 배너" />
           </div> -->
 
-          <!-- 최근주문내역 -->
           <section class="mypage-section">
             <div class="section-header">
-              <h3>최근주문내역</h3>
-              <a href="./order.html">더보기 ></a>
+              <h3>전체주문내역</h3>
+            </div>
+
+            <!-- 기간 조회 -->
+            <div class="period-search-wrap">
+              <div class="period-search-title">기간별조회</div>
+
+              <div class="period-search-content">
+                <!-- 단기조회 -->
+                <div class="period-btn-group quick-period">
+                  <button type="button">1주일</button>
+                  <button type="button">15일</button>
+                  <button type="button">1개월</button>
+                </div>
+
+                <!-- 최근 5개월 -->
+                <div class="period-btn-group month-period">
+                  <button type="button">10월</button>
+                  <button type="button">9월</button>
+                  <button type="button">8월</button>
+                  <button type="button">7월</button>
+                  <button type="button">6월</button>
+                </div>
+
+                <!-- 직접조회 -->
+                <div class="period-date-group">
+                  <input type="date" id="startDate" />
+
+                  <span>~</span>
+
+                  <input type="date" id="endDate" />
+
+                  <button type="button" class="period-search-btn">조회</button>
+                </div>
+              </div>
             </div>
 
             <table class="order-table">
@@ -138,162 +176,22 @@
                 </tr>
               </tbody>
             </table>
-          </section>
 
-          <!-- 포인트 적립내역 -->
-          <section class="mypage-section point-table">
-            <div class="section-header">
-              <h3>포인트적립내역</h3>
-              <a href="#">더보기 ></a>
-            </div>
+            <!-- 페이징 -->
+            <div class="pagination">
+              <a href="#" class="page-btn"
+                ><i class="bi bi-chevron-left"></i
+              ></a>
 
-            <table class="mypage-table">
-              <thead>
-                <tr>
-                  <th>날짜</th>
-                  <th>구분</th>
-                  <th>주문번호</th>
-                  <th>적립금액</th>
-                  <th>비고</th>
-                  <th>유효기간</th>
-                </tr>
-              </thead>
+              <a href="#" class="active">1</a>
+              <a href="#">2</a>
+              <a href="#">3</a>
+              <a href="#">4</a>
+              <a href="#">5</a>
 
-              <tbody>
-                <tr>
-                  <td>2026-06-18</td>
-                  <td>적립</td>
-                  <td>20260618001</td>
-                  <td class="point">340P</td>
-                  <td>상품 구매확정</td>
-                  <td>2028-06-18</td>
-                </tr>
-
-                <tr>
-                  <td>2026-06-17</td>
-                  <td>적립</td>
-                  <td>20260617001</td>
-                  <td class="point">120P</td>
-                  <td>상품 구매확정</td>
-                  <td>2028-06-17</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <!-- 상품평 -->
-          <section class="mypage-section review-table">
-            <div class="section-header">
-              <h3>상품평</h3>
-              <a href="#">더보기 ></a>
-            </div>
-
-            <table class="mypage-table review-table">
-              <thead>
-                <tr>
-                  <th>번호</th>
-                  <th>상품명</th>
-                  <th>내용</th>
-                  <th>평점</th>
-                  <th>작성일</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>상품번호 / 상품명</td>
-                  <td>배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                  <td class="star">★★★★☆</td>
-                  <td>2026-06-18</td>
-                </tr>
-
-                <tr>
-                  <td>2</td>
-                  <td>상품번호 / 상품명</td>
-                  <td>배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                  <td class="star">★★★★☆</td>
-                  <td>2026-06-17</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <!-- 문의내역 -->
-          <section class="mypage-section inquiry-table">
-            <div class="section-header">
-              <h3>문의내역</h3>
-              <a href="#">더보기 ></a>
-            </div>
-
-            <table class="mypage-table">
-              <thead>
-                <tr>
-                  <th>번호</th>
-                  <th>문의채널</th>
-                  <th>문의유형</th>
-                  <th>제목</th>
-                  <th>작성일</th>
-                  <th>상태</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>고객센터</td>
-                  <td>주문 / 결제</td>
-                  <td>신용카드 결제 중 오류가 발생했습니다.</td>
-                  <td>2026-06-18</td>
-                  <td class="answer">답변완료</td>
-                </tr>
-
-                <tr>
-                  <td>2</td>
-                  <td>판매자게시판</td>
-                  <td>배송</td>
-                  <td>배송기간이 얼마나 걸리나요?</td>
-                  <td>2026-06-17</td>
-                  <td class="pending">검토중</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          <!-- 나의설정 -->
-          <section class="mypage-section">
-            <h3 class="setting-title">나의설정</h3>
-
-            <div class="setting-grid">
-              <div class="setting-card">
-                <div class="setting-header">
-                  <h4>기본배송지설정</h4>
-                  <a href="#">변경</a>
-                </div>
-
-                <p>부산광역시 부산진구 중앙대로 103</p>
-                <p>그린타워 13층</p>
-              </div>
-
-              <div class="setting-card">
-                <div class="setting-header">
-                  <h4>Email 설정</h4>
-                  <a href="#">변경</a>
-                </div>
-
-                <p>abc123@naver.com</p>
-                <p>최종수정일 : 2026-06-18</p>
-              </div>
-
-              <div class="setting-card">
-                <div class="setting-header">
-                  <h4>휴대폰 설정</h4>
-                  <a href="#">변경</a>
-                </div>
-
-                <p>010-1234-5678</p>
-                <p>최종수정일 : 2026-06-18</p>
-              </div>
+              <a href="#" class="page-btn"
+                ><i class="bi bi-chevron-right"></i
+              ></a>
             </div>
           </section>
         </section>

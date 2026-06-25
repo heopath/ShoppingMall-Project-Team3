@@ -1,0 +1,74 @@
+.review-table {
+  width: 100%;
+
+  border-top: 2px solid #3fbf3f;
+  border-collapse: collapse;
+
+  background: #fff;
+}
+
+.review-table thead th {
+  height: 46px;
+
+  background: #f7f7f7;
+
+  border-bottom: 1px solid #e5e5e5;
+
+  font-size: 13px;
+  font-weight: 700;
+  color: #444;
+}
+
+.review-table tbody td {
+  padding: 16px 12px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  text-align: center;
+
+  font-size: 13px;
+  color: #555;
+}
+
+.review-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.review-table td:nth-child(1) {
+  width: 70px;
+}
+
+.review-table td:nth-child(2) {
+  width: 220px;
+}
+
+.review-table td:nth-child(4) {
+  width: 140px;
+}
+
+.review-table td:nth-child(5) {
+  width: 120px;
+}
+
+.review-product-link {
+  color: #333;
+  /* text-decoration: underline; */
+}
+
+.review-product-link:hover {
+  color: #3fbf3f;
+}
+
+.review-content {
+  text-align: left;
+}
+
+.review-star {
+  color: #ffb400;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.review-table tbody tr:hover .review-product-link {
+  color: #3fbf3f;
+}

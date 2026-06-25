@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>마이페이지 리뷰내역</title>
+    <link rel="stylesheet" href="./../css/main.css" />
+    <link rel="stylesheet" href="./../css/my/common.css" />
+    <link rel="stylesheet" href="./../css/my/review.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <a href="#" class="logo-img">
+        <img src="./../images/main/header_logo.png" alt="Kmarket 로고" />
+      </a>
+
+      <div class="search-box">
+        <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
+        <button aria-label="검색">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+              stroke="#fff"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="header-links">
+        <a href="#login">로그인</a>
+        <a href="#join">회원가입</a>
+        <a href="#mypage">마이페이지</a>
+        <a href="#cart">🛒 장바구니</a>
+      </nav>
+    </header>
+
+    <main class="main-layout">
+      <div class="mypage-layout">
+        <aside class="mypage-sidebar">
+          <h3>마이페이지</h3>
+
+          <ul>
+            <li><a href="#">전체주문내역</a></li>
+            <li><a href="#">포인트내역</a></li>
+            <li><a href="#">쿠폰</a></li>
+            <li class="active"><a href="#">나의리뷰</a></li>
+            <li><a href="#">문의하기</a></li>
+            <li><a href="#">나의설정</a></li>
+          </ul>
+        </aside>
+
+        <section class="mypage-content">
+          <div class="mypage-summary">
+            <div class="summary-card">
+              <strong>주문</strong>
+              <span>2</span>
+            </div>
+
+            <div class="summary-card">
+              <strong>쿠폰</strong>
+              <span>1</span>
+            </div>
+
+            <div class="summary-card">
+              <strong>포인트</strong>
+              <span>1,000</span>
+            </div>
+
+            <div class="summary-card">
+              <strong>문의</strong>
+              <span>1</span>
+            </div>
+          </div>
+
+          <div class="mypage-banner">810 × 86 배너 광고</div>
+
+          <!-- 배너 -->
+          <!-- <div class="mypage-banner">
+            <img src="../../images/mypage/banner.jpg" alt="광고 배너" />
+          </div> -->
+
+          <section class="mypage-section">
+            <div class="section-header">
+              <h3>나의 리뷰</h3>
+            </div>
+
+            <!-- 리뷰 테이블 -->
+            <table class="review-table">
+              <thead>
+                <tr>
+                  <th>번호</th>
+                  <th>상품명</th>
+                  <th>내용</th>
+                  <th>평점</th>
+                  <th>작성일</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>1</td>
+
+                  <td>
+                    <a href="#" class="review-product-link">
+                      상품번호 / 상품명
+                    </a>
+                  </td>
+
+                  <td class="review-content">
+                    배송이 빠릅니다. 잘 사용하겠습니다.
+                  </td>
+
+                  <td>
+                    <div class="review-star">★★★★★</div>
+                  </td>
+
+                  <td>2026-06-18</td>
+                </tr>
+
+                <tr>
+                  <td>2</td>
+
+                  <td>
+                    <a href="#" class="review-product-link">
+                      상품번호 / 상품명
+                    </a>
+                  </td>
+
+                  <td class="review-content">
+                    배송이 빠릅니다. 잘 사용하겠습니다.
+                  </td>
+
+                  <td>
+                    <div class="review-star">★★★★☆</div>
+                  </td>
+
+                  <td>2026-06-15</td>
+                </tr>
+
+                <tr>
+                  <td>3</td>
+
+                  <td>
+                    <a href="#" class="review-product-link">
+                      상품번호 / 상품명
+                    </a>
+                  </td>
+
+                  <td class="review-content">
+                    배송이 빠릅니다. 잘 사용하겠습니다.
+                  </td>
+
+                  <td>
+                    <div class="review-star">★★★★☆</div>
+                  </td>
+
+                  <td>2026-06-10</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- 페이징 -->
+            <div class="pagination">
+              <a href="#" class="page-btn"
+                ><i class="bi bi-chevron-left"></i
+              ></a>
+
+              <a href="#" class="active">1</a>
+              <a href="#">2</a>
+              <a href="#">3</a>
+              <a href="#">4</a>
+              <a href="#">5</a>
+
+              <a href="#" class="page-btn"
+                ><i class="bi bi-chevron-right"></i
+              ></a>
+            </div>
+          </section>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <nav class="footer-links">
+          <a href="#about">회사소개</a>
+          <a href="#terms">서비스이용약관</a>
+          <a href="#privacy">개인정보처리방침</a>
+          <a href="#finance">전자금융거래약관</a>
+        </nav>
+
+        <div class="footer-company">
+          <div class="footer-logo-box">
+            <img src="../images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
+          </div>
+
+          <div class="footer-info">
+            <h4>(주)케이마켓</h4>
+            <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
+            <p>대표이사 : 홍길동</p>
+            <p>사업자등록번호 : 123-45-12345</p>
+          </div>
+
+          <div class="footer-cs">
+            <h4>고객센터</h4>
+            <p>Tel : 1234-5678 평일 09:00~18:00</p>
+            <p>전자금융거래 분쟁 담당 : 1234-1234</p>
+            <p>365일 09:00~18:00</p>
+          </div>
+        </div>
+
+        <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

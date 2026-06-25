@@ -1,0 +1,228 @@
+/* =========================
+   회원가입 폼
+========================= */
+main {
+  flex: 1;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.form-container {
+  max-width: 760px;
+  margin: 0 auto;
+
+  background: #fff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+
+  padding: 48px;
+
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.form-title-group {
+  margin-bottom: 40px;
+}
+
+.form-title-group h2 {
+  /* font-size: 36px; */
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.3;
+
+  color: #111827;
+
+  margin-bottom: 10px;
+}
+
+.form-title-group p {
+  font-size: 15px;
+  color: #6b7280;
+}
+
+/* =========================
+   입력 영역
+========================= */
+
+.input-row {
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.input-row label {
+  display: block;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: #111827;
+
+  margin-bottom: 8px;
+}
+
+.input-field {
+  width: 100%;
+  height: 52px;
+
+  padding: 0 16px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+
+  font-size: 15px;
+  color: #111827;
+
+  transition: all 0.2s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #53d400;
+  box-shadow: 0 0 0 3px rgba(83, 212, 0, 0.08);
+}
+
+.guide-text {
+  display: block;
+
+  margin-top: 6px;
+
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* =========================
+   성공 상태
+========================= */
+
+.valid-mark {
+  position: absolute;
+
+  right: 16px;
+  top: 43px;
+
+  color: #53d400;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  display: none;
+}
+
+.input-row.success .valid-mark {
+  display: block;
+}
+
+/* =========================
+   버튼 결합형
+========================= */
+
+.input-with-btn {
+  display: flex;
+  gap: 10px;
+}
+
+.inline-btn {
+  height: 52px;
+
+  padding: 0 20px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+
+  background: #fff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #475569;
+
+  white-space: nowrap;
+
+  transition: all 0.2s ease;
+}
+
+.inline-btn:hover {
+  border-color: #53d400;
+  color: #53d400;
+}
+
+/* =========================
+   주소
+========================= */
+
+.address-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* =========================
+   성별
+========================= */
+
+.gender-group {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  height: 52px;
+}
+
+.gender-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 15px;
+  color: #374151;
+
+  cursor: pointer;
+}
+
+.gender-label input[type="radio"] {
+  accent-color: #53d400;
+}
+
+/* =========================
+   하단 버튼
+========================= */
+
+.btn-group {
+  margin-top: 40px;
+  display: flex;
+  gap: 12px;
+}
+
+.action-btn {
+  flex: 1;
+
+  height: 56px;
+
+  border-radius: 10px;
+
+  font-size: 17px;
+  font-weight: 700;
+  border: 0;
+}
+
+.action-btn.prev {
+  background: #fff;
+
+  border: 1px solid #cbd5e1;
+
+  color: #64748b;
+}
+
+.action-btn.prev:hover {
+  background: #f8fafc;
+}
+
+.action-btn.submit {
+  background: #53d400;
+  color: #fff;
+}
+
+.action-btn.submit:hover {
+  background: #49bf00;
+}
