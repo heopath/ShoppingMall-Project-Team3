@@ -1,0 +1,286 @@
+/* =========================
+   로그인 영역
+========================= */
+.container {
+  margin: 60px auto 60px;
+}
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.login-container {
+  width: 460px;
+
+  background: #fff;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  padding: 24px;
+}
+
+/* =========================
+   로그인 헤더
+========================= */
+
+.login-header {
+  margin-bottom: 16px;
+}
+
+.login-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #222;
+
+  margin-bottom: 6px;
+}
+
+.login-header p {
+  font-size: 13px;
+  color: #888;
+}
+
+/* =========================
+   입력영역
+========================= */
+
+.input-group {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+
+  margin-bottom: 12px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+
+  height: 50px;
+
+  padding: 0 16px;
+
+  background: #fff;
+}
+
+.input-row:first-child {
+  border-bottom: 1px solid #eee;
+}
+
+.input-row label {
+  width: 72px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #666;
+}
+
+.input-row input {
+  flex: 1;
+
+  font-size: 13px;
+  color: #333;
+
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.input-row input::placeholder {
+  color: #aaa;
+}
+
+/* =========================
+   자동로그인
+========================= */
+
+.form-util {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 14px;
+
+  font-size: 12px;
+}
+
+.form-util label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  color: #666;
+}
+
+.find-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.find-links a {
+  color: #888;
+}
+
+.find-links span {
+  color: #ccc;
+}
+
+/* =========================
+   로그인 버튼
+========================= */
+
+.submit-btn {
+  width: 100%;
+  height: 46px;
+
+  background: #46c028;
+
+  border-radius: 6px;
+
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+  border: 0;
+  transition: 0.2s;
+}
+
+.submit-btn:hover {
+  background: #3cad20;
+}
+
+/* =========================
+   SNS 로그인
+========================= */
+
+.sns-login-section {
+  margin-top: 20px;
+  padding-top: 20px;
+
+  border-top: 1px solid #eee;
+}
+
+.sns-title {
+  display: block;
+
+  margin-bottom: 14px;
+
+  font-size: 13px;
+  color: #777;
+}
+
+.sns-btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.sns-btn {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+  cursor: pointer;
+}
+
+.sns-btn.naver {
+  background: #03c75a;
+  color: #fff;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sns-btn.kakao {
+  background: #fee500;
+  color: #222;
+
+  font-size: 16px;
+}
+
+.sns-btn.google {
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+.sns-btn.google img {
+  width: 20px;
+  height: 20px;
+}
+
+/* =========================
+   배너
+========================= */
+
+.ad-banner {
+  width: 300px;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  background: #fff;
+}
+
+.ad-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* =========================
+   인증마크
+========================= */
+
+.award-section {
+  width: 758px;
+
+  margin: 36px auto 0;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #ddd;
+}
+
+.award-section img {
+  display: block;
+  width: 100%;
+}
+
+/* =========================
+   반응형
+========================= */
+
+@media (max-width: 900px) {
+  .content-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login-container {
+    width: 100%;
+    max-width: 460px;
+  }
+
+  .ad-banner {
+    width: 100%;
+    max-width: 460px;
+    margin-top: 0;
+  }
+
+  .award-section {
+    width: 100%;
+  }
+}

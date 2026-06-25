@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>공지사항 목록</title>
+    <link rel="stylesheet" href="../../css/main.css" />
+    <link rel="stylesheet" href="../../css/cs/common.css" />
+    <link rel="stylesheet" href="../../css/cs/notice/list.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <a href="#" class="logo-img">
+        <img src="../../images/main/header_logo.png" alt="Kmarket 로고" />
+      </a>
+
+      <div class="search-box">
+        <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
+        <button aria-label="검색">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+              stroke="#fff"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="header-links">
+        <a href="#login">로그인</a>
+        <a href="#join">회원가입</a>
+        <a href="#mypage">마이페이지</a>
+        <a href="#cart">🛒 장바구니</a>
+      </nav>
+    </header>
+
+    <main class="main-layout">
+      <div class="breadcrumb">
+        <a href="#">홈</a>
+        <span>></span>
+        <span>공지사항</span>
+      </div>
+      <div class="cs-layout">
+        <!-- 사이드 메뉴 -->
+        <aside class="cs-sidebar">
+          <h3>공지사항</h3>
+
+          <ul>
+            <li class="active">
+              <a href="#">전체</a>
+            </li>
+
+            <li>
+              <a href="#">고객서비스</a>
+            </li>
+
+            <li>
+              <a href="#">안전거래</a>
+            </li>
+
+            <li>
+              <a href="#">위해상품</a>
+            </li>
+
+            <li>
+              <a href="#">이벤트당첨</a>
+            </li>
+          </ul>
+        </aside>
+
+        <!-- 컨텐츠 -->
+        <section class="cs-content">
+          <div class="content-header">
+            <h2>전체</h2>
+            <p>공지사항 전체 내용입니다.</p>
+          </div>
+
+          <table class="notice-table">
+            <tbody>
+              <tr>
+                <td>
+                  <a href="./view.html">[안내] 해외결제 사칭 문자주의</a>
+                </td>
+                <td>26.06.18</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <a href="#">[발표] G.Live X SK 스토아 이벤트 당첨자</a>
+                </td>
+                <td>26.06.17</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <a href="#">[안내] 교환/반품 정책 변경 안내</a>
+                </td>
+                <td>26.06.16</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <a href="#">[안내] 위치정보 이용약관 개정</a>
+                </td>
+                <td>26.06.15</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <a href="#">[안내] 구매회원 이용약관 개정</a>
+                </td>
+                <td>26.06.14</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <a href="#">[안내] 시스템 점검 안내</a>
+                </td>
+                <td>26.06.13</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <a href="#">[안내] 개인정보처리방침 변경</a>
+                </td>
+                <td>26.06.12</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <a href="#">[안내] 배송 정책 변경</a>
+                </td>
+                <td>26.06.11</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <a href="#">[안내] 이벤트 참여 안내</a>
+                </td>
+                <td>26.06.10</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <a href="#">[안내] 신규 서비스 오픈</a>
+                </td>
+                <td>26.06.09</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="pagination">
+            <a href="#" class="page-btn"><i class="bi bi-chevron-left"></i></a>
+
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+
+            <a href="#" class="page-btn"><i class="bi bi-chevron-right"></i></a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <nav class="footer-links">
+          <a href="#about">회사소개</a>
+          <a href="#terms">서비스이용약관</a>
+          <a href="#privacy">개인정보처리방침</a>
+          <a href="#finance">전자금융거래약관</a>
+        </nav>
+
+        <div class="footer-company">
+          <div class="footer-logo-box">
+            <img src="../images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
+          </div>
+
+          <div class="footer-info">
+            <h4>(주)케이마켓</h4>
+            <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
+            <p>대표이사 : 홍길동</p>
+            <p>사업자등록번호 : 123-45-12345</p>
+          </div>
+
+          <div class="footer-cs">
+            <h4>고객센터</h4>
+            <p>Tel : 1234-5678 평일 09:00~18:00</p>
+            <p>전자금융거래 분쟁 담당 : 1234-1234</p>
+            <p>365일 09:00~18:00</p>
+          </div>
+        </div>
+
+        <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

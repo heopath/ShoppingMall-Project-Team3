@@ -1,0 +1,327 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+.main-layout {
+  max-width: 1280px;
+  margin: 24px auto 60px;
+  padding: 0 16px;
+}
+
+.mypage-layout {
+  /* width: 1000px; */
+  margin: 0 auto;
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+/* ************************ 사이드 ************************ */
+.mypage-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+
+  background: #f8fbf7;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.mypage-sidebar h3 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.mypage-sidebar ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mypage-sidebar a {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: #333;
+  transition: 0.2s;
+}
+
+.mypage-sidebar a:hover {
+  background: #eef9eb;
+}
+
+.mypage-sidebar li.active a {
+  background: #3fbf3f;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ************************ 우측 ************************ */
+.mypage-content {
+  flex: 1;
+}
+
+/* ************************ 요약 ************************ */
+.mypage-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.summary-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+}
+
+.summary-card strong {
+  display: block;
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.summary-card span {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* ************************ 배너 ************************ */
+.mypage-banner {
+  height: 110px;
+  border-radius: 16px;
+  background: #f5f5f5;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #aaa;
+  font-size: 28px;
+  font-weight: 300;
+
+  margin-bottom: 24px;
+}
+
+/* ************************ 페이지네이션 ************************ */
+.page-title {
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pagination {
+  margin-top: 25px;
+
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination a {
+  font-size: 12px;
+  color: #333;
+}
+
+.pagination a.active {
+  font-weight: 700;
+}
+
+/* ************************ 기간조회 ************************ */
+.period-search-wrap {
+  display: flex;
+
+  margin-bottom: 20px;
+
+  border: 1px solid #dcdcdc;
+}
+
+.period-search-title {
+  width: 120px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #f5f5f5;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  border-right: 1px solid #dcdcdc;
+}
+
+.period-search-content {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 8px 12px;
+
+  background: #fafafa;
+}
+
+.quick-period,
+.month-period,
+.date-period {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.quick-period {
+  margin-right: 12px;
+}
+
+.month-period {
+  margin-right: 12px;
+}
+
+.period-btn-group {
+  display: flex;
+}
+
+.period-btn-group button {
+  width: 70px;
+  height: 34px;
+
+  border: 1px solid #d5d5d5;
+  border-right: 0;
+
+  background: #fff;
+
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.period-btn-group button:last-child {
+  border-right: 1px solid #d5d5d5;
+}
+
+.period-btn-group button.active {
+  background: #f3f7fc;
+  color: #3fbf3f;
+  font-weight: 700;
+}
+
+.period-date-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.period-date-group input {
+  width: 145px;
+  height: 34px;
+
+  padding: 0 10px;
+
+  border: 1px solid #d5d5d5;
+  background: #fff;
+
+  font-size: 12px;
+}
+
+.period-search-btn {
+  width: 60px;
+  height: 34px;
+
+  border: 1px solid #bdbdbd;
+
+  background: #fff;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.period-search-btn:hover {
+  background: #f5f5f5;
+}
+
+.period-btn-group button.active {
+  background: #3fbf3f;
+  color: #fff;
+  border-color: #3fbf3f;
+}
+
+/* ******************* 페이지네이션 ******************* */
+.pagination {
+  margin-top: 30px;
+
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pagination a {
+  min-width: 38px;
+  height: 38px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 8px;
+
+  background: #f5f5f5;
+  color: #555;
+
+  transition: 0.2s;
+}
+
+.pagination a:hover {
+  background: #eef9eb;
+}
+
+.pagination a.active {
+  background: #3fbf3f;
+  color: #fff;
+  font-weight: 700;
+}
+
+.page-btn {
+  border: 1px solid #ddd;
+  background: #fff !important;
+}
+
+/*  */
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 14px;
+}
+
+.section-header h3,
+.setting-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.section-header a {
+  font-size: 13px;
+  color: #666;
+}
+
+.section-header a:hover {
+  color: #3fbf3f;
+}

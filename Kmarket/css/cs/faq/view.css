@@ -1,0 +1,99 @@
+/* FAQ 상세 */
+
+.faq-view {
+  border-top: 2px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+/* 질문 영역 */
+
+.faq-view-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 24px;
+  border-bottom: 1px solid #eee;
+}
+
+.q-badge {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  background: #eef9eb;
+  color: #3fbf3f;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-shrink: 0;
+}
+
+.faq-question h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* 답변 영역 */
+
+.faq-view-body {
+  padding: 32px 24px;
+
+  min-height: 300px;
+
+  font-size: 14px;
+  line-height: 1.9;
+  color: #444;
+}
+
+.faq-view-body p {
+  margin-bottom: 12px;
+}
+
+.faq-view-body ul {
+  margin-top: 12px;
+  padding-left: 18px;
+}
+
+.faq-view-body li {
+  margin-bottom: 8px;
+}
+
+/* 버튼 */
+
+.view-btn-area {
+  margin-top: 30px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.btn-list {
+  width: 140px;
+  height: 46px;
+
+  border-radius: 10px;
+
+  background: #3fbf3f;
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: 0.2s;
+}
+
+.btn-list:hover {
+  background: #35aa35;
+}

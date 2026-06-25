@@ -1,0 +1,46 @@
+.point-table {
+  width: 100%;
+  border-top: 2px solid #3fbf3f;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.point-table thead th {
+  height: 44px;
+
+  background: #f7f7f7;
+
+  border-bottom: 1px solid #e5e5e5;
+
+  font-size: 13px;
+  font-weight: 700;
+  color: #444;
+}
+
+.point-table tbody td {
+  padding: 16px 10px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  text-align: center;
+
+  font-size: 13px;
+  color: #555;
+}
+
+.point-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.point-plus {
+  font-weight: 700;
+  color: #3fbf3f;
+}
+
+.point-table td:nth-child(2) {
+  font-weight: 600;
+}
+
+.point-table td:nth-child(5) {
+  color: #666;
+}

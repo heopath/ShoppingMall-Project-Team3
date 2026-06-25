@@ -1,0 +1,79 @@
+.inquiry-table {
+  width: 100%;
+
+  border-top: 2px solid #3fbf3f;
+  border-collapse: collapse;
+
+  background: #fff;
+}
+
+.inquiry-table thead th {
+  height: 46px;
+
+  background: #f7f7f7;
+
+  border-bottom: 1px solid #e5e5e5;
+
+  font-size: 13px;
+  font-weight: 700;
+  color: #444;
+}
+
+.inquiry-table tbody td {
+  padding: 16px 12px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  text-align: center;
+
+  font-size: 13px;
+  color: #555;
+}
+
+.inquiry-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.inquiry-table td:nth-child(1) {
+  width: 70px;
+}
+
+.inquiry-table td:nth-child(2) {
+  width: 120px;
+}
+
+.inquiry-table td:nth-child(3) {
+  width: 120px;
+}
+
+.inquiry-table td:nth-child(5) {
+  width: 120px;
+}
+
+.inquiry-table td:nth-child(6) {
+  width: 100px;
+}
+
+.inquiry-title {
+  text-align: left;
+}
+
+.inquiry-title a {
+  color: #333;
+  text-decoration: none;
+}
+
+.inquiry-title a:hover {
+  color: #3fbf3f;
+  text-decoration: underline;
+}
+
+.status-wait {
+  color: #888;
+  font-weight: 600;
+}
+
+.status-complete {
+  color: #3fbf3f;
+  font-weight: 700;
+}
