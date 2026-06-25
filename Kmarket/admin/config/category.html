@@ -25,11 +25,10 @@
         <aside class="sidebar">
             <ul class="admin-menu">
 
-                <li class="menu-title" onclick="toggleConfigMenu()">
+                <li class="menu-title active" onclick="toggleMenu(this, 'configMenu')">
                     ⚙ 환경설정
                 </li>
-
-                <li class="sub-menu-wrap open" id="configMenu">
+                <li class="sub-menu-wrap" id="configMenu">
                     <ul class="sub-menu-list">
                         <li class="sub-menu">
                             <a href="/admin/config/basic">- 기본설정</a>
@@ -49,20 +48,84 @@
                     </ul>
                 </li>
 
-                <li>
-                    <a href="/admin/shop/list">👥 상점관리</a>
+                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">
+                    👥 상점관리
                 </li>
-                <li>
-                    <a href="/admin/member/list">👤 회원관리</a>
+                <li class="sub-menu-wrap close" id="shopMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu">
+                            <a href="/admin/shop/list">- 상점목록</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/shop/sales">- 매출현황</a>
+                        </li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="/admin/product/list">📦 상품관리</a>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">
+                    👤 회원관리
                 </li>
-                <li>
-                    <a href="/admin/order/list">🧾 주문관리</a>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu">
+                            <a href="/admin/member/list">- 회원목록</a>
+                        </li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="/admin/cs/list">💬 고객센터</a>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
+                    📦 상품관리
+                </li>
+                <li class="sub-menu-wrap close" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu">
+                            <a href="/admin/product/list">- 상품목록</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/product/register">- 상품등록</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
+                    🧾 주문관리
+                </li>
+                <li class="sub-menu-wrap close" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu">
+                            <a href="/admin/order/list">- 주문목록</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'couponMenu')">
+                    🎟 쿠폰관리
+                </li>
+                <li class="sub-menu-wrap close" id="couponMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/coupon/list">- 쿠폰목록</a></li>
+                        <li class="sub-menu"><a href="/admin/coupon/issued">- 쿠폰발급현황</a></li>
+                    </ul>
+                </li>
+
+
+                <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">
+                    💬 고객센터
+                </li>
+                <li class="sub-menu-wrap close" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu">
+                            <a href="/admin/cs/notice/list">- 공지사항</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/cs/faq/list">- 자주묻는질문</a>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/admin/cs/qna/list">- 문의하기</a>
+                        </li>
+                        <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+
+                    </ul>
                 </li>
 
             </ul>
@@ -185,14 +248,11 @@
 </div>
 
 <script>
-    function toggleConfigMenu() {
-        const menu = document.getElementById("configMenu");
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
 
-        if (menu.style.display === "none" || menu.style.display === "") {
-            menu.style.display = "block";
-        } else {
-            menu.style.display = "none";
-        }
+        menu.classList.toggle("close");
+        clickedTitle.classList.toggle("active");
     }
 </script>
 

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 메인</title>
+    <link rel="stylesheet" href="../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../css/admin/index.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/logout">로그아웃</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+
+        <aside class="sidebar">
+            <ul class="admin-menu">
+
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
+                    ⚙ 환경설정
+                </li>
+                <li class="sub-menu-wrap close" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">
+                    👥 상점관리
+                </li>
+                <li class="sub-menu-wrap close" id="shopMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">
+                    👤 회원관리
+                </li>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                        <li class="sub-menu"><a href="/admin/member/point">- 포인트관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
+                    📦 상품관리
+                </li>
+                <li class="sub-menu-wrap close" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
+                    🧾 주문관리
+                </li>
+                <li class="sub-menu-wrap close" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                        <li class="sub-menu"><a href="/admin/order/delivery">- 배송현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'couponMenu')">
+                    🎟 쿠폰관리
+                </li>
+                <li class="sub-menu-wrap close" id="couponMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/coupon/list">- 쿠폰목록</a></li>
+                        <li class="sub-menu"><a href="/admin/coupon/issued">- 쿠폰발급현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">
+                    💬 고객센터
+                </li>
+                <li class="sub-menu-wrap close" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </aside>
+
+        <main class="content admin-index-content">
+
+            <div class="page-title">
+                <h2>관리자메인</h2>
+                <span>HOME &gt; 관리자 메인</span>
+            </div>
+
+            <!-- 집계현황 -->
+            <section class="dashboard-section">
+                <h3>집계현황</h3>
+
+                <div class="chart-wrap">
+                    <!-- 막대 차트 -->
+                    <div class="bar-chart-box">
+                        <div class="chart-legend">
+                            <span><i class="legend-box blue"></i>주문</span>
+                            <span><i class="legend-box red"></i>결제</span>
+                            <span><i class="legend-box green"></i>취소</span>
+                        </div>
+
+                        <div class="bar-chart">
+                            <div class="bar-group">
+                                <div class="bars">
+                                    <div class="bar blue" style="height:80px;"></div>
+                                    <div class="bar red" style="height:50px;"></div>
+                                    <div class="bar green" style="height:28px;"></div>
+                                </div>
+                                <p>10-10</p>
+                            </div>
+
+                            <div class="bar-group">
+                                <div class="bars">
+                                    <div class="bar blue" style="height:112px;"></div>
+                                    <div class="bar red" style="height:82px;"></div>
+                                    <div class="bar green" style="height:42px;"></div>
+                                </div>
+                                <p>10-11</p>
+                            </div>
+
+                            <div class="bar-group">
+                                <div class="bars">
+                                    <div class="bar blue" style="height:70px;"></div>
+                                    <div class="bar red" style="height:60px;"></div>
+                                    <div class="bar green" style="height:44px;"></div>
+                                </div>
+                                <p>10-12</p>
+                            </div>
+
+                            <div class="bar-group">
+                                <div class="bars">
+                                    <div class="bar blue" style="height:88px;"></div>
+                                    <div class="bar red" style="height:58px;"></div>
+                                    <div class="bar green" style="height:36px;"></div>
+                                </div>
+                                <p>10-13</p>
+                            </div>
+
+                            <div class="bar-group">
+                                <div class="bars">
+                                    <div class="bar blue" style="height:90px;"></div>
+                                    <div class="bar red" style="height:56px;"></div>
+                                    <div class="bar green" style="height:22px;"></div>
+                                </div>
+                                <p>10-14</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 원형 차트 -->
+                    <div class="pie-chart-box">
+                        <div class="pie-chart"></div>
+
+                        <div class="pie-legend">
+                            <span><i class="legend-box blue"></i>가전</span>
+                            <span><i class="legend-box red"></i>식품</span>
+                            <span><i class="legend-box green"></i>의류</span>
+                            <span><i class="legend-box purple"></i>기타</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 운영현황 -->
+            <section class="dashboard-section">
+                <h3>운영현황</h3>
+
+                <div class="operation-top">
+                    <div class="operation-card">
+                        <strong>입금대기</strong>
+                        <b>101</b>
+                    </div>
+                    <div class="operation-card">
+                        <strong>배송준비</strong>
+                        <b>124</b>
+                    </div>
+                    <div class="operation-card">
+                        <strong>취소요청</strong>
+                        <b>14</b>
+                    </div>
+                    <div class="operation-card">
+                        <strong>교환요청</strong>
+                        <b>7</b>
+                    </div>
+                    <div class="operation-card">
+                        <strong>반품요청</strong>
+                        <b>24</b>
+                    </div>
+                </div>
+
+                <div class="operation-summary">
+                    <div class="summary-item">
+                        <strong>주문건수</strong>
+                        <b>131</b>
+                        <p>오늘 <span>60</span></p>
+                        <p>어제 <span>71</span></p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>주문금액</strong>
+                        <b>3,700,000</b>
+                        <p>오늘 <span>1,200,000</span></p>
+                        <p>어제 <span>2,500,000</span></p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>회원가입</strong>
+                        <b>232</b>
+                        <p>오늘 <span>102</span></p>
+                        <p>어제 <span>130</span></p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>방문자 수</strong>
+                        <b>2,500</b>
+                        <p>어제 <span>1,200</span></p>
+                        <p>오늘 <span>1,300</span></p>
+                    </div>
+
+                    <div class="summary-item">
+                        <strong>문의 게시물</strong>
+                        <b>25</b>
+                        <p>어제 <span>12</span></p>
+                        <p>오늘 <span>13</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 공지사항 / 고객문의 -->
+            <section class="dashboard-section board-section">
+                <div class="board-box">
+                    <h3>공지사항</h3>
+                    <ul class="board-list">
+                        <li>
+                            <a href="/admin/cs/notice/view">[안내] 해외결제사칭문자주의</a>
+                            <span>22.10.31</span>
+                        </li>
+                        <li>
+                            <a href="/admin/cs/notice/view">[안내] 로젠택배반품 / 교환수거지</a>
+                            <span>22.10.31</span>
+                        </li>
+                        <li>
+                            <a href="/admin/cs/notice/view">[안내] 위치정보이용약관개정</a>
+                            <span>22.10.31</span>
+                        </li>
+                        <li>
+                            <a href="/admin/cs/notice/view">[안내] 구매회원이용약관개정</a>
+                            <span>22.10.31</span>
+                        </li>
+                        <li>
+                            <a href="/admin/cs/notice/view">[안내] 세티즌&시스템점검예정</a>
+                            <span>22.10.31</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="board-box">
+                    <h3>고객문의</h3>
+                    <ul class="board-list inquiry-list">
+                        <li>
+                            <a href="/admin/cs/qna/view">[가입] 가입문의내용</a>
+                            <em>chh***</em>
+                            <span>22.10.31</span>
+                        </li>
+                        <li>
+                            <a href="/admin/cs/qna/view">[탈퇴] 탈퇴문의내용</a>
+                            <em>chh***</em>
+                            <span>22.10.31</span>
+                        </li>
+                        <li>
+                            <a href="/admin/cs/qna/view">[회원정보] 회원정보문의내용</a>
+                            <em>chh***</em>
+                            <span>22.10.31</span>
+                        </li>
+                        <li>
+                            <a href="/admin/cs/qna/view">[회원정보] 회원정보문의내용</a>
+                            <em>chh***</em>
+                            <span>22.10.31</span>
+                        </li>
+                        <li>
+                            <a href="/admin/cs/qna/view">[회원정보] 회원정보문의내용</a>
+                            <em>chh***</em>
+                            <span>22.10.31</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+</div>
+
+<script>
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+</script>
+
+</body>
+</html>

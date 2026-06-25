@@ -23,53 +23,78 @@
 <aside class="sidebar">
     <ul class="admin-menu">
 
-        <li onclick="toggleMenu('configMenu')">
+        <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
             ⚙ 환경설정
         </li>
         <li class="sub-menu-wrap close" id="configMenu">
             <ul class="sub-menu-list">
-                <li class="sub-menu">
-                    <a href="/admin/config/basic">- 기본설정</a>
-                </li>
-                <li class="sub-menu">
-                    <a href="/admin/config/banner">- 배너관리</a>
-                </li>
-                <li class="sub-menu">
-                    <a href="/admin/config/policy">- 약관관리</a>
-                </li>
-                <li class="sub-menu">
-                    <a href="/admin/config/category">- 카테고리</a>
-                </li>
-                <li class="sub-menu">
-                    <a href="/admin/config/version">- 버전관리</a>
-                </li>
+                <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
             </ul>
         </li>
 
-        <li class="menu-title" onclick="toggleMenu('shopMenu')">
+        <li class="menu-title active"  onclick="toggleMenu(this, 'shopMenu')">
             👥 상점관리
         </li>
         <li class="sub-menu-wrap" id="shopMenu">
             <ul class="sub-menu-list">
-                <li class="sub-menu active">
-                    <a href="/admin/shop/list">- 상점목록</a>
-                </li>
-                <li class="sub-menu">
-                    <a href="/admin/shop/sales">- 매출현황</a></li>
+                <li class="sub-menu active"><a href="/admin/shop/list">- 상점목록</a></li>
+                <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
             </ul>
         </li>
 
-        <li>
-            <a href="/admin/member/list">👤 회원관리</a>
+        <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">
+            👤 회원관리
         </li>
-        <li>
-            <a href="/admin/product/list">📦 상품관리</a>
+        <li class="sub-menu-wrap close" id="memberMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+            </ul>
         </li>
-        <li>
-            <a href="/admin/order/list">🧾 주문관리</a>
+
+        <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
+            📦 상품관리
         </li>
-        <li>
-            <a href="/admin/cs/list">💬 고객센터</a>
+        <li class="sub-menu-wrap close" id="productMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
+            🧾 주문관리
+        </li>
+        <li class="sub-menu-wrap close" id="orderMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-title" onclick="toggleMenu(this, 'couponMenu')">
+            🎟 쿠폰관리
+        </li>
+        <li class="sub-menu-wrap close" id="couponMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu"><a href="/admin/coupon/list">- 쿠폰목록</a></li>
+                <li class="sub-menu"><a href="/admin/coupon/issued">- 쿠폰발급현황</a></li>
+            </ul>
+        </li>
+
+
+        <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">
+            💬 고객센터
+        </li>
+        <li class="sub-menu-wrap close" id="csMenu">
+            <ul class="sub-menu-list">
+                <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+            </ul>
         </li>
 
     </ul>
@@ -183,10 +208,97 @@
                         <a href="#">5</a>
                         <a href="#">다음</a>
                     </div>
-                    <button type="button" class="reg-btn">상점등록</button>
+                    <button type="button" class="reg-btn" id="openShopModal">상점등록</button>
                 </div>
             </section>
         </main>
+        <div id="shopModal" class="modal-overlay">
+            <div class="shop-modal-container">
+                <div class="shop-modal-header">
+                    <h3>상점등록</h3>
+                    <button type="button" class="modal-close" id="closeShopModal">X</button>
+                </div>
+
+                <div class="shop-modal-body">
+                    <table class="shop-form-table">
+                        <tr>
+                            <th>아이디</th>
+                            <td>
+                                <input type="text" class="input-w-medium">
+                                <span class="input-guide">영문, 숫자 4~12자 설정</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>비밀번호</th>
+                            <td>
+                                <input type="password" class="input-w-medium">
+                                <span class="input-guide">영문, 숫자, 특수문자 8~12자 설정</span>
+                            </td>
+                        </tr>
+                        <tr class="divide-row">
+                            <th>비밀번호확인</th>
+                            <td>
+                                <input type="password" class="input-w-medium">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>상호명</th>
+                            <td>
+                                <input type="text" class="input-w-medium" placeholder="상호명입력( ) (주)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>대표</th>
+                            <td>
+                                <input type="text" class="input-w-medium" placeholder="이름입력">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>사업자등록번호</th>
+                            <td>
+                                <input type="text" class="input-w-medium" placeholder="사업자등록번호입력">
+                                <span class="input-guide">- 포함 12 자리 입력</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>통신판매업번호</th>
+                            <td>
+                                <input type="text" class="input-w-medium" placeholder="통신판매업번호입력">
+                                <span class="input-guide">- 포함 12 자리 입력</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td>
+                                <input type="text" class="input-w-medium" placeholder="전화번호입력">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>팩스</th>
+                            <td>
+                                <input type="text" class="input-w-medium" placeholder="팩스번호입력">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>주소</th>
+                            <td class="address-row">
+                                <div class="address-zipcode-wrap">
+                                    <input type="text" class="input-w-medium" placeholder="우편번호검색클릭" readonly>
+                                    <button type="button" class="btn-zipcode">우편번호 검색</button>
+                                </div>
+                                <input type="text" class="input-w-large" placeholder="기본주소검색" readonly>
+                                <input type="text" class="input-w-large" placeholder="상세주소입력">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="shop-modal-btn-area">
+                        <button type="button" class="btn-submit-green">등록하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -195,10 +307,45 @@
 </div>
 
 <script>
-    // 클릭한 메뉴의 ID를 받아 토글(열기/닫기)하는 함수
-    function toggleMenu(menuId) {
+    // 1. 좌측 사이드바 메뉴 토글 함수
+    function toggleMenu(clickedTitle, menuId) {
         const menu = document.getElementById(menuId);
+
         menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+
+    // 2. 상점 등록 모달 열기/닫기 스크립트
+    const shopModal = document.getElementById("shopModal");
+    const openShopModal = document.getElementById("openShopModal");
+    const closeShopModal = document.getElementById("closeShopModal");
+
+    // '상점등록' 버튼 클릭 시 모달 열기
+    if(openShopModal) {
+        openShopModal.addEventListener("click", function () {
+            shopModal.classList.add("show");
+        });
+    }
+
+    // 모달 내부의 'X' 버튼 클릭 시 모달 닫기
+    if(closeShopModal) {
+        closeShopModal.addEventListener("click", function () {
+            shopModal.classList.remove("show");
+        });
+    }
+
+    // 모달 바깥(어두운 배경) 클릭 시 모달 닫기
+    if(shopModal) {
+        shopModal.addEventListener("click", function (e) {
+            if (e.target === shopModal) {
+                shopModal.classList.remove("show");
+            }
+        });
     }
 </script>
 

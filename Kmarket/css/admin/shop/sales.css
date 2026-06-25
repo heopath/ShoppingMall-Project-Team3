@@ -1,0 +1,92 @@
+/* =========================================================
+   상점관리 > 매출현황 전용 CSS
+========================================================= */
+.sales-section {
+    width: 100%;
+}
+
+.search-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.date-filter {
+    width: 100px;
+    height: 30px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    padding: 0 8px;
+}
+
+.sales-table {
+    width: 100%;
+    border-top: 2px solid #b9cbb0;
+    border-collapse: collapse;
+    background: #fff;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.sales-table th {
+    height: 48px;
+    border-bottom: 1px solid #d7e4d1;
+    background: #fbfef9;
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.sales-table td {
+    height: 52px;
+    border-bottom: 1px solid #e1eadc;
+    color: #555;
+    font-size: 12px;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+/* 금액이 들어가는 컬럼은 글자를 좀 더 진하게 강조 */
+.sales-table td:nth-child(9),
+.sales-table td:nth-child(10) {
+    color: #333;
+    font-weight: bold;
+}
+
+/* 테이블 컬럼 비율 설정 (피그마 시안에 맞춤) */
+.sales-table th:nth-child(1) { width: 5%; }
+.sales-table th:nth-child(2) { width: 10%; }
+.sales-table th:nth-child(3) { width: 15%; }
+.sales-table th:nth-child(4) { width: 7%; }
+.sales-table th:nth-child(5) { width: 7%; }
+.sales-table th:nth-child(6) { width: 7%; }
+.sales-table th:nth-child(7) { width: 7%; }
+.sales-table th:nth-child(8) { width: 7%; }
+.sales-table th:nth-child(9) { width: 15%; }
+.sales-table th:nth-child(10) { width: 15%; }
+
+/* 페이지네이션 래퍼 (중앙 정렬) */
+.pagination-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.pagination {
+    display: flex;
+    gap: 14px;
+    font-size: 14px;
+    align-items: center;
+}
+
+.pagination a {
+    color: #555;
+}
+
+.pagination a.active {
+    font-weight: bold;
+    color: #111;
+    text-decoration: underline;
+}

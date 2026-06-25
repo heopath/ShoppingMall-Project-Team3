@@ -38,24 +38,23 @@ li {
 .top-bar {
     width: 100%;
     height: 128px;
-    background: #2f6df3;
+    background: #fff;
     overflow: hidden;
 }
 
 .top-ad {
     display: block;
-    width: 1100px;
+    max-width: 1280px;
     height: 128px;
     margin: 0 auto;
 }
 
 .top-ad img {
     display: block;
-    width: 1100px;
+    width: 100%;
     height: 128px;
-    object-fit: contain;
+    object-fit: cover;
 }
-
 /* Header */
 header {
     max-width: 1280px;
@@ -277,8 +276,8 @@ header {
 }
 
 .side-best-item .thumb {
-    width: 52px;
-    height: 52px;
+    width: 50px;
+    height: 50px;
     background: #f2f2f2;
     border: 1px solid var(--line);
     border-radius: 5px;
@@ -334,8 +333,9 @@ header {
 }
 
 .side-best-item.best-first .thumb {
-    width: 100%;
-    height: 145px;
+    width: 230px;
+    height: 230px;
+    margin: 0 auto 10px;
     margin-bottom: 10px;
     border-radius: 6px;
 }
@@ -473,7 +473,9 @@ header {
 }
 
 .card .thumb {
-    height: 168px;
+    width: 230px;
+    height: 230px;
+    margin: 0 auto;
     background: #f4f4f4;
     display: flex;
     align-items: center;
@@ -794,10 +796,6 @@ footer {
 
     .hit-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .card .thumb {
-        height: 150px;
     }
 
     .footer-company {

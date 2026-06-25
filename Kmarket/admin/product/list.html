@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 상품목록</title>
+    <link rel="stylesheet" href="../../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin/product/list.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/logout">로그아웃</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+        <aside class="sidebar">
+            <ul class="admin-menu">
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">⚙ 환경설정</li>
+                <li class="sub-menu-wrap close" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">👥 상점관리</li>
+                <li class="sub-menu-wrap close" id="shopMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">👤 회원관리</li>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                        <li class="sub-menu"><a href="/admin/member/point">- 포인트관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title active" onclick="toggleMenu(this, 'productMenu')">📦 상품관리</li>
+                <li class="sub-menu-wrap" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu active"><a href="/admin/product/list">- 상품목록</a></li>
+                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">🧾 주문관리</li>
+                <li class="sub-menu-wrap close" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'couponMenu')">
+                    🎟 쿠폰관리
+                </li>
+                <li class="sub-menu-wrap close" id="couponMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/coupon/list">- 쿠폰목록</a></li>
+                        <li class="sub-menu"><a href="/admin/coupon/issued">- 쿠폰발급현황</a></li>
+                    </ul>
+                </li>
+
+
+                <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">💬 고객센터</li>
+                <li class="sub-menu-wrap close" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <div class="page-title">
+                <h2>상품현황</h2>
+                <span>HOME &gt; 상품관리 &gt; 상품목록</span>
+            </div>
+
+            <section class="product-list-section">
+                <div class="product-search-wrap">
+                    <select>
+                        <option>상품명</option>
+                        <option>상품코드</option>
+                        <option>판매자</option>
+                        <option>카테고리</option>
+                    </select>
+                    <input type="text" placeholder="키워드입력">
+                    <button type="button" class="product-search-btn">검색</button>
+                </div>
+
+                <table class="product-table">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox"></th>
+                        <th>사진</th>
+                        <th>상품코드</th>
+                        <th>상품명</th>
+                        <th>판매가격</th>
+                        <th>할인율</th>
+                        <th>포인트</th>
+                        <th>재고</th>
+                        <th>판매자</th>
+                        <th>조회</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><div class="thumb-box">이미지</div></td>
+                        <td>201603292</td>
+                        <td class="product-name">상품명 #1</td>
+                        <td>32,000</td>
+                        <td>10%</td>
+                        <td>320</td>
+                        <td>1,000</td>
+                        <td>(주)<br>다짜고</td>
+                        <td>120</td>
+                        <td class="manage-cell">
+                            <a href="#">[보기]</a>
+                            <a href="#">[수정]</a>
+                            <a href="#">[삭제]</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><div class="thumb-box">이미지</div></td>
+                        <td>201603292</td>
+                        <td class="product-name">상품명 #2</td>
+                        <td>32,000</td>
+                        <td>5%</td>
+                        <td>200</td>
+                        <td>1,000</td>
+                        <td>(주)<br>다짜고</td>
+                        <td>120</td>
+                        <td class="manage-cell">
+                            <a href="#">[보기]</a>
+                            <a href="#">[수정]</a>
+                            <a href="#">[삭제]</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><div class="thumb-box">이미지</div></td>
+                        <td>201603292</td>
+                        <td class="product-name">상품명 #3</td>
+                        <td>32,000</td>
+                        <td>-</td>
+                        <td>100</td>
+                        <td>1,000</td>
+                        <td>(주)<br>다짜고</td>
+                        <td>120</td>
+                        <td class="manage-cell">
+                            <a href="#">[보기]</a>
+                            <a href="#">[수정]</a>
+                            <a href="#">[삭제]</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><div class="thumb-box">이미지</div></td>
+                        <td>201603292</td>
+                        <td class="product-name">상품명 #4</td>
+                        <td>32,000</td>
+                        <td>15%</td>
+                        <td>300</td>
+                        <td>1,000</td>
+                        <td>(주)<br>다짜고</td>
+                        <td>120</td>
+                        <td class="manage-cell">
+                            <a href="#">[보기]</a>
+                            <a href="#">[수정]</a>
+                            <a href="#">[삭제]</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="product-bottom">
+                    <button type="button" class="product-delete-btn">선택삭제</button>
+
+                    <div class="product-pagination">
+                        <a href="#">이전</a>
+                        <a href="#" class="active">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">4</a>
+                        <a href="#">5</a>
+                        <a href="#">다음</a>
+                    </div>
+
+                    <a href="/admin/product/register" class="product-register-btn">상품등록</a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+</div>
+
+<script>
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+</script>
+
+</body>
+</html>

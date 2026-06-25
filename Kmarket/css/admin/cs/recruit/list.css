@@ -1,0 +1,357 @@
+/* =========================================================
+   채용하기 목록
+========================================================= */
+.recruit-section {
+    width: 100%;
+    margin-top: 18px;
+}
+
+.recruit-search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.recruit-search select {
+    width: 92px;
+    height: 32px;
+    padding-left: 8px;
+    border: 1px solid #bbb;
+    background: #fff;
+    font-size: 12px;
+    color: #333;
+}
+
+.recruit-search input {
+    width: 170px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid #bbb;
+    font-size: 12px;
+    color: #333;
+}
+
+.recruit-search-btn {
+    width: 58px;
+    height: 32px;
+    border: none;
+    background: #bcbcbc;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.recruit-search-btn:hover {
+    background: #999;
+}
+
+.recruit-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #999;
+    font-size: 11px;
+    color: #333;
+}
+
+.recruit-table th {
+    height: 34px;
+    border-bottom: 1px solid #dcdcdc;
+    background: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+.recruit-table td {
+    height: 42px;
+    padding: 4px 3px;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+    line-height: 1.45;
+}
+
+.recruit-table .check-cell {
+    width: 36px;
+}
+
+.recruit-table th:nth-child(2),
+.recruit-table td:nth-child(2) {
+    width: 45px;
+}
+
+.recruit-table th:nth-child(3),
+.recruit-table td:nth-child(3),
+.recruit-table th:nth-child(4),
+.recruit-table td:nth-child(4),
+.recruit-table th:nth-child(5),
+.recruit-table td:nth-child(5) {
+    width: 70px;
+}
+
+.recruit-table th:nth-child(7),
+.recruit-table td:nth-child(7),
+.recruit-table th:nth-child(8),
+.recruit-table td:nth-child(8) {
+    width: 58px;
+}
+
+.recruit-table th:nth-child(9),
+.recruit-table td:nth-child(9),
+.recruit-table th:nth-child(10),
+.recruit-table td:nth-child(10) {
+    width: 82px;
+}
+
+.recruit-table .title-cell {
+    text-align: left;
+    padding-left: 8px;
+}
+
+.status-open {
+    color: #31aa00;
+    font-weight: bold;
+}
+
+.wave-row td {
+    height: 52px;
+    border-bottom: 1px solid #e5e5e5;
+    background:
+        radial-gradient(50% 8px at 25% 0, transparent 70%, #aaa 72%, transparent 74%) repeat-x,
+        radial-gradient(50% 8px at 75% 100%, transparent 70%, #aaa 72%, transparent 74%) repeat-x;
+    background-size: 60px 20px;
+    background-position: 0 14px, 0 28px;
+}
+
+.recruit-bottom {
+    position: relative;
+    min-height: 55px;
+    margin-top: 15px;
+}
+
+.recruit-delete-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 78px;
+    height: 34px;
+    border: none;
+    background: #bcbcbc;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.recruit-delete-btn:hover {
+    background: #999;
+}
+
+.recruit-register-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 82px;
+    height: 34px;
+    border: none;
+    background: #9fc5f8;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.recruit-register-btn:hover {
+    background: #6fa8dc;
+}
+
+.recruit-pagination {
+    padding-top: 10px;
+    text-align: center;
+}
+
+.recruit-pagination a {
+    margin: 0 4px;
+    color: #111;
+    font-size: 13px;
+}
+
+.recruit-pagination a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================================
+   채용등록 모달
+========================================================= */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.42);
+    z-index: 9999;
+}
+
+.modal-overlay.show {
+    display: block;
+}
+
+.recruit-modal {
+    position: absolute;
+    top: 58px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 590px;
+    background: #fff;
+    border: 1px solid #999;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+}
+
+.recruit-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 38px;
+    padding: 0 14px;
+    background: #3a3a3a;
+}
+
+.recruit-modal-header h3 {
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.modal-close {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.recruit-modal-body {
+    padding: 18px 16px 24px;
+}
+
+.recruit-form-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #ddd;
+}
+
+.recruit-form-table th {
+    width: 90px;
+    padding: 11px 0;
+    border-bottom: 1px solid #ddd;
+    background: #f1f1f1;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+    vertical-align: top;
+}
+
+.recruit-form-table td {
+    padding: 9px 8px;
+    border-bottom: 1px solid #ddd;
+    background: #fff;
+}
+
+.recruit-input {
+    height: 28px;
+    padding: 0 8px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    color: #333;
+}
+
+.title-input {
+    width: 300px;
+}
+
+.recruit-select {
+    width: 135px;
+    height: 28px;
+    padding-left: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 12px;
+    color: #333;
+}
+
+.date-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date-input {
+    width: 115px;
+    height: 28px;
+    padding: 0 8px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    color: #333;
+}
+
+.recruit-textarea {
+    width: 300px;
+    height: 112px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    resize: none;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #333;
+    font-family: inherit;
+}
+
+.recruit-modal-btn-area {
+    margin-top: 22px;
+    text-align: center;
+}
+
+.modal-cancel-btn,
+.modal-submit-btn {
+    width: 68px;
+    height: 34px;
+    margin: 0 3px;
+    border: none;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.modal-cancel-btn {
+    background: #bdbdbd;
+}
+
+.modal-submit-btn {
+    background: #2fb34a;
+}
+
+.modal-cancel-btn:hover {
+    background: #999;
+}
+
+.modal-submit-btn:hover {
+    background: #23943a;
+}
+
+
+.date-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date-input {
+    width: 120px;
+    height: 28px;
+    padding: 0 6px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    color: #333;
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}

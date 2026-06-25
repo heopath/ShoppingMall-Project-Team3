@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 주문현황</title>
+    <link rel="stylesheet" href="../../css/admin/admin-common.css">
+    <link rel="stylesheet" href="../../css/admin/order/list.css">
+</head>
+<body>
+
+<div id="admin-wrapper">
+    <header class="admin-header">
+        <div class="logo">CI ( 로고 )</div>
+        <div class="top-menu">
+            <a href="/">홈</a>
+            <a href="/logout">로그아웃</a>
+            <a href="/cs">고객센터</a>
+        </div>
+    </header>
+
+    <div class="admin-body">
+        <aside class="sidebar">
+            <ul class="admin-menu">
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">⚙ 환경설정</li>
+                <li class="sub-menu-wrap close" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">👥 상점관리</li>
+                <li class="sub-menu-wrap close" id="shopMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
+                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">👤 회원관리</li>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                        <li class="sub-menu"><a href="/admin/member/point">- 포인트관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">📦 상품관리</li>
+                <li class="sub-menu-wrap close" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title active" onclick="toggleMenu(this, 'orderMenu')">🧾 주문관리</li>
+                <li class="sub-menu-wrap" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu active"><a href="/admin/order/list">- 주문목록</a></li>
+                        <li class="sub-menu"><a href="/admin/order/delivery">- 배송현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'couponMenu')">
+                    🎟 쿠폰관리
+                </li>
+                <li class="sub-menu-wrap close" id="couponMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/coupon/list">- 쿠폰목록</a></li>
+                        <li class="sub-menu"><a href="/admin/coupon/issued">- 쿠폰발급현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">💬 고객센터</li>
+                <li class="sub-menu-wrap close" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <div class="page-title">
+                <h2>주문현황</h2>
+                <span>HOME &gt; 주문관리 &gt; 주문현황</span>
+            </div>
+
+            <section class="order-section">
+                <div class="order-search-wrap">
+                    <select>
+                        <option>주문번호</option>
+                        <option>주문자</option>
+                        <option>수령자</option>
+                    </select>
+                    <input type="text" placeholder="검색어입력">
+                    <button type="button" class="order-search-btn">검색</button>
+                </div>
+
+                <table class="order-table">
+                    <thead>
+                    <tr>
+                        <th>주문번호</th>
+                        <th>주문자</th>
+                        <th>주문자명</th>
+                        <th>주문 건수</th>
+                        <th>주문합계</th>
+                        <th>결제수단</th>
+                        <th>주문상태</th>
+                        <th>주문일</th>
+                        <th>배송</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><a href="javascript:void(0)" class="order-no openOrderDetail">10121211341</a></td>
+                        <td>abc123</td>
+                        <td>김유신</td>
+                        <td>2</td>
+                        <td>102,900</td>
+                        <td>신용카드</td>
+                        <td><span class="state green">결제완료</span></td>
+                        <td>0000-00-00<br>00:00:00</td>
+                        <td><button type="button" class="delivery-btn openDeliveryInput">배송하기</button></td>
+                    </tr>
+                    <tr>
+                        <td><a href="javascript:void(0)" class="order-no openOrderDetail">10121211340</a></td>
+                        <td>afra123</td>
+                        <td>김춘추</td>
+                        <td>1</td>
+                        <td>36,000</td>
+                        <td>계좌이체</td>
+                        <td><span class="state green">입금대기</span></td>
+                        <td>0000-00-00<br>00:00:00</td>
+                        <td><button type="button" class="delivery-btn openDeliveryInput">배송하기</button></td>
+                    </tr>
+                    <tr>
+                        <td><a href="javascript:void(0)" class="order-no openOrderDetail">10121211339</a></td>
+                        <td>pewoq12</td>
+                        <td>장보고</td>
+                        <td>2</td>
+                        <td>9,000</td>
+                        <td>신용카드</td>
+                        <td><span class="state green">결제완료</span></td>
+                        <td>0000-00-00<br>00:00:00</td>
+                        <td><span class="delivery-text">배송완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><a href="javascript:void(0)" class="order-no openOrderDetail">10121211338</a></td>
+                        <td>yaouw33</td>
+                        <td>강감찬</td>
+                        <td>1</td>
+                        <td>89,000</td>
+                        <td>무통장</td>
+                        <td><span class="state red">주문취소</span></td>
+                        <td>0000-00-00<br>00:00:00</td>
+                        <td><span class="delivery-text">주문취소</span></td>
+                    </tr>
+                    <tr>
+                        <td><a href="javascript:void(0)" class="order-no openOrderDetail">10121211337</a></td>
+                        <td>enpo909</td>
+                        <td>이순신</td>
+                        <td>3</td>
+                        <td>260,000</td>
+                        <td>계좌이체</td>
+                        <td><span class="state green">입금대기</span></td>
+                        <td>0000-00-00<br>00:00:00</td>
+                        <td><button type="button" class="delivery-btn openDeliveryInput">배송하기</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="order-pagination">
+                    <a href="#">이전</a>
+                    <a href="#">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <a href="#">다음</a>
+                </div>
+            </section>
+        </main>
+
+        <!-- 주문상세 모달 -->
+        <div id="orderDetailModal" class="modal-overlay">
+            <div class="order-modal order-detail-modal">
+                <div class="modal-header">
+                    <h3>주문상세 <span>10121211341</span></h3>
+                    <button type="button" class="modal-close" id="closeOrderDetailModal">X</button>
+                </div>
+                <div class="modal-body">
+                    <h4>상품정보</h4>
+                    <table class="modal-product-table">
+                        <thead>
+                        <tr>
+                            <th>상품사진</th>
+                            <th>상품번호</th>
+                            <th>상품명</th>
+                            <th>판매자</th>
+                            <th>가격</th>
+                            <th>할인</th>
+                            <th>수량</th>
+                            <th>배송비</th>
+                            <th>결제금액</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><div class="modal-thumb">이미지</div></td>
+                            <td>120120021</td>
+                            <td>OOO</td>
+                            <td>(주)상호명</td>
+                            <td>24,000</td>
+                            <td>-1,200</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td>68,400</td>
+                        </tr>
+                        <tr>
+                            <td><div class="modal-thumb">이미지</div></td>
+                            <td>114514326</td>
+                            <td>OOO</td>
+                            <td>(주)상호명</td>
+                            <td>35,000</td>
+                            <td>-3,500</td>
+                            <td>1</td>
+                            <td>3,000</td>
+                            <td>34,500</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="modal-summary">
+                        <p><span>총 상품금액</span><strong>107,000 원</strong></p>
+                        <p><span>총 할인금액</span><strong>-7,100 원</strong></p>
+                        <p><span>배송비</span><strong>3,000 원</strong></p>
+                        <p><span>총 결제금액</span><strong class="price-red">102,900 원</strong></p>
+                    </div>
+
+                    <h4>결제정보</h4>
+                    <table class="modal-info-table">
+                        <tr><th>주문번호</th><td>10121211341</td></tr>
+                        <tr><th>결제방법</th><td>신용카드 / 1234 **** **** 4432</td></tr>
+                        <tr><th>주문자</th><td>김유신 / 010-1234-1234</td></tr>
+                        <tr><th>연락처</th><td>결제완료</td></tr>
+                    </table>
+
+                    <h4>주문자</h4>
+                    <table class="modal-info-table">
+                        <tr><th>수령자</th><td>김유신</td></tr>
+                        <tr><th>연락처</th><td>010-1234-1234</td></tr>
+                        <tr><th>배송지 주소</th><td>부산 부산진구 123-11 06</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 배송입력 모달 -->
+        <div id="deliveryInputModal" class="modal-overlay">
+            <div class="order-modal delivery-input-modal">
+                <div class="modal-header">
+                    <h3>배송입력 <span>10121211341</span></h3>
+                    <button type="button" class="modal-close" id="closeDeliveryInputModal">X</button>
+                </div>
+                <div class="modal-body">
+                    <table class="delivery-form-table">
+                        <tr><th>주문번호</th><td><input type="text" value="10121211341"></td></tr>
+                        <tr><th>수령인</th><td><input type="text" value="홍길동"></td></tr>
+                        <tr><th>우편번호</th><td><input type="text" value="12345"></td></tr>
+                        <tr><th>기본주소</th><td><input type="text" class="long-input" value="부산광역시 부산진구 부전동 123"></td></tr>
+                        <tr><th>상세주소</th><td><input type="text" class="long-input" value="OO 빌딩 3층 301호"></td></tr>
+                        <tr>
+                            <th>택배사</th>
+                            <td>
+                                <select>
+                                    <option>택배사선택</option>
+                                    <option>CJ대한통운</option>
+                                    <option>로젠택배</option>
+                                    <option>한진택배</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><th>운송장번호</th><td><input type="text" class="long-input" placeholder="발급받은 택배사 송장번호입력"></td></tr>
+                        <tr><th>기타</th><td><textarea placeholder="기타정보입력"></textarea></td></tr>
+                    </table>
+                    <div class="modal-btn-area">
+                        <button type="button" class="green-submit-btn">등록하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
+    </footer>
+</div>
+
+<script>
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+
+    const orderDetailModal = document.getElementById("orderDetailModal");
+    const deliveryInputModal = document.getElementById("deliveryInputModal");
+
+    document.querySelectorAll(".openOrderDetail").forEach(button => {
+        button.addEventListener("click", function () {
+            orderDetailModal.classList.add("show");
+        });
+    });
+
+    document.querySelectorAll(".openDeliveryInput").forEach(button => {
+        button.addEventListener("click", function () {
+            deliveryInputModal.classList.add("show");
+        });
+    });
+
+    document.getElementById("closeOrderDetailModal").addEventListener("click", function () {
+        orderDetailModal.classList.remove("show");
+    });
+
+    document.getElementById("closeDeliveryInputModal").addEventListener("click", function () {
+        deliveryInputModal.classList.remove("show");
+    });
+
+    orderDetailModal.addEventListener("click", function (e) {
+        if (e.target === orderDetailModal) {
+            orderDetailModal.classList.remove("show");
+        }
+    });
+
+    deliveryInputModal.addEventListener("click", function (e) {
+        if (e.target === deliveryInputModal) {
+            deliveryInputModal.classList.remove("show");
+        }
+    });
+</script>
+
+</body>
+</html>
