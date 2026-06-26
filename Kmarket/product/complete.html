@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>K-Market 주문완료</title>
+
+        <link rel="stylesheet" href="../css/product/common.css" />
+        <link rel="stylesheet" href="../css/product/complete.css" />
+    </head>
+
+    <body id="top">
+        <!-- 상단 광고 배너 -->
+        <div class="top-bar">
+            <a href="#" class="top-ad">
+                <img src="../images/main/vip_plcc_banner.png" alt="Kmarket 광고 배너" />
+            </a>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <a href="../index.html" class="logo-img">
+                <img src="../images/main/header_logo.png" alt="Kmarket 로고" />
+            </a>
+
+            <div class="search-box">
+                <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
+
+                <button type="button" aria-label="검색">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+                            stroke="#fff"
+                            stroke-width="2"
+                            fill="none"
+                            stroke-linecap="round"
+                        />
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="header-links">
+                <a href="#">로그인</a>
+                <a href="#">회원가입</a>
+                <a href="#">마이페이지</a>
+                <a href="./cart.html">🛒 장바구니</a>
+            </nav>
+        </header>
+
+        <!-- GNB -->
+        <nav class="gnb">
+            <div class="gnb-inner">
+                <a href="#">히트상품</a>
+                <a href="#">추천상품</a>
+                <a href="#">최신상품</a>
+                <a href="#">인기상품</a>
+                <a href="#">할인상품</a>
+            </div>
+        </nav>
+
+        <div class="page-layout">
+            <!-- Aside -->
+            <aside class="side-cat">
+                <div class="category-box">
+                    <h3>카테고리</h3>
+
+                    <ul class="category-list">
+                        <li>
+                            <a href="#">
+                                <span class="icon">👕</span>
+                                패션·의류·뷰티
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon">💻</span>
+                                가전·디지털
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon">🍎</span>
+                                식품·생필품
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon">🏠</span>
+                                홈·문구·취미
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 베스트상품 -->
+                <div class="side-best-sticky">
+                    <div class="side-best">
+                        <h3>베스트 상품</h3>
+
+                        <div class="side-best-list">
+                            <a href="#" class="side-best-item best-first">
+                                <span class="rank">01</span>
+
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="txt">
+                                    <b>베스트 인기상품</b>
+                                    <em>27,000원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">02</span>
+
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 002 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="txt">
+                                    <b>상품명 2위</b>
+                                    <em>13,000원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">03</span>
+
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 002 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="txt">
+                                    <b>상품명 3위</b>
+                                    <em>22,320원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">04</span>
+
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 002 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="txt">
+                                    <b>상품명 4위</b>
+                                    <em>18,900원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">05</span>
+
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 002 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="txt">
+                                    <b>상품명 5위</b>
+                                    <em>9,900원</em>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 주문완료 내용 -->
+            <main class="content-area">
+                <div class="breadcrumb">HOME <span>›</span> 주문하기 <span>›</span> 주문완료</div>
+
+                <section class="complete-page">
+                    <div class="page-title">
+                        <h1>주문완료</h1>
+                    </div>
+
+                    <!-- 주문 완료 문구 -->
+                    <div class="complete-message">
+                        <h2>고객님의 주문이 정상적으로 완료되었습니다.</h2>
+                        <p>즐거운 쇼핑이 되셨나요? 항상 고객님을 위한 케이마켓이 되겠습니다.</p>
+                    </div>
+
+                    <!-- 주문 상품 -->
+                    <section class="complete-product-section">
+                        <div class="complete-table-head">
+                            <span>상품명</span>
+                            <span>상품금액</span>
+                            <span>할인금액</span>
+                            <span>수량</span>
+                            <span>주문금액</span>
+                        </div>
+
+                        <div class="complete-product-row">
+                            <a href="./view.html" class="complete-product-info">
+                                <span class="complete-product-thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 002 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="complete-product-text">
+                                    <b>상품명</b>
+                                    <em>상품설명</em>
+                                </span>
+                            </a>
+
+                            <span>27,000원</span>
+                            <span>-1,350원</span>
+                            <span>1</span>
+                            <strong>25,650원</strong>
+                        </div>
+
+                        <div class="product-price-summary">
+                            <dl>
+                                <div>
+                                    <dt>총 상품금액</dt>
+                                    <dd>27,000원</dd>
+                                </div>
+
+                                <div>
+                                    <dt>총 할인금액</dt>
+                                    <dd>-1,350원</dd>
+                                </div>
+
+                                <div>
+                                    <dt>배송비</dt>
+                                    <dd>0원</dd>
+                                </div>
+
+                                <div class="final-total">
+                                    <dt>총 결제금액</dt>
+                                    <dd>25,650원</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </section>
+
+                    <!-- 주문 정보 -->
+                    <section class="complete-info-section">
+                        <h2>주문정보</h2>
+
+                        <div class="info-box">
+                            <dl>
+                                <div>
+                                    <dt>주문번호</dt>
+                                    <dd>1000121121</dd>
+                                </div>
+
+                                <div>
+                                    <dt>결제방법</dt>
+                                    <dd>신용카드</dd>
+                                </div>
+
+                                <div>
+                                    <dt>주문자 / 연락처</dt>
+                                    <dd>홍길동 / 010-1234-1234</dd>
+                                </div>
+
+                                <div class="order-total-info">
+                                    <dt>총 결제금액</dt>
+                                    <dd>24,650원</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </section>
+
+                    <!-- 배송 정보 -->
+                    <section class="complete-info-section">
+                        <h2>배송정보</h2>
+
+                        <div class="info-box">
+                            <dl>
+                                <div>
+                                    <dt>수취인</dt>
+                                    <dd>홍길동</dd>
+                                </div>
+
+                                <div>
+                                    <dt>연락처</dt>
+                                    <dd>010-1234-1234</dd>
+                                </div>
+
+                                <div>
+                                    <dt>배송지 주소</dt>
+                                    <dd>부산광역시 부산진구 중앙대로 103 그린타워 13층</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </section>
+
+                    <div class="complete-actions">
+                        <a href="../index.html" class="btn-home">쇼핑 계속하기</a>
+                        <a href="#" class="btn-order-list">주문내역 확인</a>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-inner">
+                <nav class="footer-links">
+                    <a href="#">회사소개</a>
+                    <a href="#">서비스이용약관</a>
+                    <a href="#">개인정보처리방침</a>
+                    <a href="#">전자금융거래약관</a>
+                </nav>
+
+                <div class="footer-company">
+                    <div class="footer-logo-box">
+                        <img src="../images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
+                    </div>
+
+                    <div class="footer-info">
+                        <h4>(주)케이마켓</h4>
+                        <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
+                        <p>대표이사 : 홍길동</p>
+                        <p>사업자등록번호 : 123-45-12345</p>
+                    </div>
+
+                    <div class="footer-cs">
+                        <h4>고객센터</h4>
+                        <p>Tel : 1234-5678 평일 09:00~18:00</p>
+                        <p>전자금융거래 분쟁 담당 : 1234-1234</p>
+                        <p>365일 09:00~18:00</p>
+                    </div>
+                </div>
+
+                <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
+            </div>
+        </footer>
+
+        <a href="#top" class="top-btn">
+            <img src="../images/main/top.png" alt="위로 이동" />
+        </a>
+    </body>
+</html>
