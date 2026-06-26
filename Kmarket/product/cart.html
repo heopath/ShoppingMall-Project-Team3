@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>K-Market 장바구니</title>
+
+        <link rel="stylesheet" href="../css/product/common.css" />
+        <link rel="stylesheet" href="../css/product/cart.css" />
+    </head>
+
+    <body id="top">
+        <!-- 상단 광고 배너 -->
+        <div class="top-bar">
+            <a href="#" class="top-ad">
+                <img src="../images/main/vip_plcc_banner.png" alt="Kmarket 광고 배너" />
+            </a>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <a href="../index.html" class="logo-img">
+                <img src="../images/main/header_logo.png" alt="Kmarket 로고" />
+            </a>
+
+            <div class="search-box">
+                <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
+
+                <button type="button" aria-label="검색">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+                            stroke="#fff"
+                            stroke-width="2"
+                            fill="none"
+                            stroke-linecap="round"
+                        />
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="header-links">
+                <a href="#">로그인</a>
+                <a href="#">회원가입</a>
+                <a href="#">마이페이지</a>
+                <a href="./cart.html">🛒 장바구니</a>
+            </nav>
+        </header>
+
+        <!-- GNB -->
+        <nav class="gnb">
+            <div class="gnb-inner">
+                <a href="#">히트상품</a>
+                <a href="#">추천상품</a>
+                <a href="#">최신상품</a>
+                <a href="#">인기상품</a>
+                <a href="#">할인상품</a>
+            </div>
+        </nav>
+
+        <div class="page-layout">
+            <!-- Aside -->
+            <aside class="side-cat">
+                <div class="category-box">
+                    <h3>카테고리</h3>
+
+                    <ul class="category-list">
+                        <li>
+                            <a href="#">
+                                <span class="icon">👕</span>
+                                패션·의류·뷰티
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon">💻</span>
+                                가전·디지털
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon">🍎</span>
+                                식품·생필품
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon">🏠</span>
+                                홈·문구·취미
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 베스트상품 -->
+                <div class="side-best-sticky">
+                    <div class="side-best">
+                        <h3>베스트 상품</h3>
+
+                        <div class="side-best-list">
+                            <a href="#" class="side-best-item best-first">
+                                <span class="rank">01</span>
+
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="txt">
+                                    <b>베스트 인기상품</b>
+                                    <em>27,000원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">02</span>
+
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="txt">
+                                    <b>상품명 2위</b>
+                                    <em>13,000원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">03</span>
+
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="txt">
+                                    <b>상품명 3위</b>
+                                    <em>22,320원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">04</span>
+
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="txt">
+                                    <b>상품명 4위</b>
+                                    <em>18,900원</em>
+                                </span>
+                            </a>
+
+                            <a href="#" class="side-best-item">
+                                <span class="rank">05</span>
+
+                                <span class="thumb">
+                                    <svg viewBox="0 0 24 24" fill="#ccc">
+                                        <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span class="txt">
+                                    <b>상품명 5위</b>
+                                    <em>9,900원</em>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Cart Content -->
+            <main class="content-area">
+                <div class="breadcrumb">HOME <span>›</span> 패션·의류·뷰티 <span>›</span> 장바구니</div>
+
+                <section class="cart-page">
+                    <div class="page-title">
+                        <h1>장바구니</h1>
+                    </div>
+
+                    <div class="cart-table-wrap">
+                        <div class="cart-table-head">
+                            <label class="check-wrap">
+                                <input type="checkbox" id="checkAll" />
+                                <span></span>
+                            </label>
+
+                            <span>상품명</span>
+                            <span>수량</span>
+                            <span>판매가</span>
+                            <span>할인</span>
+                            <span>포인트</span>
+                            <span>배송비</span>
+                            <span>총합</span>
+                        </div>
+
+                        <div class="cart-list" id="cartList"></div>
+                    </div>
+
+                    <div class="cart-bottom">
+                        <button type="button" class="delete-btn" id="deleteSelected">선택삭제</button>
+
+                        <aside class="cart-summary">
+                            <h2>전체합계</h2>
+
+                            <dl>
+                                <div>
+                                    <dt>상품수</dt>
+                                    <dd id="summaryCount">0</dd>
+                                </div>
+
+                                <div>
+                                    <dt>상품금액</dt>
+                                    <dd id="summaryProductPrice">0원</dd>
+                                </div>
+
+                                <div>
+                                    <dt>할인금액</dt>
+                                    <dd id="summaryDiscount">0원</dd>
+                                </div>
+
+                                <div>
+                                    <dt>배송비</dt>
+                                    <dd id="summaryDelivery">0원</dd>
+                                </div>
+
+                                <div class="total-row">
+                                    <dt>결제예정 금액</dt>
+                                    <dd id="summaryTotal">0원</dd>
+                                </div>
+
+                                <div>
+                                    <dt>적립 포인트</dt>
+                                    <dd id="summaryPoint">0</dd>
+                                </div>
+                            </dl>
+
+                            <button type="button" class="order-btn" id="orderBtn">주문하기</button>
+                        </aside>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-inner">
+                <nav class="footer-links">
+                    <a href="#">회사소개</a>
+                    <a href="#">서비스이용약관</a>
+                    <a href="#">개인정보처리방침</a>
+                    <a href="#">전자금융거래약관</a>
+                </nav>
+
+                <div class="footer-company">
+                    <div class="footer-logo-box">
+                        <img src="../images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
+                    </div>
+
+                    <div class="footer-info">
+                        <h4>(주)케이마켓</h4>
+                        <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
+                        <p>대표이사 : 홍길동</p>
+                        <p>사업자등록번호 : 123-45-12345</p>
+                    </div>
+
+                    <div class="footer-cs">
+                        <h4>고객센터</h4>
+                        <p>Tel : 1234-5678 평일 09:00~18:00</p>
+                        <p>전자금융거래 분쟁 담당 : 1234-1234</p>
+                        <p>365일 09:00~18:00</p>
+                    </div>
+                </div>
+
+                <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
+            </div>
+        </footer>
+
+        <a href="#top" class="top-btn">
+            <img src="../images/main/top.png" alt="위로 이동" />
+        </a>
+
+        <script>
+            const imageSvg = `
+                <svg viewBox="0 0 24 24" fill="#ccc">
+                    <path d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                </svg>
+            `;
+
+            let cartItems = [
+                {
+                    cartNo: 1,
+                    productName: "남성 데일리 기본 반팔 티셔츠 3장 세트",
+                    description: "부드러운 면 소재로 제작된 데일리 기본 티셔츠입니다.",
+                    price: 30000,
+                    discountRate: 10,
+                    point: 270,
+                    deliveryFee: 0,
+                    quantity: 1,
+                },
+                {
+                    cartNo: 2,
+                    productName: "남성 오버핏 데님 캐주얼 셔츠",
+                    description: "사계절 편하게 입기 좋은 데님 캐주얼 셔츠입니다.",
+                    price: 49000,
+                    discountRate: 18,
+                    point: 401,
+                    deliveryFee: 3000,
+                    quantity: 1,
+                },
+            ];
+
+            const cartList = document.getElementById("cartList");
+            const checkAll = document.getElementById("checkAll");
+
+            function formatPrice(price) {
+                return Number(price).toLocaleString() + "원";
+            }
+
+            function getDiscountPrice(item) {
+                return Math.floor(item.price * (item.discountRate / 100));
+            }
+
+            function getSalePrice(item) {
+                return item.price - getDiscountPrice(item);
+            }
+
+            function renderCart() {
+                cartList.innerHTML = "";
+
+                if (cartItems.length === 0) {
+                    cartList.innerHTML = `
+                        <div class="empty-cart">
+                            장바구니에 담긴 상품이 없습니다.
+                        </div>
+                    `;
+
+                    updateSummary();
+                    return;
+                }
+
+                cartItems.forEach((item) => {
+                    const salePrice = getSalePrice(item);
+                    const itemTotal = salePrice * item.quantity + item.deliveryFee;
+
+                    const row = document.createElement("article");
+                    row.className = "cart-item";
+
+                    row.innerHTML = `
+                        <label class="check-wrap">
+                            <input
+                                type="checkbox"
+                                class="item-check"
+                                data-cart-no="${item.cartNo}"
+                                ${item.checked ? "checked" : ""}
+                            />
+                            <span></span>
+                        </label>
+
+                        <a href="./view.html" class="cart-product">
+                            <span class="cart-thumb">
+                                ${imageSvg}
+                            </span>
+
+                            <span class="cart-product-text">
+                                <b>${item.productName}</b>
+                                <em>${item.description}</em>
+                            </span>
+                        </a>
+
+                        <div class="quantity-box">
+                            <button type="button" class="qty-minus" data-cart-no="${item.cartNo}">-</button>
+                            <input type="text" value="${item.quantity}" readonly />
+                            <button type="button" class="qty-plus" data-cart-no="${item.cartNo}">+</button>
+                        </div>
+
+                        <span class="cart-price">${formatPrice(item.price)}</span>
+
+                        <span class="cart-discount">${item.discountRate}%</span>
+
+                        <span class="cart-point">${item.point.toLocaleString()}</span>
+
+                        <span class="cart-delivery">
+                            ${item.deliveryFee === 0 ? "무료배송" : formatPrice(item.deliveryFee)}
+                        </span>
+
+                        <strong class="cart-total">${formatPrice(itemTotal)}</strong>
+                    `;
+
+                    cartList.appendChild(row);
+                });
+
+                bindCartEvents();
+                updateSummary();
+            }
+
+            function bindCartEvents() {
+                const itemChecks = document.querySelectorAll(".item-check");
+
+                itemChecks.forEach((checkbox) => {
+                    checkbox.addEventListener("change", function () {
+                        const cartNo = Number(this.dataset.cartNo);
+
+                        cartItems = cartItems.map((item) => {
+                            if (item.cartNo === cartNo) {
+                                return {
+                                    ...item,
+                                    checked: this.checked,
+                                };
+                            }
+
+                            return item;
+                        });
+
+                        checkAll.checked = cartItems.every((item) => item.checked);
+                        updateSummary();
+                    });
+                });
+
+                document.querySelectorAll(".qty-plus").forEach((button) => {
+                    button.addEventListener("click", function () {
+                        const cartNo = Number(this.dataset.cartNo);
+
+                        cartItems = cartItems.map((item) => {
+                            if (item.cartNo === cartNo) {
+                                return {
+                                    ...item,
+                                    quantity: item.quantity + 1,
+                                };
+                            }
+
+                            return item;
+                        });
+
+                        renderCart();
+                    });
+                });
+
+                document.querySelectorAll(".qty-minus").forEach((button) => {
+                    button.addEventListener("click", function () {
+                        const cartNo = Number(this.dataset.cartNo);
+
+                        cartItems = cartItems.map((item) => {
+                            if (item.cartNo === cartNo) {
+                                return {
+                                    ...item,
+                                    quantity: item.quantity > 1 ? item.quantity - 1 : 1,
+                                };
+                            }
+
+                            return item;
+                        });
+
+                        renderCart();
+                    });
+                });
+            }
+
+            function updateSummary() {
+                const selectedItems = cartItems.filter((item) => item.checked);
+
+                const productCount = selectedItems.reduce((sum, item) => {
+                    return sum + item.quantity;
+                }, 0);
+
+                const productPrice = selectedItems.reduce((sum, item) => {
+                    return sum + item.price * item.quantity;
+                }, 0);
+
+                const discountPrice = selectedItems.reduce((sum, item) => {
+                    return sum + getDiscountPrice(item) * item.quantity;
+                }, 0);
+
+                const deliveryFee = selectedItems.reduce((sum, item) => {
+                    return sum + item.deliveryFee;
+                }, 0);
+
+                const point = selectedItems.reduce((sum, item) => {
+                    return sum + item.point * item.quantity;
+                }, 0);
+
+                const total = productPrice - discountPrice + deliveryFee;
+
+                document.getElementById("summaryCount").textContent = productCount;
+                document.getElementById("summaryProductPrice").textContent = formatPrice(productPrice);
+                document.getElementById("summaryDiscount").textContent = "-" + formatPrice(discountPrice);
+                document.getElementById("summaryDelivery").textContent = formatPrice(deliveryFee);
+                document.getElementById("summaryTotal").textContent = formatPrice(total);
+                document.getElementById("summaryPoint").textContent = point.toLocaleString();
+            }
+
+            checkAll.addEventListener("change", function () {
+                cartItems = cartItems.map((item) => {
+                    return {
+                        ...item,
+                        checked: this.checked,
+                    };
+                });
+
+                renderCart();
+            });
+
+            document.getElementById("deleteSelected").addEventListener("click", () => {
+                const selectedCount = cartItems.filter((item) => item.checked).length;
+
+                if (selectedCount === 0) {
+                    alert("삭제할 상품을 선택하세요.");
+                    return;
+                }
+
+                if (!confirm("선택한 상품을 장바구니에서 삭제하시겠습니까?")) {
+                    return;
+                }
+
+                cartItems = cartItems.filter((item) => !item.checked);
+                checkAll.checked = false;
+
+                renderCart();
+            });
+
+            document.getElementById("orderBtn").addEventListener("click", () => {
+                const selectedItems = cartItems.filter((item) => item.checked);
+
+                if (selectedItems.length === 0) {
+                    alert("주문할 상품을 선택하세요.");
+                    return;
+                }
+
+                alert("주문 페이지로 이동합니다.");
+
+                // 실제 Spring 구현 시:
+                // location.href = "./order.html";
+            });
+
+            renderCart();
+        </script>
+    </body>
+</html>
