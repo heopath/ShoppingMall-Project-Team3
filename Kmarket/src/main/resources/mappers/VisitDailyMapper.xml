@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.admin.VisitDailyDAO">
+
+    <resultMap id="VisitDailyResultMap" type="kr.co.springkmarketapp.dto.admin.VisitDailyDTO">
+        <id property="visitDate" column="visit_date" />
+        <result property="visitCount" column="visit_count" />
+    </resultMap>
+
+    <insert id="insertVisitDaily" parameterType="kr.co.springkmarketapp.dto.admin.VisitDailyDTO">
+        INSERT INTO visit_daily (visit_date, visit_count)
+        VALUES (#{visitDate}, #{visitCount})
+    </insert>
+
+    <select id="selectVisitDaily" resultMap="VisitDailyResultMap">
+        SELECT *
+        FROM visit_daily
+        WHERE visit_date = #{_parameter}
+    </select>
+
+    <select id="selectVisitDailyList" resultMap="VisitDailyResultMap">
+        SELECT *
+        FROM visit_daily
+    </select>
+
+    <update id="updateVisitDaily" parameterType="kr.co.springkmarketapp.dto.admin.VisitDailyDTO">
+        UPDATE visit_daily
+        SET visit_count = #{visitCount}
+        WHERE visit_date = #{visitDate}
+    </update>
+
+    <delete id="deleteVisitDaily">
+        DELETE FROM visit_daily
+        WHERE visit_date = #{_parameter}
+    </delete>
+
+</mapper>
