@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.admin.BannerDAO">
+
+    <resultMap id="BannerResultMap" type="kr.co.springkmarketapp.dto.admin.BannerDTO">
+        <id property="bannerNo" column="banner_no" />
+        <result property="bannerName" column="banner_name" />
+        <result property="bannerSize" column="banner_size" />
+        <result property="bgColor" column="bg_color" />
+        <result property="linkUrl" column="link_url" />
+        <result property="bannerPosition" column="banner_position" />
+        <result property="imagePath" column="image_path" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="startDatetime" column="start_datetime" />
+        <result property="endDatetime" column="end_datetime" />
+        <result property="useYn" column="use_yn" />
+        <result property="regDate" column="reg_date" />
+    </resultMap>
+
+    <insert id="insertBanner" parameterType="kr.co.springkmarketapp.dto.admin.BannerDTO" useGeneratedKeys="true" keyProperty="bannerNo">
+        INSERT INTO banner (banner_name, banner_size, bg_color, link_url, banner_position, image_path, sort_order, start_datetime, end_datetime, use_yn, reg_date)
+        VALUES (#{bannerName}, #{bannerSize}, #{bgColor}, #{linkUrl}, #{bannerPosition}, #{imagePath}, #{sortOrder}, #{startDatetime}, #{endDatetime}, #{useYn}, #{regDate})
+    </insert>
+
+    <select id="selectBanner" resultMap="BannerResultMap">
+        SELECT *
+        FROM banner
+        WHERE banner_no = #{_parameter}
+    </select>
+
+    <select id="selectBannerList" resultMap="BannerResultMap">
+        SELECT *
+        FROM banner
+    </select>
+
+    <update id="updateBanner" parameterType="kr.co.springkmarketapp.dto.admin.BannerDTO">
+        UPDATE banner
+        SET banner_name = #{bannerName},
+            banner_size = #{bannerSize},
+            bg_color = #{bgColor},
+            link_url = #{linkUrl},
+            banner_position = #{bannerPosition},
+            image_path = #{imagePath},
+            sort_order = #{sortOrder},
+            start_datetime = #{startDatetime},
+            end_datetime = #{endDatetime},
+            use_yn = #{useYn},
+            reg_date = #{regDate}
+        WHERE banner_no = #{bannerNo}
+    </update>
+
+    <delete id="deleteBanner">
+        DELETE FROM banner
+        WHERE banner_no = #{_parameter}
+    </delete>
+
+</mapper>

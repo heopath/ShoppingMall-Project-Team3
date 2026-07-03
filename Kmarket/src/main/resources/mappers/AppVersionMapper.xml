@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.admin.AppVersionDAO">
+
+    <resultMap id="AppVersionResultMap" type="kr.co.springkmarketapp.dto.admin.AppVersionDTO">
+        <id property="versionNo" column="version_no" />
+        <result property="versionName" column="version_name" />
+        <result property="writerNo" column="writer_no" />
+        <result property="changeLog" column="change_log" />
+        <result property="regDate" column="reg_date" />
+    </resultMap>
+
+    <insert id="insertAppVersion" parameterType="kr.co.springkmarketapp.dto.admin.AppVersionDTO" useGeneratedKeys="true" keyProperty="versionNo">
+        INSERT INTO app_version (version_name, writer_no, change_log, reg_date)
+        VALUES (#{versionName}, #{writerNo}, #{changeLog}, #{regDate})
+    </insert>
+
+    <select id="selectAppVersion" resultMap="AppVersionResultMap">
+        SELECT *
+        FROM app_version
+        WHERE version_no = #{_parameter}
+    </select>
+
+    <select id="selectAppVersionList" resultMap="AppVersionResultMap">
+        SELECT *
+        FROM app_version
+    </select>
+
+    <update id="updateAppVersion" parameterType="kr.co.springkmarketapp.dto.admin.AppVersionDTO">
+        UPDATE app_version
+        SET version_name = #{versionName},
+            writer_no = #{writerNo},
+            change_log = #{changeLog},
+            reg_date = #{regDate}
+        WHERE version_no = #{versionNo}
+    </update>
+
+    <delete id="deleteAppVersion">
+        DELETE FROM app_version
+        WHERE version_no = #{_parameter}
+    </delete>
+
+</mapper>
