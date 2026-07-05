@@ -27,12 +27,12 @@ ShoppingMall-project는 쇼핑몰 화면 설계서를 기반으로 제작하는 
 <summary><b>👥 2. 팀원 및 업무 분배 </b></summary>
 
 ### 👥 팀원 명단 및 담당 영역
-| 이름 | 담당 파트 | 상세 담당 페이지 |
-|:---:|---|---|
-| <span style="white-space: nowrap;">**허민재**</span> | 메인, 상품 프로세스, 회사 소개 | `index.html`, `product/*` (목록, 상세, 검색, 장바구니, 주문), `company/*` |
-| <span style="white-space: nowrap;">**양지웅**</span> | 회원 인증 및 마이페이지 | `member/*` (로그인, 가입, 약관), `my/*` (주문내역, 포인트, 쿠폰, 리뷰, 문의 등) |
-| <span style="white-space: nowrap;">**정인길**</span> | 고객센터 및 약관/정책 | `cs/*` (공지, FAQ, QNA), `policy/*` (이용약관, 개인정보처리방침 등) |
-| <span style="white-space: nowrap;">**최수빈**</span> | Admin 관리자 시스템 | `admin/*` (메인 대시보드, 환경설정, 배너 관리, 상품 등록, 고객센터 답변 등) |
+| 이름 | 담당 파트 | 상세 담당 페이지 및 도메인 | 연관 핵심 DB 테이블 |
+|:---:|---|---|---|
+| <span style="white-space: nowrap;">**허민재**</span> | **Admin A담당**<br>(메인/상품/주문/설정) | `admin/*` (메인 대시보드, 환경설정, 상품 등록/목록, 주문 관리, 배송/반품 상태 제어 등) | `site_setting`, `category`, `product` 계열 전체, `orders`, `order_item`, `order_status_history`, `delivery` |
+| <span style="white-space: nowrap;">**정인길**</span> | **Admin B담당**<br>(상점/회원/쿠폰/CS) | `admin/*` (상점 정보 관리, 회원 목록 조회, 쿠폰 관리, 고객센터 및 1:1 문의 답변, 배너/버전 관리 등) | `member`, `seller_profile`, `coupon`, `coupon_issue`, `cs_category`, `notice`, `faq`, `qna`, `recruit`, `banner`, `app_version` |
+| <span style="white-space: nowrap;">**양지웅**</span> | **사용자 쇼핑 프로세스**<br>및 회사/정책 안내 | `index.html` (메인 쇼핑몰 화면)<br>`product/*` (상품 목록, 상세, 검색, 장바구니, 주문/결제 및 완료)<br>`company/*` (회사 소개 및 연혁)<br>`policy/*` (소비자/판매자 약관 페이지) | `category`, `product` 계열 전체, `cart`, `orders`, `order_item`, `payment`, `policy`, `company_content`, `company_history` |
+| <span style="white-space: nowrap;">**최수빈**</span> | **회원 인증, 마이페이지**<br>및 사용자 고객센터 | `member/*` (로그인, 회원가입 약관 및 정보 입력)<br>`my/*` (주문내역, 포인트/쿠폰 현황, 나의 리뷰, 문의 내역, 정보 수정)<br>`cs/*` (고객센터 메인, 공지/FAQ 목록, 1:1 문의글 작성) | `member`, `member_social`, `member_agreement`, `member_point`, `coupon_issue`, `orders`, `order_item`, `delivery`, `order_claim`, `claim_file`, `product_review`, `review_image`, `cs_category`, `notice`, `faq`, `qna` |
 </details>
 
 ---

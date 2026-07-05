@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.admin.SiteSettingDAO">
+
+    <resultMap id="SiteSettingResultMap" type="kr.co.springkmarketapp.dto.admin.SiteSettingDTO">
+        <id property="settingNo" column="setting_no" />
+        <result property="settingKey" column="setting_key" />
+        <result property="settingValue" column="setting_value" />
+        <result property="updateDate" column="update_date" />
+    </resultMap>
+
+    <insert id="insertSiteSetting" parameterType="kr.co.springkmarketapp.dto.admin.SiteSettingDTO" useGeneratedKeys="true" keyProperty="settingNo">
+        INSERT INTO site_setting (setting_key, setting_value, update_date)
+        VALUES (#{settingKey}, #{settingValue}, #{updateDate})
+    </insert>
+
+    <select id="selectSiteSetting" resultMap="SiteSettingResultMap">
+        SELECT *
+        FROM site_setting
+        WHERE setting_no = #{_parameter}
+    </select>
+
+    <select id="selectSiteSettingList" resultMap="SiteSettingResultMap">
+        SELECT *
+        FROM site_setting
+    </select>
+
+    <update id="updateSiteSetting" parameterType="kr.co.springkmarketapp.dto.admin.SiteSettingDTO">
+        UPDATE site_setting
+        SET setting_key = #{settingKey},
+            setting_value = #{settingValue},
+            update_date = #{updateDate}
+        WHERE setting_no = #{settingNo}
+    </update>
+
+    <delete id="deleteSiteSetting">
+        DELETE FROM site_setting
+        WHERE setting_no = #{_parameter}
+    </delete>
+
+</mapper>
