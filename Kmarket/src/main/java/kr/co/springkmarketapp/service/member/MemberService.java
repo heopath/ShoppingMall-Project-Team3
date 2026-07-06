@@ -3,6 +3,7 @@ package kr.co.springkmarketapp.service.member;
 import kr.co.springkmarketapp.dao.member.MemberDAO;
 import kr.co.springkmarketapp.dto.member.MemberCheckDTO;
 import kr.co.springkmarketapp.dto.member.MemberDTO;
+import kr.co.springkmarketapp.entity.member.Member;
 import kr.co.springkmarketapp.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,15 +15,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final MemberDAO memberDAO;
 
-    public void insertMember(MemberDTO memberDTO) {
-       // String encoded = passwordEncoder.encode(memberDTO.getPass());
-       // memberDTO.setPass(encoded);
+    public Member insertMember(MemberDTO memberDTO) {
+        String encoded = passwordEncoder.encode(memberDTO.getPassword());
+        memberDTO.setPassword(encoded);
         // return memberDAO.insertMember(memberDTO);
-        memberRepository.save(memberDTO.toEntity());
+        return memberRepository.save(memberDTO.toEntity());
     }
 
     public MemberDTO selectMember(Integer memberNo) {
@@ -66,19 +67,19 @@ public class MemberService {
         return memberDAO.deleteMember(memberNo);
     }
 
-    public int getCount(MemberCheckDTO dto){
+    public int getCount(MemberCheckDTO dto) {
 
         int count = 0;
 
         // JPA
-        if(dto.getType().equals("userid")){
+        if (dto.getType().equals("userid")) {
             count = memberRepository.countByMemberId(dto.getValue());
 
-        } else if(dto.getType().equals("email")){
+        } else if (dto.getType().equals("email")) {
 
             count = memberRepository.countByEmail(dto.getValue());
 
-        } else if(dto.getType().equals("hp")){
+        } else if (dto.getType().equals("hp")) {
             count = memberRepository.countByHp(dto.getValue());
         }
         return count;
