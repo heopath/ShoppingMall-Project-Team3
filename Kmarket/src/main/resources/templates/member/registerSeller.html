@@ -1,230 +1,168 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>판매자 회원가입</title>
-    <link rel="stylesheet" href="../css/member/registerSeller.css" />
-    <link rel="stylesheet" href="../css/main.css" />
-  </head>
-  <body>
-    <header>
-      <a href="#" class="logo-img">
-        <img src="../images/main/header_logo.png" alt="Kmarket 로고" />
-      </a>
+    <link rel="stylesheet" href="../css/member/registerSeller.css"/>
+    <link rel="stylesheet" href="../css/main.css"/>
+    <script th:src="@{/js/postcode.js}"></script>
+    <script th:src="@{/js/validationSeller.js}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+<body>
+<th:block th:replace="~{common/_main_header}"></th:block>
 
-      <div class="search-box">
-        <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
-        <button aria-label="검색">
-          <svg viewBox="0 0 24 24">
-            <path
-              d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
-              stroke="#fff"
-              stroke-width="2"
-              fill="none"
-              stroke-linecap="round"
-            />
-          </svg>
-        </button>
-      </div>
 
-      <nav class="header-links">
-        <a th:href="@{/member/login}">로그인</a>
-        <a th:href="@{/member/join}">회원가입</a>
-        <a th:href="@{/my/home}">마이페이지</a>
-        <a th:href="@{/product/cart}">🛒 장바구니</a>
-      </nav>
-    </header>
-
-    <main class="container">
-      <div class="seller-form-wrapper">
+<main class="container">
+    <div class="seller-form-wrapper">
         <div class="form-header">
-          <h2>판매자 회원가입</h2>
-          <p>판매 활동을 위한 사업자 정보를 입력해주세요.</p>
+            <h2>판매자 회원가입</h2>
+            <p>판매 활동을 위한 사업자 정보를 입력해주세요.</p>
         </div>
 
-        <form>
-          <!-- 계정정보 -->
-          <section class="form-section">
-            <h3>계정정보</h3>
+        <form th:action="@{/member/registerSeller}" method="post">
+            <!-- 계정정보 -->
+            <section class="form-section">
+                <h3>계정정보</h3>
 
-            <div class="input-row">
-              <label>아이디</label>
+                <div class="input-row">
+                    <label>아이디</label>
 
-              <div class="input-with-btn">
-                <input
-                  type="text"
-                  class="input-field"
-                  placeholder="아이디 입력"
-                />
-                <button type="button" class="inline-btn">중복확인</button>
-              </div>
-            </div>
+                    <div class="input-with-btn">
+                        <input type="text" class="input-field" name="memberId" placeholder="아이디 입력">
+                        <button type="button" class="inline-btn" id="btnUserid">중복확인</button>
+                    </div>
 
-            <div class="input-row">
-              <label>비밀번호</label>
-              <input
-                type="password"
-                class="input-field"
-                placeholder="비밀번호 입력"
-              />
-            </div>
-
-            <div class="input-row">
-              <label>비밀번호 확인</label>
-              <input
-                type="password"
-                class="input-field"
-                placeholder="비밀번호 재입력"
-              />
-            </div>
-          </section>
-
-          <!-- 사업자정보 -->
-          <section class="form-section">
-            <h3>사업자 정보</h3>
-
-            <div class="input-row">
-              <label>상호명</label>
-              <input type="text" class="input-field" />
-            </div>
-
-            <div class="input-row">
-              <label>대표자명</label>
-              <input type="text" class="input-field" />
-            </div>
-
-            <div class="input-row">
-              <label>사업자등록번호</label>
-
-              <div class="input-with-btn">
-                <input type="text" class="input-field" />
-                <button type="button" class="inline-btn">인증하기</button>
-              </div>
-            </div>
-
-            <div class="input-row">
-              <label>통신판매업번호</label>
-              <input type="text" class="input-field" />
-            </div>
-
-            <div class="input-row">
-              <label>전화번호</label>
-              <input type="text" class="input-field" />
-            </div>
-
-            <div class="input-row">
-              <label>팩스</label>
-              <input type="text" class="input-field" />
-            </div>
-
-            <div class="input-row">
-              <label>주소</label>
-
-              <div class="address-group">
-                <div class="input-with-btn">
-                  <input
-                    type="text"
-                    class="input-field"
-                    placeholder="우편번호"
-                  />
-                  <button type="button" class="inline-btn">주소검색</button>
+                    <span class="useridResult"></span>
                 </div>
 
-                <input type="text" class="input-field" placeholder="기본주소" />
+                <div class="input-row">
+                    <label>비밀번호</label>
 
-                <input type="text" class="input-field" placeholder="상세주소" />
-              </div>
-            </div>
-          </section>
+                    <input type="password" class="input-field" name="password" placeholder="비밀번호 입력">
 
-          <!-- 담당자정보 -->
-          <!-- <section class="form-section">
-            <h3>담당자 정보</h3>
-
-            <div class="input-row">
-              <label>이름</label>
-              <input type="text" class="input-field" />
-            </div>
-
-            <div class="input-row">
-              <label>휴대폰 번호</label>
-              <input type="text" class="input-field" />
-            </div>
-
-            <div class="input-row">
-              <label>이메일</label>
-              <input type="email" class="input-field" />
-            </div>
-          </section> -->
-
-          <!-- 주소 -->
-          <!-- <section class="form-section">
-            <h3>사업장 주소</h3>
-
-            <div class="input-row">
-              <label>주소</label>
-
-              <div class="address-group">
-                <div class="input-with-btn">
-                  <input
-                    type="text"
-                    class="input-field"
-                    placeholder="우편번호"
-                  />
-                  <button type="button" class="inline-btn">주소검색</button>
+                    <span class="passResult"></span>
                 </div>
 
-                <input type="text" class="input-field" placeholder="기본주소" />
+                <div class="input-row">
+                    <label>비밀번호 확인</label>
 
-                <input type="text" class="input-field" placeholder="상세주소" />
-              </div>
+                    <input type="password" class="input-field" name="password2" placeholder="비밀번호 재입력">
+                </div>
+
+            </section>
+
+            <!-- 사업자 정보 -->
+            <section class="form-section">
+                <h3>사업자 정보</h3>
+
+                <div class="input-row">
+                    <label>상호명</label>
+
+                    <input type="text" class="input-field" name="companyName" placeholder="상호명 입력">
+
+                    <span class="companyResult"></span>
+                </div>
+
+                <div class="input-row">
+                    <label>대표자명</label>
+
+                    <input type="text" class="input-field" name="ceoName"  placeholder="대표자명 입력">
+
+                    <span class="ceoResult"></span>
+                </div>
+
+                <div class="input-row">
+                    <label>사업자등록번호</label>
+                    <input
+                            type="text"
+                            class="input-field"
+                            name="bizNo"
+                            maxlength="12"
+                            placeholder="ex) 123-45-67890"
+                    >
+
+                    <span class="bizNoResult"></span>
+                </div>
+
+                <div class="input-row">
+                    <label>통신판매업번호</label>
+
+                    <input type="text" class="input-field" name="onlineSaleNo"  placeholder="ex) 2025-서울강남-1234">
+
+                    <span class="onlineSaleNoResult"></span>
+                </div>
+
+                <div class="input-row">
+                    <label>전화번호</label>
+
+                    <input type="text" class="input-field" name="tel"  placeholder="전화번호 입력">
+
+                    <span class="telResult"></span>
+                </div>
+
+                <div class="input-row">
+                    <label>팩스</label>
+
+                    <input type="text" class="input-field" name="fax"  placeholder="ex) 02-1234-5678">
+
+                    <span class="faxResult"></span>
+                </div>
+
+                <div class="input-row">
+                    <label>주소</label>
+
+                    <div class="address-group">
+
+                        <div class="input-with-btn">
+                            <input
+                                    type="text"
+                                    class="input-field"
+                                    id="zip"
+                                    name="zip"
+                                    placeholder="우편번호"
+                                    readonly
+                            >
+                            <button type="button" onclick="postcode()" class="inline-btn">주소검색</button>
+                        </div>
+
+                        <input
+                                type="text"
+                                class="input-field"
+                                id="addr1"
+                                name="addr1"
+                                placeholder="기본주소"
+                                readonly
+                        >
+
+                        <input
+                                type="text"
+                                class="input-field"
+                                id="addr2"
+                                name="addr2"
+                                placeholder="상세주소"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <div class="btn-group">
+                <!-- <button type="button" class="action-btn prev">이전으로</button> -->
+
+                <button type="submit" class="action-btn submit">
+                    판매자 회원가입
+                </button>
             </div>
-          </section> -->
-
-          <div class="btn-group">
-            <!-- <button type="button" class="action-btn prev">이전으로</button> -->
-
-            <button type="submit" class="action-btn submit">
-              판매자 회원가입
-            </button>
-          </div>
         </form>
-      </div>
-    </main>
+    </div>
+</main>
 
-    <!-- Footer -->
-    <footer>
-      <div class="footer-inner">
-        <nav class="footer-links">
-          <a href="#about">회사소개</a>
-          <a href="#terms">서비스이용약관</a>
-          <a href="#privacy">개인정보처리방침</a>
-          <a href="#finance">전자금융거래약관</a>
-        </nav>
+<!-- Footer -->
+<th:block th:replace="~{common/_admin_footer}"></th:block>
 
-        <div class="footer-company">
-          <div class="footer-logo-box">
-            <img src="../images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
-          </div>
-
-          <div class="footer-info">
-            <h4>(주)케이마켓</h4>
-            <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
-            <p>대표이사 : 홍길동</p>
-            <p>사업자등록번호 : 123-45-12345</p>
-          </div>
-
-          <div class="footer-cs">
-            <h4>고객센터</h4>
-            <p>Tel : 1234-5678 평일 09:00~18:00</p>
-            <p>전자금융거래 분쟁 담당 : 1234-1234</p>
-            <p>365일 09:00~18:00</p>
-          </div>
-        </div>
-
-        <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
-      </div>
-    </footer>
-  </body>
+</body>
 </html>

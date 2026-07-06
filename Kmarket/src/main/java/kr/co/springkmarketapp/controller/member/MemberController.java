@@ -3,8 +3,11 @@ package kr.co.springkmarketapp.controller.member;
 import jakarta.servlet.http.HttpSession;
 import kr.co.springkmarketapp.dto.member.MemberCheckDTO;
 import kr.co.springkmarketapp.dto.member.MemberDTO;
+import kr.co.springkmarketapp.dto.member.SellerProfileDTO;
+import kr.co.springkmarketapp.entity.member.Member;
 import kr.co.springkmarketapp.service.member.EmailService;
 import kr.co.springkmarketapp.service.member.MemberService;
+import kr.co.springkmarketapp.service.member.SellerProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,7 @@ public class MemberController {
     
     private final MemberService memberService;
     private final EmailService emailService;
+    private final SellerProfileService sellerProfileService;
 
     @GetMapping("/member/login")
     public String login() {
@@ -47,6 +51,22 @@ public class MemberController {
     @GetMapping("/member/registerSeller")
     public String registerSeller() {
         return "member/registerSeller";
+    }
+
+    @PostMapping("/member/registerSeller")
+    public String registerSeller(MemberDTO memberDTO,
+                                 SellerProfileDTO sellerProfileDTO) {
+
+        // member 저장
+        Member member = memberService.insertMember(memberDTO);
+
+        // FK 설정
+        sellerProfileDTO.setMemberNo(member.getMemberNo());
+
+        // seller_profile 저장
+//        sellerProfileService.insertSellerProfile(sellerProfileDTO);
+
+        return "redirect:/member/login?register=success";
     }
 
     @GetMapping("/member/signup")
