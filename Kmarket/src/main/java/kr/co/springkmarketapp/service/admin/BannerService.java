@@ -32,4 +32,12 @@ public class BannerService {
     public int deleteBanner(Integer bannerNo) {
         return bannerDAO.deleteBanner(bannerNo);
     }
+
+    public BannerDTO getTopBanner() {
+        return bannerDAO.selectTopBanner();
+    }
+
+    public List<BannerDTO> getMain2Banners() {
+        return bannerDAO.selectMain2Banners();
+    }
 }

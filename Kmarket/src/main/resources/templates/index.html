@@ -13,260 +13,40 @@
     </head>
 
     <body id="top">
-        <!-- Top ad banner -->
-        <div class="top-bar">
-            <a href="#" class="top-ad">
-                <img src="./images/main/vip_plcc_banner.png" alt="Kmarket 최상단 광고 배너" />
-            </a>
-        </div>
-
-        <!-- Header -->
-        <header>
-            <a href="#" class="logo-img">
-                <img src="./images/main/header_logo.png" alt="Kmarket 로고" />
-            </a>
-
-            <div class="search-box">
-                <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
-                <button aria-label="검색">
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
-                            stroke="#fff"
-                            stroke-width="2"
-                            fill="none"
-                            stroke-linecap="round"
-                        />
-                    </svg>
-                </button>
-            </div>
-
-            <nav class="header-links">
-                <a th:href="@{/member/login}">로그인</a>
-                <a th:href="@{/member/join}">회원가입</a>
-                <a th:href="@{/my/home}">마이페이지</a>
-                <a th:href="@{/product/cart}">🛒 장바구니</a>
-            </nav>
-        </header>
-
-        <!-- GNB -->
-        <nav class="gnb">
-            <div class="gnb-inner">
-                <a href="#hit" class="active">히트상품</a>
-                <a href="#recommend">추천상품</a>
-                <a href="#new">최신상품</a>
-                <a href="#popular">인기상품</a>
-                <a href="#discount">할인상품</a>
-            </div>
-        </nav>
-
+        <!-- 최상단 광고 배너, 헤더, nav include -->
+        <th:block th:replace="~{common/_main_header}"></th:block>
 
         <!-- Page layout : aside + right content -->
         <div class="page-layout">
-            <!-- Left aside -->
-            <aside class="side-cat">
-                <!-- Category: 일반 영역, sticky 아님 -->
-                <div class="category-box">
-                    <h3>카테고리</h3>
-<!--                    <ul class="category-list">-->
-<!--                        <li>-->
-<!--                            <a href="#"><span class="icon">👕</span> 패션·의류·뷰티</a>-->
-<!--                        </li>-->
-<!--                        <li>-->
-<!--                            <a href="#"><span class="icon">💻</span> 가전·디지털</a>-->
-<!--                        </li>-->
-<!--                        <li>-->
-<!--                            <a href="#"><span class="icon">🍎</span> 식품·생필품</a>-->
-<!--                        </li>-->
-<!--                        <li>-->
-<!--                            <a href="#"><span class="icon">🏠</span> 홈·문구·취미</a>-->
-<!--                        </li>-->
-<!--                    </ul>-->
-
-                    <ul class="category-list">
-
-                        <li class="category-item">
-
-                            <div class="category-title">
-                                <span><span class="icon">👕</span> 패션·의류·뷰티</span>
-                                <span class="arrow">+</span>
-                            </div>
-
-                            <ul class="sub-category close">
-                                <li><a href="#">여성의류</a></li>
-                                <li><a href="#">남성의류</a></li>
-                                <li><a href="#">신발</a></li>
-                                <li><a href="#">가방</a></li>
-                            </ul>
-
-                        </li>
-
-                        <li class="category-item">
-
-                            <div class="category-title">
-                                <span><span class="icon">💻</span> 가전·디지털</span>
-                                <span class="arrow">+</span>
-                            </div>
-
-                            <ul class="sub-category close">
-                                <li><a href="#">노트북</a></li>
-                                <li><a href="#">모니터</a></li>
-                                <li><a href="#">스마트폰</a></li>
-                                <li><a href="#">이어폰</a></li>
-                            </ul>
-
-                        </li>
-
-                        <li class="category-item">
-
-                            <div class="category-title">
-                                <span><span class="icon">🍎</span> 식품·생필품</span>
-                                <span class="arrow">+</span>
-                            </div>
-
-                            <ul class="sub-category close">
-                                <li><a href="#">과일</a></li>
-                                <li><a href="#">채소</a></li>
-                                <li><a href="#">정육</a></li>
-                                <li><a href="#">음료</a></li>
-                            </ul>
-
-                        </li>
-
-                        <li class="category-item">
-
-                            <div class="category-title">
-                                <span><span class="icon">🏠</span> 홈·문구·취미</span>
-                                <span class="arrow">+</span>
-                            </div>
-
-                            <ul class="sub-category close">
-                                <li><a href="#">생활용품</a></li>
-                                <li><a href="#">주방용품</a></li>
-                                <li><a href="#">인테리어</a></li>
-                                <li><a href="#">문구</a></li>
-                            </ul>
-
-                        </li>
-
-                    </ul>
-
-
-                </div>
-
-                <!-- Best products: 이 부분만 sticky -->
-                <div class="side-best-sticky">
-                    <div class="side-best">
-                        <h3>베스트 상품</h3>
-
-                        <div class="side-best-list">
-                            <a href="#" class="side-best-item best-first">
-                                <span class="rank">01</span>
-                                <span class="thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
-                                <span class="txt">
-                                    <b>베스트 인기상품</b>
-                                    <em>27,000원</em>
-                                </span>
-                            </a>
-
-                            <a href="#" class="side-best-item">
-                                <span class="rank">02</span>
-                                <span class="thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
-                                <span class="txt">
-                                    <b>상품명 2위</b>
-                                    <em>13,000원</em>
-                                </span>
-                            </a>
-
-                            <a href="#" class="side-best-item">
-                                <span class="rank">03</span>
-                                <span class="thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
-                                <span class="txt">
-                                    <b>상품명 3위</b>
-                                    <em>22,320원</em>
-                                </span>
-                            </a>
-
-                            <a href="#" class="side-best-item">
-                                <span class="rank">04</span>
-                                <span class="thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
-                                <span class="txt">
-                                    <b>상품명 4위</b>
-                                    <em>18,900원</em>
-                                </span>
-                            </a>
-
-                            <a href="#" class="side-best-item">
-                                <span class="rank">05</span>
-                                <span class="thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
-                                <span class="txt">
-                                    <b>상품명 5위</b>
-                                    <em>9,900원</em>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </aside>
+            <!-- Left aside include -->
+            <th:block th:replace="~{common/_main_aside}"></th:block>
 
             <!-- Right content -->
             <main class="content-area">
                 <!-- Visual slider -->
-                <div class="visual">
+                <!-- DB 슬라이더 배너가 있을 때 -->
+                <div class="visual" th:if="${!#lists.isEmpty(main2Banners)}">
+                    <ul class="main-slider">
+
+                        <li th:each="banner : ${main2Banners}"
+                            th:style="${banner.bgColor != null ? 'background-color:' + banner.bgColor : ''}">
+
+                            <a th:href="${banner.linkUrl != null ? banner.linkUrl : '#'}">
+                                <img th:src="${banner.imagePath}"
+                                     th:alt="${banner.bannerName}" />
+                            </a>
+
+                        </li>
+
+                    </ul>
+                </div>
+
+                <!-- DB 배너가 없을 때 -->
+                <div class="visual" th:unless="${!#lists.isEmpty(main2Banners)}">
                     <ul class="main-slider">
                         <li>
                             <a href="#">
-                                <img src="./images/main/slider_item1.jpg" alt="여름 대비 상품 배너" />
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <img src="./images/main/slider_item2.jpg" alt="캠핑 용품전 배너" />
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <img src="./images/main/slider_item3.jpg" alt="건강 음료 배너" />
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <img src="./images/main/slider_item4.jpg" alt="장마철 대비 상품 배너" />
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <img src="./images/main/slider_item5.jpg" alt="제습기 기획전 배너" />
+                                <img src="/images/main/slider_item1.jpg" alt="메인 배너" />
                             </a>
                         </li>
                     </ul>
@@ -279,7 +59,41 @@
                         <span class="more">더보기 ›</span>
                     </div>
                     <p class="sec-sub">상품 썸네일 기준, 조회수가 많은 순서로 8건 출력</p>
-                    <div class="hit-grid" id="hitGrid"></div>
+                    <div class="hit-grid" id="hitGrid">
+                        <a th:each="product : ${hitProducts}"
+                           th:href="@{/product/view(productNo=${product.productNo})}"
+                           class="card">
+
+                            <div class="thumb">
+                                <img th:src="@{${product.imagePath}}"
+                                     th:alt="${product.productName}" />
+                            </div>
+
+                            <div class="info">
+                                <div class="name" th:text="${product.productName}">
+                                    상품명
+                                </div>
+
+                                <div class="price-row">
+                                    <span class="old-price"
+                                          th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
+                                    </span>
+
+                                    <span class="discount"
+                                          th:text="${product.discountRate} + '%'">
+                                     </span>
+
+                                    <span class="price"
+                                          th:text="${#numbers.formatInteger(product.discountPrice, 3, 'COMMA')} + '원'">
+                                    </span>
+                                </div>
+
+                                <span class="free-ship"
+                                      th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
+                                 </span>
+                            </div>
+                        </a>
+                    </div>
                 </section>
 
                 <!-- Recommended products -->
@@ -289,7 +103,41 @@
                         <span class="more">더보기 ›</span>
                     </div>
                     <p class="sec-sub">상품평점이 높은 순서로 8건 출력</p>
-                    <div class="hit-grid" id="recommendGrid"></div>
+                    <div class="hit-grid" id="recommendGrid">
+                        <a th:each="product : ${recommendProducts}"
+                           th:href="@{/product/view(productNo=${product.productNo})}"
+                           class="card">
+
+                            <div class="thumb">
+                                <img th:src="@{${product.imagePath}}"
+                                     th:alt="${product.productName}" />
+                            </div>
+
+                            <div class="info">
+                                <div class="name" th:text="${product.productName}">
+                                    상품명
+                                </div>
+
+                                <div class="price-row">
+                                    <span class="old-price"
+                                          th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
+                                    </span>
+
+                                    <span class="discount"
+                                          th:text="${product.discountRate} + '%'">
+                                     </span>
+
+                                    <span class="price"
+                                          th:text="${#numbers.formatInteger(product.discountPrice, 3, 'COMMA')} + '원'">
+                                    </span>
+                                </div>
+
+                                <span class="free-ship"
+                                      th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
+                                 </span>
+                            </div>
+                        </a>
+                    </div>
                 </section>
 
                 <!-- New products -->
@@ -299,7 +147,82 @@
                         <span class="more">더보기 ›</span>
                     </div>
                     <p class="sec-sub">상품 등록 날짜가 최신 순서로 8건 출력</p>
-                    <div class="hit-grid" id="newGrid"></div>
+                    <div class="hit-grid" id="newGrid">
+                        <a th:each="product : ${newProducts}"
+                           th:href="@{/product/view(productNo=${product.productNo})}"
+                           class="card">
+
+                            <div class="thumb">
+                                <img th:src="@{${product.imagePath}}"
+                                     th:alt="${product.productName}" />
+                            </div>
+
+                            <div class="info">
+                                <div class="name" th:text="${product.productName}">
+                                    상품명
+                                </div>
+
+                                <div class="price-row">
+                                    <span class="old-price"
+                                          th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
+                                    </span>
+
+                                    <span class="discount"
+                                          th:text="${product.discountRate} + '%'">
+                                     </span>
+
+                                    <span class="price"
+                                          th:text="${#numbers.formatInteger(product.discountPrice, 3, 'COMMA')} + '원'">
+                                    </span>
+                                </div>
+
+                                <span class="free-ship"
+                                      th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- popular product -->
+                <section class="sec" id="popular">
+                    <div class="sec-head">
+                        <h2>인기상품</h2>
+                        <a href="/product/list?sort=popular" class="more">더보기 ›</a>
+                    </div>
+
+                    <p class="sec-sub">판매량 + 조회수 높은 순서로 8건 출력</p>
+
+                    <div class="hit-grid">
+                        <a th:each="product : ${popularProducts}"
+                           th:href="@{/product/view(productNo=${product.productNo})}"
+                           class="card">
+
+                            <div class="thumb">
+                                <img th:src="@{${product.imagePath}}"
+                                     th:alt="${product.productName}" />
+                            </div>
+
+                            <div class="info">
+                                <div class="name" th:text="${product.productName}"></div>
+
+                                <div class="price-row">
+                                    <span class="old-price"
+                                          th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'"></span>
+
+                                    <span class="discount"
+                                          th:text="${product.discountRate} + '%'"></span>
+
+                                    <span class="price"
+                                          th:text="${#numbers.formatInteger(product.discountPrice, 3, 'COMMA')} + '원'"></span>
+                                </div>
+
+                                <span class="free-ship"
+                                      th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
+                                </span>
+                            </div>
+                        </a>
+                    </div>
                 </section>
 
                 <!-- Discount products -->
@@ -309,7 +232,41 @@
                         <span class="more">더보기 ›</span>
                     </div>
                     <p class="sec-sub">할인율이 높은 순서로 8건 출력</p>
-                    <div class="hit-grid" id="discountGrid"></div>
+                    <div class="hit-grid" id="discountGrid">
+                        <a th:each="product : ${discountProducts}"
+                           th:href="@{/product/view(productNo=${product.productNo})}"
+                           class="card">
+
+                            <div class="thumb">
+                                <img th:src="@{${product.imagePath}}"
+                                     th:alt="${product.productName}" />
+                            </div>
+
+                            <div class="info">
+                                <div class="name" th:text="${product.productName}">
+                                    상품명
+                                </div>
+
+                                <div class="price-row">
+                                    <span class="old-price"
+                                          th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
+                                    </span>
+
+                                    <span class="discount"
+                                          th:text="${product.discountRate} + '%'">
+                                     </span>
+
+                                    <span class="price"
+                                          th:text="${#numbers.formatInteger(product.discountPrice, 3, 'COMMA')} + '원'">
+                                    </span>
+                                </div>
+
+                                <span class="free-ship"
+                                      th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
+                                 </span>
+                            </div>
+                        </a>
+                    </div>
                 </section>
 
                 <!-- Member menu -->
@@ -330,39 +287,8 @@
             </main>
         </div>
 
-        <!-- Footer -->
-        <footer>
-            <div class="footer-inner">
-                <nav class="footer-links">
-                    <a href="#about">회사소개</a>
-                    <a href="#terms">서비스이용약관</a>
-                    <a href="#privacy">개인정보처리방침</a>
-                    <a href="#finance">전자금융거래약관</a>
-                </nav>
-
-                <div class="footer-company">
-                    <div class="footer-logo-box">
-                        <img src="./images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
-                    </div>
-
-                    <div class="footer-info">
-                        <h4>(주)케이마켓</h4>
-                        <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
-                        <p>대표이사 : 홍길동</p>
-                        <p>사업자등록번호 : 123-45-12345</p>
-                    </div>
-
-                    <div class="footer-cs">
-                        <h4>고객센터</h4>
-                        <p>Tel : 1234-5678 평일 09:00~18:00</p>
-                        <p>전자금융거래 분쟁 담당 : 1234-1234</p>
-                        <p>365일 09:00~18:00</p>
-                    </div>
-                </div>
-
-                <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
-            </div>
-        </footer>
+        <!-- Footer include -->
+        <th:block th:replace="~{common/_main_footer}"></th:block>
 
         <!-- TOP button -->
         <a href="#top" class="top-btn">
@@ -374,46 +300,26 @@
         <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 
         <script>
-            const cardSVG = `<svg viewBox="0 0 24 24" fill="#ccc"><path d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
 
-            function makeCard(rank) {
-                const div = document.createElement("div");
-                div.className = "card";
-                div.innerHTML = `
-                    <div class="thumb">${cardSVG}</div>
-                    <div class="info">
-                        <div class="name">상품명 ${rank}위 - 상품 설명 영역</div>
-                        <div class="price-row">
-                            <span class="old-price">30,000원</span>
-                            <span class="discount">10%</span>
-                            <span class="price">27,000원</span>
-                        </div>
-                        <span class="free-ship">무료배송</span>
-                    </div>
-                `;
-                return div;
-            }
-
-            ["hitGrid", "recommendGrid", "newGrid", "discountGrid"].forEach((id) => {
-                const grid = document.getElementById(id);
-
-                for (let i = 1; i <= 8; i++) {
-                    grid.appendChild(makeCard(i));
-                }
-            });
+            let mainSlider;
 
             $(function () {
-                $(".main-slider").bxSlider({
+
+                mainSlider = $(".main-slider").bxSlider({
                     mode: "horizontal",
                     auto: true,
                     pause: 3500,
                     speed: 500,
+
                     controls: true,
                     pager: true,
                     adaptiveHeight: false,
                     touchEnabled: true,
-                    slideWidth: 985,
+
+                    // CSS transition 대신 jQuery 애니메이션 사용
+                    useCSS: false,
                 });
+
             });
 
             const items = document.querySelectorAll(".category-item");

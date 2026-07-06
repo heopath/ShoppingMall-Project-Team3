@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.springkmarketapp.dao.product.ProductDAO">
+
+    <!-- 메인 상품 공통 조회 -->
+    <sql id="mainProductColumns">
+        SELECT
+        p.product_no     AS productNo,
+        p.product_name   AS productName,
+        p.basic_desc     AS basicDesc,
+        p.brand          AS brand,
+        p.price          AS price,
+        p.discount_rate  AS discountRate,
+        p.point          AS point,
+        p.delivery_fee   AS deliveryFee,
+        p.view_count     AS viewCount,
+        p.sold_count     AS soldCount,
+
+        MAX(CASE
+        WHEN pi.image_type = 'THUMB1'
+        THEN pi.image_path
+        END) AS imagePath,
+
+        ROUND(IFNULL(AVG(pr.rating), 0), 1) AS avgRating,
+        COUNT(DISTINCT pr.review_no) AS reviewCount
+
+        FROM product p
+
+        LEFT JOIN product_image pi
+        ON p.product_no = pi.product_no
+
+        LEFT JOIN product_review pr
+        ON p.product_no = pr.product_no
+
+        WHERE p.status = '판매중'
+
+        GROUP BY
+        p.product_no,
+        p.product_name,
+        p.basic_desc,
+        p.brand,
+        p.price,
+        p.discount_rate,
+        p.point,
+        p.delivery_fee,
+        p.view_count,
+        p.sold_count
+    </sql>
+
+
+    <!-- 베스트상품 5개 : 판매 건수 순 -->
+    <select id="selectBestProducts"
+            resultType="kr.co.springkmarketapp.dto.product.ProductMainDTO">
+
+        <include refid="mainProductColumns"/>
+
+        ORDER BY p.sold_count DESC
+        LIMIT 5
+
+    </select>
+
+
+    <!-- 히트상품 8개 : 조회수 순 -->
+    <select id="selectHitProducts"
+            resultType="kr.co.springkmarketapp.dto.product.ProductMainDTO">
+
+        <include refid="mainProductColumns"/>
+
+        ORDER BY p.view_count DESC
+        LIMIT 8
+
+    </select>
+
+
+    <!-- 추천상품 8개 : 평균 평점 순 -->
+    <select id="selectRecommendProducts"
+            resultType="kr.co.springkmarketapp.dto.product.ProductMainDTO">
+
+        <include refid="mainProductColumns"/>
+
+        ORDER BY avgRating DESC, reviewCount DESC
+        LIMIT 8
+
+    </select>
+
+
+    <!-- 최신상품 8개 : 등록일 최신 순 -->
+    <select id="selectNewProducts"
+            resultType="kr.co.springkmarketapp.dto.product.ProductMainDTO">
+
+        <include refid="mainProductColumns"/>
+
+        ORDER BY p.reg_date DESC
+        LIMIT 8
+
+    </select>
+
+
+    <!-- 인기상품 8개 : 판매량 + 조회수 종합 순 -->
+    <select id="selectPopularProducts"
+            resultType="kr.co.springkmarketapp.dto.product.ProductMainDTO">
+
+        <include refid="mainProductColumns"/>
+
+        ORDER BY (p.sold_count * 3 + p.view_count) DESC
+        LIMIT 8
+
+    </select>
+
+
+    <!-- 할인상품 8개 : 할인율 높은 순 -->
+    <select id="selectDiscountProducts"
+            resultType="kr.co.springkmarketapp.dto.product.ProductMainDTO">
+
+        <include refid="mainProductColumns"/>
+
+        ORDER BY p.discount_rate DESC, p.price DESC
+        LIMIT 8
+
+    </select>
+
+</mapper>

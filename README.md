@@ -83,215 +83,474 @@ main
 ---
 
 <details>
-<summary><b> 📊 SQL-DDL </b></summary>
+<summary><b> 📊 테이블 생성 SQL (DDL)</b></summary>
 
-### 📊 SQL-DDL
-
-```plaintext
-
+```sql
 CREATE DATABASE IF NOT EXISTS kmarket;
 USE kmarket;
 
+-- 1. 회원
 CREATE TABLE member (
-    member_no INT AUTO_INCREMENT PRIMARY KEY, member_id VARCHAR(50) UNIQUE, password VARCHAR(255),
-    name VARCHAR(50) NOT NULL, gender CHAR(1), birth DATE, email VARCHAR(100) UNIQUE, hp VARCHAR(20),
-    role VARCHAR(20) NOT NULL DEFAULT 'USER', grade VARCHAR(20) NOT NULL DEFAULT 'SILVER',
-    point INT NOT NULL DEFAULT 0, status VARCHAR(20) NOT NULL DEFAULT '정상', zip VARCHAR(10),
-    addr1 VARCHAR(255), addr2 VARCHAR(255), last_login_date DATETIME, leave_date DATETIME,
-    reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    member_no        INT AUTO_INCREMENT PRIMARY KEY,
+    member_id        VARCHAR(50) UNIQUE,
+    password         VARCHAR(255),
+    name             VARCHAR(50) NOT NULL,
+    gender           CHAR(1),
+    birth            DATE,
+    email            VARCHAR(100) UNIQUE,
+    hp               VARCHAR(20),
+    role             VARCHAR(20) NOT NULL DEFAULT 'USER',
+    grade            VARCHAR(20) NOT NULL DEFAULT 'SILVER',
+    point            INT NOT NULL DEFAULT 0,
+    status           VARCHAR(20) NOT NULL DEFAULT '정상',
+    zip              VARCHAR(10),
+    addr1            VARCHAR(255),
+    addr2            VARCHAR(255),
+    last_login_date  DATETIME,
+    leave_date       DATETIME,
+    reg_date         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 2. 소셜 로그인 연동
 CREATE TABLE member_social (
-    social_no BIGINT AUTO_INCREMENT PRIMARY KEY, member_no INT NOT NULL, provider VARCHAR(20) NOT NULL,
-    provider_user_id VARCHAR(255) NOT NULL, provider_email VARCHAR(100), reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (provider, provider_user_id), UNIQUE (member_no, provider), FOREIGN KEY (member_no) REFERENCES member(member_no)
-);
-
-CREATE TABLE policy (
-    policy_no INT AUTO_INCREMENT PRIMARY KEY, policy_type VARCHAR(50) NOT NULL, title VARCHAR(100) NOT NULL,
-    content TEXT NOT NULL, required_yn CHAR(1) NOT NULL DEFAULT 'Y', use_yn CHAR(1) NOT NULL DEFAULT 'Y',
-    update_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE member_agreement (
-    agreement_no INT AUTO_INCREMENT PRIMARY KEY, member_no INT NOT NULL, policy_no INT NOT NULL,
-    agree_yn CHAR(1) NOT NULL DEFAULT 'Y', agree_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (member_no) REFERENCES member(member_no), FOREIGN KEY (policy_no) REFERENCES policy(policy_no)
-);
-
-CREATE TABLE seller_profile (
-    seller_no INT AUTO_INCREMENT PRIMARY KEY, member_no INT NOT NULL UNIQUE, company_name VARCHAR(100) NOT NULL,
-    ceo_name VARCHAR(50) NOT NULL, biz_no VARCHAR(30) NOT NULL UNIQUE, online_sale_no VARCHAR(50), tel VARCHAR(20),
-    fax VARCHAR(20), zip VARCHAR(10), addr1 VARCHAR(255), addr2 VARCHAR(255), status VARCHAR(20) NOT NULL DEFAULT '운영준비',
-    reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (member_no) REFERENCES member(member_no)
-);
-
-CREATE TABLE category (
-    cate_no INT AUTO_INCREMENT PRIMARY KEY, parent_no INT DEFAULT NULL, cate_name VARCHAR(100) NOT NULL,
-    depth TINYINT NOT NULL DEFAULT 1, sort_order INT NOT NULL DEFAULT 0, use_yn CHAR(1) NOT NULL DEFAULT 'Y',
-    reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (parent_no) REFERENCES category(cate_no)
-);
-
-CREATE TABLE product (
-    product_no INT AUTO_INCREMENT PRIMARY KEY, seller_no INT NOT NULL, cate_no INT NOT NULL, product_name VARCHAR(200) NOT NULL,
-    basic_desc VARCHAR(255), manufacturer VARCHAR(100), brand VARCHAR(100), model_name VARCHAR(100), price INT NOT NULL DEFAULT 0,
-    discount_rate INT NOT NULL DEFAULT 0, point INT NOT NULL DEFAULT 0, stock INT NOT NULL DEFAULT 0, delivery_fee INT NOT NULL DEFAULT 0,
-    detail_content TEXT, status VARCHAR(20) NOT NULL DEFAULT '판매중', view_count INT NOT NULL DEFAULT 0, sold_count INT NOT NULL DEFAULT 0,
-    reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, update_date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no), FOREIGN KEY (cate_no) REFERENCES category(cate_no)
-);
-
-CREATE TABLE product_image (
-    image_no INT AUTO_INCREMENT PRIMARY KEY, product_no INT NOT NULL, image_type VARCHAR(30) NOT NULL,
-    image_path VARCHAR(255) NOT NULL, sort_order INT NOT NULL DEFAULT 0, reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (product_no) REFERENCES product(product_no)
-);
-
-CREATE TABLE product_option (
-    option_no INT AUTO_INCREMENT PRIMARY KEY, product_no INT NOT NULL, option_name VARCHAR(100) NOT NULL,
-    option_value VARCHAR(100) NOT NULL, add_price INT NOT NULL DEFAULT 0, stock INT NOT NULL DEFAULT 0,
-    use_yn CHAR(1) NOT NULL DEFAULT 'Y', FOREIGN KEY (product_no) REFERENCES product(product_no)
-);
-
-CREATE TABLE product_notice (
-    notice_no INT AUTO_INCREMENT PRIMARY KEY, product_no INT NOT NULL UNIQUE, product_status VARCHAR(100),
-    tax_type VARCHAR(100), receipt_type VARCHAR(100), business_type VARCHAR(100), origin VARCHAR(100),
-    as_info VARCHAR(255), tel VARCHAR(20), detail_notice TEXT, FOREIGN KEY (product_no) REFERENCES product(product_no)
-);
-
-CREATE TABLE cart (
-    cart_no INT AUTO_INCREMENT PRIMARY KEY, member_no INT NOT NULL, product_no INT NOT NULL, option_no INT DEFAULT NULL,
-    quantity INT NOT NULL DEFAULT 1, reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (member_no) REFERENCES member(member_no), FOREIGN KEY (product_no) REFERENCES product(product_no),
-    FOREIGN KEY (option_no) REFERENCES product_option(option_no)
-);
-
-CREATE TABLE orders (
-    order_no BIGINT AUTO_INCREMENT PRIMARY KEY, order_code VARCHAR(50) NOT NULL UNIQUE, member_no INT NOT NULL,
-    orderer_name VARCHAR(50) NOT NULL, orderer_hp VARCHAR(20) NOT NULL, total_price INT NOT NULL DEFAULT 0,
-    discount_price INT NOT NULL DEFAULT 0, coupon_discount INT NOT NULL DEFAULT 0, delivery_fee INT NOT NULL DEFAULT 0,
-    point_use INT NOT NULL DEFAULT 0, point_save INT NOT NULL DEFAULT 0, pay_price INT NOT NULL DEFAULT 0,
-    payment_method VARCHAR(30), payment_status VARCHAR(30) NOT NULL DEFAULT '결제대기', paid_date DATETIME,
-    cancel_date DATETIME, order_status VARCHAR(30) NOT NULL DEFAULT '주문완료', order_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    social_no         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    member_no         INT NOT NULL,
+    provider          VARCHAR(20) NOT NULL,
+    provider_user_id  VARCHAR(255) NOT NULL,
+    provider_email    VARCHAR(100),
+    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (provider, provider_user_id),
+    UNIQUE (member_no, provider),
     FOREIGN KEY (member_no) REFERENCES member(member_no)
 );
 
-CREATE TABLE delivery (
-    delivery_no INT AUTO_INCREMENT PRIMARY KEY, order_no BIGINT NOT NULL, seller_no INT NOT NULL, receiver_name VARCHAR(50) NOT NULL,
-    receiver_hp VARCHAR(20) NOT NULL, zip VARCHAR(10), addr1 VARCHAR(255), addr2 VARCHAR(255), courier VARCHAR(50),
-    invoice_no VARCHAR(50), delivery_status VARCHAR(30) NOT NULL DEFAULT '배송준비', memo TEXT, ready_date DATETIME,
-    shipped_date DATETIME, delivered_date DATETIME, reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_no) REFERENCES orders(order_no), FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no)
+-- 3. 약관
+CREATE TABLE policy (
+    policy_no         INT AUTO_INCREMENT PRIMARY KEY,
+    policy_type       VARCHAR(50) NOT NULL,
+    title             VARCHAR(100) NOT NULL,
+    content           TEXT NOT NULL,
+    required_yn       CHAR(1) NOT NULL DEFAULT 'Y',
+    use_yn            CHAR(1) NOT NULL DEFAULT 'Y',
+    update_date       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE order_item (
-    order_item_no BIGINT AUTO_INCREMENT PRIMARY KEY, order_no BIGINT NOT NULL, delivery_no INT DEFAULT NULL, product_no INT NOT NULL,
-    seller_no INT NOT NULL, option_name VARCHAR(100), option_value VARCHAR(100), product_name VARCHAR(200) NOT NULL,
-    product_image VARCHAR(255), price INT NOT NULL DEFAULT 0, discount_rate INT NOT NULL DEFAULT 0, point INT NOT NULL DEFAULT 0,
-    quantity INT NOT NULL DEFAULT 1, total_price INT NOT NULL DEFAULT 0, item_status VARCHAR(30) NOT NULL DEFAULT '주문완료',
-    FOREIGN KEY (order_no) REFERENCES orders(order_no), FOREIGN KEY (delivery_no) REFERENCES delivery(delivery_no),
-    FOREIGN KEY (product_no) REFERENCES product(product_no), FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no)
+-- 4. 판매자 상점 정보
+CREATE TABLE seller_profile (
+    seller_no         INT AUTO_INCREMENT PRIMARY KEY,
+    member_no         INT NOT NULL UNIQUE,
+    company_name      VARCHAR(100) NOT NULL,
+    ceo_name          VARCHAR(50) NOT NULL,
+    biz_no            VARCHAR(30) NOT NULL UNIQUE,
+    online_sale_no    VARCHAR(50),
+    tel               VARCHAR(20),
+    fax               VARCHAR(20),
+    zip               VARCHAR(10),
+    addr1             VARCHAR(255),
+    addr2             VARCHAR(255),
+    status            VARCHAR(20) NOT NULL DEFAULT '운영준비',
+    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_no) REFERENCES member(member_no)
 );
 
-CREATE TABLE order_claim (
-    claim_no BIGINT AUTO_INCREMENT PRIMARY KEY, order_item_no BIGINT NOT NULL, member_no INT NOT NULL,
-    claim_type VARCHAR(20) NOT NULL, claim_reason VARCHAR(100) NOT NULL, detail_reason TEXT, status VARCHAR(30) NOT NULL DEFAULT '신청',
-    request_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, process_date DATETIME,
-    FOREIGN KEY (order_item_no) REFERENCES order_item(order_item_no), FOREIGN KEY (member_no) REFERENCES member(member_no)
+-- 5. 상품 카테고리
+CREATE TABLE category (
+    cate_no           INT AUTO_INCREMENT PRIMARY KEY,
+    parent_no         INT DEFAULT NULL,
+    cate_name         VARCHAR(100) NOT NULL,
+    depth             TINYINT NOT NULL DEFAULT 1,
+    sort_order        INT NOT NULL DEFAULT 0,
+    use_yn            CHAR(1) NOT NULL DEFAULT 'Y',
+    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (parent_no) REFERENCES category(cate_no)
 );
 
-CREATE TABLE claim_file (
-    claim_file_no BIGINT AUTO_INCREMENT PRIMARY KEY, claim_no BIGINT NOT NULL, ori_name VARCHAR(255) NOT NULL,
-    new_name VARCHAR(255) NOT NULL, reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (claim_no) REFERENCES order_claim(claim_no)
+-- 6. 상품
+CREATE TABLE product (
+    product_no        INT AUTO_INCREMENT PRIMARY KEY,
+    seller_no         INT NOT NULL,
+    cate_no           INT NOT NULL,
+    product_name      VARCHAR(200) NOT NULL,
+    basic_desc        VARCHAR(255),
+    brand             VARCHAR(100),
+    price             INT NOT NULL DEFAULT 0,
+    discount_rate     INT NOT NULL DEFAULT 0,
+    point             INT NOT NULL DEFAULT 0,
+    stock             INT NOT NULL DEFAULT 0,
+    delivery_fee      INT NOT NULL DEFAULT 0,
+    status            VARCHAR(20) NOT NULL DEFAULT '판매중',
+    view_count        INT NOT NULL DEFAULT 0,
+    sold_count        INT NOT NULL DEFAULT 0,
+    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no),
+    FOREIGN KEY (cate_no) REFERENCES category(cate_no)
 );
 
-CREATE TABLE product_review (
-    review_no BIGINT AUTO_INCREMENT PRIMARY KEY, order_item_no BIGINT NOT NULL UNIQUE, member_no INT NOT NULL,
-    product_no INT NOT NULL, rating TINYINT NOT NULL, content TEXT NOT NULL, reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_item_no) REFERENCES order_item(order_item_no), FOREIGN KEY (member_no) REFERENCES member(member_no),
+-- 7. 상품 이미지
+CREATE TABLE product_image (
+    image_no          INT AUTO_INCREMENT PRIMARY KEY,
+    product_no        INT NOT NULL,
+    image_type        VARCHAR(30) NOT NULL,
+    image_path        VARCHAR(255) NOT NULL,
+    sort_order        INT NOT NULL DEFAULT 0,
+    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (product_no) REFERENCES product(product_no)
 );
 
-CREATE TABLE review_image (
-    review_image_no BIGINT AUTO_INCREMENT PRIMARY KEY, review_no BIGINT NOT NULL, image_path VARCHAR(255) NOT NULL,
-    sort_order INT NOT NULL DEFAULT 0, FOREIGN KEY (review_no) REFERENCES product_review(review_no)
+-- 8. 상품 옵션
+CREATE TABLE product_option (
+    option_no         INT AUTO_INCREMENT PRIMARY KEY,
+    product_no        INT NOT NULL,
+    option_group_no   TINYINT NOT NULL,
+    option_name       VARCHAR(100) NOT NULL,
+    option_value      VARCHAR(100) NOT NULL,
+    sort_order        INT NOT NULL DEFAULT 0,
+    UNIQUE KEY uk_product_option_value (product_no, option_group_no, option_value),
+    FOREIGN KEY (product_no) REFERENCES product(product_no)
 );
 
-CREATE TABLE member_point (
-    point_no INT AUTO_INCREMENT PRIMARY KEY, member_no INT NOT NULL, order_no BIGINT DEFAULT NULL, point_type VARCHAR(20) NOT NULL,
-    point_value INT NOT NULL, balance_point INT NOT NULL DEFAULT 0, reason VARCHAR(255), expire_date DATE,
-    reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (member_no) REFERENCES member(member_no),
-    FOREIGN KEY (order_no) REFERENCES orders(order_no)
+-- 9. 상품정보 제공고시
+CREATE TABLE product_notice (
+    notice_no         INT AUTO_INCREMENT PRIMARY KEY,
+    product_no        INT NOT NULL UNIQUE,
+    product_status    VARCHAR(100),
+    tax_type          VARCHAR(100),
+    receipt_type      VARCHAR(100),
+    business_type     VARCHAR(100),
+    origin            VARCHAR(100),
+    FOREIGN KEY (product_no) REFERENCES product(product_no)
 );
 
-CREATE TABLE coupon (
-    coupon_no INT AUTO_INCREMENT PRIMARY KEY, coupon_code VARCHAR(50) NOT NULL UNIQUE, seller_no INT DEFAULT NULL,
-    coupon_type VARCHAR(30) NOT NULL, coupon_name VARCHAR(100) NOT NULL, benefit_type VARCHAR(20) NOT NULL, benefit_value INT NOT NULL DEFAULT 0,
-    min_order_price INT NOT NULL DEFAULT 0, max_discount_price INT NOT NULL DEFAULT 0, issue_limit INT DEFAULT NULL, start_date DATE,
-    end_date DATE, caution TEXT, status VARCHAR(20) NOT NULL DEFAULT '사용', reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+-- 10. 장바구니
+CREATE TABLE cart (
+    cart_no           INT AUTO_INCREMENT PRIMARY KEY,
+    member_no         INT NOT NULL,
+    product_no        INT NOT NULL,
+    option_signature  VARCHAR(100) NOT NULL DEFAULT '',
+    quantity          INT NOT NULL DEFAULT 1,
+    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_cart_member_product_option (member_no, product_no, option_signature),
+    FOREIGN KEY (member_no) REFERENCES member(member_no),
+    FOREIGN KEY (product_no) REFERENCES product(product_no)
+);
+
+-- 11. 장바구니 선택 옵션
+CREATE TABLE cart_option (
+    cart_no           INT NOT NULL,
+    option_no         INT NOT NULL,
+    PRIMARY KEY (cart_no, option_no),
+    FOREIGN KEY (cart_no) REFERENCES cart(cart_no),
+    FOREIGN KEY (option_no) REFERENCES product_option(option_no)
+);
+
+-- 12. 주문
+CREATE TABLE orders (
+    order_no          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_code        VARCHAR(50) NOT NULL UNIQUE,
+    member_no         INT NOT NULL,
+    orderer_name      VARCHAR(50) NOT NULL,
+    orderer_hp        VARCHAR(20) NOT NULL,
+    total_price       INT NOT NULL DEFAULT 0,
+    discount_price    INT NOT NULL DEFAULT 0,
+    coupon_discount   INT NOT NULL DEFAULT 0,
+    delivery_fee      INT NOT NULL DEFAULT 0,
+    point_use         INT NOT NULL DEFAULT 0,
+    point_save        INT NOT NULL DEFAULT 0,
+    pay_price         INT NOT NULL DEFAULT 0,
+    payment_method    VARCHAR(30),
+    payment_status    VARCHAR(30) NOT NULL DEFAULT '결제대기',
+    paid_date         DATETIME,
+    cancel_date       DATETIME,
+    order_status      VARCHAR(30) NOT NULL DEFAULT '주문완료',
+    order_date        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_no) REFERENCES member(member_no)
+);
+
+-- 13. 배송
+CREATE TABLE delivery (
+    delivery_no       INT AUTO_INCREMENT PRIMARY KEY,
+    order_no          BIGINT NOT NULL,
+    seller_no         INT NOT NULL,
+    receiver_name     VARCHAR(50) NOT NULL,
+    receiver_hp       VARCHAR(20) NOT NULL,
+    zip               VARCHAR(10),
+    addr1             VARCHAR(255),
+    addr2             VARCHAR(255),
+    courier           VARCHAR(50),
+    invoice_no        VARCHAR(50),
+    delivery_fee      INT NOT NULL DEFAULT 0,
+    delivery_status   VARCHAR(30) NOT NULL DEFAULT '배송준비',
+    memo              TEXT,
+    receipt_date      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    shipped_date      DATETIME,
+    delivered_date    DATETIME,
+    FOREIGN KEY (order_no) REFERENCES orders(order_no),
     FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no)
 );
 
+-- 14. 주문 상품 상세
+CREATE TABLE order_item (
+    order_item_no          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_no               BIGINT NOT NULL,
+    delivery_no            INT DEFAULT NULL,
+    product_no             INT NOT NULL,
+    seller_no              INT NOT NULL,
+    product_name           VARCHAR(200) NOT NULL,
+    product_image          VARCHAR(255),
+    price                  INT NOT NULL DEFAULT 0,
+    discount_rate          INT NOT NULL DEFAULT 0,
+    coupon_discount        INT NOT NULL DEFAULT 0,
+    point                  INT NOT NULL DEFAULT 0,
+    quantity               INT NOT NULL DEFAULT 1,
+    total_price            INT NOT NULL DEFAULT 0,
+    item_status            VARCHAR(30) NOT NULL DEFAULT '주문완료',
+    purchase_confirm_date  DATETIME,
+    FOREIGN KEY (order_no) REFERENCES orders(order_no),
+    FOREIGN KEY (delivery_no) REFERENCES delivery(delivery_no),
+    FOREIGN KEY (product_no) REFERENCES product(product_no),
+    FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no)
+);
+
+-- 15. 주문상품 선택 옵션
+CREATE TABLE order_item_option (
+    order_item_option_no  BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_item_no         BIGINT NOT NULL,
+    option_group_no       TINYINT NOT NULL,
+    option_name           VARCHAR(100) NOT NULL,
+    option_value          VARCHAR(100) NOT NULL,
+    UNIQUE KEY uk_order_item_option_group (order_item_no, option_group_no),
+    FOREIGN KEY (order_item_no) REFERENCES order_item(order_item_no)
+);
+
+-- 16. 반품 / 교환 신청
+CREATE TABLE order_claim (
+    claim_no          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_item_no     BIGINT NOT NULL,
+    member_no         INT NOT NULL,
+    claim_type        VARCHAR(20) NOT NULL,
+    claim_reason      VARCHAR(100) NOT NULL,
+    detail_reason     TEXT,
+    status            VARCHAR(30) NOT NULL DEFAULT '신청',
+    request_date      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    process_date      DATETIME,
+    FOREIGN KEY (order_item_no) REFERENCES order_item(order_item_no),
+    FOREIGN KEY (member_no) REFERENCES member(member_no)
+);
+
+-- 17. 반품 / 교환 첨부파일
+CREATE TABLE claim_file (
+    claim_file_no     BIGINT AUTO_INCREMENT PRIMARY KEY,
+    claim_no          BIGINT NOT NULL,
+    ori_name          VARCHAR(255) NOT NULL,
+    new_name          VARCHAR(255) NOT NULL,
+    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (claim_no) REFERENCES order_claim(claim_no)
+);
+
+-- 18. 상품 리뷰
+CREATE TABLE product_review (
+    review_no         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_item_no     BIGINT NOT NULL UNIQUE,
+    member_no         INT NOT NULL,
+    product_no        INT NOT NULL,
+    rating            TINYINT NOT NULL,
+    content           TEXT NOT NULL,
+    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_item_no) REFERENCES order_item(order_item_no),
+    FOREIGN KEY (member_no) REFERENCES member(member_no),
+    FOREIGN KEY (product_no) REFERENCES product(product_no)
+);
+
+-- 19. 리뷰 이미지
+CREATE TABLE review_image (
+    review_image_no   BIGINT AUTO_INCREMENT PRIMARY KEY,
+    review_no         BIGINT NOT NULL,
+    image_path        VARCHAR(255) NOT NULL,
+    sort_order        INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (review_no) REFERENCES product_review(review_no)
+);
+
+-- 20. 회원 포인트 이력
+CREATE TABLE member_point (
+    point_no          INT AUTO_INCREMENT PRIMARY KEY,
+    member_no         INT NOT NULL,
+    order_no          BIGINT DEFAULT NULL,
+    point_type        VARCHAR(20) NOT NULL,
+    point_value       INT NOT NULL,
+    balance_point     INT NOT NULL DEFAULT 0,
+    reason            VARCHAR(255),
+    expire_date       DATE,
+    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_no) REFERENCES member(member_no),
+    FOREIGN KEY (order_no) REFERENCES orders(order_no)
+);
+
+-- 21. 쿠폰
+CREATE TABLE coupon (
+    coupon_no          INT AUTO_INCREMENT PRIMARY KEY,
+    coupon_code        VARCHAR(50) NOT NULL UNIQUE,
+    seller_no          INT DEFAULT NULL,
+    coupon_type        VARCHAR(30) NOT NULL,
+    coupon_name        VARCHAR(100) NOT NULL,
+    benefit_type       VARCHAR(20) NOT NULL,
+    benefit_value      INT NOT NULL DEFAULT 0,
+    min_order_price    INT NOT NULL DEFAULT 0,
+    max_discount_price INT NOT NULL DEFAULT 0,
+    issue_limit        INT DEFAULT NULL,
+    start_date         DATE,
+    end_date           DATE,
+    caution            TEXT,
+    status             VARCHAR(20) NOT NULL DEFAULT '사용',
+    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no)
+);
+
+-- 22. 쿠폰 적용 상품
+CREATE TABLE coupon_product (
+    coupon_no          INT NOT NULL,
+    product_no         INT NOT NULL,
+    PRIMARY KEY (coupon_no, product_no),
+    FOREIGN KEY (coupon_no) REFERENCES coupon(coupon_no),
+    FOREIGN KEY (product_no) REFERENCES product(product_no)
+);
+
+-- 23. 회원 쿠폰 발급 이력
 CREATE TABLE coupon_issue (
-    issue_no BIGINT AUTO_INCREMENT PRIMARY KEY, issue_code VARCHAR(50) NOT NULL UNIQUE, coupon_no INT NOT NULL, member_no INT NOT NULL,
-    order_no BIGINT DEFAULT NULL, status VARCHAR(20) NOT NULL DEFAULT '발급', used_date DATETIME, issue_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (coupon_no) REFERENCES coupon(coupon_no), FOREIGN KEY (member_no) REFERENCES member(member_no), FOREIGN KEY (order_no) REFERENCES orders(order_no)
+    issue_no           BIGINT AUTO_INCREMENT PRIMARY KEY,
+    issue_code         VARCHAR(50) NOT NULL UNIQUE,
+    coupon_no          INT NOT NULL,
+    member_no          INT NOT NULL,
+    order_no           BIGINT DEFAULT NULL,
+    status             VARCHAR(20) NOT NULL DEFAULT '발급',
+    used_date          DATETIME,
+    issue_date         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (coupon_no) REFERENCES coupon(coupon_no),
+    FOREIGN KEY (member_no) REFERENCES member(member_no),
+    FOREIGN KEY (order_no) REFERENCES orders(order_no)
 );
 
+-- 24. 배너
 CREATE TABLE banner (
-    banner_no INT AUTO_INCREMENT PRIMARY KEY, banner_name VARCHAR(100) NOT NULL, banner_size VARCHAR(50), bg_color VARCHAR(20),
-    link_url VARCHAR(255), banner_position VARCHAR(50) NOT NULL, image_path VARCHAR(255) NOT NULL, sort_order INT NOT NULL DEFAULT 0,
-    start_datetime DATETIME, end_datetime DATETIME, use_yn CHAR(1) NOT NULL DEFAULT 'Y', reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    banner_no          INT AUTO_INCREMENT PRIMARY KEY,
+    banner_name        VARCHAR(100) NOT NULL,
+    banner_size        VARCHAR(50),
+    bg_color           VARCHAR(20),
+    link_url           VARCHAR(255),
+    banner_position    VARCHAR(50) NOT NULL,
+    image_path         VARCHAR(255) NOT NULL,
+    sort_order         INT NOT NULL DEFAULT 0,
+    start_datetime     DATETIME,
+    end_datetime       DATETIME,
+    use_yn             CHAR(1) NOT NULL DEFAULT 'Y',
+    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 25. 고객센터 카테고리
 CREATE TABLE cs_category (
-    cs_cate_no INT AUTO_INCREMENT PRIMARY KEY, parent_no INT DEFAULT NULL, board_type VARCHAR(20) NOT NULL DEFAULT 'COMMON',
-    cate_name VARCHAR(100) NOT NULL, depth TINYINT NOT NULL DEFAULT 1, sort_order INT NOT NULL DEFAULT 0, use_yn CHAR(1) NOT NULL DEFAULT 'Y',
+    cs_cate_no         INT AUTO_INCREMENT PRIMARY KEY,
+    parent_no          INT DEFAULT NULL,
+    cate_name          VARCHAR(100) NOT NULL,
+    depth              TINYINT NOT NULL DEFAULT 1,
+    sort_order         INT NOT NULL DEFAULT 0,
+    use_yn             CHAR(1) NOT NULL DEFAULT 'Y',
     FOREIGN KEY (parent_no) REFERENCES cs_category(cs_cate_no)
 );
 
+-- 26. 공지사항
 CREATE TABLE notice (
-    notice_no INT AUTO_INCREMENT PRIMARY KEY, writer_no INT NOT NULL, notice_type VARCHAR(50) NOT NULL, title VARCHAR(200) NOT NULL,
-    content TEXT NOT NULL, hit INT NOT NULL DEFAULT 0, reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (writer_no) REFERENCES member(member_no)
-);
-
-CREATE TABLE faq (
-    faq_no INT AUTO_INCREMENT PRIMARY KEY, cs_cate_no INT NOT NULL, writer_no INT NOT NULL, title VARCHAR(200) NOT NULL,
-    content TEXT NOT NULL, hit INT NOT NULL DEFAULT 0, reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, FOREIGN KEY (cs_cate_no) REFERENCES cs_category(cs_cate_no),
+    notice_no          INT AUTO_INCREMENT PRIMARY KEY,
+    writer_no          INT NOT NULL,
+    notice_type        VARCHAR(50) NOT NULL,
+    title              VARCHAR(200) NOT NULL,
+    content            TEXT NOT NULL,
+    hit                INT NOT NULL DEFAULT 0,
+    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_date        DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (writer_no) REFERENCES member(member_no)
 );
 
+-- 27. 자주 묻는 질문
+CREATE TABLE faq (
+    faq_no             INT AUTO_INCREMENT PRIMARY KEY,
+    cs_cate_no         INT NOT NULL,
+    writer_no          INT NOT NULL,
+    title              VARCHAR(200) NOT NULL,
+    content            TEXT NOT NULL,
+    hit                INT NOT NULL DEFAULT 0,
+    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    update_date        DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (cs_cate_no) REFERENCES cs_category(cs_cate_no),
+    FOREIGN KEY (writer_no) REFERENCES member(member_no)
+);
+
+-- 28. 1:1 문의
 CREATE TABLE qna (
-    qna_no BIGINT AUTO_INCREMENT PRIMARY KEY, member_no INT NOT NULL, order_no BIGINT DEFAULT NULL, cs_cate_no INT NOT NULL,
-    title VARCHAR(200) NOT NULL, content TEXT NOT NULL, answer TEXT, answer_member_no INT DEFAULT NULL, status VARCHAR(20) NOT NULL DEFAULT '검토중',
-    reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, answer_date DATETIME, FOREIGN KEY (member_no) REFERENCES member(member_no),
-    FOREIGN KEY (order_no) REFERENCES orders(order_no), FOREIGN KEY (cs_cate_no) REFERENCES cs_category(cs_cate_no),
+    qna_no             BIGINT AUTO_INCREMENT PRIMARY KEY,
+    member_no          INT NOT NULL,
+    cs_cate_no         INT NOT NULL,
+    title              VARCHAR(200) NOT NULL,
+    content            TEXT NOT NULL,
+    answer             TEXT,
+    answer_member_no   INT DEFAULT NULL,
+    status             VARCHAR(20) NOT NULL DEFAULT '검토중',
+    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    answer_date        DATETIME,
+    FOREIGN KEY (member_no) REFERENCES member(member_no),
+    FOREIGN KEY (cs_cate_no) REFERENCES cs_category(cs_cate_no),
     FOREIGN KEY (answer_member_no) REFERENCES member(member_no)
 );
 
+-- 29. 채용 공고
 CREATE TABLE recruit (
-    recruit_no INT AUTO_INCREMENT PRIMARY KEY, writer_no INT NOT NULL, title VARCHAR(200) NOT NULL, department VARCHAR(50),
-    career VARCHAR(50), recruit_type VARCHAR(50), start_date DATE, end_date DATE, note TEXT, status VARCHAR(20) NOT NULL DEFAULT '모집중',
-    reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (writer_no) REFERENCES member(member_no)
+    recruit_no         INT AUTO_INCREMENT PRIMARY KEY,
+    writer_no          INT NOT NULL,
+    title              VARCHAR(200) NOT NULL,
+    department         VARCHAR(50),
+    career             VARCHAR(50),
+    recruit_type       VARCHAR(50),
+    start_date         DATE,
+    end_date           DATE,
+    note               TEXT,
+    status             VARCHAR(20) NOT NULL DEFAULT '모집중',
+    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (writer_no) REFERENCES member(member_no)
 );
 
+-- 30. 사이트 기본 설정
 CREATE TABLE site_setting (
-    setting_no INT AUTO_INCREMENT PRIMARY KEY, setting_key VARCHAR(100) NOT NULL UNIQUE, setting_value TEXT,
-    update_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    setting_no         INT AUTO_INCREMENT PRIMARY KEY,
+    setting_key        VARCHAR(100) NOT NULL UNIQUE,
+    setting_value      TEXT,
+    update_date        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- 31. 회사소개 / 문화 / 소식 / 미디어 콘텐츠
 CREATE TABLE company_content (
-    content_no INT AUTO_INCREMENT PRIMARY KEY, content_type VARCHAR(30) NOT NULL, title VARCHAR(200) NOT NULL, content TEXT,
-    image_path VARCHAR(255), video_url VARCHAR(255), category_name VARCHAR(100), use_yn CHAR(1) NOT NULL DEFAULT 'Y',
-    reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    content_no         INT AUTO_INCREMENT PRIMARY KEY,
+    content_type       VARCHAR(30) NOT NULL,
+    title              VARCHAR(200) NOT NULL,
+    content            TEXT,
+    image_path         VARCHAR(255),
+    video_url          VARCHAR(255),
+    category_name      VARCHAR(100),
+    use_yn             CHAR(1) NOT NULL DEFAULT 'Y',
+    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 32. 버전 관리
 CREATE TABLE app_version (
-    version_no INT AUTO_INCREMENT PRIMARY KEY, version_name VARCHAR(50) NOT NULL, writer_no INT, change_log TEXT NOT NULL,
-    reg_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (writer_no) REFERENCES member(member_no)
+    version_no         INT AUTO_INCREMENT PRIMARY KEY,
+    version_name       VARCHAR(50) NOT NULL,
+    writer_no          INT,
+    change_log         TEXT NOT NULL,
+    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (writer_no) REFERENCES member(member_no)
+);
+
+-- 33. 방문자수 관리
+CREATE TABLE visit_daily (
+    visit_date   DATE PRIMARY KEY,
+    visit_count  INT NOT NULL DEFAULT 0
 );
 ```
 </details>
@@ -302,326 +561,443 @@ CREATE TABLE app_version (
 
 ### 📊 테이블 구조 및 컬럼 설명
 
-■ 본 프로젝트는 총 30개의 테이블로 구성되어 있으며, 주요 비즈니스 흐름을 담당하는 핵심 테이블 구조는 다음과 같습니다.
+■ 본 프로젝트는 총 33개의 테이블로 구성되어 있으며, 주요 비즈니스 흐름을 담당하는 핵심 테이블 구조는 다음과 같습니다.
 
-- member: 회원(USER, SELLER, ADMIN) 통합 관리 및 권한, 포인트 상태 저장
+- **member**: 회원(USER, SELLER, ADMIN) 통합 관리 및 권한, 포인트 상태 저장
+- **member_social**: 소셜 로그인 연동 (NAVER, KAKAO, GOOGLE 등) 식별값 매핑
+- **policy**: 쇼핑몰 이용약관 및 개인정보처리방침 마스터 데이터 관리
+- **seller_profile**: 판매자 사업자 정보 및 입점 상점 세부 정보 관리
+- **category**: N차 상품 카테고리 계층 구조 분류 및 노출 순서 제어
+- **product / product_image**: 상품 기본 정보(재고, 정가, 할인율) 및 멀티미디어 썸네일 경로 관리
+- **product_option**: 상품별 추가 선택 항목(색상, 사이즈 등) 구조 관리
+- **product_notice**: 소비자 보호를 위한 전자상거래 상품정보 제공고시 규격 저장
+- **cart / cart_option**: 사용자별 장바구니에 담긴 상품 정보 및 다중 선택 옵션 매핑
+- **orders / order_item / order_item_option**: 전체 주문 정보 및 주문 시점의 스냅샷 데이터(가격, 옵션값 고정) 저장
+- **delivery**: 입점 판매자별/출고처별 분할 배송 및 송장번호, 배송 상태 추적 관리
+- **order_claim / claim_file**: 상품별 반품, 교환 클레임 신청 내역 및 증빙용 첨부파일 관리
+- **product_review / review_image**: 구매 확정 상품 기준의 포토 후기, 평점 및 이미지 관리
+- **member_point**: 회원의 포인트 적립, 사용, 회수 등 정밀 원장 이력 관리
+- **coupon / coupon_product / coupon_issue**: 프로모션 쿠폰 생성, 적용 상품 바인딩 및 회원 발급/사용 이력 추적
+- **cs_category / notice / faq / qna**: 통합 고객센터 카테고리 분류 및 공지사항, FAQ, 1:1 문의 답변 프로세스 관리
+- **recruit**: 쇼핑몰 기업 채용 공고 게시판 관리
+- **site_setting**: 사이트명, 대표 연락처 등 시스템 전반의 동적 환경설정 관리
+- **company_content**: 회사 소개, 기업 문화, 보도 자료 및 미디어 콘텐츠 아카이빙
+- **app_version**: 플랫폼 시스템 소프트웨어 버전 및 릴리즈 노트 체인지로그 관리
+- **visit_daily**: 통계 분석을 위한 일별 방문자수 데이터 관리
 
-- member_social: 소셜 로그인 연동 (NAVER, KAKAO 등) 식별값 매핑
+---
 
-- policy / member_agreement: 이용약관 및 개인정보처리방침 동의 이력 관리
-
-- seller_profile: 판매자 사업자 및 상점 세부 정보
-
-- category / product: N차 카테고리 분류 및 상품 정보 (재고, 가격, 할인율)
-
-- product_option: 상품별 추가 옵션(색상, 사이즈 등) 및 추가 금액
-
-- cart: 사용자별 장바구니에 담긴 상품 및 옵션, 수량 정보
-
-- orders / order_item: 전체 주문 정보 및 주문 시점의 스냅샷 데이터(가격, 옵션 고정) 저장
-
-- delivery: 택배사, 송장번호, 배송 상태(배송중, 완료 등)
-
-- order_claim: 교환/반품 신청 내역 및 처리 상태
-
-- product_review: 구매 확정된 주문상품 기준의 리뷰 및 평점 관리
-
-- member_point: 회원의 적립/사용 내역 관리
-
-- coupon / coupon_issue: 시스템 및 판매자 쿠폰 생성, 회원 발급 및 사용 이력
-
-- notice / faq / qna: 통합 고객센터 게시판 및 1:1 문의 답변 시스템
-
-#### 1. member
+#### 1. member (회원)
 | 컬럼명 | 설명 |
 |---|---|
-| `member_no` | 회원을 구분하는 내부 PK 번호 |
-| `member_id` | 일반 로그인 시 사용하는 아이디, 소셜 회원은 NULL 가능 |
-| `password` | BCrypt로 암호화하여 저장하는 비밀번호 |
-| `role` | USER, SELLER, ADMIN 권한 구분 |
-| `grade` | 회원 등급 정보 |
-| `point` | 현재 보유 포인트 총합 |
-| `status` | 정상, 중지, 휴면, 탈퇴 상태 |
-| `last_login_date` | 마지막 로그인 시각 |
-| `leave_date` | 회원 탈퇴 처리 시각 |
+| `member_no` | 회원 PK (내부 식별 고유 번호) |
+| `member_id` | 일반 로그인 아이디 (소셜 가입 회원은 NULL 가능) |
+| `password` | BCrypt로 암호화하여 저장하는 일반 로그인 비밀번호 |
+| `name` | 회원 실명 |
+| `gender` | 회원 성별 (M: 남성, F: 여성 등) |
+| `birth` | 회원 생년월일 |
+| `email` | 회원 이메일 주소 (UNIQUE) |
+| `hp` | 회원 휴대폰 번호 |
+| `role` | 권한 구분 (USER: 일반 회원, SELLER: 판매자, ADMIN: 관리자) |
+| `grade` | 회원 등급 (SILVER, GOLD, VIP 등) |
+| `point` | 현재 회원이 보유하여 사용 가능한 최종 잔여 포인트 수치 |
+| `status` | 회원 계정 상태 (정상, 중지, 휴면, 탈퇴) |
+| `zip` | 우편번호 |
+| `addr1` | 도로명/지번 기본 주소 |
+| `addr2` | 상세 주소 (동·호수 등) |
+| `last_login_date` | 마지막 로그인 일시 |
+| `leave_date` | 회원 탈퇴 처리 완료 일시 |
+| `reg_date` | 회원 가입 일시 |
 
-#### 2. member_social
+#### 2. member_social (소셜 로그인 연동)
 | 컬럼명 | 설명 |
 |---|---|
-| `provider` | NAVER, KAKAO, GOOGLE 중 로그인 제공자 |
-| `provider_user_id` | 소셜 로그인 업체가 제공하는 회원 고유 식별값 |
-| `provider_email` | 소셜 로그인 과정에서 전달받은 이메일 |
-| `UNIQUE(provider, provider_user_id)` | 하나의 소셜 계정이 여러 KMarket 회원에 연결되는 것을 방지 |
-| `UNIQUE(member_no, provider)` | 한 회원이 같은 소셜 제공자를 중복 연동하는 것을 방지 |
+| `social_no` | 소셜 로그인 연동 PK |
+| `member_no` | 연결되는 일반 회원 번호 (FK) |
+| `provider` | 소셜 로그인 제공처 (NAVER, KAKAO, GOOGLE 등) |
+| `provider_user_id` | 소셜 제공사측에서 발급한 사용자의 유니크한 고유 식별값 |
+| `provider_email` | 소셜 로그인 과정에서 전달받은 소셜 계정 이메일 |
+| `reg_date` | 소셜 계정 연동 및 연동 최초 일시 |
 
-#### 3. policy
+#### 3. policy (약관)
 | 컬럼명 | 설명 |
 |---|---|
-| `policy_type` | BUYER, SELLER, PRIVACY 등 약관 구분값 |
-| `required_yn` | 회원가입 시 반드시 동의해야 하는 약관인지 여부 |
-| `use_yn` | 현재 화면에 노출하여 사용하는 약관인지 여부 |
+| `policy_no` | 약관 PK |
+| `policy_type` | 약관 구분 식별자 (BUYER: 구매자 이용약관, SELLER: 판매자 이용약관, PRIVACY: 개인정보처리방침 등) |
+| `title` | 약관 제목 |
+| `content` | 약관 본문 내용 (마크다운 혹은 HTML 텍스트) |
+| `required_yn` | 가입 시 필수 동의 항목 여부 (Y: 필수, N: 선택) |
+| `use_yn` | 현재 시점에 화면 노출 및 적용 중인 약관인지 여부 (Y/N) |
+| `update_date` | 약관이 마지막으로 개정 및 수정된 시각 |
 
-#### 4. member_agreement
+#### 4. seller_profile (판매자 상점 정보)
 | 컬럼명 | 설명 |
 |---|---|
-| `member_no` | 약관에 동의한 회원 번호 |
-| `policy_no` | 동의한 약관 번호 |
-| `agree_yn` | 동의 여부 |
-| `agree_date` | 동의한 날짜와 시간 |
-
-#### 5. seller_profile
-| 컬럼명 | 설명 |
-|---|---|
-| `member_no` | 판매자 계정과 1:1로 연결되는 회원 번호 |
-| `company_name` | 판매 상점의 상호명 |
-| `ceo_name` | 사업자 대표자명 |
-| `biz_no` | 사업자등록번호 |
+| `seller_no` | 판매자 상점 정보 PK |
+| `member_no` | 판매자 권한 계정과 연결되는 회원 번호 (FK, UNIQUE) |
+| `company_name` | 상호명 및 법인명 |
+| `ceo_name` | 대표자 성명 |
+| `biz_no` | 사업자등록번호 (UNIQUE) |
 | `online_sale_no` | 통신판매업 신고번호 |
-| `status` | 운영준비, 승인대기, 운영중, 중단 상태 |
+| `tel` | 판매자 고객센터 전화번호 및 A/S 대표 연락처 |
+| `fax` | 판매자 팩스번호 |
+| `zip` | 사업장 주소 우편번호 |
+| `addr1` | 사업장 기본 주소 |
+| `addr2` | 사업장 상세 주소 |
+| `status` | 판매 상점 상태 (운영준비, 승인대기, 운영중, 중단) |
+| `reg_date` | 판매자 상점 최초 신청 및 등록 일시 |
 
-#### 6. category
+#### 5. category (상품 카테고리)
 | 컬럼명 | 설명 |
 |---|---|
-| `parent_no` | 2차 카테고리일 때 상위 1차 카테고리 번호 |
-| `depth` | 1은 1차 카테고리, 2는 2차 카테고리 |
-| `sort_order` | 화면에서 카테고리를 보여주는 순서 |
-| `use_yn` | 카테고리 사용 여부 |
+| `cate_no` | 상품 카테고리 PK |
+| `parent_no` | 상위 카테고리 번호 (1차 카테고리일 경우 NULL, 2차일 경우 상위 1차 번호 참조) |
+| `cate_name` | 카테고리 노출 명칭 |
+| `depth` | 카테고리 차수 계층 단계 구분 (1: 1차 대분류, 2: 2차 중분류) |
+| `sort_order` | 카테고리 메뉴의 화면 출력 및 정렬 우선순위 |
+| `use_yn` | 카테고리 활성화 및 노출 여부 (Y/N) |
 
-#### 7. product
+#### 6. product (상품)
 | 컬럼명 | 설명 |
 |---|---|
-| `seller_no` | 상품을 등록한 판매자 번호 |
-| `cate_no` | 상품이 속한 최종 2차 카테고리 번호 |
-| `basic_desc` | 상품 목록에 보여줄 한 줄 소개 |
-| `price` | 할인 전 상품 정가 |
-| `discount_rate` | 상품 할인율 |
-| `point` | 해당 상품 구매 시 적립되는 포인트 |
-| `stock` | 옵션이 없는 기본 상품 재고 |
-| `delivery_fee` | 해당 상품의 배송비 |
-| `detail_content` | 상품 상세 페이지 본문 |
-| `status` | 판매중, 판매중지, 품절, 삭제 상태 |
-| `view_count` | 상품 상세 조회수 |
-| `sold_count` | 누적 판매 수량 |
+| `product_no` | 상품 PK |
+| `seller_no` | 상품을 공급 및 등록한 판매자 번호 (FK) |
+| `cate_no` | 상품이 속한 최종 2차 카테고리 번호 (FK) |
+| `product_name` | 상품명 |
+| `basic_desc` | 상품 목록 리스트 뷰에 표기될 짤막한 한 줄 소개 요약글 |
+| `brand` | 상품 제조 브랜드 명칭 |
+| `price` | 할인 적용 전 상품 정가 (소비자가) |
+| `discount_rate` | 상품 할인율 (퍼센트 단위 수치) |
+| `point` | 해당 상품 구매 시 최종 지급 및 적립할 포인트 레이트 수치 |
+| `stock` | 상품의 전체 실재고 수량 (모든 옵션이 공통으로 사용하는 재고 원장) |
+| `delivery_fee` | 상품 기본 기본 배송비 비용 |
+| `status` | 현재 판매 상태 제어 코드 (판매중, 판매중지, 품절) |
+| `view_count` | 상품 상세 페이지 누적 조회수 (Hit) |
+| `sold_count` | 누적 판매 및 출고 수량 |
+| `reg_date` | 상품 최초 등록 시각 |
 
-#### 8. product_image
+#### 7. product_image (상품 이미지)
 | 컬럼명 | 설명 |
 |---|---|
-| `image_type` | THUMB1, THUMB2, THUMB3, MAIN, DETAIL 구분 |
-| `image_path` | 서버에 저장된 이미지 파일 경로 |
-| `sort_order` | 상세 이미지 출력 순서 |
+| `image_no` | 상품 이미지 PK |
+| `product_no` | 이미지가 소속된 대상 상품 번호 (FK) |
+| `image_type` | 이미지 역할 종류 구분 (THUMB1, THUMB2, THUMB3, MAIN, DETAIL 목록 및 본문 구분) |
+| `image_path` | 파일 스토리지 서버에 저장된 물리 파일 상대 경로 |
+| `sort_order` | 특히 상세 이미지 여러 장 노출 시 화면 출력 배열 순서 |
+| `reg_date` | 이미지 파일 업로드 등록 시각 |
 
-#### 9. product_option
+#### 8. product_option (상품 옵션)
 | 컬럼명 | 설명 |
 |---|---|
-| `option_name` | 색상, 사이즈, 용량 등 옵션 종류 |
-| `option_value` | 블랙, XL, 500ml 등 실제 선택값 |
-| `add_price` | 옵션 선택 시 추가되는 금액 |
-| `stock` | 해당 옵션 조합의 재고 |
-| `use_yn` | 옵션 사용 여부 |
+| `option_no` | 상품 옵션 PK |
+| `product_no` | 옵션 항목이 종속된 대상 상품 번호 (FK) |
+| `option_group_no`| 화면 UI 구성을 위한 옵션 대분류 그룹 그룹화 번호 (1: 색상, 2: 사이즈 등) |
+| `option_name` | 옵션 종류 타이틀 표기명 (ex: "색상", "사이즈") |
+| `option_value` | 사용자가 마주할 드롭다운 실제 선택 명칭 (ex: "블랙", "100") |
+| `sort_order` | 드롭다운 셀렉트 박스 내부에서의 출력 순서 정렬값 |
 
-#### 10. product_notice
+#### 9. product_notice (상품정보 제공고시)
 | 컬럼명 | 설명 |
 |---|---|
-| `product_status` | 상품 상태 또는 제품 상태 안내 |
-| `tax_type` | 과세 여부 |
-| `receipt_type` | 현금영수증 발급 가능 여부 |
-| `business_type` | 판매자 사업자 구분 |
-| `origin` | 원산지 |
-| `as_info` | A/S 책임자 및 연락처 |
-| `detail_notice` | 기타 제공고시 상세 내용 |
+| `notice_no` | 상품정보 제공고시 PK |
+| `product_no` | 제공고시 명세가 연동되는 대상 상품 번호 (FK, UNIQUE) |
+| `product_status` | 상품의 상태 고시 문구 (신상품, 중고품 등) |
+| `tax_type` | 과세 형태 구분 문구 (과세상품, 면세상품) |
+| `receipt_type` | 영수증 발행 가능 범위 안내 문구 |
+| `business_type` | 판매자 형태 구분 안내 (개인사업자, 법인사업자) |
+| `origin` | 제조국 및 최종 원산지 정보 문구 |
 
-#### 11. cart
+#### 10. cart (장바구니)
 | 컬럼명 | 설명 |
 |---|---|
-| `option_no` | 선택한 상품 옵션, 옵션이 없으면 NULL |
-| `quantity` | 장바구니에 담은 수량 |
-| `update_date` | 수량을 수정한 가장 최근 시간 |
+| `cart_no` | 장바구니 PK |
+| `member_no` | 장바구니에 상품을 담은 주체인 회원 번호 (FK) |
+| `product_no` | 장바구니에 담긴 원본 상품 번호 (FK) |
+| `option_signature`| 선택한 다중 옵션 번호 조합을 정렬 후 쉼표로 결합한 고유식별문자열 (중복 적재 방지용 내부 연산 필드) |
+| `quantity` | 장바구니에 담은 희망 상품 수량 |
+| `reg_date` | 장바구니 최초 적재 시각 |
 
-#### 12. orders
+#### 11. cart_option (장바구니 선택 옵션)
 | 컬럼명 | 설명 |
 |---|---|
-| `order_code` | 사용자에게 보여주는 주문번호 |
-| `orderer_name` | 주문 당시 주문자 이름 |
-| `orderer_hp` | 주문 당시 주문자 연락처 |
-| `total_price` | 상품 가격 합계 |
-| `discount_price` | 상품 자체 할인 금액 합계 |
-| `coupon_discount` | 쿠폰으로 할인된 금액 |
-| `point_use` | 주문 시 사용한 포인트 |
-| `point_save` | 주문 완료 후 적립될 포인트 |
-| `pay_price` | 실제 최종 결제 금액 |
-| `payment_method` | 신용카드, 계좌이체, 무통장입금, 카카오페이 등 |
-| `payment_status` | 결제대기, 결제완료, 결제취소, 환불완료 상태 |
-| `paid_date` | 결제가 완료된 시간 |
-| `cancel_date` | 결제 취소 또는 환불 처리 시간 |
-| `order_status` | 주문 전체의 대표 상태 |
+| `cart_no` | 선택 옵션이 묶이는 부모 장바구니 번호 (FK) |
+| `option_no` | 회원이 장바구니에 담을 때 명시한 개별 상품 옵션 번호 (FK) |
 
-#### 13. delivery
+#### 12. orders (주문)
 | 컬럼명 | 설명 |
 |---|---|
-| `seller_no` | 판매자별 배송 처리를 위한 판매자 번호 |
-| `courier` | 택배사명 |
-| `invoice_no` | 송장번호 |
-| `delivery_status` | 배송준비, 배송중, 배송완료 등 현재 상태 |
-| `ready_date` | 배송준비 상태가 된 시간 |
-| `shipped_date` | 배송이 시작된 시간 |
-| `delivered_date` | 배송완료 처리 시간 |
-| `memo` | 배송 요청사항 |
+| `order_no` | 주문 PK (시스템 관리용 고유 내부 번호) |
+| `order_code` | 외부 및 사용자단 영수증에 출력 표기할 노출용 유니크 주문 번호 |
+| `member_no` | 주문 결제를 수행한 구매 주체 회원 번호 (FK) |
+| `orderer_name` | 결제 당시 기입한 주문자 성명 |
+| `orderer_hp` | 결제 당시 기입한 주문자 연락처 휴대폰 번호 |
+| `total_price` | 주문에 포함된 모든 상품들의 순수 정가 금액 총합계 |
+| `discount_price` | 상품 자체 할인율 정책으로 차감된 금액의 총합계 |
+| `coupon_discount`| 회원이 사용 적용한 쿠폰 혜택으로 할인된 총 누적 차감 금액 |
+| `delivery_fee` | 주문 전체 건에 매겨진 실질 배송비 부과 비용 합계 |
+| `point_use` | 주문 결제 시 차감 차용한 회원의 포인트 사용량 |
+| `point_save` | 주문 결제 확정 후 향후 적립 지급 대기 예정인 포인트 총액 |
+| `pay_price` | 최종 PG 결제창에 연동되어 실제로 회원이 지불한 실결제 금액 |
+| `payment_method` | 결제 수단 종류 (신용카드, 계좌이체, 무통장입금, 카카오페이 등) |
+| `payment_status` | 결제 재무 상태 정보 제어 코드 (결제대기, 결제완료, 결제취소, 환불완료) |
+| `paid_date` | PG사 승인 처리가 완결되어 입금이 확정된 시간 |
+| `cancel_date` | 결제 취소 또는 전액 환불 처리가 완료된 시간 |
+| `order_status` | 주문 마스터 트랜잭션 전체를 대표하는 현재 프로세스 흐름 상태 |
+| `order_date` | 최초 주문서 인스턴스 생성 일시 |
 
-#### 14. order_item
+#### 13. delivery (배송)
 | 컬럼명 | 설명 |
 |---|---|
-| `delivery_no` | 판매자별 배송 정보와 연결되는 번호 |
-| `option_name` | 주문 당시의 옵션명 |
-| `option_value` | 주문 당시의 옵션값 |
-| `product_name` | 주문 당시 상품명 스냅샷 |
-| `product_image` | 주문 당시 상품 썸네일 경로 |
-| `price` | 주문 당시 상품 정가 |
-| `discount_rate` | 주문 당시 할인율 |
-| `total_price` | 해당 주문상품의 최종 금액 |
-| `item_status` | 주문상품 단위 상태 |
+| `delivery_no` | 배송 PK |
+| `order_no` | 배송 정보가 종속된 결제 주문 번호 (FK) |
+| `seller_no` | 해당 택배 출고 배송 건을 직접 책임 처리하는 입점 판매자 번호 (FK) |
+| `receiver_name` | 배송지 목적지 수령인 성명 |
+| `receiver_hp` | 수령인 비상 연락처 |
+| `zip` | 수령 주소지 우편번호 |
+| `addr1` | 수령 주소지 기본 주소 |
+| `addr2` | 수령 주소지 상세 주소 명시 |
+| `courier` | 배송 담당 택배사 명칭 (ex: CJ대한통운, 한진택배) |
+| `invoice_no` | 출고 시 입력 매킹 완료된 화물 운송장번호 |
+| `delivery_fee` | 해당 판매자가 배송을 보내기 위해 책정한 개별 물류 배송비 비용 |
+| `delivery_status`| 실제 물류 처리 상태 (배송준비, 배송중, 배송완료) |
+| `memo` | 배송 기사님께 남기는 전달 현장 요청 메시지 |
+| `receipt_date` | 배송 접수 및 송장 발행일시 |
+| `shipped_date` | 집하가 완료되어 터미널 배송이 시작된 최초 출발 시간 |
+| `delivered_date` | 최종 배송원 배송 완료 처리 시각 |
 
-#### 15. order_claim
+#### 14. order_item (주문 상품 상세)
 | 컬럼명 | 설명 |
 |---|---|
-| `claim_type` | 반품 또는 교환 구분 |
-| `claim_reason` | 단순변심, 불량, 오배송 등 선택 사유 |
-| `detail_reason` | 사용자가 작성한 상세 사유 |
-| `status` | 신청, 승인, 반려, 수거중, 완료 상태 |
-| `process_date` | 최종 처리 완료 시간 |
+| `order_item_no` | 주문상품 PK |
+| `order_no` | 주문상품 항목들이 속해있는 부모 주문 번호 (FK) |
+| `delivery_no` | 해당 단일 상품이 합포장 출고 처리된 타겟 배송 번호 (FK, 미출고 시 NULL) |
+| `product_no` | 근간이 되는 원본 상품 번호 (FK) |
+| `seller_no` | 주문 결제 시점 당시의 공급 판매자 번호 (FK) |
+| `product_name` | 주문 결제 시점 당시 원본 상품에서 복사 아카이빙해온 상품명 스냅샷 |
+| `product_image` | 주문 결제 시점 당시 원본 상품의 메인 대표 썸네일 이미지 경로 스냅샷 |
+| `price` | 주문 결제 시점 당시 변경 전 상품 단일 원본 정가 스냅샷 |
+| `discount_rate` | 주문 결제 시점 당시 원본 상품의 단일 할인율 수치 스냅샷 |
+| `coupon_discount`| 해당 개별 상품 품목 단독에 직접적으로 매킹 적용된 쿠폰 차감 할인액 |
+| `point` | 해당 개별 상품 구매 확정 시 최종 누적 합산될 적립용 보상 포인트 피드값 |
+| `quantity` | 해당 단일 상품 품목의 실제 구매 수량 |
+| `total_price` | 수량과 할인을 정밀 가산하여 결정된 해당 주문 상품의 최종 정산 단가 총합액 |
+| `item_status` | 개별 상품 단위 독립 클레임 추적 상태값 (주문완료, 구매확정, 취소, 반품, 교환) |
+| `purchase_confirm_date`| 사용자가 직접 구매확정 버튼을 누르거나 자동 적치 완료되어 확정된 최종 시각 |
 
-#### 16. claim_file
+#### 15. order_item_option (주문상품 선택 옵션)
 | 컬럼명 | 설명 |
 |---|---|
-| `ori_name` | 사용자가 업로드한 원본 파일명 |
-| `new_name` | 서버에 저장될 때 변경한 파일명 |
-| `claim_no` | 해당 반품 또는 교환 신청 번호 |
+| `order_item_option_no`| 주문상품 선택 옵션 PK |
+| `order_item_no` | 사용자가 선택 복사해온 기준 타겟 주문상품 번호 (FK) |
+| `option_group_no`| 색상, 사이즈 등 복사 시점의 옵션 성격 대분류 인덱스 코드 |
+| `option_name` | 결제 시점의 옵션 종류 명칭 (ex: "색상") |
+| `option_value` | 결제 시점의 구체적 옵션 선택값 명칭 (ex: "화이트") |
 
-#### 17. product_review
+#### 16. order_claim (반품 / 교환 신청)
 | 컬럼명 | 설명 |
 |---|---|
-| `order_item_no` | 구매한 주문상품 번호, 한 주문상품당 리뷰 1개 제한 |
-| `rating` | 1점부터 5점까지의 상품 평점 |
-| `content` | 리뷰 본문 |
+| `claim_no` | 반품 또는 교환 신청 마스터 PK |
+| `order_item_no` | 클레임 철회 혹은 처리가 발생한 대상 단일 주문상품 번호 (FK) |
+| `member_no` | 환불/교환 접수를 발의한 주체 회원 번호 (FK) |
+| `claim_type` | 클레임 성격 분류 코드 (RETURN: 반품/환불, EXCHANGE: 사이즈/색상 교환) |
+| `claim_reason` | 드롭다운 선택형 정형화 사유 요약 (단순변심, 상품불량, 오배송 등) |
+| `detail_reason` | 소비자가 텍스트 영역에 직접 서술 타이핑한 구체적 명세 사유 내용 |
+| `status` | 클레임 접수 처리 워크플로우 제어 (신청, 승인, 반려, 수거중, 완료) |
+| `request_date` | 클레임 최초 인스턴스 인입 접수 시각 |
+| `process_date` | 판매자 혹은 시스템 총괄자가 승인/반려/완료 판정을 내려 완결 지은 시각 |
 
-#### 18. review_image
+#### 17. claim_file (반품 / 교환 첨부파일)
 | 컬럼명 | 설명 |
 |---|---|
-| `image_path` | 서버에 저장된 리뷰 첨부 이미지 경로 |
-| `sort_order` | 리뷰 이미지 노출 순서 |
+| `claim_file_no` | 반품 또는 교환 입증용 첨부파일 PK |
+| `claim_no` | 증빙 파일 서류들이 종속 바인딩된 대상 클레임 신청 번호 (FK) |
+| `ori_name` | 사용자 로컬 PC 기준 업로드 원본 파일명 명칭 |
+| `new_name` | 서버 내부 난수화 암호 가공 처리된 난수 변경 파일명 명칭 |
+| `reg_date` | 파일 물리 스토리지 업로드 완료 시각 |
 
-#### 19. member_point
+#### 18. product_review (상품 리뷰)
 | 컬럼명 | 설명 |
 |---|---|
-| `order_no` | 주문으로 발생한 포인트일 때 연결되는 주문번호 |
-| `point_type` | 적립, 사용, 차감, 환불 구분 |
-| `point_value` | 변동된 포인트 수치 |
-| `balance_point` | 변동 후 남은 포인트 |
-| `reason` | 포인트 지급·차감 이유 |
-| `expire_date` | 포인트 만료일 |
+| `review_no` | 상품 리뷰 PK |
+| `order_item_no` | 리뷰 대상 타겟 주문상품 번호 (FK, 데이터 정합성 보장 1:1 영수증 UNIQUE) |
+| `member_no` | 리뷰 문서를 직접 서술 기입한 작성자 회원 번호 (FK) |
+| `product_no` | 후기 통계 누적 노출 대상이 되는 원본 상품 마스터 번호 (FK) |
+| `rating` | 만족도 스코어 부여 점수 수치 (1점 최저부터 5점 만점 기준 별점) |
+| `content` | 리뷰 본문 텍스트 텍스트 내용 |
+| `reg_date` | 리뷰 작성 및 전송 완료 시각 |
 
-#### 20. coupon
+#### 19. review_image (리뷰 이미지)
 | 컬럼명 | 설명 |
 |---|---|
-| `seller_no` | NULL이면 관리자가 발급한 공통 쿠폰 |
-| `coupon_type` | 개별상품할인, 주문상품할인, 배송비무료 구분 |
-| `benefit_type` | 금액할인, 비율할인, 무료배송 구분 |
-| `benefit_value` | 할인 금액 또는 할인율 |
-| `min_order_price` | 쿠폰 사용이 가능한 최소 주문 금액 |
-| `max_discount_price` | 비율 할인 시 최대 할인 가능 금액 |
-| `issue_limit` | 발급 가능한 최대 수량, NULL이면 제한 없음 |
-| `caution` | 쿠폰 사용 유의사항 |
+| `review_image_no`| 리뷰 이미지 첨부파일 PK |
+| `review_no` | 이미지가 포함 결합되어 노출될 대상 부모 리뷰 번호 (FK) |
+| `image_path` | 이미지 파일 서버 물리 저장 상대 경로 |
+| `sort_order` | 포토 후기 멀티 노출 시 가로 출력 순서 |
 
-#### 21. coupon_issue
+#### 20. member_point (회원 포인트 이력)
 | 컬럼명 | 설명 |
 |---|---|
-| `issue_code` | 회원별로 발급된 개별 쿠폰 식별번호 |
-| `order_no` | 쿠폰을 사용한 주문번호 |
-| `status` | 발급, 사용, 만료, 종료 상태 |
-| `used_date` | 쿠폰 사용 시간 |
-| `issue_date` | 쿠폰 발급 시간 |
+| `point_no` | 포인트 이력 원장 PK |
+| `member_no` | 포인트 증감 변동 파이프라인 대상 타겟 회원 번호 (FK) |
+| `order_no` | 쇼핑몰 물건 구매로 파생 및 소모 연동된 경우 연결 지을 결제 주문 번호 (FK, 일반 지급 시 NULL) |
+| `point_type` | 변동 가산 구분 식별자 코드 (적립, 사용, 차감, 환불) |
+| `point_value` | 이번 트랜잭션 건으로 실질 변동 가감 처리되는 포인트 가치량 수치 |
+| `balance_point` | 해당 변동 처리가 완결 반영된 직후 시점의 정밀 잔여 최종 스냅샷 포인트 총합 |
+| `reason` | 적립/소모 사유 표기 문구 (회원가입 축하, 상품 구매확정 적립, 결제 사용 차감 등) |
+| `expire_date` | 적립 포인트 정책에 따른 해당 포인트의 자연 소멸 예정 마감 기한일 |
+| `reg_date` | 포인트 이력 트랜잭션 기록 반영 시각 |
 
-#### 22. banner
+#### 21. coupon (쿠폰)
 | 컬럼명 | 설명 |
 |---|---|
-| `banner_size` | 배너 권장 가로·세로 크기 |
-| `bg_color` | 배너 배경색 값 |
-| `link_url` | 배너 클릭 시 이동할 주소 |
-| `banner_position` | MAIN1, PRODUCT1, MEMBER1, MY1 등 노출 위치 |
-| `image_path` | 서버에 저장된 배너 이미지 경로 |
-| `sort_order` | 같은 위치에서 배너가 출력되는 순서 |
-| `start_datetime` | 배너 노출 시작일시 |
-| `end_datetime` | 배너 노출 종료일시 |
-| `use_yn` | Y면 노출, N이면 숨김 |
+| `coupon_no` | 쿠폰 마스터 정보 PK |
+| `coupon_code` | 프로모션 난수화 입력 식별 코드 및 쿠폰 마스터 번호 (UNIQUE) |
+| `seller_no` | 쿠폰 발행 주체인 입점 판매자 번호 (전체 공통 및 본사 쿠폰일 시 NULL) |
+| `coupon_type` | 쿠폰 적용 가능 대상 바운더리 구분 스코프 (개별상품할인, 주문상품할인, 배송비무료) |
+| `coupon_name` | 고객이 다운로드 화면에서 확인할 쿠폰 정식 명칭 |
+| `benefit_type` | 혜택 가산 연산 산식 종류 구분 식별자 (금액할인, 비율할인, 무료배송) |
+| `benefit_value` | 실제 깎아줄 할인 절대 금액 혹은 정밀 할인율 비율 수치 |
+| `min_order_price`| 쿠폰을 장바구니에 먹이기 위해 충족해야 할 최소 결제 주문 하한선 금액 |
+| `max_discount_price`| 비율할인형 쿠폰 조건 충족 시 최대로 방어 차단할 커트라인 한도 할인 금액 |
+| `issue_limit` | 총 마스터 쿠폰 풀에서 최대로 발행 허용 가능한 수량 제한값 (제한 없을 시 NULL) |
+| `start_date` | 쿠폰의 동적 활성화 사용 시작 가능 기준일 |
+| `end_date` | 쿠폰이 소멸하는 최종 사용 유효 기한 마감일 |
+| `caution` | 쿠폰 하단에 기재될 사용 조건 예외 처리 유의사항 안내문 |
+| `status` | 쿠폰 자체의 발급 가능 운영 상태 정보 (사용, 종료) |
+| `reg_date` | 관리자가 쿠폰 마스터 풀을 최초 개설 등록한 시각 |
 
-#### 23. cs_category
+#### 22. coupon_product (쿠폰 적용 상품)
 | 컬럼명 | 설명 |
 |---|---|
-| `parent_no` | 2차 카테고리일 경우 상위 1차 카테고리 번호 |
-| `board_type` | COMMON, FAQ, QNA 중 적용 범위 |
-| `depth` | 1차 또는 2차 카테고리 구분 |
-| `sort_order` | 고객센터 메뉴 노출 순서 |
-| `use_yn` | 카테고리 사용 여부 |
+| `coupon_no` | 발급 범위가 '개별상품할인'인 타겟 원본 쿠폰 번호 (FK) |
+| `product_no` | 해당 전용 쿠폰으로 할인을 받을 수 있게 매핑 바인딩 처리한 타겟 상품 번호 (FK) |
 
-#### 24. notice
+#### 23. coupon_issue (회원 쿠폰 발급 이력)
 | 컬럼명 | 설명 |
 |---|---|
-| `writer_no` | 공지사항을 작성한 관리자 회원번호 |
-| `notice_type` | 일반공지, 이벤트공지, 점검공지 등 공지 유형 |
-| `hit` | 공지사항 조회수 |
+| `issue_no` | 회원 쿠폰 발급 이력 PK |
+| `issue_code` | 회원 지갑 내부의 개별 고유 낱개 발행 쿠폰 일련 식별 일련번호 (UNIQUE) |
+| `coupon_no` | 모태가 되는 부모 원본 쿠폰 마스터 번호 (FK) |
+| `member_no` | 쿠폰을 다운로드하여 보유 중인 실제 회원 번호 (FK) |
+| `order_no` | 이미 사용 완료한 쿠폰인 경우 적용되어 태워진 결제 주문 번호 (FK, 미사용 시 NULL) |
+| `status` | 회원이 지닌 개별 쿠폰 인스턴스 현재 상태 (발급, 사용, 만료, 종료) |
+| `used_date` | 결제창에서 실질적으로 쿠폰 소모 처리를 완결 지은 시각 |
+| `issue_date` | 사용자가 다운로드 버튼을 눌러 보관함에 쿠폰을 수령 적치한 시각 |
 
-#### 25. faq
+#### 24. banner (배너)
 | 컬럼명 | 설명 |
 |---|---|
-| `cs_cate_no` | FAQ가 속하는 고객센터 카테고리 번호 |
-| `writer_no` | FAQ를 작성한 관리자 회원번호 |
-| `hit` | FAQ 조회수 |
+| `banner_no` | 전시 배너 PK |
+| `banner_name` | 관리 시스템 식별 및 통계용 배너 내부 관리 명칭 |
+| `banner_size` | 프론트 가이드라인 권장 가로x세로 해상도 크기 정보 스펙 |
+| `bg_color` | 풀와이드 배너의 경우 양측을 채울 CSS 헥사 배경색 코드값 |
+| `link_url` | 배너 이미지 클릭 시 랜딩 이동할 아웃바운드/인바운드 목적지 주소 |
+| `banner_position`| 템플릿 영역 렌더링 노출 레이아웃 위치값 코드 (MAIN1, PRODUCT1, MEMBER1, MY1) |
+| `image_path` | 배너 에셋 이미지 보관 물리 저장 파일 경로 |
+| `sort_order` | 슬라이더 등 동일 영역 복수 배너 순환 노출 시 가중치 출력 순서 |
+| `start_datetime` | 배너 마케팅 노출 개시 자동 타이머 시작 일시 |
+| `end_datetime` | 배너 노출 자동 오프 타이머 마감 일시 |
+| `use_yn` | 시스템 노출 강제 토글 플래그 (Y: 노출, N: 숨김) |
+| `reg_date` | 배너 최초 등록 시각 |
 
-#### 26. qna
+#### 25. cs_category (고객센터 카테고리)
 | 컬럼명 | 설명 |
 |---|---|
-| `member_no` | 문의를 작성한 회원 번호 |
-| `order_no` | 주문 관련 문의일 때 연결되는 주문번호 |
-| `cs_cate_no` | 문의가 속하는 고객센터 카테고리 번호 |
-| `answer` | 관리자 답변 내용 |
-| `answer_member_no` | 답변을 작성한 관리자 회원번호 |
-| `status` | 검토중 또는 답변완료 상태 |
-| `answer_date` | 답변이 등록된 시간 |
+| `cs_cate_no` | 고객센터 대분류/소분류 분류 체계 PK |
+| `parent_no` | 계층형 구조용 상위 고객센터 카테고리 코드 (1차 메뉴 시 NULL) |
+| `cate_name` | 고객이 분류 탭에서 마주할 직관적인 메뉴 명칭 (회원, 주문/결제, 배송, 반품/환불 등) |
+| `depth` | 고객센터 메뉴 차수 깊이 (1: 대분류 탭, 2: 세부 속성 분류 소분류) |
+| `sort_order` | 고객센터 메인 화면의 메뉴 탭 좌측 출력 및 정렬 배열 순서 |
+| `use_yn` | 해당 상담 및 고시 분류 카테고리 운영 가동 여부 (Y/N) |
 
-#### 27. recruit
+#### 26. notice (공지사항)
 | 컬럼명 | 설명 |
 |---|---|
-| `writer_no` | 채용공고를 작성한 관리자 회원번호 |
-| `department` | 모집 부서 |
-| `career` | 신입, 경력 등 지원 경력 조건 |
-| `recruit_type` | 정규직, 계약직, 인턴 등 고용형태 |
-| `start_date` | 모집 시작일 |
-| `end_date` | 모집 마감일 |
-| `note` | 채용 공고 상세 내용 |
-| `status` | 모집중 또는 마감 상태 |
+| `notice_no` | 공지사항 게시글 PK |
+| `writer_no` | 공지를 기안 작성한 관리 권한을 지닌 마스터 회원 번호 (FK) |
+| `notice_type` | 공지사항 성격 분류 태그 속성값 (일반공지, 이벤트공지, 점검공지) |
+| `title` | 공지사항 게시글 제목 |
+| `content` | 공지사항 상세 안내 본문 텍스트 내역 |
+| `hit` | 게시글 단독 누적 단순 조회 뷰 카운트 수치 |
+| `reg_date` | 공지사항 초안 작성 및 최초 발행 시각 |
+| `update_date` | 공지 내용에 오타 등이 있어 관리자가 재수정한 최종 갱신 시각 |
 
-#### 28. site_setting
+#### 27. faq (자주 묻는 질문)
 | 컬럼명 | 설명 |
 |---|---|
-| `setting_key` | site_name, company_tel처럼 설정을 구분하는 키 |
-| `setting_value` | 키에 대응하는 실제 설정값 |
-| `update_date` | 마지막 수정 시간 |
+| `faq_no` | FAQ 게시글 PK |
+| `cs_cate_no` | FAQ 게시글이 포지셔닝될 최종 타겟 고객센터 상담 분류 번호 (FK) |
+| `writer_no` | FAQ 명세를 작성 기입한 시스템 운영 관리자 회원 번호 (FK) |
+| `title` | 빈번하게 발생하는 요약 질문 형태의 타이틀 제목 |
+| `content` | 질문에 대해 완결형으로 서술해둔 정형화된 정답 및 답변 안내 본문 |
+| `hit` | FAQ 문서 단순 누적 조회수 |
+| `reg_date` | FAQ 최초 작성 보관 등록 시각 |
+| `update_date` | FAQ 최신 정책 변경으로 내용 문구를 마지막으로 가공 수정한 시각 |
 
-#### 29. company_content
+#### 28. qna (1:1 문의)
 | 컬럼명 | 설명 |
 |---|---|
-| `content_type` | INTRO, CULTURE, STORY, MEDIA 콘텐츠 구분 |
-| `image_path` | 콘텐츠 대표 이미지 경로 |
-| `video_url` | 유튜브 등 외부 영상 링크 |
-| `category_name` | 소식 또는 미디어의 세부 분류명 |
-| `use_yn` | 화면 노출 여부 |
-| `reg_date` | 최신글 5개 조회 시 기준이 되는 등록일 |
+| `qna_no` | 1:1 민원 문의 신청 PK |
+| `member_no` | 질문 민원을 접수 인입시킨 작성 사용자 회원 번호 (FK) |
+| `cs_cate_no` | 문의할 영역으로 사용자가 선택 지정한 상담 분류 속성 코드 (FK) |
+| `title` | 고객 문의 제목 |
+| `content` | 고객 문의 세부 텍스트 서술 본문 내용 |
+| `answer` | 고객센터 전담 상담사 혹은 관리자가 검토 후 하단에 달아준 공식 답변 내용 |
+| `answer_member_no`| 실제 답변 데이터 입력 처리를 수행한 담당 관리자 회원 번호 (FK, 미답변 시 NULL) |
+| `status` | 민원 처리 대응 내부 파이프라인 지표 제어 코드 (검토중, 답변완료) |
+| `reg_date` | 사용자가 문의하기 완료 버튼을 누른 최초 접수 시각 |
+| `answer_date` | 관리자가 답변을 최종 작성 등록 완료하여 고객에게 알림이 전출된 시각 |
 
-#### 30. app_version
+#### 29. recruit (채용 공고)
 | 컬럼명 | 설명 |
 |---|---|
-| `version_name` | v1.0.0 같은 버전명 |
-| `writer_no` | 버전 정보를 등록한 관리자 회원번호 |
-| `change_log` | 해당 버전에서 추가·수정된 내용 |
+| `recruit_no` | 채용 공고 마스터 PK |
+| `writer_no` | 인사 직무 채용 공고를 게시 등록한 사내 담당 관리자 회원 번호 (FK) |
+| `title` | 채용 공고 포스팅 제목 |
+| `department` | 신규 충원 및 포지션이 발생하는 사내 소속 모집 부서 명칭 |
+| `career` | 채용 자격 요건 요구 경력 조건 필터값 명칭 (신입, 경력, 경력무관) |
+| `recruit_type` | 근로 계약 고용 형태 구분값 명칭 (정규직, 계약직, 인턴) |
+| `start_date` | 채용 전형 서류 접수 자동 개시 시작일 |
+| `end_date` | 채용 공고 서류 접수 자동 셧다운 마감일 |
+| `note` | 직무 기술서(JD), 전형 절차, 우대 사항 등 채용 공고 세부 안내 본문 내용 |
+| `status` | 현재 전형의 모니터링 노출 상태 (모집중, 마감) |
+| `reg_date` | 채용 공고 포스팅 생성 일시 |
+
+#### 30. site_setting (사이트 기본 설정)
+| 컬럼명 | 설명 |
+|---|---|
+| `setting_no` | 사이트 환경설정 고유 엔티티 PK |
+| `setting_key` | 설정의 역할을 구분짓는 네임스페이스 상수형 룩업 유니크 키 (ex: 'site_name', 'company_tel') |
+| `setting_value` | 키에 매칭되어 동적으로 프론트 전역에 뿌려질 세부 셋팅 텍스트/HTML 실제값 값 |
+| `update_date` | 설정 데이터를 마지막으로 변경 저장한 시각 |
+
+#### 31. company_content (회사 소개 콘텐츠)
+| 컬럼명 | 설명 |
+|---|---|
+| `content_no` | 회사 브랜드 아카이브 콘텐츠 PK |
+| `content_type` | 기업 콘텐츠 노출 섹션 도메인 속성 구분자 (INTRO: 회사소개, CULTURE: 기업문화, STORY: 성장스토리, MEDIA: 언론보도) |
+| `title` | 보도자료 및 홍보 포스팅 타이틀 제목 |
+| `content` | 롱폼 형태의 홍보 브랜딩 본문 상세 내용 |
+| `image_path` | 홍보 그리드 및 본문에 렌더링될 대표 배너 이미지 파일 저장 경로 |
+| `video_url` | 유튜브, 비메오 등 외부 미디어 스트리밍 공유 링크 URL 주소 |
+| `category_name` | 소식과 이야기 혹은 뉴스 미디어 내부의 미세 세부 서브 분류 명칭 |
+| `use_yn` | 홍보 게시물 프론트 전역 아카이브 노출 활성화 여부 (Y/N) |
+| `reg_date` | 기업 홍보 아카이브 포스팅 최초 작성 일시 (최신 뉴스 5개 렌더링 연산 기준 정렬값) |
+
+#### 32. app_version (버전 관리)
+| 컬럼명 | 설명 |
+|---|---|
+| `version_no` | 소프트웨어 버전 제어 인덱스 PK |
+| `version_name` | 배포 및 업데이트 명시 규격화 버전명 명칭 (ex: "v1.0.0", "v1.2.4") |
+| `writer_no` | 릴리즈 노트를 전산 등록한 전담 시스템 백엔드 개발자/관리자 회원 번호 (FK) |
+| `change_log` | 이번 패치 배포에서 신규 추가/버그 수정/기능 개선 완결된 상세 명세 체인지로그 텍스트 |
+| `reg_date` | 소프트웨어 버전 릴리즈 전산 배포 등록 완료 시각 |
+
+#### 33. visit_daily (방문자수 관리)
+| 컬럼명 | 설명 |
+|---|---|
+| `visit_date` | 비즈니스 일자 달력 기준 방문 날짜 (PK, DATE 형식 연-월-일) |
+| `visit_count` | 해당 하루 동안 쇼핑몰 전역에 접속 트래픽을 일으킨 유니크 총 방문자 수 수치 카운터 |
 </details>
 
 ---

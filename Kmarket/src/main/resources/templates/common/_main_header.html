@@ -1,7 +1,22 @@
 <!-- Top ad banner -->
-<div class="top-bar">
+<!-- DB 배너가 있을 때 -->
+<div class="top-bar"
+     th:if="${topBanner != null}"
+     th:style="${topBanner.bgColor != null ? 'background-color:' + topBanner.bgColor : ''}">
+
+    <a th:href="${topBanner.linkUrl != null ? topBanner.linkUrl : '#'}"
+       class="top-ad">
+
+        <img th:src="${topBanner.imagePath}"
+             th:alt="${topBanner.bannerName}" />
+    </a>
+</div>
+
+<!-- DB 배너가 없을 때 임시 기본 이미지 -->
+<div class="top-bar" th:unless="${topBanner != null}">
     <a href="#" class="top-ad">
-        <img src="./images/main/vip_plcc_banner.png" alt="Kmarket 최상단 광고 배너" />
+        <img src="/images/main/vip_plcc_banner.png"
+             alt="Kmarket 최상단 광고 배너" />
     </a>
 </div>
 

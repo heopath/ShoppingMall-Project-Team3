@@ -9,6 +9,8 @@ import java.util.List;
 public interface BannerDAO {
     int insertBanner(BannerDTO bannerDTO);
     BannerDTO selectBanner(Integer bannerNo);
+    BannerDTO selectTopBanner();
+    List<BannerDTO> selectMain2Banners();
     List<BannerDTO> selectBannerList();
     int updateBanner(BannerDTO bannerDTO);
     int deleteBanner(Integer bannerNo);
