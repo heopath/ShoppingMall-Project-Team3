@@ -83,7 +83,7 @@ main
 ---
 
 <details>
-<summary><b> 2️⃣ 테이블 생성 SQL (DDL)</b></summary>
+<summary><b> 📊 테이블 생성 SQL (DDL)</b></summary>
 
 ```sql
 CREATE DATABASE IF NOT EXISTS kmarket;
