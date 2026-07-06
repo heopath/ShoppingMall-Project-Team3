@@ -1,6 +1,7 @@
 package kr.co.springkmarketapp.controller.admin;
 
 import kr.co.springkmarketapp.dto.member.MemberDTO;
+import kr.co.springkmarketapp.dto.my.MemberPointDTO;
 import kr.co.springkmarketapp.service.member.MemberService;
 import kr.co.springkmarketapp.service.my.MemberPointService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 @Controller
 @RequiredArgsConstructor
@@ -98,16 +101,89 @@ public class AdminMemberController {
         return ResponseEntity.ok().build();
     }
 
+    // AJAX 전용: 선택 회원 일괄 수정
+    @PostMapping("/admin/member/bulk-update")
+    @ResponseBody
+    public ResponseEntity<Void> bulkUpdateMember(@RequestParam List<Integer> memberNoList,
+                                                 @RequestParam(required = false) String grade,
+                                                 @RequestParam(required = false) String status) {
+
+        boolean hasGrade = grade != null && !grade.isBlank();
+        boolean hasStatus = status != null && !status.isBlank();
+
+        if (memberNoList == null || memberNoList.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (!hasGrade && !hasStatus) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        memberService.updateMemberBulk(memberNoList, grade, status);
+
+        return ResponseEntity.ok().build();
+    }
+
+
     @PostMapping("/admin/member/delete")
     public String delete(@RequestParam Integer memberNo) {
         memberService.deleteMember(memberNo);
         return "redirect:/admin/member/list";
     }
-
     @GetMapping("/admin/member/point")
-    public String point(Model model) {
-        model.addAttribute("pointList", memberPointService.selectMemberPointList());
-        model.addAttribute("memberList", memberService.selectMemberList());
+    public String point(@RequestParam(defaultValue = "1") int page,
+                        @RequestParam(required = false) String searchType,
+                        @RequestParam(required = false) String keyword,
+                        Model model) {
+
+        int pageSize = 10;
+        int pageBlock = 5;
+
+        boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
+        String trimmedKeyword = hasKeyword ? keyword.trim() : null;
+
+        int totalCount = hasKeyword
+            ? memberPointService.countMemberPointList(searchType, trimmedKeyword)
+            : memberPointService.countMemberPointList();
+
+        int totalPages = Math.max(1, (int) Math.ceil((double) totalCount / pageSize));
+        int currentPage = Math.min(Math.max(page, 1), totalPages);
+        int offset = (currentPage - 1) * pageSize;
+
+        List<MemberPointDTO> pointList = hasKeyword
+            ? memberPointService.selectMemberPointList(searchType, trimmedKeyword, offset, pageSize)
+            : memberPointService.selectMemberPointList(offset, pageSize);
+
+        int startPage = ((currentPage - 1) / pageBlock) * pageBlock + 1;
+        int endPage = Math.min(startPage + pageBlock - 1, totalPages);
+
+        model.addAttribute("pointList", pointList);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("keyword", keyword);
+
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("hasPrevPage", currentPage > 1);
+        model.addAttribute("hasNextPage", currentPage < totalPages);
+        model.addAttribute("totalCount", totalCount);
+
         return "admin/member/point";
     }
+
+    @PostMapping("/admin/member/point/revoke")
+    @ResponseBody
+    public ResponseEntity<Void> revokeSelectedPoint(@RequestParam List<Integer> pointNoList) {
+
+        if (pointNoList == null || pointNoList.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        memberPointService.revokeSelectedPoint(pointNoList);
+
+        return ResponseEntity.ok().build();
+    }
+
+
 }

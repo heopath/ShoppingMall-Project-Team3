@@ -57,6 +57,11 @@ public class MemberService {
         return memberDAO.updateMember(memberDTO);
     }
 
+    public int updateMemberBulk(List<Integer> memberNoList, String grade, String status) {
+        return memberDAO.updateMemberBulk(memberNoList, grade, status);
+    }
+
+
     public int deleteMember(Integer memberNo) {
         return memberDAO.deleteMember(memberNo);
     }

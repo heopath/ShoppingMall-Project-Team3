@@ -376,3 +376,13 @@ button.action-link {
     color: #333;
     resize: vertical;
 }
+
+.bulk-guide {
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: #333;
+}
+
+.bulk-guide strong {
+    color: #31aa00;
+}

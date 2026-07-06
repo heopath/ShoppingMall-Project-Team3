@@ -21,4 +21,9 @@ public class MemberPointDTO {
     private String reason;
     private LocalDate expireDate;
     private LocalDateTime regDate;
+
+    // 포인트관리 화면 출력용
+    private String memberId;
+    private String name;
+    private String revokedYn;
 }
