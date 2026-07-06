@@ -807,3 +807,61 @@ footer {
         width: 100%;
     }
 }
+
+/* 2차 GNB */
+.category-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:13px 16px;
+    border-bottom:1px solid var(--line);
+    font-size:14px;
+    transition:.2s;
+}
+
+.category-title:hover{
+    background:#f3fbf6;
+    color:var(--green);
+}
+
+.arrow{
+    font-size:18px;
+    font-weight:bold;
+    color:#999;
+    transition:.3s;
+}
+
+.sub-category{
+    display:none;
+    background:#fafafa;
+}
+
+.sub-category li a{
+    display:block;
+    padding:10px 20px 10px 42px;
+    font-size:13px;
+    color:#666;
+    border-top:1px solid #f0f0f0;
+    transition:.2s;
+}
+
+.sub-category li a:hover{
+    background:#eaf7ef;
+    color:var(--green);
+    padding-left:48px;
+}
+
+.category-item.active .sub-category{
+    display:block;
+}
+
+.category-item.active .arrow{
+    transform:rotate(45deg);
+    color:var(--green);
+}
+
+.category-item.active>.category-title{
+    background:#f3fbf6;
+    color:var(--green);
+    font-weight:bold;
+}
