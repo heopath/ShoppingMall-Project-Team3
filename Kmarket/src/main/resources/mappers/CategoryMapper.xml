@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.springkmarketapp.dao.product.CategoryDAO">
+
+    <!-- 1차 카테고리 -->
+    <select id="selectMainCategories"
+            resultType="kr.co.springkmarketapp.dto.product.CategoryDTO">
+
+        SELECT
+        cate_no    AS cateNo,
+        parent_no  AS parentNo,
+        cate_name  AS cateName,
+        depth,
+        sort_order AS sortOrder,
+        use_yn     AS useYn
+        FROM category
+        WHERE depth = 1
+        AND use_yn = 'Y'
+        ORDER BY sort_order ASC, cate_no ASC
+
+    </select>
+
+    <!-- 2차 카테고리 -->
+    <select id="selectSubCategories"
+            resultType="kr.co.springkmarketapp.dto.product.CategoryDTO">
+
+        SELECT
+        cate_no    AS cateNo,
+        parent_no  AS parentNo,
+        cate_name  AS cateName,
+        depth,
+        sort_order AS sortOrder,
+        use_yn     AS useYn
+        FROM category
+        WHERE depth = 2
+        AND use_yn = 'Y'
+        ORDER BY parent_no ASC, sort_order ASC, cate_no ASC
+
+    </select>
+
+</mapper>

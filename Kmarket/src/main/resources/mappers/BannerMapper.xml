@@ -30,6 +30,60 @@
         WHERE banner_no = #{_parameter}
     </select>
 
+    <!-- 메인 최상단 광고 배너 1개 -->
+    <select id="selectTopBanner"
+            resultType="kr.co.springkmarketapp.dto.admin.BannerDTO">
+
+        SELECT
+        banner_no       AS bannerNo,
+        banner_name     AS bannerName,
+        banner_size     AS bannerSize,
+        bg_color        AS bgColor,
+        link_url        AS linkUrl,
+        banner_position AS bannerPosition,
+        image_path      AS imagePath,
+        sort_order      AS sortOrder,
+        start_datetime  AS startDatetime,
+        end_datetime    AS endDatetime,
+        use_yn          AS useYn,
+        reg_date        AS regDate
+        FROM banner
+        WHERE banner_position = 'TOP'
+        AND use_yn = 'Y'
+        AND (start_datetime IS NULL OR start_datetime &lt;= NOW())
+        AND (end_datetime IS NULL OR end_datetime >= NOW())
+        ORDER BY sort_order ASC, banner_no DESC
+        LIMIT 1
+
+    </select>
+
+    <!-- 메인 비주얼 슬라이더 배너 -->
+    <select id="selectMain2Banners"
+            resultType="kr.co.springkmarketapp.dto.admin.BannerDTO">
+
+        SELECT
+        banner_no       AS bannerNo,
+        banner_name     AS bannerName,
+        banner_size     AS bannerSize,
+        bg_color        AS bgColor,
+        link_url        AS linkUrl,
+        banner_position AS bannerPosition,
+        image_path      AS imagePath,
+        sort_order      AS sortOrder,
+        start_datetime  AS startDatetime,
+        end_datetime    AS endDatetime,
+        use_yn          AS useYn,
+        reg_date        AS regDate
+        FROM banner
+        WHERE banner_position = 'MAIN2'
+        AND use_yn = 'Y'
+        AND (start_datetime IS NULL OR start_datetime &lt;= NOW())
+        AND (end_datetime IS NULL OR end_datetime >= NOW())
+        ORDER BY sort_order ASC, banner_no DESC
+        LIMIT 5
+
+    </select>
+
     <select id="selectBannerList" resultMap="BannerResultMap">
         SELECT *
         FROM banner
