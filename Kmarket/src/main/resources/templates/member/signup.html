@@ -51,10 +51,7 @@
             return;
           }
 
-          alert("약관 동의가 완료되었습니다.");
 
-          // 실제 페이지 이동 시 사용
-          // location.href = "join.html";
         });
       });
     </script>
@@ -81,10 +78,10 @@
       </div>
 
       <nav class="header-links">
-        <a href="#login">로그인</a>
-        <a href="#join">회원가입</a>
-        <a href="#mypage">마이페이지</a>
-        <a href="#cart">🛒 장바구니</a>
+        <a th:href="@{/member/login}">로그인</a>
+        <a th:href="@{/member/join}">회원가입</a>
+        <a th:href="@{/my/home}">마이페이지</a>
+        <a th:href="@{/product/cart}">🛒 장바구니</a>
       </nav>
     </header>
 
@@ -95,7 +92,7 @@
           <p>회원가입을 위해 약관에 동의해주세요.</p>
         </div>
 
-        <form action="#">
+        <form th:action="@{/member/register}" method="get">
           <div class="all-agree-box">
             <label>
               <input type="checkbox" id="all-check" />
@@ -153,7 +150,7 @@
             </div>
           </div>
 
-          <div class="terms-item">
+          <div class="terms-item" th:if="${type=='user'}">
             <label class="terms-title">
               <input type="checkbox" />
               <span class="optional">[선택]</span>

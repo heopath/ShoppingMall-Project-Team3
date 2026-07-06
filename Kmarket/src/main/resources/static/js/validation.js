@@ -5,7 +5,7 @@
 const reUserid   = /^[a-z]+[a-z0-9]{4,19}$/g;
 const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
 const reName  = /^[가-힣]{2,10}$/
-const reNick  = /^[a-zA-Zㄱ-힣0-9][a-zA-Zㄱ-힣0-9]*$/;
+// const reNick  = /^[a-zA-Zㄱ-힣0-9][a-zA-Zㄱ-힣0-9]*$/;
 const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
 
@@ -13,7 +13,7 @@ const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
 let isUseridOk = false;
 let isPassOk = false;
 let isNameOk = false;
-let isNickOk = false;
+// let isNickOk = false;
 let isEmailOk = false;
 let isHpOk = false;
 
@@ -43,11 +43,11 @@ document.addEventListener('DOMContentLoaded', function(){
             return;
         }
 
-        if(!isNickOk){
-            e.preventDefault();
-            alert('별명을 확인하세요.');
-            return;
-        }
+        // if(!isNickOk){
+        //     e.preventDefault();
+        //     alert('별명을 확인하세요.');
+        //     return;
+        // }
 
         if(!isEmailOk){
             e.preventDefault();
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function(){
     btnUserid.addEventListener('click', async function(e){
         e.preventDefault();
 
-        const value = form.userid.value;
+        const value = form.memberId.value;
 
         // 아이디 유효성 검사
         if(!value.match(reUserid)){
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function(){
             isUseridOk = false;
         }else{
             useridResult.innerText = '사용 가능한 아이디 입니다.';
-            useridResult.style.color = 'green';
+            useridResult.style.color = '#83d400';
             isUseridOk = true;
         }
     }); // 아이디 중복 체크 끝
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         if(value1 === value2){
             passResult.innerText = '비밀번호가 일치 합니다.';
-            passResult.style.color = 'green';
+            passResult.style.color = '#83d400';
             isPassOk = true;
         }else {
             passResult.innerText = '비밀번호가 일치하지 않습니다.';
@@ -159,35 +159,35 @@ document.addEventListener('DOMContentLoaded', function(){
     //--------------------------
     // 4) 별명 유효성 검사(중복 체크 포함)
     //--------------------------
-    const btnNick = document.getElementById('btnNick');
-    const nickResult = document.getElementsByClassName('nickResult')[0];
-
-    btnNick.addEventListener('click', async function(e){
-        e.preventDefault();
-
-        const value = form.nick.value;
-
-        if(!value.match(reNick)){
-            nickResult.innerText = '별명이 유효하지 않습니다.';
-            nickResult.style.color = 'red';
-            isNickOk = false;
-        }
-
-        // 별명 중복 여부 요청하기
-        const response = await fetch('/user/check?type=nick&value=' + value);
-        const data = await response.json();
-        console.log(data);
-
-        if(data.count > 0){
-            nickResult.innerText = '이미 사용중인 별명 입니다.';
-            nickResult.style.color = 'red';
-            isNickOk = false;
-        }else{
-            nickResult.innerText = '사용 가능한 별명 입니다.';
-            nickResult.style.color = 'green';
-            isNickOk = true;
-        }
-    }); // 별명 중복 체크 끝
+    // const btnNick = document.getElementById('btnNick');
+    // const nickResult = document.getElementsByClassName('nickResult')[0];
+    //
+    // btnNick.addEventListener('click', async function(e){
+    //     e.preventDefault();
+    //
+    //     const value = form.nick.value;
+    //
+    //     if(!value.match(reNick)){
+    //         nickResult.innerText = '별명이 유효하지 않습니다.';
+    //         nickResult.style.color = 'red';
+    //         isNickOk = false;
+    //     }
+    //
+    //     // 별명 중복 여부 요청하기
+    //     const response = await fetch('/user/check?type=nick&value=' + value);
+    //     const data = await response.json();
+    //     console.log(data);
+    //
+    //     if(data.count > 0){
+    //         nickResult.innerText = '이미 사용중인 별명 입니다.';
+    //         nickResult.style.color = 'red';
+    //         isNickOk = false;
+    //     }else{
+    //         nickResult.innerText = '사용 가능한 별명 입니다.';
+    //         nickResult.style.color = '#83d400';
+    //         isNickOk = true;
+    //     }
+    // }); // 별명 중복 체크 끝
 
 
     //--------------------------
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function(){
             return;
         }
 
-        console.log('이중 클릭 방지!!!');
+        // console.log('이중 클릭 방지!!!');
 
         const value = form.email.value;
 
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function(){
             isEmailOk = false;
         }else{
             emailResult.innerText = '이메일 인증코드를 확인 하세요.';
-            emailResult.style.color = 'green';
+            emailResult.style.color = '#83d400';
             auth.style.display = 'block'; // 인증코드 입력필드 노출
         }
 
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function(){
             isEmailOk = false;
         }else{
             emailResult.innerText = '이메일이 인증 되었습니다.';
-            emailResult.style.color = 'green';
+            emailResult.style.color = '#83d400';
             isEmailOk = true;
         }
     });
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function(){
             isHpOk = false;
         }else{
             hpResult.innerText = '사용할 수 있는 휴대폰 입니다.';
-            hpResult.style.color = 'green';
+            hpResult.style.color = '#83d400';
             isHpOk = true;
         }
     }); // 휴대폰 유효성 검사 끝

@@ -163,25 +163,46 @@ main {
 
 .gender-group {
   display: flex;
-  align-items: center;
-  gap: 24px;
-
-  height: 52px;
+  gap: 12px;
 }
 
 .gender-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  font-size: 15px;
-  color: #374151;
-
+  position: relative;
   cursor: pointer;
 }
 
-.gender-label input[type="radio"] {
-  accent-color: #53d400;
+.gender-label input {
+  display: none;
+}
+
+.gender-label span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100px;
+  height: 52px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  background: #fff;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+
+  transition: all .2s ease;
+}
+
+.gender-label span:hover {
+  border-color: #53d400;
+}
+
+.gender-label input:checked + span {
+  background: #f6fff0;
+  border-color: #53d400;
+  color: #53d400;
 }
 
 /* =========================

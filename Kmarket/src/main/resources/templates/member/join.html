@@ -30,10 +30,10 @@
       </div>
 
       <nav class="header-links">
-        <a href="#login">로그인</a>
-        <a href="#join">회원가입</a>
-        <a href="#mypage">마이페이지</a>
-        <a href="#cart">🛒 장바구니</a>
+        <a th:href="@{/member/login}">로그인</a>
+        <a th:href="@{/member/join}">회원가입</a>
+        <a th:href="@{/my/home}">마이페이지</a>
+        <a th:href="@{/product/cart}">🛒 장바구니</a>
       </nav>
     </header>
 
@@ -45,7 +45,7 @@
         </div>
 
         <div class="join-type-list">
-          <a href="./register.html" class="join-card general">
+          <a th:href="@{/member/signup(type='user')}" class="join-card general">
             <div class="card-icon">👤</div>
 
             <div class="card-content">
@@ -59,7 +59,7 @@
             <span class="arrow">›</span>
           </a>
 
-          <a href="./registerSeller.html" class="join-card seller">
+          <a th:href="@{/member/signup(type='seller')}"  class="join-card seller">
             <div class="card-icon">🏪</div>
 
             <div class="card-content">

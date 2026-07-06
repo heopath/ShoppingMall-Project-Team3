@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicInsert;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicInsert
 public class Member {
 
 

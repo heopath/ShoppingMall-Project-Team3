@@ -1,8 +1,11 @@
 package kr.co.springkmarketapp.service.member;
 
 import kr.co.springkmarketapp.dao.member.MemberDAO;
+import kr.co.springkmarketapp.dto.member.MemberCheckDTO;
 import kr.co.springkmarketapp.dto.member.MemberDTO;
+import kr.co.springkmarketapp.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,10 +14,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
+//    private final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
     private final MemberDAO memberDAO;
 
-    public int insertMember(MemberDTO memberDTO) {
-        return memberDAO.insertMember(memberDTO);
+    public void insertMember(MemberDTO memberDTO) {
+       // String encoded = passwordEncoder.encode(memberDTO.getPass());
+       // memberDTO.setPass(encoded);
+        // return memberDAO.insertMember(memberDTO);
+        memberRepository.save(memberDTO.toEntity());
     }
 
     public MemberDTO selectMember(Integer memberNo) {
@@ -31,5 +39,23 @@ public class MemberService {
 
     public int deleteMember(Integer memberNo) {
         return memberDAO.deleteMember(memberNo);
+    }
+
+    public int getCount(MemberCheckDTO dto){
+
+        int count = 0;
+
+        // JPA
+        if(dto.getType().equals("userid")){
+            count = memberRepository.countByMemberId(dto.getValue());
+
+        } else if(dto.getType().equals("email")){
+
+            count = memberRepository.countByEmail(dto.getValue());
+
+        } else if(dto.getType().equals("hp")){
+            count = memberRepository.countByHp(dto.getValue());
+        }
+        return count;
     }
 }
