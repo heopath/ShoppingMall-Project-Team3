@@ -126,3 +126,60 @@
     color: #111;
     text-decoration: underline;
 }
+
+.bottom-controls-point {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.btn-revoke-selected {
+    position: absolute;
+    left: 0;
+    height: 32px;
+    padding: 0 16px;
+    border: 1px solid #ccc;
+    background: #d8d8d8;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-revoke-selected:hover {
+    background: #c8c8c8;
+}
+
+.pagination {
+    display: flex;
+    gap: 14px;
+    font-size: 14px;
+    align-items: center;
+}
+
+.pagination a {
+    color: #555;
+}
+
+.pagination a.active {
+    font-weight: bold;
+    color: #111;
+    text-decoration: underline;
+}
+
+.pagination .disabled {
+    color: #aaa;
+    cursor: default;
+}
+
+.revoked-label {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    background: #eee;
+    color: #999;
+    font-size: 11px;
+}

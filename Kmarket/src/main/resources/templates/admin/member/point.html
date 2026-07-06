@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>관리자 포인트관리</title>
     <link rel="stylesheet" href="../../css/admin/admin-common.css">
     <link rel="stylesheet" href="../../css/admin/member/point.css">
+    <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}">
+    <meta name="_csrf_header" th:content="${_csrf != null ? _csrf.headerName : ''}">
 </head>
 <body>
 
@@ -106,21 +108,21 @@
             </div>
 
             <section class="point-list-section">
-                <div class="search-wrap">
-                    <select class="search-select">
-                        <option>아이디</option>
-                        <option>이름</option>
-                        <option>이메일</option>
-                        <option>휴대폰</option>
+                <form class="search-wrap" th:action="@{/admin/member/point}" method="get">
+                    <select class="search-select" name="searchType">
+                        <option value="id" th:selected="${searchType == 'id'}">아이디</option>
+                        <option value="name" th:selected="${searchType == 'name'}">이름</option>
+                        <option value="reason" th:selected="${searchType == 'reason'}">내용</option>
                     </select>
-                    <input type="text" placeholder="검색어입력" class="search-input">
-                    <button type="button" class="search-btn">검색</button>
-                </div>
+                    <input type="text" name="keyword" placeholder="검색어입력" class="search-input" th:value="${keyword}">
+                    <input type="hidden" name="page" value="1">
+                    <button type="submit" class="search-btn">검색</button>
+                </form>
 
                 <table class="point-table">
                     <thead>
                         <tr>
-                            <th><input type="checkbox"></th>
+                            <th><input type="checkbox" id="checkAllPoint"></th>
                             <th>번호</th>
                             <th>아이디</th>
                             <th>이름</th>
@@ -131,78 +133,39 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>5</td>
-                            <td>abc1234</td>
-                            <td>정우성</td>
-                            <td>1,000</td>
-                            <td>15,000</td>
-                            <td>구매확정 포인트 지급</td>
-                            <td>0000-00-00<br>00:00:00</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>4</td>
-                            <td>abc1234</td>
-                            <td>정우성</td>
-                            <td>1,000</td>
-                            <td>14,000</td>
-                            <td>이벤트 참여</td>
-                            <td>0000-00-00<br>00:00:00</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>3</td>
-                            <td>kang771</td>
-                            <td>강동원</td>
-                            <td>-17,000</td>
-                            <td>100</td>
-                            <td>주문 결제 사용</td>
-                            <td>0000-00-00<br>00:00:00</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>2</td>
-                            <td>eqpac112</td>
-                            <td>한예슬</td>
-                            <td>1,000</td>
-                            <td>3,500</td>
-                            <td>상품 리뷰 작성</td>
-                            <td>0000-00-00<br>00:00:00</td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>1</td>
-                            <td>qeimn3</td>
-                            <td>이정재</td>
-                            <td>1,000</td>
-                            <td>2,700</td>
-                            <td>회원가입 축하</td>
-                            <td>0000-00-00<br>00:00:00</td>
-                        </tr>
+                    <tr th:if="${#lists.isEmpty(pointList)}">
+                        <td colspan="8" style="text-align:center;">등록된 포인트 내역이 없습니다.</td>
+                    </tr>
+
+                    <tr th:each="point : ${pointList}">
+                        <td>
+                            <input type="checkbox"
+                                   class="point-check"
+                                   th:value="${point.pointNo}"
+                                   th:disabled="${point.pointValue <= 0 || point.revokedYn == 'Y'}">                    </td>
+                        <td th:text="${point.pointNo}">5</td>
+                        <td th:text="${point.memberId != null ? point.memberId : '-'}">abc1234</td>
+                        <td th:text="${point.name != null ? point.name : '-'}">정우성</td>
+                        <td th:text="${#numbers.formatInteger(point.pointValue, 0, 'COMMA')}">1,000</td>
+                        <td th:text="${#numbers.formatInteger(point.balancePoint, 0, 'COMMA')}">15,000</td>
+                        <td th:text="${point.reason}">구매확정 포인트 지급</td>
+                        <span th:if="${point.revokedYn == 'Y'}" class="revoked-label">회수됨</span>
+                        <td th:text="${point.regDate != null ? #temporals.format(point.regDate, 'yyyy-MM-dd HH:mm:ss') : '-'}">
+                            0000-00-00 00:00:00
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
 
                 <div class="bottom-controls-point">
-                    <button type="button" class="btn-delete-select">선택삭제</button>
-                    <div class="pagination">
-                        <a href="#">이전</a>
-                        <a href="#" class="active">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">다음</a>
-                    </div>
+                    <button type="button" class="btn-revoke-selected" id="revokeSelectedPoint">선택회수</button>
+                    <th:block th:replace="~{common/_admin_pagination :: pagination('/admin/member/point')}"></th:block>
                 </div>
             </section>
         </main>
     </div>
 
-    <footer>
-        Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR Version 5.4.1.2
-    </footer>
+    <th:block th:replace="~{common/_admin_footer :: footer}"></th:block>
 </div>
 
 <script>
@@ -216,6 +179,77 @@
         } else {
             clickedTitle.classList.add("active");
         }
+    }
+
+    const checkAllPoint = document.getElementById("checkAllPoint");
+
+    if (checkAllPoint) {
+        checkAllPoint.addEventListener("change", function () {
+            document.querySelectorAll(".point-check").forEach(function (checkbox) {
+                checkbox.checked = checkAllPoint.checked;
+            });
+        });
+    }
+
+
+
+    const revokeSelectedPoint = document.getElementById("revokeSelectedPoint");
+
+    function getCheckedPointNoList() {
+        return Array.from(document.querySelectorAll(".point-check:checked"))
+            .map(function (checkbox) {
+                return checkbox.value;
+            });
+    }
+
+    if (revokeSelectedPoint) {
+        revokeSelectedPoint.addEventListener("click", function () {
+            const pointNoList = getCheckedPointNoList();
+
+            if (pointNoList.length === 0) {
+                alert("회수할 포인트 내역을 선택해주세요.");
+                return;
+            }
+
+            if (!confirm("선택한 포인트를 회수하시겠습니까?")) {
+                return;
+            }
+
+            const params = new URLSearchParams();
+
+            pointNoList.forEach(function (pointNo) {
+                params.append("pointNoList", pointNo);
+            });
+
+            fetch("/admin/member/point/revoke", {
+                method: "POST",
+                headers: formHeaders(),
+                body: params
+            }).then(function (res) {
+                if (!res.ok) {
+                    throw new Error("포인트 회수 실패");
+                }
+
+                alert("선택한 포인트가 회수되었습니다.");
+                location.reload();
+            }).catch(function () {
+                alert("포인트 회수에 실패했습니다.");
+            });
+        });
+    }
+
+
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+    function formHeaders() {
+        const headers = {"Content-Type": "application/x-www-form-urlencoded"};
+
+        if (csrfToken && csrfHeader) {
+            headers[csrfHeader] = csrfToken;
+        }
+
+        return headers;
     }
 </script>
 

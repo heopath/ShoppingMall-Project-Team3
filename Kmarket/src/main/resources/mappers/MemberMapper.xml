@@ -83,4 +83,81 @@
     <delete id="deleteMember" parameterType="int">
         DELETE FROM member WHERE member_no=#{memberNo}
     </delete>
+
+    <update id="updateMemberBulk">
+        UPDATE member
+        <set>
+            <if test="grade != null and grade != ''">
+                grade = #{grade},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+        </set>
+        WHERE member_no IN
+        <foreach collection="memberNoList" item="memberNo" open="(" separator="," close=")">
+            #{memberNo}
+        </foreach>
+    </update>
+
+<!-- 회수대상조회-->
+    <select id="selectRevokeTargetPointList" resultType="kr.co.springkmarketapp.dto.my.MemberPointDTO">
+        SELECT
+        point_no AS pointNo,
+        member_no AS memberNo,
+        order_no AS orderNo,
+        point_type AS pointType,
+        point_value AS pointValue,
+        balance_point AS balancePoint,
+        reason AS reason,
+        expire_date AS expireDate,
+        reg_date AS regDate
+        FROM member_point
+        WHERE point_no IN
+        <foreach collection="pointNoList" item="pointNo" open="(" separator="," close=")">
+            #{pointNo}
+        </foreach>
+        AND point_value > 0
+    </select>
+
+<!--회원 현재 포인트 조회-->
+    <select id="selectCurrentMemberPoint" resultType="int">
+        SELECT point
+        FROM member
+        WHERE member_no = #{memberNo}
+    </select>
+
+<!--    회원포인트차감-->
+    <update id="updateMemberPointBalance">
+        UPDATE member
+        SET point = #{point}
+        WHERE member_no = #{memberNo}
+    </update>
+
+
+<!--    회수내역추가-->
+    <insert id="insertRevokePointHistory">
+        INSERT INTO member_point
+        (
+        member_no,
+        order_no,
+        point_type,
+        point_value,
+        balance_point,
+        reason,
+        expire_date,
+        reg_date
+        )
+        VALUES
+        (
+        #{memberNo},
+        #{orderNo},
+        'REVOKE',
+        #{pointValue},
+        #{balancePoint},
+        #{reason},
+        NULL,
+        NOW()
+        )
+    </insert>
 </mapper>

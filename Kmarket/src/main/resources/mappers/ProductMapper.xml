@@ -122,4 +122,165 @@
 
     </select>
 
+    <!-- 2차 카테고리 상품 목록 조회 -->
+    <select id="selectProductsByCategory"
+            resultType="kr.co.springkmarketapp.dto.product.ProductListDTO">
+
+        SELECT
+        p.product_no AS productNo,
+        p.product_name AS productName,
+        p.basic_desc AS basicDesc,
+
+        p.price AS price,
+        p.discount_rate AS discountRate,
+        p.delivery_fee AS deliveryFee,
+
+        img.image_path AS imagePath,
+
+        sp.company_name AS sellerName,
+
+        /* 현재 상품 리뷰 통계 */
+        IFNULL(rv.avg_rating, 0) AS avgRating,
+        IFNULL(rv.review_count, 0) AS reviewCount,
+
+        /* 판매자 전체 상품 기준 통계 */
+        IFNULL(ss.seller_avg_rating, 0) AS sellerAvgRating,
+        IFNULL(ss.seller_review_count, 0) AS sellerReviewCount,
+        IFNULL(ss.seller_sold_count, 0) AS sellerSoldCount,
+
+        /* 판매자 뱃지 판정 */
+        CASE
+        WHEN ss.seller_avg_rating >= 4.5
+        AND ss.seller_review_count >= 10
+        THEN 'SATISFACTION'
+
+        WHEN ss.seller_sold_count >= 2000
+        THEN 'BEST'
+
+        WHEN ss.seller_avg_rating >= 4.0
+        OR ss.seller_sold_count >= 1600
+        THEN 'EXCELLENT'
+
+        ELSE 'GENERAL'
+        END AS sellerBadgeCode
+
+        FROM product p
+
+        /* 상품 판매자 정보 */
+        JOIN seller_profile sp
+        ON p.seller_no = sp.seller_no
+
+        /* 상품 대표 썸네일 1장 */
+        LEFT JOIN (
+        SELECT
+        product_no,
+        MAX(
+        CASE
+        WHEN image_type = 'THUMB1'
+        THEN image_path
+        END
+        ) AS image_path
+        FROM product_image
+        GROUP BY product_no
+        ) img
+        ON p.product_no = img.product_no
+
+        /* 현재 상품의 리뷰 평균 / 리뷰 수 */
+        LEFT JOIN (
+        SELECT
+        product_no,
+        ROUND(AVG(rating), 1) AS avg_rating,
+        COUNT(review_no) AS review_count
+        FROM product_review
+        GROUP BY product_no
+        ) rv
+        ON p.product_no = rv.product_no
+
+        /*
+        판매자 전체 통계
+        판매량과 리뷰 통계를 분리해서 계산한다.
+        그래야 리뷰 개수만큼 sold_count가 중복 합산되지 않는다.
+        */
+        LEFT JOIN (
+        SELECT
+        sales.seller_no,
+        sales.seller_sold_count,
+        IFNULL(review.seller_avg_rating, 0) AS seller_avg_rating,
+        IFNULL(review.seller_review_count, 0) AS seller_review_count
+
+        FROM (
+        /* 판매자별 누적 판매량 */
+        SELECT
+        seller_no,
+        SUM(sold_count) AS seller_sold_count
+        FROM product
+        GROUP BY seller_no
+        ) sales
+
+        LEFT JOIN (
+        /* 판매자별 전체 리뷰 평균 / 리뷰 수 */
+        SELECT
+        p.seller_no,
+        ROUND(AVG(pr.rating), 1) AS seller_avg_rating,
+        COUNT(pr.review_no) AS seller_review_count
+        FROM product p
+        JOIN product_review pr
+        ON p.product_no = pr.product_no
+        GROUP BY p.seller_no
+        ) review
+        ON sales.seller_no = review.seller_no
+
+        ) ss
+        ON p.seller_no = ss.seller_no
+
+        WHERE p.cate_no = #{cateNo}
+        AND p.status = '판매중'
+
+        <choose>
+            <when test="sort == 'sold'">
+                ORDER BY p.sold_count DESC, p.product_no DESC
+            </when>
+
+            <when test="sort == 'lowPrice'">
+                ORDER BY (p.price - FLOOR(p.price * p.discount_rate / 100)) ASC
+            </when>
+
+            <when test="sort == 'highPrice'">
+                ORDER BY (p.price - FLOOR(p.price * p.discount_rate / 100)) DESC
+            </when>
+
+            <when test="sort == 'highRating'">
+                ORDER BY rv.avg_rating DESC, rv.review_count DESC
+            </when>
+
+            <when test="sort == 'lowRating'">
+                ORDER BY
+                CASE WHEN rv.avg_rating IS NULL THEN 1 ELSE 0 END,
+                rv.avg_rating ASC
+            </when>
+
+            <when test="sort == 'recent'">
+                ORDER BY p.reg_date DESC
+            </when>
+
+            <otherwise>
+                ORDER BY p.sold_count DESC, p.product_no DESC
+            </otherwise>
+        </choose>
+
+        LIMIT #{size} OFFSET #{offset}
+
+    </select>
+
+
+    <!-- 해당 카테고리 상품 수 -->
+    <select id="selectCountByCategory" resultType="int">
+
+        SELECT COUNT(*)
+        FROM product
+        WHERE cate_no = #{cateNo}
+        AND status = '판매중'
+
+    </select>
+
 </mapper>

@@ -21,4 +21,8 @@ public interface MemberDAO {
     int countMemberListBySearch(@Param("searchType") String searchType, @Param("keyword") String keyword);
     int updateMember(MemberDTO memberDTO);
     int deleteMember(Integer memberNo);
+
+    int updateMemberBulk(@Param("memberNoList") List<Integer> memberNoList,
+                         @Param("grade") String grade,
+                         @Param("status") String status);
 }
