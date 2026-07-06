@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="pagination" th:fragment="pagination(baseUrl)">
+    <a th:if="${hasPrevPage}"
+       th:href="@{${baseUrl}(page=${currentPage - 1}, searchType=${searchType}, keyword=${keyword})}">
+        이전
+    </a>
+    <span th:unless="${hasPrevPage}" class="disabled">이전</span>
+
+    <a th:each="pageNo : ${#numbers.sequence(startPage, endPage)}"
+       th:href="@{${baseUrl}(page=${pageNo}, searchType=${searchType}, keyword=${keyword})}"
+       th:text="${pageNo}"
+       th:classappend="${pageNo == currentPage} ? 'active'">
+        1
+    </a>
+
+    <a th:if="${hasNextPage}"
+       th:href="@{${baseUrl}(page=${currentPage + 1}, searchType=${searchType}, keyword=${keyword})}">
+        다음
+    </a>
+    <span th:unless="${hasNextPage}" class="disabled">다음</span>
+</div>
+
+</body>
+</html>

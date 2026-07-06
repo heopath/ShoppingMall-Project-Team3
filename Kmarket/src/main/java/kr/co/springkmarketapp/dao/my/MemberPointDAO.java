@@ -2,6 +2,7 @@ package kr.co.springkmarketapp.dao.my;
 
 import kr.co.springkmarketapp.dto.my.MemberPointDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,4 +13,34 @@ public interface MemberPointDAO {
     List<MemberPointDTO> selectMemberPointList();
     int updateMemberPoint(MemberPointDTO memberPointDTO);
     int deleteMemberPoint(Integer pointNo);
+    List<MemberPointDTO> selectMemberPointListBySearch(@Param("searchType") String searchType,
+                                                       @Param("keyword") String keyword);
+
+    List<MemberPointDTO> selectMemberPointListWithPaging(@Param("offset") int offset,
+                                                         @Param("limit") int limit);
+
+    List<MemberPointDTO> selectMemberPointListBySearchWithPaging(@Param("searchType") String searchType,
+                                                                 @Param("keyword") String keyword,
+                                                                 @Param("offset") int offset,
+                                                                 @Param("limit") int limit);
+
+    List<MemberPointDTO> selectRevokeTargetPointList(@Param("pointNoList") List<Integer> pointNoList);
+
+    Integer selectCurrentMemberPoint(@Param("memberNo") Integer memberNo);
+
+    int updateMemberPointBalance(@Param("memberNo") Integer memberNo,
+                                 @Param("point") Integer point);
+
+    int insertRevokePointHistory(@Param("memberNo") Integer memberNo,
+                                 @Param("orderNo") Long orderNo,
+                                 @Param("pointValue") Integer pointValue,
+                                 @Param("balancePoint") Integer balancePoint,
+                                 @Param("reason") String reason);
+    int countMemberPointList();
+
+    int countMemberPointListBySearch(@Param("searchType") String searchType,
+                                     @Param("keyword") String keyword);
+
+
+
 }
