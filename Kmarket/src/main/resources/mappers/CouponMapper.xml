@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.coupon.CouponDAO">
+    <select id="selectCouponList" resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
+        SELECT coupon_no AS couponNo, coupon_code AS couponCode, seller_no AS sellerNo, coupon_type AS couponType,
+               coupon_name AS couponName, benefit_type AS benefitType, benefit_value AS benefitValue,
+               min_order_price AS minOrderPrice, max_discount_price AS maxDiscountPrice, issue_limit AS issueLimit,
+               start_date AS startDate, end_date AS endDate, caution, status, reg_date AS regDate
+        FROM coupon
+        ORDER BY coupon_no DESC
+    </select>
+    <select id="selectCoupon" parameterType="int" resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
+        SELECT coupon_no AS couponNo, coupon_code AS couponCode, seller_no AS sellerNo, coupon_type AS couponType,
+               coupon_name AS couponName, benefit_type AS benefitType, benefit_value AS benefitValue,
+               min_order_price AS minOrderPrice, max_discount_price AS maxDiscountPrice, issue_limit AS issueLimit,
+               start_date AS startDate, end_date AS endDate, caution, status, reg_date AS regDate
+        FROM coupon
+        WHERE coupon_no=#{couponNo}
+    </select>
+    <insert id="insertCoupon" parameterType="kr.co.springkmarketapp.dto.coupon.CouponDTO" useGeneratedKeys="true" keyProperty="couponNo">
+        INSERT INTO coupon(coupon_code, seller_no, coupon_type, coupon_name, benefit_type, benefit_value, min_order_price,
+                           max_discount_price, issue_limit, start_date, end_date, caution, status, reg_date)
+        VALUES(#{couponCode}, #{sellerNo}, #{couponType}, #{couponName}, #{benefitType}, #{benefitValue}, #{minOrderPrice},
+               #{maxDiscountPrice}, #{issueLimit}, #{startDate}, #{endDate}, #{caution}, COALESCE(#{status}, 'ACTIVE'), NOW())
+    </insert>
+    <update id="updateCoupon" parameterType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
+        UPDATE coupon
+        SET coupon_code=#{couponCode}, seller_no=#{sellerNo}, coupon_type=#{couponType}, coupon_name=#{couponName}, benefit_type=#{benefitType},
+            benefit_value=#{benefitValue}, min_order_price=#{minOrderPrice}, max_discount_price=#{maxDiscountPrice}, issue_limit=#{issueLimit},
+            start_date=#{startDate}, end_date=#{endDate}, caution=#{caution}, status=#{status}
+        WHERE coupon_no=#{couponNo}
+    </update>
+    <delete id="deleteCoupon" parameterType="int">
+        DELETE FROM coupon WHERE coupon_no=#{couponNo}
+    </delete>
+</mapper>

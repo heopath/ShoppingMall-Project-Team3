@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.coupon.CouponIssueDAO">
+    <select id="selectCouponIssueList" resultType="kr.co.springkmarketapp.dto.coupon.CouponIssueDTO">
+        SELECT issue_no AS issueNo, issue_code AS issueCode, coupon_no AS couponNo, member_no AS memberNo, order_no AS orderNo,
+               status, used_date AS usedDate, issue_date AS issueDate
+        FROM coupon_issue
+        ORDER BY issue_no DESC
+    </select>
+    <select id="selectCouponIssue" parameterType="long" resultType="kr.co.springkmarketapp.dto.coupon.CouponIssueDTO">
+        SELECT issue_no AS issueNo, issue_code AS issueCode, coupon_no AS couponNo, member_no AS memberNo, order_no AS orderNo,
+               status, used_date AS usedDate, issue_date AS issueDate
+        FROM coupon_issue
+        WHERE issue_no=#{issueNo}
+    </select>
+    <insert id="insertCouponIssue" parameterType="kr.co.springkmarketapp.dto.coupon.CouponIssueDTO" useGeneratedKeys="true" keyProperty="issueNo">
+        INSERT INTO coupon_issue(issue_code, coupon_no, member_no, order_no, status, used_date, issue_date)
+        VALUES(#{issueCode}, #{couponNo}, #{memberNo}, #{orderNo}, COALESCE(#{status}, 'ISSUED'), #{usedDate}, NOW())
+    </insert>
+    <update id="updateCouponIssue" parameterType="kr.co.springkmarketapp.dto.coupon.CouponIssueDTO">
+        UPDATE coupon_issue SET issue_code=#{issueCode}, coupon_no=#{couponNo}, member_no=#{memberNo}, order_no=#{orderNo},
+            status=#{status}, used_date=#{usedDate}
+        WHERE issue_no=#{issueNo}
+    </update>
+    <delete id="deleteCouponIssue" parameterType="long">
+        DELETE FROM coupon_issue WHERE issue_no=#{issueNo}
+    </delete>
+</mapper>

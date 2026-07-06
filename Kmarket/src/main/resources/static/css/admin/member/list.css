@@ -72,19 +72,54 @@
     line-height: 1.5;
 }
 
-/* 테이블 컬럼 너비 비율 (피그마 시안 기준) */
-.member-table th:nth-child(1) { width: 4%; } /* 체크박스 */
-.member-table th:nth-child(2) { width: 5%; } /* 번호 */
-.member-table th:nth-child(3) { width: 7%; } /* 아이디 */
-.member-table th:nth-child(4) { width: 7%; } /* 이름 */
-.member-table th:nth-child(5) { width: 5%; } /* 성별 */
-.member-table th:nth-child(6) { width: 11%; } /* 등급(select) */
-.member-table th:nth-child(7) { width: 7%; } /* 포인트 */
-.member-table th:nth-child(8) { width: 13%; } /* 이메일 */
-.member-table th:nth-child(9) { width: 10%; } /* 휴대폰 */
-.member-table th:nth-child(10) { width: 14%; } /* 가입일 */
-.member-table th:nth-child(11) { width: 7%; } /* 상태 */
-.member-table th:nth-child(12) { width: 10%; } /* 관리 */
+/* 테이블 컬럼 너비 비율 */
+.member-table th:nth-child(1) {
+    width: 4%;
+}
+
+.member-table th:nth-child(2) {
+    width: 5%;
+}
+
+.member-table th:nth-child(3) {
+    width: 7%;
+}
+
+.member-table th:nth-child(4) {
+    width: 7%;
+}
+
+.member-table th:nth-child(5) {
+    width: 5%;
+}
+
+.member-table th:nth-child(6) {
+    width: 11%;
+}
+
+.member-table th:nth-child(7) {
+    width: 7%;
+}
+
+.member-table th:nth-child(8) {
+    width: 13%;
+}
+
+.member-table th:nth-child(9) {
+    width: 10%;
+}
+
+.member-table th:nth-child(10) {
+    width: 14%;
+}
+
+.member-table th:nth-child(11) {
+    width: 7%;
+}
+
+.member-table th:nth-child(12) {
+    width: 10%;
+}
 
 /* 테이블 내부 등급 Select 박스 */
 .grade-select {
@@ -97,27 +132,48 @@
 }
 
 /* 상태 표시 컬러 */
-.status-normal { color: #31aa00 !important; font-weight: bold; } /* 정상 (녹색) */
-.status-stop { color: #e64646 !important; font-weight: bold; } /* 중지 (빨간색) */
-.status-sleep, .status-leave { color: #999 !important; font-weight: bold; } /* 휴면/탈퇴 (회색) */
+.status-normal {
+    color: #31aa00 !important;
+    font-weight: bold;
+}
 
-/* 관리 항목 (수정, 중지 등) 텍스트 링크 */
+.status-stop {
+    color: #e64646 !important;
+    font-weight: bold;
+}
+
+.status-sleep,
+.status-leave {
+    color: #999 !important;
+    font-weight: bold;
+}
+
+/* 관리 항목 링크 */
 .action-link {
     color: #555;
     display: inline-block;
     margin: 2px 0;
 }
+
 .action-link:hover {
     color: #111;
     text-decoration: underline;
     font-weight: bold;
 }
 
+button.action-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
 /* 하단 컨트롤 및 페이지네이션 */
 .bottom-controls-member {
     position: relative;
     display: flex;
-    justify-content: center; /* 페이지네이션을 중앙에 배치 */
+    justify-content: center;
     align-items: center;
     width: 100%;
 }
@@ -156,29 +212,167 @@
     text-decoration: underline;
 }
 
+.pagination .disabled {
+    color: #aaa;
+    cursor: default;
+}
+
 /* =========================================================
    회원수정 모달 전용 추가 CSS
 ========================================================= */
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
-.modal-overlay.show { display: flex; }
-.shop-modal-container { width: 600px; background: #fff; border: 1px solid #777; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-.shop-modal-header { height: 42px; background: #444; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
-.shop-modal-header h3 { font-size: 15px; font-weight: bold; margin: 0; }
-.shop-modal-header .modal-close { background: transparent; border: none; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; }
-.shop-modal-body { padding: 20px 24px 30px; max-height: 80vh; overflow-y: auto; }
-.shop-form-table { width: 100%; border-collapse: collapse; border-top: 2px solid #ccc; margin-bottom: 24px; }
-.shop-form-table th { width: 120px; padding: 10px 12px; text-align: left; background: #f7f7f7; border-bottom: 1px solid #e1e1e1; font-size: 12px; color: #333; font-weight: bold; }
-.shop-form-table td { padding: 10px 12px; border-bottom: 1px solid #e1e1e1; font-size: 12px; color: #333;}
-.shop-form-table input[type="text"], .shop-form-table input[type="password"] { height: 28px; border: 1px solid #ccc; padding: 0 8px; font-size: 12px; color: #333; }
-.input-w-medium { width: 180px; }
-.input-w-full { width: 100%; }
-.input-guide { display: inline-block; margin-left: 8px; font-size: 11px; color: #777; }
-.shop-modal-btn-area { text-align: center; }
-.btn-submit-green { height: 36px; padding: 0 40px; background: #31aa00; color: #fff; border: none; border-radius: 2px; font-size: 14px; font-weight: bold; cursor: pointer; }
-.btn-submit-green:hover { background: #288a00; }
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.shop-modal-container {
+    width: 600px;
+    background: #fff;
+    border: 1px solid #777;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.shop-modal-header {
+    height: 42px;
+    background: #444;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+
+.shop-modal-header h3 {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.shop-modal-header .modal-close {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.shop-modal-body {
+    padding: 20px 24px 30px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.shop-form-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 2px solid #ccc;
+    margin-bottom: 24px;
+}
+
+.shop-form-table th {
+    width: 120px;
+    padding: 10px 12px;
+    text-align: left;
+    background: #f7f7f7;
+    border-bottom: 1px solid #e1e1e1;
+    font-size: 12px;
+    color: #333;
+    font-weight: bold;
+}
+
+.shop-form-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e1e1e1;
+    font-size: 12px;
+    color: #333;
+}
+
+.shop-form-table input[type="text"],
+.shop-form-table input[type="password"] {
+    height: 28px;
+    border: 1px solid #ccc;
+    padding: 0 8px;
+    font-size: 12px;
+    color: #333;
+}
+
+.input-w-medium {
+    width: 180px;
+}
+
+.input-w-full {
+    width: 100%;
+}
+
+.input-guide {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 11px;
+    color: #777;
+}
+
+.shop-modal-btn-area {
+    text-align: center;
+}
+
+.btn-submit-green {
+    height: 36px;
+    padding: 0 40px;
+    background: #31aa00;
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-submit-green:hover {
+    background: #288a00;
+}
 
 /* 회원수정 전용 추가 속성 */
-.radio-label { margin-right: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-.btn-text-green { background: transparent; border: none; color: #31aa00; font-size: 12px; font-weight: bold; cursor: pointer; margin-left: 6px; }
-.btn-text-green:hover { text-decoration: underline; }
-.member-textarea { width: 100%; height: 70px; border: 1px solid #ccc; padding: 8px; font-size: 12px; color: #333; resize: vertical; }
+.radio-label {
+    margin-right: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-text-green {
+    background: transparent;
+    border: none;
+    color: #31aa00;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 6px;
+}
+
+.btn-text-green:hover {
+    text-decoration: underline;
+}
+
+.member-textarea {
+    width: 100%;
+    height: 70px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-size: 12px;
+    color: #333;
+    resize: vertical;
+}

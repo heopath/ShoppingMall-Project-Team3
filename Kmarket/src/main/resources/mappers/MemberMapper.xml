@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.member.MemberDAO">
+    <sql id="memberColumns">
+        member_no AS memberNo, member_id AS memberId, password, name, gender, birth, email, hp, role, grade, point, status,
+        zip, addr1, addr2, last_login_date AS lastLoginDate, leave_date AS leaveDate, reg_date AS regDate
+    </sql>
+
+    <sql id="memberSearchWhere">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'id'">member_id LIKE CONCAT('%', #{keyword}, '%')</when>
+                    <when test="searchType == 'name'">name LIKE CONCAT('%', #{keyword}, '%')</when>
+                    <when test="searchType == 'email'">email LIKE CONCAT('%', #{keyword}, '%')</when>
+                    <when test="searchType == 'hp'">hp LIKE CONCAT('%', #{keyword}, '%')</when>
+                    <otherwise>
+                        member_id LIKE CONCAT('%', #{keyword}, '%')
+                        OR name LIKE CONCAT('%', #{keyword}, '%')
+                        OR email LIKE CONCAT('%', #{keyword}, '%')
+                        OR hp LIKE CONCAT('%', #{keyword}, '%')
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectMemberList" resultType="kr.co.springkmarketapp.dto.member.MemberDTO">
+        SELECT <include refid="memberColumns" />
+        FROM member
+        ORDER BY member_no DESC
+    </select>
+
+    <select id="selectMemberListByPage" resultType="kr.co.springkmarketapp.dto.member.MemberDTO">
+        SELECT <include refid="memberColumns" />
+        FROM member
+        ORDER BY member_no DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="selectMemberListBySearch" resultType="kr.co.springkmarketapp.dto.member.MemberDTO">
+        SELECT <include refid="memberColumns" />
+        FROM member
+        <include refid="memberSearchWhere" />
+        ORDER BY member_no DESC
+    </select>
+
+    <select id="selectMemberListBySearchAndPage" resultType="kr.co.springkmarketapp.dto.member.MemberDTO">
+        SELECT <include refid="memberColumns" />
+        FROM member
+        <include refid="memberSearchWhere" />
+        ORDER BY member_no DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countMemberList" resultType="int">
+        SELECT COUNT(*)
+        FROM member
+    </select>
+
+    <select id="countMemberListBySearch" resultType="int">
+        SELECT COUNT(*)
+        FROM member
+        <include refid="memberSearchWhere" />
+    </select>
+
+    <select id="selectMember" parameterType="int" resultType="kr.co.springkmarketapp.dto.member.MemberDTO">
+        SELECT <include refid="memberColumns" />
+        FROM member
+        WHERE member_no=#{memberNo}
+    </select>
+    <insert id="insertMember" parameterType="kr.co.springkmarketapp.dto.member.MemberDTO" useGeneratedKeys="true" keyProperty="memberNo">
+        INSERT INTO member(member_id, password, name, gender, birth, email, hp, role, grade, point, status, zip, addr1, addr2, reg_date)
+        VALUES(#{memberId}, #{password}, #{name}, #{gender}, #{birth}, #{email}, #{hp}, COALESCE(#{role}, 'USER'), COALESCE(#{grade}, 'FAMILY'), COALESCE(#{point}, 0), COALESCE(#{status}, 'ACTIVE'), #{zip}, #{addr1}, #{addr2}, NOW())
+    </insert>
+    <update id="updateMember" parameterType="kr.co.springkmarketapp.dto.member.MemberDTO">
+        UPDATE member
+        SET member_id=#{memberId}, password=#{password}, name=#{name}, gender=#{gender}, birth=#{birth}, email=#{email}, hp=#{hp},
+        role=#{role}, grade=#{grade}, point=#{point}, status=#{status}, zip=#{zip}, addr1=#{addr1}, addr2=#{addr2},
+        last_login_date=#{lastLoginDate}, leave_date=#{leaveDate}
+        WHERE member_no=#{memberNo}
+    </update>
+    <delete id="deleteMember" parameterType="int">
+        DELETE FROM member WHERE member_no=#{memberNo}
+    </delete>
+</mapper>

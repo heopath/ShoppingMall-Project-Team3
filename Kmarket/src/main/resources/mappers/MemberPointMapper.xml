@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.my.MemberPointDAO">
+    <select id="selectMemberPointList" resultType="kr.co.springkmarketapp.dto.my.MemberPointDTO">
+        SELECT point_no AS pointNo, member_no AS memberNo, order_no AS orderNo, point_type AS pointType, point_value AS pointValue,
+               balance_point AS balancePoint, reason, expire_date AS expireDate, reg_date AS regDate
+        FROM member_point
+        ORDER BY point_no DESC
+    </select>
+    <select id="selectMemberPoint" parameterType="int" resultType="kr.co.springkmarketapp.dto.my.MemberPointDTO">
+        SELECT point_no AS pointNo, member_no AS memberNo, order_no AS orderNo, point_type AS pointType, point_value AS pointValue,
+               balance_point AS balancePoint, reason, expire_date AS expireDate, reg_date AS regDate
+        FROM member_point
+        WHERE point_no=#{pointNo}
+    </select>
+    <insert id="insertMemberPoint" parameterType="kr.co.springkmarketapp.dto.my.MemberPointDTO" useGeneratedKeys="true" keyProperty="pointNo">
+        INSERT INTO member_point(member_no, order_no, point_type, point_value, balance_point, reason, expire_date, reg_date)
+        VALUES(#{memberNo}, #{orderNo}, #{pointType}, #{pointValue}, #{balancePoint}, #{reason}, #{expireDate}, NOW())
+    </insert>
+    <update id="updateMemberPoint" parameterType="kr.co.springkmarketapp.dto.my.MemberPointDTO">
+        UPDATE member_point SET member_no=#{memberNo}, order_no=#{orderNo}, point_type=#{pointType}, point_value=#{pointValue},
+            balance_point=#{balancePoint}, reason=#{reason}, expire_date=#{expireDate}
+        WHERE point_no=#{pointNo}
+    </update>
+    <delete id="deleteMemberPoint" parameterType="int">
+        DELETE FROM member_point WHERE point_no=#{pointNo}
+    </delete>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.member.SellerProfileDAO">
+    <select id="selectSellerProfileList" resultType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
+        SELECT seller_no AS sellerNo, member_no AS memberNo, company_name AS companyName, ceo_name AS ceoName,
+               biz_no AS bizNo, online_sale_no AS onlineSaleNo, tel, fax, zip, addr1, addr2, status, reg_date AS regDate
+        FROM seller_profile
+        ORDER BY seller_no DESC
+    </select>
+    <select id="selectSellerProfile" parameterType="int" resultType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
+        SELECT seller_no AS sellerNo, member_no AS memberNo, company_name AS companyName, ceo_name AS ceoName,
+               biz_no AS bizNo, online_sale_no AS onlineSaleNo, tel, fax, zip, addr1, addr2, status, reg_date AS regDate
+        FROM seller_profile
+        WHERE seller_no = #{sellerNo}
+    </select>
+    <insert id="insertSellerProfile" parameterType="kr.co.springkmarketapp.dto.member.SellerProfileDTO" useGeneratedKeys="true" keyProperty="sellerNo">
+        INSERT INTO seller_profile(member_no, company_name, ceo_name, biz_no, online_sale_no, tel, fax, zip, addr1, addr2, status, reg_date)
+        VALUES(#{memberNo}, #{companyName}, #{ceoName}, #{bizNo}, #{onlineSaleNo}, #{tel}, #{fax}, #{zip}, #{addr1}, #{addr2}, COALESCE(#{status}, 'READY'), NOW())
+    </insert>
+    <update id="updateSellerProfile" parameterType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
+        UPDATE seller_profile
+        SET member_no=#{memberNo}, company_name=#{companyName}, ceo_name=#{ceoName}, biz_no=#{bizNo}, online_sale_no=#{onlineSaleNo},
+            tel=#{tel}, fax=#{fax}, zip=#{zip}, addr1=#{addr1}, addr2=#{addr2}, status=#{status}
+        WHERE seller_no=#{sellerNo}
+    </update>
+    <delete id="deleteSellerProfile" parameterType="int">
+        DELETE FROM seller_profile WHERE seller_no=#{sellerNo}
+    </delete>
+</mapper>

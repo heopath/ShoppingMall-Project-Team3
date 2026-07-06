@@ -33,6 +33,26 @@ public class MemberService {
         return memberDAO.selectMemberList();
     }
 
+    public List<MemberDTO> selectMemberList(int offset, int limit) {
+        return memberDAO.selectMemberListByPage(offset, limit);
+    }
+
+    public List<MemberDTO> selectMemberList(String searchType, String keyword) {
+        return memberDAO.selectMemberListBySearch(searchType, keyword);
+    }
+
+    public List<MemberDTO> selectMemberList(String searchType, String keyword, int offset, int limit) {
+        return memberDAO.selectMemberListBySearchAndPage(searchType, keyword, offset, limit);
+    }
+
+    public int countMemberList() {
+        return memberDAO.countMemberList();
+    }
+
+    public int countMemberList(String searchType, String keyword) {
+        return memberDAO.countMemberListBySearch(searchType, keyword);
+    }
+
     public int updateMember(MemberDTO memberDTO) {
         return memberDAO.updateMember(memberDTO);
     }
