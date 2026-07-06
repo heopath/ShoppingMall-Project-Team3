@@ -1,5 +1,6 @@
 package kr.co.springkmarketapp.dto.member;
 
+import kr.co.springkmarketapp.entity.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,4 +31,23 @@ public class MemberDTO {
     private LocalDateTime lastLoginDate;
     private LocalDateTime leaveDate;
     private LocalDateTime regDate;
+
+    public Member toEntity() {
+        return Member.builder()
+                .memberId(memberId)
+                .password(password)
+                .name(name)
+                .gender(gender)
+                .birth(birth)
+                .email(email)
+                .hp(hp)
+                .role(role)
+                .grade(grade)
+                .point(point)
+                .status(status)
+                .zip(zip)
+                .addr1(addr1)
+                .addr2(addr2)
+                .build();
+    }
 }

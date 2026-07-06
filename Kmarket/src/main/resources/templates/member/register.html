@@ -6,6 +6,11 @@
     <title>일반 회원가입 - K-MARKET</title>
     <link rel="stylesheet" href="../css/member/register.css" />
     <link rel="stylesheet" href="../css/main.css" />
+    <script th:src="@{/js/postcode.js}"></script>
+    <script th:src="@{/js/validation.js}"></script>
+    <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+
   </head>
   <body>
     <header>
@@ -29,10 +34,10 @@
       </div>
 
       <nav class="header-links">
-        <a href="#login">로그인</a>
-        <a href="#join">회원가입</a>
-        <a href="#mypage">마이페이지</a>
-        <a href="#cart">🛒 장바구니</a>
+        <a th:href="@{/member/login}">로그인</a>
+        <a th:href="@{/member/join}">회원가입</a>
+        <a th:href="@{/my/home}">마이페이지</a>
+        <a th:href="@{/product/cart}">🛒 장바구니</a>
       </nav>
     </header>
 
@@ -43,16 +48,22 @@
           <p>안전한 거래를 위해 본인의 정보를 정확히 입력해주세요.</p>
         </div>
 
-        <form onsubmit="event.preventDefault()">
+        <form th:action="@{/member/register}" method="post">
           <div class="input-row success">
             <label for="user-id">ID</label>
-            <input
-              type="text"
-              id="user-id"
-              class="input-field"
-              placeholder="아이디 입력"
-              required
-            />
+            <div class="input-with-btn">
+              <input
+                      type="text"
+                      id="user-id"
+                      class="input-field"
+                      placeholder="아이디 입력"
+                      name="memberId"
+                      required
+              />
+              <button type="button" class="inline-btn" id="btnUserid">중복확인</button>
+
+            </div>
+            <span class="useridResult"></span>
             <span class="guide-text">영문, 숫자 4~12자 설정</span>
             <!-- <span class="valid-mark">✓</span> -->
           </div>
@@ -64,8 +75,10 @@
               id="user-pw"
               class="input-field"
               placeholder="비밀번호 입력"
+              name="pass"
               required
             />
+            <span class="passResult"></span>
             <span class="guide-text">영문, 숫자, 특수문자 8~12자 설정</span>
           </div>
 
@@ -76,6 +89,7 @@
               id="user-pw-confirm"
               class="input-field"
               placeholder="비밀번호 재입력"
+              name="pass2"
               required
             />
           </div>
@@ -87,9 +101,11 @@
               id="user-name"
               class="input-field"
               placeholder="이름 입력"
+              name="name"
               required
             />
-            <span class="valid-mark">✓</span>
+            <span class="nameResult"></span>
+<!--            <span class="valid-mark">✓</span>-->
           </div>
 
           <div class="input-row">
@@ -99,12 +115,16 @@
 
           <div class="input-row">
             <label>성별</label>
+
             <div class="gender-group">
               <label class="gender-label">
-                <input type="radio" name="gender" value="M" checked /> 남
+                <input type="radio" name="gender" value="M" checked />
+                <span>남성</span>
               </label>
+
               <label class="gender-label">
-                <input type="radio" name="gender" value="F" /> 여
+                <input type="radio" name="gender" value="F" />
+                <span>여성</span>
               </label>
             </div>
           </div>
@@ -117,9 +137,15 @@
                 id="user-email"
                 class="input-field"
                 placeholder="이메일 주소 입력"
+                name="email"
                 required
               />
-              <button type="button" class="inline-btn">이메일 인증</button>
+              <button type="button" class="inline-btn" id="btnEmail">이메일 인증</button>
+            </div>
+            <span class="emailResult"></span>
+            <div class="input-with-btn " style="margin-top: 8px" >
+              <input type="text" name="code" class="input-field" placeholder="인증번호 입력"/>
+              <button type="button" class="inline-btn"  id="btnConfirm">인증번호 확인</button>
             </div>
           </div>
 
@@ -131,10 +157,13 @@
                 id="user-phone"
                 class="input-field"
                 placeholder="하이픈(-) 없이 입력"
+                name="hp"
                 required
               />
               <button type="button" class="inline-btn">휴대폰 인증</button>
             </div>
+            <span class="hpResult"></span>
+
           </div>
 
           <div class="input-row">
@@ -145,19 +174,22 @@
                   type="text"
                   class="input-field"
                   placeholder="우편번호"
+                  id="zip"
                   readonly
                 />
-                <button type="button" class="inline-btn">우편번호 검색</button>
+                <button type="button" onclick="postcode()" class="inline-btn">우편번호 검색</button>
               </div>
               <input
                 type="text"
                 class="input-field"
                 placeholder="기본주소"
+                id="addr1"
                 readonly
               />
               <input
                 type="text"
                 class="input-field"
+                id="addr2"
                 placeholder="상세주소 입력"
               />
             </div>
