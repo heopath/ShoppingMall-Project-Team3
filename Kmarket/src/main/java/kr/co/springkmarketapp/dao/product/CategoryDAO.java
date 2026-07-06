@@ -15,4 +15,5 @@ public interface CategoryDAO {
 
     List<CategoryDTO> selectMainCategories();
     List<CategoryDTO> selectSubCategories();
+    CategoryDTO selectCategoryByNo(int cateNo);
 }

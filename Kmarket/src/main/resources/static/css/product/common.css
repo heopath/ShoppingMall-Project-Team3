@@ -210,23 +210,28 @@ header {
 .side-cat {
     width: 255px;
     flex-shrink: 0;
+    overflow: visible;
     align-self: stretch;
 }
 
+.category-box {
+    overflow: visible;
+}
+
 .side-cat h3 {
-    padding: 12px 16px;
-    border-radius: 6px 6px 0 0;
-    background: var(--green);
-    color: #fff;
     font-size: 15px;
     font-weight: 800;
+    padding: 12px 16px;
+    background: var(--green);
+    color: #fff;
+    border-radius: 6px 6px 0 0;
 }
 
 .category-list {
-    overflow: hidden;
     border: 1px solid var(--line);
     border-top: none;
     border-radius: 0 0 6px 6px;
+    overflow: hidden;
     background: #fff;
 }
 
@@ -235,8 +240,9 @@ header {
     align-items: center;
     gap: 10px;
     padding: 13px 16px;
-    border-bottom: 1px solid var(--line);
     font-size: 14px;
+    border-bottom: 1px solid var(--line);
+    transition: 0.15s;
 }
 
 .category-list li:last-child a {
@@ -248,15 +254,13 @@ header {
     color: var(--green-dark);
 }
 
-.icon {
-    width: 20px;
+.side-cat .icon {
     font-size: 16px;
+    width: 20px;
     text-align: center;
 }
 
-/* =========================
-   왼쪽 베스트 상품
-========================= */
+/* Best products sticky only */
 .side-best-sticky {
     position: sticky;
     top: 20px;
@@ -265,14 +269,15 @@ header {
 }
 
 .side-best-list {
-    overflow: hidden;
     border: 1px solid var(--line);
     border-top: none;
     border-radius: 0 0 6px 6px;
     background: #fff;
+    overflow: hidden;
 }
 
 .side-best-item {
+    position: relative;
     display: grid;
     grid-template-columns: 30px 52px 1fr;
     align-items: center;
@@ -280,6 +285,7 @@ header {
     min-height: 70px;
     padding: 10px;
     border-bottom: 1px solid var(--line);
+    transition: 0.15s;
 }
 
 .side-best-item:last-child {
@@ -290,28 +296,29 @@ header {
     background: #f8fff9;
 }
 
-.rank {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.side-best-item .rank {
     width: 28px;
     height: 24px;
-    border-radius: 3px;
     background: rgba(0, 0, 0, 0.68);
     color: #fff;
     font-size: 11px;
     font-weight: 800;
-}
-
-.side-best-item .thumb {
+    border-radius: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.side-best-item .thumb {
     width: 50px;
     height: 50px;
+    background: #f2f2f2;
     border: 1px solid var(--line);
     border-radius: 5px;
-    background: #f2f2f2;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
 }
 
 .side-best-item .thumb svg {
@@ -320,31 +327,34 @@ header {
 }
 
 .side-best-item .txt {
+    min-width: 0;
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    min-width: 0;
 }
 
 .side-best-item .txt b {
-    overflow: hidden;
-    color: #444;
+    display: block;
     font-size: 12px;
-    text-overflow: ellipsis;
+    color: #444;
+    font-weight: 700;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .side-best-item .txt em {
-    color: var(--orange);
-    font-size: 13px;
     font-style: normal;
+    font-size: 13px;
     font-weight: 800;
+    color: var(--orange);
 }
 
-/* 베스트 1위 */
+/* 1위 베스트 상품 크게 표시 */
 .side-best-item.best-first {
-    position: relative;
     display: block;
+    min-height: auto;
     padding: 12px;
 }
 
@@ -352,16 +362,17 @@ header {
     position: absolute;
     top: 12px;
     left: 12px;
-    z-index: 2;
     width: 34px;
     height: 26px;
     font-size: 12px;
+    z-index: 2;
 }
 
 .side-best-item.best-first .thumb {
     width: 230px;
     height: 230px;
     margin: 0 auto 10px;
+    margin-bottom: 10px;
     border-radius: 6px;
 }
 
@@ -371,10 +382,69 @@ header {
 
 .side-best-item.best-first .txt b {
     font-size: 14px;
+    margin-bottom: 2px;
 }
 
 .side-best-item.best-first .txt em {
     font-size: 18px;
+}
+
+/* 2차 GNB */
+.category-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:13px 16px;
+    border-bottom:1px solid var(--line);
+    font-size:14px;
+    transition:.2s;
+}
+
+.category-title:hover{
+    background:#f3fbf6;
+    color:var(--green);
+}
+
+.arrow{
+    font-size:18px;
+    font-weight:bold;
+    color:#999;
+    transition:.3s;
+}
+
+.sub-category{
+    display:none;
+    background:#fafafa;
+}
+
+.sub-category li a{
+    display:block;
+    padding:10px 20px 10px 42px;
+    font-size:13px;
+    color:#666;
+    border-top:1px solid #f0f0f0;
+    transition:.2s;
+}
+
+.sub-category li a:hover{
+    background:#eaf7ef;
+    color:var(--green);
+    padding-left:48px;
+}
+
+.category-item.active .sub-category{
+    display:block;
+}
+
+.category-item.active .arrow{
+    transform:rotate(45deg);
+    color:var(--green);
+}
+
+.category-item.active>.category-title{
+    background:#f3fbf6;
+    color:var(--green);
+    font-weight:bold;
 }
 
 /* =========================

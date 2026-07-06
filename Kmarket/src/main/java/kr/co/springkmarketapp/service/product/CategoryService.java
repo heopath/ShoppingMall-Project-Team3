@@ -51,4 +51,8 @@ public class CategoryService {
 
         return mainCategories;
     }
+
+    public CategoryDTO getCategory(int cateNo) {
+        return categoryDAO.selectCategoryByNo(cateNo);
+    }
 }
