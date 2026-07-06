@@ -1,7 +1,10 @@
 package kr.co.springkmarketapp.service.product;
 
 import kr.co.springkmarketapp.dao.product.ProductDAO;
+import kr.co.springkmarketapp.dto.common.PageRequestDTO;
+import kr.co.springkmarketapp.dto.common.PageResponseDTO;
 import kr.co.springkmarketapp.dto.product.ProductDTO;
+import kr.co.springkmarketapp.dto.product.ProductListDTO;
 import kr.co.springkmarketapp.dto.product.ProductMainDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,5 +55,16 @@ public class ProductService {
     }
     public List<ProductMainDTO> getDiscountProducts() {
         return productDAO.selectDiscountProducts();
+    }
+
+    public PageResponseDTO<ProductListDTO> getProductsByCategory(PageRequestDTO pageRequestDTO) {
+        List<ProductListDTO> dtoList = productDAO.selectProductsByCategory(pageRequestDTO);
+        int total = productDAO.selectCountByCategory(pageRequestDTO);
+
+        return new PageResponseDTO<>(
+                dtoList,
+                pageRequestDTO,
+                total
+        );
     }
 }

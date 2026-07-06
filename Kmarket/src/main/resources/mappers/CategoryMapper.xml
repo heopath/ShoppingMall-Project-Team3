@@ -41,4 +41,19 @@
 
     </select>
 
+    <select id="selectCategoryByNo"
+            resultType="kr.co.springkmarketapp.dto.product.CategoryDTO">
+
+        SELECT
+        cate_no AS cateNo,
+        parent_no AS parentNo,
+        cate_name AS cateName,
+        depth,
+        sort_order AS sortOrder,
+        use_yn AS useYn
+        FROM category
+        WHERE cate_no = #{cateNo}
+
+    </select>
+
 </mapper>
