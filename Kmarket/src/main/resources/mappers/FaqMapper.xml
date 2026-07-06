@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.cs.FaqDAO">
+    <select id="selectFaqList" resultType="kr.co.springkmarketapp.dto.cs.FaqDTO">
+        SELECT faq_no AS faqNo, cs_cate_no AS csCateNo, writer_no AS writerNo, title, content, hit, reg_date AS regDate, update_date AS updateDate
+        FROM faq
+        ORDER BY faq_no DESC
+    </select>
+    <select id="selectFaq" parameterType="int" resultType="kr.co.springkmarketapp.dto.cs.FaqDTO">
+        SELECT faq_no AS faqNo, cs_cate_no AS csCateNo, writer_no AS writerNo, title, content, hit, reg_date AS regDate, update_date AS updateDate
+        FROM faq WHERE faq_no=#{faqNo}
+    </select>
+    <insert id="insertFaq" parameterType="kr.co.springkmarketapp.dto.cs.FaqDTO" useGeneratedKeys="true" keyProperty="faqNo">
+        INSERT INTO faq(cs_cate_no, writer_no, title, content, hit, reg_date)
+        VALUES(#{csCateNo}, COALESCE(#{writerNo}, 1), #{title}, #{content}, 0, NOW())
+    </insert>
+    <update id="updateFaq" parameterType="kr.co.springkmarketapp.dto.cs.FaqDTO">
+        UPDATE faq SET cs_cate_no=#{csCateNo}, writer_no=#{writerNo}, title=#{title}, content=#{content}, hit=#{hit}, update_date=NOW()
+        WHERE faq_no=#{faqNo}
+    </update>
+    <delete id="deleteFaq" parameterType="int">
+        DELETE FROM faq WHERE faq_no=#{faqNo}
+    </delete>
+</mapper>

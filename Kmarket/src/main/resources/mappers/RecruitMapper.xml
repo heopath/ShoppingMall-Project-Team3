@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.company.RecruitDAO">
+    <select id="selectRecruitList" resultType="kr.co.springkmarketapp.dto.company.RecruitDTO">
+        SELECT recruit_no AS recruitNo, writer_no AS writerNo, title, department, career, recruit_type AS recruitType,
+               start_date AS startDate, end_date AS endDate, note, status, reg_date AS regDate
+        FROM recruit
+        ORDER BY recruit_no DESC
+    </select>
+    <select id="selectRecruit" parameterType="int" resultType="kr.co.springkmarketapp.dto.company.RecruitDTO">
+        SELECT recruit_no AS recruitNo, writer_no AS writerNo, title, department, career, recruit_type AS recruitType,
+               start_date AS startDate, end_date AS endDate, note, status, reg_date AS regDate
+        FROM recruit WHERE recruit_no=#{recruitNo}
+    </select>
+    <insert id="insertRecruit" parameterType="kr.co.springkmarketapp.dto.company.RecruitDTO" useGeneratedKeys="true" keyProperty="recruitNo">
+        INSERT INTO recruit(writer_no, title, department, career, recruit_type, start_date, end_date, note, status, reg_date)
+        VALUES(COALESCE(#{writerNo}, 1), #{title}, #{department}, #{career}, #{recruitType}, #{startDate}, #{endDate}, #{note}, COALESCE(#{status}, 'OPEN'), NOW())
+    </insert>
+    <update id="updateRecruit" parameterType="kr.co.springkmarketapp.dto.company.RecruitDTO">
+        UPDATE recruit SET writer_no=#{writerNo}, title=#{title}, department=#{department}, career=#{career}, recruit_type=#{recruitType},
+            start_date=#{startDate}, end_date=#{endDate}, note=#{note}, status=#{status}
+        WHERE recruit_no=#{recruitNo}
+    </update>
+    <delete id="deleteRecruit" parameterType="int">
+        DELETE FROM recruit WHERE recruit_no=#{recruitNo}
+    </delete>
+</mapper>
