@@ -51,6 +51,9 @@ public class AdminMainDTO {
     @NoArgsConstructor
     public static class ChartDataDTO {
         private String date;       // "10-10"
+        private int orderCnt;      // 주문 건수 (숫자 표기용)
+        private int payCnt;        // 결제 건수 (숫자 표기용)
+        private int cancelCnt;     // 취소 건수 (숫자 표기용)
         private int orderHeight;   // 주문 style px 높이값
         private int payHeight;     // 결제 style px 높이값
         private int cancelHeight;  // 취소 style px 높이값
