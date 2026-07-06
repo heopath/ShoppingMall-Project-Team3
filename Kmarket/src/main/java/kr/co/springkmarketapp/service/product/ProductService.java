@@ -2,6 +2,7 @@ package kr.co.springkmarketapp.service.product;
 
 import kr.co.springkmarketapp.dao.product.ProductDAO;
 import kr.co.springkmarketapp.dto.product.ProductDTO;
+import kr.co.springkmarketapp.dto.product.ProductMainDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +32,25 @@ public class ProductService {
 
     public int deleteProduct(Integer productNo) {
         return productDAO.deleteProduct(productNo);
+    }
+
+    // index product list mybatis 요청
+    public List<ProductMainDTO> getBestProducts() {
+        return productDAO.selectBestProducts();
+    }
+    public List<ProductMainDTO> getHitProducts() {
+        return productDAO.selectHitProducts();
+    }
+    public List<ProductMainDTO> getRecommendProducts() {
+        return productDAO.selectRecommendProducts();
+    }
+    public List<ProductMainDTO> getNewProducts() {
+        return productDAO.selectNewProducts();
+    }
+    public List<ProductMainDTO> getPopularProducts() {
+        return productDAO.selectPopularProducts();
+    }
+    public List<ProductMainDTO> getDiscountProducts() {
+        return productDAO.selectDiscountProducts();
     }
 }

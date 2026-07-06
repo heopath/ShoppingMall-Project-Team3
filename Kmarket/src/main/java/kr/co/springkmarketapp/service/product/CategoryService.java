@@ -32,4 +32,23 @@ public class CategoryService {
     public int deleteCategory(Integer cateNo) {
         return categoryDAO.deleteCategory(cateNo);
     }
+
+    // 카테고리 목록 리스트 출력
+    public List<CategoryDTO> getCategoryTree() {
+
+        List<CategoryDTO> mainCategories = categoryDAO.selectMainCategories();
+        List<CategoryDTO> subCategories = categoryDAO.selectSubCategories();
+
+        for (CategoryDTO main : mainCategories) {
+            for (CategoryDTO sub : subCategories) {
+
+                if (sub.getParentNo() != null && sub.getParentNo().equals(main.getCateNo())) {
+
+                    main.getChildren().add(sub);
+                }
+            }
+        }
+
+        return mainCategories;
+    }
 }

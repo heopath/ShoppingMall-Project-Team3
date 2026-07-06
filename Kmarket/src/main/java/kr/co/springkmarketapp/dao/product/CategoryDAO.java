@@ -12,4 +12,7 @@ public interface CategoryDAO {
     List<CategoryDTO> selectCategoryList();
     int updateCategory(CategoryDTO categoryDTO);
     int deleteCategory(Integer cateNo);
+
+    List<CategoryDTO> selectMainCategories();
+    List<CategoryDTO> selectSubCategories();
 }
