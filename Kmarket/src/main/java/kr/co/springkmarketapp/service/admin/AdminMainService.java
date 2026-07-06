@@ -30,12 +30,11 @@ public class AdminMainService {
             int pays = ((Number) row.get("payCnt")).intValue();
             int cancels = ((Number) row.get("cancelCnt")).intValue();
 
-            // 데이터 분포에 알맞게 그래프 높이 스케일링 보정
             int orderHeight = Math.min(orders * 15, 120);
             int payHeight = Math.min(pays * 15, 120);
             int cancelHeight = Math.min(cancels * 15, 120);
 
-            barChartList.add(new AdminMainDTO.ChartDataDTO(date, orderHeight, payHeight, cancelHeight));
+            barChartList.add(new AdminMainDTO.ChartDataDTO(date, orders, pays, cancels, orderHeight, payHeight, cancelHeight));
         }
 
         // 3. 원형차트 카테고리 맵 가공

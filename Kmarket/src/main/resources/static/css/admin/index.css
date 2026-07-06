@@ -92,6 +92,19 @@
     margin-top: 6px;
 }
 
+.bar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.bar-count {
+    font-size: 10px;
+    color: #666;
+    margin-bottom: 2px;
+}
+
 /* 원형차트 */
 .pie-chart-box {
     width: 240px;
