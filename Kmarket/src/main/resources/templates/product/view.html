@@ -19,161 +19,72 @@
 
     <!-- Content -->
     <main class="content-area">
-        <div class="breadcrumb">
-            <a th:href="@{/}">HOME</a>
-
-            <span th:if="${parentCategory != null}">›</span>
-
-            <span th:if="${parentCategory != null}"
-                  th:text="${parentCategory.cateName}">
-                패션·의류·뷰티
-            </span>
-
-            <span>›</span>
-
-            <strong th:text="${currentCategory.cateName}">
-                남성의류
-            </strong>
-        </div>
+        <div class="breadcrumb">HOME <span>›</span> 패션·의류·뷰티 <span>›</span> 남성의류</div>
 
         <section class="view-page">
-
+            <div class="page-title">
+                <h1>상품보기</h1>
+            </div>
 
             <!-- Product Summary -->
             <section class="view-summary">
                 <div class="summary-thumb">
                     <div class="product-image">
-                        <img th:src="${product.imagePath != null ? product.imagePath : '/images/common/no-image.png'}"
-                             th:alt="${product.productName}" />
+                        <svg viewBox="0 0 24 24" fill="#ccc">
+                            <path
+                                    d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                            />
+                        </svg>
                     </div>
                 </div>
 
                 <div class="summary-info">
                     <div class="meta-top">
-                        <span class="goods-no">
-                            상품번호 :
-                            <span th:text="${product.productNo}">10010118412</span>
-                        </span>
-
-                        <span class="seller-shop"
-                              th:text="${product.sellerName}">
-                            (주)상호명
-                        </span>
+                        <span class="goods-no">상품번호 : 10010118412</span>
+                        <span class="seller-shop">(주)상호명</span>
                     </div>
 
-                    <h2 class="product-title"
-                        th:text="${product.productName}">
-                        상품명
-                    </h2>
+                    <h2 class="product-title">상품명</h2>
 
-                    <div class="review-star-row"
-                         th:if="${product.reviewCount > 0}">
-
-                    <span class="stars"
-                          th:style="'--rating: ' + ${product.ratingPercent} + '%'">
-                    </span>
-
-                        <span class="review-count">
-                            상품평
-                            <strong th:text="${product.reviewCount}">17</strong>건
-                        </span>
-                    </div>
-
-                    <div class="review-star-row no-review"
-                         th:unless="${product.reviewCount > 0}">
-                        아직 등록된 상품평이 없습니다.
+                    <div class="review-star-row">
+                        <span class="stars" style="--rating: 90%"></span>
+                        <span class="review-count">상품평 17건</span>
                     </div>
 
                     <div class="price-box">
-
                         <div class="old-price-row">
-                            <del th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
-                                30,000원
-                            </del>
-
-                            <span class="discount-rate"
-                                  th:text="${product.discountRate} + '%'">
-                                10%
-                            </span>
-
-                            <span class="coupon-badge"
-                                  th:if="${product.discountRate > 0}">
-                                할인상품
-                            </span>
+                            <del>30,000원</del>
+                            <span class="discount-rate">10%</span>
+                            <span class="coupon-badge">쿠폰할인</span>
                         </div>
 
-                        <div class="sale-price"
-                             th:text="${#numbers.formatInteger(product.salePrice, 3, 'COMMA')} + '원'">
-                            27,000원
-                        </div>
+                        <div class="sale-price">27,000원</div>
 
                         <div class="delivery-info">
-
-                            <span class="delivery-badge"
-                                  th:if="${product.deliveryFee == 0}">
-                                무료배송
-                            </span>
-
-                            <span class="delivery-badge paid"
-                                  th:unless="${product.deliveryFee == 0}"
-                                  th:text="'배송비 ' + ${#numbers.formatInteger(product.deliveryFee, 3, 'COMMA')} + '원'">
-                                배송비 3,000원
-                            </span>
-
-                            <span>배송 예정</span>
+                            <span class="delivery-badge">무료배송</span>
+                            <span>모레 도착예정</span>
                         </div>
 
-                        <p class="delivery-note"
-                           th:text="${product.deliveryFee == 0 ? '무료배송 · 국내배송만 가능합니다.' : '배송비가 부과됩니다.'}">
-                            무료배송 · 국내배송만 가능합니다.
-                        </p>
-
-                        <p class="origin-note">
-                            원산지 - 상세설명 참고
-                        </p>
+                        <p class="delivery-note">무료배송 · 국내배송만 가능합니다.</p>
+                        <p class="origin-note">원산지 - 상세설명 참고</p>
                     </div>
 
-                    <div class="option-box"
-                         th:if="${!#maps.isEmpty(optionGroups)}">
-
-                        <div class="option-row"
-                             th:each="entry : ${optionGroups}">
-
-                            <!-- 같은 그룹의 첫 번째 옵션에서 옵션 이름 가져오기 -->
-                            <label th:text="${entry.value[0].optionName}">
-                                옵션
-                            </label>
-
-                            <select class="option-select"
-                                    th:data-group-no="${entry.key}">
-
-                                <option value="">선택하세요</option>
-
-                                <option th:each="option : ${entry.value}"
-                                        th:value="${option.optionNo}"
-                                        th:text="${option.optionValue}">
-                                    블랙
-                                </option>
-                            </select>
-
-                        </div>
+                    <div class="option-box">
+                        <select id="optionSelect">
+                            <option value="27000">선택하세요</option>
+                            <option value="27000">옵션 1 / 기본형</option>
+                            <option value="32000">옵션 2 / 고급형 (+5,000원)</option>
+                            <option value="35000">옵션 3 / 프리미엄형 (+8,000원)</option>
+                        </select>
                     </div>
-
-                    <input type="hidden"
-                           id="basePrice"
-                           th:value="${product.salePrice}" />
 
                     <div class="selected-item">
                         <div class="selected-left">
-                            <strong id="selectedProductName"
-                                    th:data-product-name="${product.productName}"
-                                    th:text="${product.productName}">
-                                선택한 상품명
-                            </strong>
+                            <strong>선택한 상품명</strong>
 
                             <div class="qty-box">
                                 <button type="button" id="minusBtn">-</button>
-                                <input type="text" id="qtyInput" value="1" readonly />
+                                <input type="text" id="qtyInput" value="2" readonly />
                                 <button type="button" id="plusBtn">+</button>
                             </div>
                         </div>
@@ -211,21 +122,14 @@
                 </div>
 
                 <div class="detail-image-box">
-
-                    <div class="detail-images"
-                         th:if="${!#lists.isEmpty(detailImages)}">
-
-                        <img th:each="image : ${detailImages}"
-                             th:src="${image.imagePath}"
-                             th:alt="${product.productName}" />
+                    <div class="detail-placeholder">
+                        <svg viewBox="0 0 24 24" fill="#ccc">
+                            <path
+                                    d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                            />
+                        </svg>
+                        <p>상품 상세 이미지 출력 영역</p>
                     </div>
-
-                    <div class="detail-placeholder"
-                         th:if="${#lists.isEmpty(detailImages)}">
-
-                        <p>등록된 상품 상세 이미지가 없습니다.</p>
-                    </div>
-
                 </div>
             </section>
 
@@ -238,106 +142,53 @@
 
                 <table class="notice-table">
                     <tbody>
-                    <!-- 상품정보 제공고시 -->
                     <tr>
                         <th>상품번호</th>
-                        <td th:text="${product.productNo}">10010118412</td>
+                        <td>10010118412</td>
                     </tr>
-
                     <tr>
                         <th>상품상태</th>
-                        <td th:text="${notice != null && notice.productStatus != null ? notice.productStatus : '-'}">
-                            새상품
-                        </td>
+                        <td>새상품</td>
                     </tr>
-
                     <tr>
                         <th>부가세면세여부</th>
-                        <td th:text="${notice != null && notice.taxType != null ? notice.taxType : '-'}">
-                            과세상품
-                        </td>
+                        <td>과세상품</td>
                     </tr>
-
                     <tr>
                         <th>영수증발행</th>
-                        <td th:text="${notice != null && notice.receiptType != null ? notice.receiptType : '-'}">
-                            발행가능
-                        </td>
+                        <td>발행가능 / 신용카드전표, 온라인현금영수증 등</td>
                     </tr>
-
                     <tr>
                         <th>사업자구분</th>
-                        <td th:text="${notice != null && notice.businessType != null ? notice.businessType : '-'}">
-                            통신판매업자
-                        </td>
+                        <td>통신판매업자</td>
                     </tr>
-
                     <tr>
                         <th>브랜드</th>
-                        <td th:text="${product.brand != null ? product.brand : '-'}">
-                            블루포스
-                        </td>
+                        <td>블루포스</td>
                     </tr>
-
                     <tr>
                         <th>원산지</th>
-                        <td th:text="${notice != null && notice.origin != null ? notice.origin : '상품상세정보 참조'}">
-                            국내생산
-                        </td>
+                        <td>국내생산</td>
                     </tr>
-
-                    <!-- 판매자 정보 -->
                     <tr>
-                        <th>상호명</th>
-                        <td th:text="${seller != null && seller.companyName != null ? seller.companyName : '-'}">
-                            (주)상호명
-                        </td>
+                        <th>제조사 / 수입국</th>
+                        <td>상세정보 직접 입력</td>
                     </tr>
-
                     <tr>
-                        <th>대표자명</th>
-                        <td th:text="${seller != null && seller.ceoName != null ? seller.ceoName : '-'}">
-                            홍길동
-                        </td>
+                        <th>제조년월</th>
+                        <td>상세정보 직접 입력</td>
                     </tr>
-
                     <tr>
-                        <th>사업자등록번호</th>
-                        <td th:text="${seller != null && seller.bizNo != null ? seller.bizNo : '-'}">
-                            000-00-00000
-                        </td>
+                        <th>품질보증기준</th>
+                        <td>상세정보 직접 입력</td>
                     </tr>
-
                     <tr>
-                        <th>통신판매업 신고번호</th>
-                        <td th:text="${seller != null && seller.onlineSaleNo != null ? seller.onlineSaleNo : '-'}">
-                            2026-서울강남-0000
-                        </td>
+                        <th>A/S 책임자</th>
+                        <td>상세정보 직접 입력</td>
                     </tr>
-
                     <tr>
-                        <th>판매자 연락처</th>
-                        <td th:text="${seller != null && seller.tel != null ? seller.tel : '-'}">
-                            02-1234-5678
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th>사업장 주소</th>
-                        <td th:if="${seller != null}">
-                            <span th:if="${seller.zip != null}"
-                                  th:text="'(' + ${seller.zip} + ') '">
-                            </span>
-
-                            <span th:text="${seller.addr1 != null ? seller.addr1 : ''}">
-                                서울특별시 강남구
-                            </span>
-
-                            <span th:text="${seller.addr2 != null ? seller.addr2 : ''}">
-                                테헤란로 00
-                            </span>
-                        </td>
-                        <td th:unless="${seller != null}">-</td>
+                        <th>전화번호</th>
+                        <td>상세정보 직접 입력</td>
                     </tr>
                     </tbody>
                 </table>
@@ -354,119 +205,93 @@
                     <h3>상품리뷰</h3>
                 </div>
 
-                <div class="review-list"
-                     th:if="${!#lists.isEmpty(reviewPageResponseDTO.dtoList)}">
-
-                    <article class="review-item"
-                             th:each="review : ${reviewPageResponseDTO.dtoList}">
-
+                <div class="review-list">
+                    <article class="review-item">
                         <div class="review-top">
-                            <span class="stars"
-                                  th:style="'--rating: ' + ${review.ratingPercent} + '%'">
-                            </span>
-
-                            <div class="review-meta">
-                                <span th:text="${review.maskedMemberId}">
-                                    seo******
-                                </span>
-                                ·
-                                <span th:text="${#temporals.format(review.regDate, 'yyyy-MM-dd')}">
-                                    2026-07-10
-                                </span>
-                            </div>
+                            <span class="stars" style="--rating: 100%"></span>
+                            <div class="review-meta">seo****** · 0000-07-10</div>
                         </div>
 
                         <div class="review-body">
-
                             <div class="review-thumb">
-                                <img th:if="${review.imagePath != null}"
-                                     th:src="${review.imagePath}"
-                                     th:alt="${product.productName}" />
-
-                                <svg th:unless="${review.imagePath != null}"
-                                     viewBox="0 0 24 24"
-                                     fill="#ccc">
-                                    <path d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                                <svg viewBox="0 0 24 24" fill="#ccc">
+                                    <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                    />
                                 </svg>
                             </div>
 
                             <div class="review-text">
-                                <strong th:text="${product.productName}">
-                                    상품명
-                                </strong>
+                                <strong>상품명</strong>
+                                <p>
+                                    가격대비 정말 괜찮은 옷이라 생각되네요. 핏도 좋고 소재도 괜찮아서
+                                    만족합니다. 배송도 빠르고 포장도 깔끔해서 다음에도 여기서 구매할 것 같아요.
+                                </p>
+                            </div>
+                        </div>
+                    </article>
 
-                                <p th:text="${review.content}">
-                                    리뷰 내용
+                    <article class="review-item">
+                        <div class="review-top">
+                            <span class="stars" style="--rating: 80%"></span>
+                            <div class="review-meta">seo****** · 0000-07-10</div>
+                        </div>
+
+                        <div class="review-body">
+                            <div class="review-thumb">
+                                <svg viewBox="0 0 24 24" fill="#ccc">
+                                    <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                    />
+                                </svg>
+                            </div>
+
+                            <div class="review-text">
+                                <strong>상품명</strong>
+                                <p>
+                                    재질이 괜찮고 착용감도 좋아요. 길이감도 적당해서 데일리로 입기 좋습니다.
+                                    다만 생각보다 색상이 조금 진한 편이었지만 전체적으로 만족합니다.
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="review-item">
+                        <div class="review-top">
+                            <span class="stars" style="--rating: 90%"></span>
+                            <div class="review-meta">seo****** · 0000-07-10</div>
+                        </div>
+
+                        <div class="review-body">
+                            <div class="review-thumb">
+                                <svg viewBox="0 0 24 24" fill="#ccc">
+                                    <path
+                                            d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
+                                    />
+                                </svg>
+                            </div>
+
+                            <div class="review-text">
+                                <strong>상품명</strong>
+                                <p>
+                                    깔끔하고 무난해서 누구나 입기 좋은 스타일이에요. 세탁 후에도 큰 변형이
+                                    없어서 더 만족스럽네요. 재구매 의사 있습니다.
                                 </p>
                             </div>
                         </div>
                     </article>
                 </div>
 
-                <div class="empty-review"
-                     th:if="${#lists.isEmpty(reviewPageResponseDTO.dtoList)}">
-                    아직 등록된 상품리뷰가 없습니다.
-                </div>
-
-                <nav class="pagination"
-                     aria-label="리뷰 페이지 이동"
-                     th:if="${reviewPageResponseDTO.total > 0}">
-
-                    <!-- 처음 -->
-                    <span class="page-arrow disabled"
-                          th:if="${reviewPageResponseDTO.pageRequestDTO.page == 1}">
-                        «
-                    </span>
-
-                    <a th:unless="${reviewPageResponseDTO.pageRequestDTO.page == 1}"
-                       class="page-arrow"
-                       th:href="@{/product/view(productNo=${product.productNo}, reviewPage=1)} + '#reviewInfo'">
-                        «
-                    </a>
-
-                    <!-- 이전 페이지 묶음 -->
-                    <span class="page-arrow disabled"
-                          th:unless="${reviewPageResponseDTO.prev}">
-                        ‹
-                    </span>
-
-                    <a th:if="${reviewPageResponseDTO.prev}"
-                       class="page-arrow"
-                       th:href="@{/product/view(productNo=${product.productNo}, reviewPage=${reviewPageResponseDTO.startNo - 1})} + '#reviewInfo'">
-                        ‹
-                    </a>
-
-                    <!-- 페이지 번호 -->
-                    <a th:each="pageNo : ${#numbers.sequence(reviewPageResponseDTO.startNo, reviewPageResponseDTO.endNo)}"
-                       th:text="${pageNo}"
-                       th:href="@{/product/view(productNo=${product.productNo}, reviewPage=${pageNo})} + '#reviewInfo'"
-                       th:classappend="${reviewPageResponseDTO.pageRequestDTO.page == pageNo} ? 'active' : ''">
-                        1
-                    </a>
-
-                    <!-- 다음 페이지 묶음 -->
-                    <span class="page-arrow disabled"
-                        th:unless="${reviewPageResponseDTO.next}">
-                        ›
-                    </span>
-
-                    <a th:if="${reviewPageResponseDTO.next}"
-                       class="page-arrow"
-                       th:href="@{/product/view(productNo=${product.productNo}, reviewPage=${reviewPageResponseDTO.endNo + 1})} + '#reviewInfo'">
-                        ›
-                    </a>
-
-                    <!-- 마지막 -->
-                    <span class="page-arrow disabled"
-                          th:if="${reviewPageResponseDTO.pageRequestDTO.page == reviewPageResponseDTO.lastPage}">
-                        »
-                    </span>
-
-                    <a th:unless="${reviewPageResponseDTO.pageRequestDTO.page == reviewPageResponseDTO.lastPage}"
-                       class="page-arrow"
-                       th:href="@{/product/view(productNo=${product.productNo}, reviewPage=${reviewPageResponseDTO.lastPage})} + '#reviewInfo'">
-                        »
-                    </a>
+                <nav class="pagination" aria-label="리뷰 페이지 이동">
+                    <a href="#" class="page-arrow">«</a>
+                    <a href="#" class="page-arrow">‹</a>
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <a href="#" class="page-arrow">›</a>
+                    <a href="#" class="page-arrow">»</a>
                 </nav>
             </section>
         </section>
@@ -502,59 +327,25 @@
     const qtyInput = document.getElementById("qtyInput");
     const plusBtn = document.getElementById("plusBtn");
     const minusBtn = document.getElementById("minusBtn");
-
+    const optionSelect = document.getElementById("optionSelect");
     const totalPrice = document.getElementById("totalPrice");
     const selectedPrice = document.getElementById("selectedPrice");
-
-    const basePrice = document.getElementById("basePrice");
-    const selectedProductName = document.getElementById("selectedProductName");
-
-    const optionSelects = document.querySelectorAll(".option-select");
 
     function formatPrice(num) {
         return Number(num).toLocaleString() + "원";
     }
 
     function getUnitPrice() {
-        return Number(document.getElementById("basePrice").value);
-    }
-
-    function getSelectedOptionTexts() {
-        const selectedOptions = [];
-
-        optionSelects.forEach(function (select) {
-            const selectedOption = select.options[select.selectedIndex];
-
-            if (selectedOption.value !== "") {
-                selectedOptions.push(selectedOption.text);
-            }
-        });
-
-        return selectedOptions;
-    }
-
-    function updateSelectedProductName() {
-        const productName = selectedProductName.dataset.productName;
-        const selectedOptions = getSelectedOptionTexts();
-
-        if (selectedOptions.length === 0) {
-            selectedProductName.textContent = productName;
-            return;
-        }
-
-        selectedProductName.textContent =
-            productName + " / " + selectedOptions.join(" / ");
+        return Number(optionSelect.value);
     }
 
     function updatePrice() {
         const qty = Number(qtyInput.value);
-        const unitPrice = getUnitPrice();
-        const total = qty * unitPrice;
+        const unit = getUnitPrice();
+        const total = qty * unit;
 
         selectedPrice.textContent = formatPrice(total);
         totalPrice.textContent = formatPrice(total);
-
-        updateSelectedProductName();
     }
 
     plusBtn.addEventListener("click", () => {
@@ -570,49 +361,14 @@
         }
     });
 
+    optionSelect.addEventListener("change", updatePrice);
+
     const detailTabs = document.querySelectorAll(".detail-tabs a");
     detailTabs.forEach((tab) => {
         tab.addEventListener("click", () => {
             detailTabs.forEach((el) => el.classList.remove("active"));
             tab.classList.add("active");
         });
-    });
-
-    optionSelects.forEach(function (select) {
-        select.addEventListener("change", updatePrice);
-    });
-
-    function isAllOptionsSelected() {
-        for (const select of optionSelects) {
-            if (select.value === "") {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    const cartBtn = document.querySelector(".btn-cart");
-    const buyBtn = document.querySelector(".btn-buy");
-
-    cartBtn.addEventListener("click", function () {
-        if (!isAllOptionsSelected()) {
-            alert("상품 옵션을 모두 선택해주세요.");
-            return;
-        }
-
-        // 다음 단계: 장바구니 저장 요청
-        console.log("장바구니 가능");
-    });
-
-    buyBtn.addEventListener("click", function () {
-        if (!isAllOptionsSelected()) {
-            alert("상품 옵션을 모두 선택해주세요.");
-            return;
-        }
-
-        // 다음 단계: 바로구매 주문서 이동
-        console.log("구매 가능");
     });
 
     updatePrice();

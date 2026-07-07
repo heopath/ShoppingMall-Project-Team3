@@ -15,27 +15,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
     width: 420px;
     height: 420px;
     border: 1px solid var(--line);
     background: #f7f7f7;
 }
 
-.product-image img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
 .product-image svg {
     width: 30%;
     opacity: 0.5;
-}
-
-.product-view {
-    margin-top: 22px;
 }
 
 .meta-top {
@@ -319,12 +307,6 @@
     padding: 18px;
 }
 
-.detail-image-box img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
 .detail-placeholder {
     display: flex;
     flex-direction: column;
@@ -411,26 +393,18 @@
 }
 
 .review-thumb {
-    overflow: hidden;
-}
-
-.review-thumb img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    height: 90px;
+    border: 1px solid var(--line);
+    background: #f7f7f7;
 }
 
 .review-thumb svg {
-    width: 28px;
-    height: 28px;
-}
-
-.empty-review {
-    padding: 55px 0;
-    border-bottom: 1px solid var(--line);
-    color: #888;
-    text-align: center;
+    width: 38%;
+    opacity: 0.45;
 }
 
 .review-text strong {
@@ -519,10 +493,4 @@
     border-color: var(--green);
     background: #fff;
     color: var(--green-dark);
-}
-
-.pagination .disabled {
-    pointer-events: none;
-    opacity: 0.35;
-    cursor: default;
 }

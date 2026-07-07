@@ -3,22 +3,19 @@ package kr.co.springkmarketapp.service.product;
 import kr.co.springkmarketapp.dao.product.ProductDAO;
 import kr.co.springkmarketapp.dto.common.PageRequestDTO;
 import kr.co.springkmarketapp.dto.common.PageResponseDTO;
-import kr.co.springkmarketapp.dto.product.*;
+import kr.co.springkmarketapp.dto.product.ProductDTO;
+import kr.co.springkmarketapp.dto.product.ProductListDTO;
+import kr.co.springkmarketapp.dto.product.ProductMainDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
     private final ProductDAO productDAO;
-    private final RestClient.Builder builder;
 
     public int insertProduct(ProductDTO productDTO) {
         return productDAO.insertProduct(productDTO);
@@ -70,48 +67,4 @@ public class ProductService {
                 total
         );
     }
-
-    // 상품 상세 페이지
-    public ProductViewDTO getProductView(int productNo) {
-        return productDAO.selectProductView(productNo);
-    }
-
-    public List<ProductOptionDTO> getProductOptions(int productNo) {
-        return productDAO.selectProductOptions(productNo);
-    }
-
-    public Map<Integer, List<ProductOptionDTO>> getProductOptionGroups(int productNo) {
-
-        List<ProductOptionDTO> options =
-                productDAO.selectProductOptions(productNo);
-
-        return options.stream()
-                .collect(Collectors.groupingBy(
-                        ProductOptionDTO::getOptionGroupNo,
-                        LinkedHashMap::new,
-                        Collectors.toList()
-                ));
-    }
-
-    public List<ProductImageDTO> getDetailImages(int productNo) {
-        return productDAO.selectDetailImages(productNo);
-    }
-
-    public ProductNoticeDTO getProductNotice(int productNo) {
-        return productDAO.selectProductNotice(productNo);
-    }
-
-    public PageResponseDTO<ProductReviewDTO> getProductReviews(int productNo, PageRequestDTO pageRequestDTO) {
-        List<ProductReviewDTO> dtoList = productDAO.selectProductReviewList(productNo, pageRequestDTO);
-
-        int total = productDAO.selectProductReviewCount(productNo);
-
-        return PageResponseDTO.<ProductReviewDTO>builder()
-                .pageRequestDTO(pageRequestDTO)
-                .dtoList(dtoList)
-                .total(total)
-                .build();
-    }
-
-
 }
