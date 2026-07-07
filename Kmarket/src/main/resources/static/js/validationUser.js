@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function(){
         if(!value.match(rePass)){
             passResult.innerText = '비밀번호가 유효하지 않습니다.';
             passResult.style.color = 'red';
+            isPassOk = false;
             return;
         }else {
             passResult.innerText = '';
@@ -121,11 +122,18 @@ document.addEventListener('DOMContentLoaded', function(){
         const value1 = form.password.value;
         const value2 = form.password2.value;
 
+        if(!value1.match(rePass)){
+            passResult.innerText = '비밀번호가 유효하지 않습니다.';
+            passResult.style.color = 'red';
+            isPassOk = false;
+            return;
+        }
+
         if(value1 === value2){
             passResult.innerText = '비밀번호가 일치 합니다.';
             passResult.style.color = '#83d400';
             isPassOk = true;
-        }else {
+        }else{
             passResult.innerText = '비밀번호가 일치하지 않습니다.';
             passResult.style.color = 'red';
             isPassOk = false;

@@ -18,18 +18,15 @@
   <main class="main-layout">
       <h2 class="page-title">케이마켓이 도와드릴게요!</h2>
 
-      <!-- 검색 -->
-      <!-- <div class="cs-search">
-            <input type="text" placeholder="궁금한 내용을 검색해보세요">
-            <button type="button"><i class="bi bi-search"></i></button>
-        </div> -->
-
       <!-- 공지사항 -->
       <section class="cs-section">
         <div class="section-header">
           <h3>공지사항</h3>
-          <a href="#">전체보기 ></a>
+          <a th:href="@{/cs/notice/list}">전체보기 ></a>
         </div>
+
+<!--        <th:block >-->
+<!--        </th:block>-->
 
         <ul class="notice-list">
           <li>
@@ -63,7 +60,7 @@
       <section class="cs-section">
         <div class="section-header">
           <h3>자주하는 질문</h3>
-          <a href="#">전체보기 ></a>
+          <a th:href="@{/cs/faq/list}">전체보기 ></a>
         </div>
 
         <div class="faq-category">
@@ -103,7 +100,7 @@
       <section class="cs-section">
         <div class="section-header">
           <h3>문의하기</h3>
-          <a href="#">전체보기 ></a>
+          <a th:href="@{/cs/qna/list}">전체보기 ></a>
         </div>
 
         <ul class="qna-list">

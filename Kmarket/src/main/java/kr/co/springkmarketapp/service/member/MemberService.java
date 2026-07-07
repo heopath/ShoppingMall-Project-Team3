@@ -84,4 +84,28 @@ public class MemberService {
         }
         return count;
     }
+
+    public int countByNameAndEmail(String name, String email) {
+        return memberDAO.countByNameAndEmail(name, email);
+    }
+
+
+    public String findMemberId(String name, String email) {
+        return memberDAO.findMemberId(name, email);
+    }
+
+    public int countByMemberIdAndEmail(String memberId, String email) {
+        return memberDAO.countByMemberIdAndEmail(memberId, email);
+    }
+
+    public int changePassword(String memberId, String password) {
+
+        String encoded = passwordEncoder.encode(password);
+
+        return memberDAO.changePassword(memberId, encoded);
+    }
+
+    public MemberDTO selectMemberByMemberId(String memberId) {
+        return memberDAO.selectMemberByMemberId(memberId);
+    }
 }
