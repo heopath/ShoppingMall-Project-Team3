@@ -15,11 +15,6 @@ public class SellerProfileService {
 
     private final SellerProfileDAO sellerProfileDAO;
 
-    public int insertSellerProfile(SellerProfileDTO sellerProfileDTO) {
-
-        return sellerProfileDAO.insertSellerProfile(sellerProfileDTO);
-    }
-
     public SellerProfileDTO selectSellerProfile(Integer sellerNo) {
         return sellerProfileDAO.selectSellerProfile(sellerNo);
     }
