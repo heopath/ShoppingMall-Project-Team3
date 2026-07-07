@@ -6,11 +6,13 @@
     <title>아이디 찾기</title>
     <link rel="stylesheet" href="../../css/main.css" />
     <link rel="stylesheet" href="../../css/member/find/common.css" />
+    <script th:src="@{/js/findId.js}"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const tabBtns = document.querySelectorAll(".tab-btn");
         const contents = document.querySelectorAll(".find-content");
 
+        // 탭 전환 기능만 유지
         tabBtns.forEach(function (btn) {
           btn.addEventListener("click", function () {
             tabBtns.forEach(function (tab) {
@@ -22,9 +24,7 @@
             });
 
             btn.classList.add("active");
-
             const target = btn.dataset.tab;
-
             document.getElementById(target + "-tab").classList.add("active");
           });
         });
@@ -33,9 +33,6 @@
   </head>
   <body>
   <th:block th:replace="~{common/_main_header}"></th:block>
-
-
-
 
     <main class="main-layout">
       <div class="find-card">
@@ -52,22 +49,56 @@
 
         <!-- 이메일 인증 -->
         <div class="find-content active" id="email-tab">
-          <div class="form-row">
-            <label>이름</label>
-            <input type="text" placeholder="이름 입력" />
-          </div>
+          <form id="findIdEmailForm">
 
-          <div class="form-row">
-            <label>이메일</label>
-
-            <div class="verify-group">
-              <input type="email" placeholder="이메일 입력" />
-              <button type="button">인증받기</button>
+            <div class="form-row">
+              <label>이름</label>
+              <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      placeholder="이름 입력"
+              />
             </div>
-          </div>
 
-          <p class="guide">가입 시 등록한 이메일로 인증번호가 발송됩니다.</p>
+            <div class="form-row">
+              <label>이메일</label>
+
+              <div class="verify-group">
+                <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="이메일 입력"
+                />
+                <button type="button" id="btnEmail">인증받기</button>
+              </div>
+            </div>
+            <span class="emailResult" style="margin-top: -10px; display: block; margin-bottom: 20px;"></span>
+
+            <div class="form-row auth" >
+              <label>인증번호</label>
+
+              <div class="verify-group">
+                <input
+                        type="text"
+                        id="code"
+                        name="code"
+                        placeholder="인증번호 입력"
+                />
+                <button type="button" id="btnConfirm">인증번호 확인</button>
+              </div>
+            </div>
+
+<!--            <span class="emailResult"></span>-->
+
+            <p class="guide">
+              가입 시 등록한 이메일로 인증번호가 발송됩니다.
+            </p>
+
+          </form>
         </div>
+
 
         <!-- 휴대폰 인증 -->
         <div class="find-content" id="phone-tab">
@@ -90,7 +121,7 @@
 
             <div class="verify-group">
               <input type="text" placeholder="인증번호 입력" />
-              <button type="button">확인</button>
+              <button type="button">인증번호 확인</button>
             </div>
           </div>
 
@@ -100,8 +131,10 @@
         </div>
 
         <div class="btn-area">
-          <a href="../login.html" class="btn-cancel">취소</a>
-          <a href="./resultId.html" class="btn-submit">다음</a>
+          <a th:href="@{/member/login}" class="btn-cancel">취소</a>
+          <button type="button" id="btnNext" class="btn-submit">
+            다음
+          </button>
         </div>
       </div>
     </main>

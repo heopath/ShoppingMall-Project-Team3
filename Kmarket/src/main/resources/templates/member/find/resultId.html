@@ -23,27 +23,27 @@
         <table class="result-table">
           <tr>
             <th>이름</th>
-            <td>홍길동</td>
+            <td>[[${member.name}]]</td>
           </tr>
           <tr>
             <th>아이디</th>
-            <td class="result-id">honggildong</td>
+            <td class="result-id">[[${member.memberId}]]</td>
           </tr>
           <tr>
             <th>이메일</th>
-            <td>honggildong@gmail.com</td>
+            <td>[[${member.email}]]</td>
           </tr>
           <tr>
             <th>가입일</th>
-            <td>2022-11-16 10:20:22</td>
+            <td>[[${#temporals.format(member.regDate, 'yyyy-MM-dd')}]]</td>
           </tr>
         </table>
 
         <div class="result-message">고객님의 정보와 일치하는 아이디입니다.</div>
 
         <div class="btn-area">
-          <a href="../login.html" class="btn-cancel">로그인</a>
-          <a href="./password.html" class="btn-submit">비밀번호 찾기</a>
+          <a th:href="@{/member/login}" class="btn-cancel">로그인</a>
+          <a th:href="@{/member/find/password}" class="btn-submit">비밀번호 찾기</a>
         </div>
       </div>
     </main>

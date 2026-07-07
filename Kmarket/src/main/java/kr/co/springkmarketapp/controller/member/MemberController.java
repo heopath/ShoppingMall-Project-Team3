@@ -56,7 +56,12 @@ public class MemberController {
     @PostMapping("/member/registerSeller")
     public String registerSeller(MemberDTO memberDTO,
                                  SellerProfileDTO sellerProfileDTO) {
+        // 대표자명과 전화번호를 memeberDTO의 name과 hp에 저장
+        memberDTO.setName(sellerProfileDTO.getCeoName());
+        memberDTO.setHp(sellerProfileDTO.getTel());
 
+        // 판매자 권한 설정
+        memberDTO.setRole("SELLER");
         // member 저장
         Member member = memberService.insertMember(memberDTO);
 
@@ -64,7 +69,7 @@ public class MemberController {
         sellerProfileDTO.setMemberNo(member.getMemberNo());
 
         // seller_profile 저장
-//        sellerProfileService.insertSellerProfile(sellerProfileDTO);
+        sellerProfileService.insertSellerProfile(sellerProfileDTO);
 
         return "redirect:/member/login?register=success";
     }

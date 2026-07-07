@@ -867,3 +867,18 @@ footer {
     color:var(--green);
     font-weight:bold;
 }
+
+/* 로그인 후 헤더에 유저 이름 반영 */
+.login-user {
+    color: #666;
+    font-size: 13px;
+}
+
+.login-user .name {
+    color: #8cd13f;
+    font-weight: 700;
+}
+
+.login-user .suffix {
+    color: #333;
+}

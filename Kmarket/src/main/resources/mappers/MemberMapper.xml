@@ -100,7 +100,6 @@
         </foreach>
     </update>
 
-<!-- 회수대상조회-->
     <select id="selectRevokeTargetPointList" resultType="kr.co.springkmarketapp.dto.my.MemberPointDTO">
         SELECT
         point_no AS pointNo,
@@ -120,22 +119,18 @@
         AND point_value > 0
     </select>
 
-<!--회원 현재 포인트 조회-->
     <select id="selectCurrentMemberPoint" resultType="int">
         SELECT point
         FROM member
         WHERE member_no = #{memberNo}
     </select>
 
-<!--    회원포인트차감-->
     <update id="updateMemberPointBalance">
         UPDATE member
         SET point = #{point}
         WHERE member_no = #{memberNo}
     </update>
 
-
-<!--    회수내역추가-->
     <insert id="insertRevokePointHistory">
         INSERT INTO member_point
         (
@@ -160,4 +155,41 @@
         NOW()
         )
     </insert>
+
+    <select id="countByNameAndEmail" resultType="int">
+        SELECT COUNT(*)
+        FROM member
+        WHERE name = #{name}
+        AND email = #{email}
+    </select>
+
+    <select id="findMemberId" resultType="string">
+        SELECT member_id
+        FROM member
+        WHERE name = #{name}
+        AND email = #{email}
+    </select>
+
+    <select id="countByMemberIdAndEmail" resultType="int">
+        SELECT COUNT(*)
+        FROM member
+        WHERE member_id = #{memberId}
+        AND email = #{email}
+    </select>
+
+    <update id="changePassword">
+        UPDATE member
+        SET password = #{password}
+        WHERE member_id = #{memberId}
+    </update>
+
+    <select id="selectMemberByMemberId">
+        SELECT
+        name,
+        member_id,
+        email,
+        reg_date
+        FROM member
+        WHERE member_id = #{memberId}
+    </select>
 </mapper>
