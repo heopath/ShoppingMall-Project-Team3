@@ -1,29 +1,330 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.springkmarketapp.dao.member.SellerProfileDAO">
+
     <select id="selectSellerProfileList" resultType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
-        SELECT seller_no AS sellerNo, member_no AS memberNo, company_name AS companyName, ceo_name AS ceoName,
-               biz_no AS bizNo, online_sale_no AS onlineSaleNo, tel, fax, zip, addr1, addr2, status, reg_date AS regDate
+        SELECT seller_no AS sellerNo,
+               member_no AS memberNo,
+               company_name AS companyName,
+               ceo_name AS ceoName,
+               biz_no AS bizNo,
+               online_sale_no AS onlineSaleNo,
+               tel,
+               fax,
+               zip,
+               addr1,
+               addr2,
+               status,
+               reg_date AS regDate
         FROM seller_profile
+        WHERE status != '삭제'
         ORDER BY seller_no DESC
     </select>
+
     <select id="selectSellerProfile" parameterType="int" resultType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
-        SELECT seller_no AS sellerNo, member_no AS memberNo, company_name AS companyName, ceo_name AS ceoName,
-               biz_no AS bizNo, online_sale_no AS onlineSaleNo, tel, fax, zip, addr1, addr2, status, reg_date AS regDate
+        SELECT seller_no AS sellerNo,
+               member_no AS memberNo,
+               company_name AS companyName,
+               ceo_name AS ceoName,
+               biz_no AS bizNo,
+               online_sale_no AS onlineSaleNo,
+               tel,
+               fax,
+               zip,
+               addr1,
+               addr2,
+               status,
+               reg_date AS regDate
         FROM seller_profile
         WHERE seller_no = #{sellerNo}
     </select>
-    <insert id="insertSellerProfile" parameterType="kr.co.springkmarketapp.dto.member.SellerProfileDTO" useGeneratedKeys="true" keyProperty="sellerNo">
-        INSERT INTO seller_profile(member_no, company_name, ceo_name, biz_no, online_sale_no, tel, fax, zip, addr1, addr2, status, reg_date)
-        VALUES(#{memberNo}, #{companyName}, #{ceoName}, #{bizNo}, #{onlineSaleNo}, #{tel}, #{fax}, #{zip}, #{addr1}, #{addr2}, COALESCE(#{status}, 'READY'), NOW())
-    </insert>
+
+    <select id="selectSellerProfileListBySearch" resultType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
+        SELECT seller_no AS sellerNo,
+               member_no AS memberNo,
+               company_name AS companyName,
+               ceo_name AS ceoName,
+               biz_no AS bizNo,
+               online_sale_no AS onlineSaleNo,
+               tel,
+               fax,
+               zip,
+               addr1,
+               addr2,
+               status,
+               reg_date AS regDate
+        FROM seller_profile
+        <where>
+            status != '삭제'
+            <if test="keyword != null and keyword != ''">
+                AND
+                <choose>
+                <when test="searchType == 'companyName'">
+                    company_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="searchType == 'ceoName'">
+                    ceo_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="searchType == 'bizNo'">
+                    biz_no LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="searchType == 'tel'">
+                    tel LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <otherwise>
+                    (
+                    company_name LIKE CONCAT('%', #{keyword}, '%')
+                    OR ceo_name LIKE CONCAT('%', #{keyword}, '%')
+                    OR biz_no LIKE CONCAT('%', #{keyword}, '%')
+                    OR tel LIKE CONCAT('%', #{keyword}, '%')
+                    )
+                </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY seller_no DESC
+    </select>
+
+    <select id="selectSellerProfileListWithPaging" resultType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
+        SELECT seller_no AS sellerNo,
+        member_no AS memberNo,
+        company_name AS companyName,
+        ceo_name AS ceoName,
+        biz_no AS bizNo,
+        online_sale_no AS onlineSaleNo,
+        tel,
+        fax,
+        zip,
+        addr1,
+        addr2,
+        status,
+        reg_date AS regDate
+        FROM seller_profile
+        WHERE status != '삭제'
+        ORDER BY seller_no DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="selectSellerProfileListBySearchWithPaging" resultType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
+        SELECT seller_no AS sellerNo,
+        member_no AS memberNo,
+        company_name AS companyName,
+        ceo_name AS ceoName,
+        biz_no AS bizNo,
+        online_sale_no AS onlineSaleNo,
+        tel,
+        fax,
+        zip,
+        addr1,
+        addr2,
+        status,
+        reg_date AS regDate
+        FROM seller_profile
+        <where>
+            status != '삭제'
+
+            <if test="keyword != null and keyword != ''">
+                AND
+                <choose>
+                    <when test="searchType == 'companyName'">
+                        company_name LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'ceoName'">
+                        ceo_name LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'bizNo'">
+                        biz_no LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'tel'">
+                        tel LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <otherwise>
+                        (
+                        company_name LIKE CONCAT('%', #{keyword}, '%')
+                        OR ceo_name LIKE CONCAT('%', #{keyword}, '%')
+                        OR biz_no LIKE CONCAT('%', #{keyword}, '%')
+                        OR tel LIKE CONCAT('%', #{keyword}, '%')
+                        )
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY seller_no DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countSellerProfileList" resultType="int">
+        SELECT COUNT(*)
+        FROM seller_profile
+        WHERE status != '삭제'
+    </select>
+
+    <select id="countSellerProfileListBySearch" resultType="int">
+        SELECT COUNT(*)
+        FROM seller_profile
+        <where>
+            status != '삭제'
+
+            <if test="keyword != null and keyword != ''">
+                AND
+                <choose>
+                    <when test="searchType == 'companyName'">
+                        company_name LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'ceoName'">
+                        ceo_name LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'bizNo'">
+                        biz_no LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'tel'">
+                        tel LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <otherwise>
+                        (
+                        company_name LIKE CONCAT('%', #{keyword}, '%')
+                        OR ceo_name LIKE CONCAT('%', #{keyword}, '%')
+                        OR biz_no LIKE CONCAT('%', #{keyword}, '%')
+                        OR tel LIKE CONCAT('%', #{keyword}, '%')
+                        )
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectMemberNoByMemberId" resultType="java.lang.Integer">
+        SELECT member_no
+        FROM member
+        WHERE member_id = #{memberId}
+    </select>
+
+    <select id="countSellerByMemberNo" resultType="int">
+        SELECT COUNT(*)
+        FROM seller_profile
+        WHERE member_no = #{memberNo}
+    </select>
+
+    <select id="countBizNo" resultType="int">
+        SELECT COUNT(*)
+        FROM seller_profile
+        WHERE biz_no = #{bizNo}
+    </select>
+
     <update id="updateSellerProfile" parameterType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
         UPDATE seller_profile
-        SET member_no=#{memberNo}, company_name=#{companyName}, ceo_name=#{ceoName}, biz_no=#{bizNo}, online_sale_no=#{onlineSaleNo},
-            tel=#{tel}, fax=#{fax}, zip=#{zip}, addr1=#{addr1}, addr2=#{addr2}, status=#{status}
-        WHERE seller_no=#{sellerNo}
+        SET member_no = #{memberNo},
+            company_name = #{companyName},
+            ceo_name = #{ceoName},
+            biz_no = #{bizNo},
+            online_sale_no = #{onlineSaleNo},
+            tel = #{tel},
+            fax = #{fax},
+            zip = #{zip},
+            addr1 = #{addr1},
+            addr2 = #{addr2},
+            status = #{status}
+        WHERE seller_no = #{sellerNo}
     </update>
+
+    <update id="updateSellerStatus">
+        UPDATE seller_profile
+        SET status = #{status}
+        WHERE seller_no = #{sellerNo}
+    </update>
+
+    <insert id="insertSellerProfile"
+            parameterType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
+        INSERT INTO seller_profile
+        (
+            member_no,
+            company_name,
+            ceo_name,
+            biz_no,
+            online_sale_no,
+            tel,
+            fax,
+            zip,
+            addr1,
+            addr2,
+            status,
+            reg_date
+        )
+        VALUES
+        (
+            #{memberNo},
+            #{companyName},
+            #{ceoName},
+            #{bizNo},
+            #{onlineSaleNo},
+            #{tel},
+            #{fax},
+            #{zip},
+            #{addr1},
+            #{addr2},
+            '운영준비',
+            NOW()
+        )
+    </insert>
+
     <delete id="deleteSellerProfile" parameterType="int">
-        DELETE FROM seller_profile WHERE seller_no=#{sellerNo}
+        DELETE FROM seller_profile
+        WHERE seller_no = #{sellerNo}
     </delete>
+
+    <update id="deleteSellerProfiles">
+        UPDATE seller_profile
+        SET status = '삭제'
+        WHERE seller_no IN
+        <foreach collection="sellerNos" item="sellerNo" open="(" separator="," close=")">
+            #{sellerNo}
+        </foreach>
+    </update>
+
+    <select id="countSellerSalesList" resultType="int">
+        SELECT COUNT(*)
+        FROM seller_profile
+        WHERE status != '삭제'
+    </select>
+
+    <select id="selectSellerSalesList" resultType="kr.co.springkmarketapp.dto.member.SellerSalesDTO">
+        SELECT sp.seller_no AS sellerNo,
+               sp.company_name AS companyName,
+               sp.biz_no AS bizNo,
+               COUNT(DISTINCT o.order_no) AS orderCount,
+               COUNT(DISTINCT CASE WHEN o.payment_status = '결제완료' THEN o.order_no END) AS paymentCompleteCount,
+               COUNT(DISTINCT CASE WHEN d.delivery_status = '배송중' THEN d.delivery_no END) AS deliveryIngCount,
+               COUNT(DISTINCT CASE WHEN d.delivery_status = '배송완료' THEN d.delivery_no END) AS deliveryCompleteCount,
+               COUNT(CASE WHEN oi.item_status = '구매확정' AND o.order_no IS NOT NULL THEN 1 END) AS purchaseConfirmCount,
+               IFNULL(SUM(CASE WHEN o.order_no IS NOT NULL THEN oi.total_price ELSE 0 END), 0) AS orderTotal,
+               IFNULL(SUM(CASE
+                   WHEN o.payment_status = '결제완료'
+                        AND (oi.item_status IS NULL OR oi.item_status NOT IN ('취소', '반품', '환불'))
+                   THEN oi.total_price
+                   ELSE 0
+               END), 0) AS salesTotal
+        FROM seller_profile sp
+        LEFT JOIN order_item oi
+               ON sp.seller_no = oi.seller_no
+        LEFT JOIN orders o
+               ON oi.order_no = o.order_no
+              <choose>
+                  <when test="salesPeriod == 'week'">
+                      AND o.order_date &gt;= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+                  </when>
+                  <when test="salesPeriod == 'month'">
+                      AND o.order_date &gt;= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+                  </when>
+                  <otherwise>
+                      AND DATE(o.order_date) = CURDATE()
+                  </otherwise>
+              </choose>
+        LEFT JOIN delivery d
+               ON oi.delivery_no = d.delivery_no
+        WHERE sp.status != '삭제'
+        GROUP BY sp.seller_no, sp.company_name, sp.biz_no
+        ORDER BY salesTotal DESC, sp.seller_no DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
 </mapper>

@@ -209,3 +209,29 @@
 .btn-submit-green:hover {
     background: #288a00;
 }
+
+.action-btn {
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+}
+.alert-message {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border: 1px solid #b8e6b8;
+    background: #f0fff0;
+    color: #258000;
+    font-size: 12px;
+}
+
+.alert-error {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border: 1px solid #f0b8b8;
+    background: #fff5f5;
+    color: #c00000;
+    font-size: 12px;
+}
