@@ -33,7 +33,7 @@ public class Category {
 
     // --- 계층형 외래키(FK) 셀프 참조 구조 ---
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "parent_no")
     private Category parent; // 부모 카테고리 (대분류일 경우 null)
 
