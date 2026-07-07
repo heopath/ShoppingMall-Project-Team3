@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ShoppingMall-Project-Team3.iml" filepath="$PROJECT_DIR$/.idea/ShoppingMall-Project-Team3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/spring-kmarket-app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/spring-kmarket-app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/spring-kmarket-app.test.iml" filepath="$PROJECT_DIR$/.idea/modules/spring-kmarket-app.test.iml" />
     </modules>
   </component>
 </project>
