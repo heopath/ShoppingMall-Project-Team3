@@ -146,7 +146,8 @@
                     사이트 버전 목록 입니다.
                 </p>
 
-                <table class="version-table">
+                <form th:action="@{/admin/config/version/delete}" method="post" id="formDelete" onsubmit="return confirmDelete(event)">
+                    <table class="version-table">
                     <thead>
                     <tr>
                         <th class="check-cell">
@@ -160,147 +161,144 @@
                     </tr>
                     </thead>
 
+
                     <tbody>
-                    <tr>
-                        <td class="check-cell">
-                            <input type="checkbox">
-                        </td>
-                        <td>1</td>
-                        <td>0.0.1-SNAPSHOT</td>
-                        <td>chhako503</td>
-                        <td>2024.10.13 17:12:00</td>
-                        <td>
-                            <a href="#" class="version-link openVersionView">[ 확인 ]</a>
-                        </td>
+                    <!-- 리스트가 비어있을 때 예외 처리 -->
+                    <tr th:if="${#lists.isEmpty(versions)}">
+                        <td colspan="6" style="text-align: center; padding: 20px;">등록된 버전 정보가 없습니다.</td>
                     </tr>
 
-                    <tr>
+                    <!-- 데이터가 있을 때 반복문 실행 -->
+                    <tr th:each="v, loop : ${versions}">
                         <td class="check-cell">
-                            <input type="checkbox">
+                            <input type="checkbox" name="versionCheckbox" th:value="${v.versionNo}">
                         </td>
-                        <td>2</td>
-                        <td>0.0.2-SNAPSHOT</td>
-                        <td>chhako503</td>
-                        <td>2024.10.14 17:12:00</td>
+                        <!-- 루프 인덱스(1부터 시작) 또는 DB 고유 번호 중 기획에 맞춰 출력 -->
+                        <td th:text="${loop.count}">1</td>
+                        <td th:text="${v.versionName}">0.0.1-SNAPSHOT</td>
+                        <!-- 작성자 바인딩 (추후 Security 연동 전까지 가상 출력 혹은 컬럼 매핑) -->
+                        <td th:text="${v.writerNo != null ? 'admin' : 'unknown'}">admin</td>
+                        <!-- 날짜 포맷 원하는 형태로 변경 -->
+                        <td th:text="${#temporals.format(v.regDate, 'yyyy.MM.dd HH:mm:ss')}">2024.10.13 17:12:00</td>
                         <td>
-                            <a href="#" class="version-link">[ 확인 ]</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="check-cell">
-                            <input type="checkbox">
-                        </td>
-                        <td>3</td>
-                        <td>0.0.3-SNAPSHOT</td>
-                        <td>chhako503</td>
-                        <td>2024.10.15 17:12:00</td>
-                        <td>
-                            <a href="#" class="version-link">[ 확인 ]</a>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="check-cell">
-                            <input type="checkbox">
-                        </td>
-                        <td>4</td>
-                        <td>0.0.4-SNAPSHOT</td>
-                        <td>chhako503</td>
-                        <td>2024.10.16 17:12:00</td>
-                        <td>
-                            <a href="#" class="version-link">[ 확인 ]</a>
+                            <a href="#" class="version-link openVersionView"
+                               th:data-no="${v.versionNo}"
+                               th:data-version="${v.versionName}"
+                               th:data-changelog="${v.changeLog}">[ 확인 ]</a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <div class="version-bottom">
-                    <button type="button" class="btn-delete">선택삭제</button>
+                    <div class="version-bottom">
+                        <button type="submit" class="btn-delete">선택삭제</button>
 
-                    <div class="pagination">
-                        <a href="#">이전</a>
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">다음</a>
+                        <div class="pagination" th:if="${totalPages > 0}" style="display: flex; justify-content: center; align-items: center; gap: 8px; flex-grow: 1;">
+                            <!-- 이전 버튼 -->
+                            <a th:href="@{/admin/config/version(page=${currentPage - 1})}"
+                               th:if="${currentPage > 1}" style="text-decoration: none; color: #333;">이전</a>
+
+                            <!-- 숫자 페이지 버튼 -->
+                            <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+                                <a th:href="@{/admin/config/version(page=${i})}"
+                                   th:text="${i}"
+                                   th:style="${i == currentPage} ? 'font-weight: bold; color: #fff; background-color: #007bff; padding: 4px 9px; border-radius: 3px; text-decoration: none;' : 'color: #333; padding: 4px 9px; text-decoration: none; border: 1px solid #ddd; border-radius: 3px;'">1</a>
+                            </th:block>
+
+                            <!-- 다음 버튼 -->
+                            <a th:href="@{/admin/config/version(page=${currentPage + 1})}"
+                               th:if="${currentPage < totalPages}" style="text-decoration: none; color: #333;">다음</a>
+                        </div>
+
+                        <button type="button" class="btn-register" id="openVersionWriteModal">등록</button>
                     </div>
-
-                    <button type="button" class="btn-register" id="openVersionWriteModal">등록</button>
-                </div>
-
+                    </div>
+                </form>
             </section>
 
             
         </main>
 
-        <!-- 버전확인 모달 -->
-<div id="versionViewModal" class="modal-overlay">
-    <div class="version-modal version-view-modal">
-        <div class="version-modal-header">
-            <h3>버전확인</h3>
-            <button type="button" class="modal-close" id="closeVersionViewModal">X</button>
-        </div>
+    <!-- 버전확인 및 수정 통합 모달 -->
+    <div id="versionViewModal" class="modal-overlay">
+        <div class="version-modal version-view-modal">
+            <form th:action="@{/admin/config/version/modify}" method="post">
+                <!-- 500 에러 해결의 핵심: 고유 번호가 매핑될 수 있도록 id 매칭 -->
+                <input type="hidden" name="versionNo" id="modalModifyNo">
 
-        <div class="version-modal-body">
-            <table class="version-modal-table">
-                <tr>
-                    <th>버전</th>
-                    <td>0.0.1-SNAPSHOT</td>
-                </tr>
-                <tr>
-                    <th>변경내역</th>
-                    <td>
-                        <ul class="version-history-list">
-                            <li>프로젝트 생성 전 전체 구조 설계</li>
-                            <li>회원가입 / 로그인 / 장바구니 모듈</li>
-                            <li>관리자 상품 등록 완료</li>
-                            <li>쇼핑몰 메인 및 카테고리 UI 시안 구성</li>
-                            <li>개발용 파일 및 세부 사항 처리</li>
-                        </ul>
-                    </td>
-                </tr>
-            </table>
+                <div class="version-modal-header">
+                    <h3 id="modalMenuTitle">버전확인</h3>
+                    <button type="button" class="modal-close" id="closeVersionViewModal">X</button>
+                </div>
 
-            <div class="version-modal-btn-area">
-                <button type="button" class="version-green-btn" id="bottomCloseVersionViewModal">닫기</button>
-            </div>
+                <div class="version-modal-body">
+                    <table class="version-modal-table">
+                        <tr>
+                            <th>버전</th>
+                            <td>
+                                <!-- 1. 단순 확인용 텍스트 -->
+                                <span id="viewVersionName"></span>
+                                <!-- 2. 수정용 인풋 상자 (기본 숨김) -->
+                                <input type="text" name="versionName" id="modalModifyName" class="version-input" style="display: none;" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>변경내역</th>
+                            <td>
+                                <!-- 1. 단순 확인용 리스트 영역 -->
+                                <div id="viewChangeLog"></div>
+                                <!-- 2. 수정용 텍스트 영역 (기본 숨김) -->
+                                <textarea name="changeLog" id="modalModifyLog" class="version-textarea" style="height:120px; display: none;" required></textarea>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="version-modal-btn-area" style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                        <!-- 모드에 따라 토글될 버튼 스왑 영역 -->
+                        <button type="button" class="version-green-btn" id="btnGoToModify" style="background-color: #28a745;">수정하기</button>
+                        <button type="submit" class="version-green-btn" id="btnSubmitModify" style="background-color: #007bff; display: none;">수정완료</button>
+                        <button type="button" class="version-green-btn" id="bottomCloseVersionViewModal" style="background-color: #6c757d;">닫기</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-</div>
 
 <!-- 버전등록 모달 -->
-<div id="versionWriteModal" class="modal-overlay">
-    <div class="version-modal version-write-modal">
-        <div class="version-modal-header">
-            <h3>버전등록</h3>
-            <button type="button" class="modal-close" id="closeVersionWriteModal">X</button>
-        </div>
+        <div id="versionWriteModal" class="modal-overlay">
+            <div class="version-modal version-write-modal">
+                <form th:action="@{/admin/config/version/register}" method="post">
+                    <div class="version-modal-header">
+                        <h3>버전등록</h3>
+                        <button type="button" class="modal-close" id="closeVersionWriteModal">X</button>
+                    </div>
 
-        <div class="version-modal-body">
-            <table class="version-modal-table">
-                <tr>
-                    <th>버전</th>
-                    <td>
-                        <input type="text" class="version-input" placeholder="버전입력하기">
-                    </td>
-                </tr>
-                <tr>
-                    <th>변경내역</th>
-                    <td>
-                        <textarea class="version-textarea" placeholder="변경내역작성하기"></textarea>
-                    </td>
-                </tr>
-            </table>
+                    <div class="version-modal-body">
+                        <table class="version-modal-table">
+                            <tr>
+                                <th>버전</th>
+                                <td>
+                                    <!-- name 속성이 Entity 필드명(versionName)과 정확히 일치해야 합니다 -->
+                                    <input type="text" name="versionName" class="version-input" placeholder="예: 0.0.3-SNAPSHOT" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>변경내역</th>
+                                <td>
+                                    <!-- name 속성이 Entity 필드명(changeLog)과 정확히 일치해야 합니다 -->
+                                    <textarea name="changeLog" class="version-textarea" placeholder="- 변경내역작성하기&#10;- 엔터로 구분 가능" required></textarea>
+                                </td>
+                            </tr>
+                        </table>
 
-            <div class="version-modal-btn-area">
-                <button type="button" class="version-green-btn">등록하기</button>
+                        <div class="version-modal-btn-area">
+                            <!-- 버튼 타입을 submit으로 변경하여 폼이 전송되도록 만듭니다 -->
+                            <button type="submit" class="version-green-btn">등록하기</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>
-</div>
 
 
     </div>
@@ -323,23 +321,97 @@
     const closeVersionViewModal = document.getElementById("closeVersionViewModal");
     const bottomCloseVersionViewModal = document.getElementById("bottomCloseVersionViewModal");
 
+    // 모달 내부의 엘리먼트 타겟팅
+    const viewVersionName = document.getElementById("viewVersionName");
+    const modalModifyName = document.getElementById("modalModifyName");
+    const viewChangeLog = document.getElementById("viewChangeLog");
+    const modalModifyLog = document.getElementById("modalModifyLog");
+    const modalModifyNo = document.getElementById("modalModifyNo");
+
+    const modalMenuTitle = document.getElementById("modalMenuTitle");
+    const btnGoToModify = document.getElementById("btnGoToModify");
+    const btnSubmitModify = document.getElementById("btnSubmitModify");
+
+    const modalVersionTitle = versionViewModal.querySelector(".version-modal-table tr:nth-child(1) td");
+    const modalVersionHistory = versionViewModal.querySelector(".version-modal-table tr:nth-child(2) td");
+
+    // 모달 열기 및 데이터 주입
     openVersionViewButtons.forEach(button => {
-        button.addEventListener("click", function () {
-            versionViewModal.classList.add("show");
+        button.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // 데이터 속성 가져오기
+            const no = this.getAttribute("data-no");
+            const version = this.getAttribute("data-version");
+            const changelog = this.getAttribute("data-changelog");
+
+            // 1. 값 기본 매핑 (Hidden 정보 포함)
+            modalModifyNo.value = no;
+            modalModifyName.value = version;
+            modalModifyLog.value = changelog;
+
+            // 2. 초기 팝업 상태는 [확인(읽기)] 모드로 세팅
+            viewVersionName.textContent = version;
+            viewVersionName.style.display = "inline";
+            modalModifyName.style.display = "none";
+
+            // 변경내역 ul > li 파싱 출력
+            if (changelog) {
+                const lines = changelog.split('\n');
+                let htmlContent = '<ul class="version-history-list">';
+                lines.forEach(line => {
+                    if(line.trim() !== "") htmlContent += `<li>${line}</li>`;
+                });
+                htmlContent += '</ul>';
+                viewChangeLog.innerHTML = htmlContent;
+            } else {
+                viewChangeLog.innerHTML = '등록된 변경내역이 없습니다.';
+            }
+            viewChangeLog.style.display = "block";
+            modalModifyLog.style.display = "none";
+
+            // 버튼 및 제목 초기화
+            modalMenuTitle.textContent = "버전확인";
+            btnGoToModify.style.display = "inline-block";
+            btnSubmitModify.style.display = "none";
+
+            versionViewModal.style.display = "flex";
         });
     });
 
-    closeVersionViewModal.addEventListener("click", function () {
-        versionViewModal.classList.remove("show");
+    // [수정하기] 버튼 클릭 시 입력 폼으로 모드 전환 이벤트
+    btnGoToModify.addEventListener("click", function() {
+        modalMenuTitle.textContent = "버전수정";
+
+        // 텍스트 감추고 Input 활성화
+        viewVersionName.style.display = "none";
+        modalModifyName.style.display = "block";
+
+        viewChangeLog.style.display = "none";
+        modalModifyLog.style.display = "block";
+
+        // 버튼 교체
+        btnGoToModify.style.display = "none";
+        btnSubmitModify.style.display = "inline-block";
     });
 
-    bottomCloseVersionViewModal.addEventListener("click", function () {
+    // 2. 모달 닫기 기능 (X 버튼, 하단 녹색 닫기 버튼, 배경 클릭 전체 통합)
+    function hideVersionModal() {
         versionViewModal.classList.remove("show");
-    });
+        versionViewModal.style.display = "none"; // 화면에서 완전히 숨김
+    }
 
+    if (closeVersionViewModal) {
+        closeVersionViewModal.addEventListener("click", hideVersionModal);
+    }
+    if (bottomCloseVersionViewModal) {
+        bottomCloseVersionViewModal.addEventListener("click", hideVersionModal);
+    }
+
+    // 배경(어두운 영역) 클릭 시 닫기
     versionViewModal.addEventListener("click", function (e) {
         if (e.target === versionViewModal) {
-            versionViewModal.classList.remove("show");
+            hideVersionModal();
         }
     });
 
@@ -361,6 +433,20 @@
             versionWriteModal.classList.remove("show");
         }
     });
+
+    // 삭제 버튼 클릭 시 알림
+    function confirmDelete(e) {
+        const checkboxes = document.querySelectorAll('input[name="versionCheckbox"]:checked');
+        if (checkboxes.length === 0) {
+            alert("삭제할 버전을 선택해주세요.");
+            return false;
+        }
+
+        if (!confirm("선택한 " + checkboxes.length + "개의 버전을 정말 삭제하시겠습니까?")) {
+            return false;
+        }
+        return true;
+    }
 </script>
 
 </body>

@@ -13,10 +13,9 @@ public class SellerProfileService {
 
     private final SellerProfileDAO sellerProfileDAO;
 
-//    public int insertSellerProfile(SellerProfileDTO sellerProfileDTO) {
-//
-//        return sellerProfileDAO.insertSellerProfile(sellerProfileDTO);
-//    }
+    public int insertSellerProfile(SellerProfileDTO sellerProfileDTO) {
+        return sellerProfileDAO.insertSellerProfile(sellerProfileDTO);
+    }
 
     public SellerProfileDTO selectSellerProfile(Integer sellerNo) {
         return sellerProfileDAO.selectSellerProfile(sellerNo);
@@ -33,4 +32,6 @@ public class SellerProfileService {
     public int deleteSellerProfile(Integer sellerNo) {
         return sellerProfileDAO.deleteSellerProfile(sellerNo);
     }
+
+
 }
