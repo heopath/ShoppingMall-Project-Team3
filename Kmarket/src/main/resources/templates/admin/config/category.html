@@ -157,11 +157,7 @@
                         <!-- 1차 대분류 반복문 시작 -->
                         <li class="category-item" th:each="main : ${categoryTree}" th:data-no="${main.cateNo}">
                             <div class="category-main">
-                                <!-- 자식 카테고리가 있을 때만 토글 버튼 모양 제어 (기본은 닫힘 ▶) -->
-                                <button type="button" class="category-toggle"
-                                        th:if="${!#lists.isEmpty(main.children)}">▶</button>
-                                <button type="button" class="category-toggle-empty"
-                                        th:if="${#lists.isEmpty(main.children)}" style="visibility: hidden;">▶</button>
+                                <button type="button" class="category-toggle">▶</button>
 
                                 <span th:text="${main.cateName}">여성패션</span>
                                 <button type="button" class="category-delete"
@@ -266,6 +262,7 @@
                 alert(data.message);
                 if (data.status === "success") {
                     location.reload(); // 성공 시 화면 즉시 새로고침하여 리스트 반영
+
                 }
             })
             .catch(error => console.error("Error:", error));

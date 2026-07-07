@@ -55,5 +55,31 @@
         WHERE cate_no = #{cateNo}
 
     </select>
+    <insert id="insertCategory" parameterType="kr.co.springkmarketapp.dto.product.CategoryDTO">
+        INSERT INTO category (
+        parent_no,
+        cate_name,
+        depth,
+        sort_order,
+        use_yn
+        ) VALUES (
+        #{parentNo},
+        #{cateName},
+        #{depth},
+        #{sortOrder},
+        #{useYn}
+        )
+    </insert>
 
+    <delete id="deleteCategory" parameterType="int">
+        DELETE FROM category WHERE cate_no = #{cateNo}
+    </delete>
+
+    <update id="updateCategory" parameterType="kr.co.springkmarketapp.dto.product.CategoryDTO">
+        UPDATE category SET
+        cate_name = #{cateName},
+        sort_order = #{sortOrder},
+        use_yn = #{useYn}
+        WHERE cate_no = #{cateNo}
+    </update>
 </mapper>
