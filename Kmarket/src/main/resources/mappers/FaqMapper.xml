@@ -2,13 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.springkmarketapp.dao.cs.FaqDAO">
     <select id="selectFaqList" resultType="kr.co.springkmarketapp.dto.cs.FaqDTO">
-        SELECT faq_no AS faqNo, cs_cate_no AS csCateNo, writer_no AS writerNo, title, content, hit, reg_date AS regDate, update_date AS updateDate
-        FROM faq
-        ORDER BY faq_no DESC
+        SELECT
+        f.faq_no AS faqNo,
+        f.cs_cate_no AS csCateNo,
+        f.writer_no AS writerNo,
+        f.title,
+        f.content,
+        f.hit,
+        f.reg_date AS regDate,
+        f.update_date AS updateDate,
+        c1.cate_name AS cateName,
+        c2.cate_name AS parentCateName
+        FROM faq f
+        JOIN cs_category c1
+        ON f.cs_cate_no = c1.cs_cate_no
+        LEFT JOIN cs_category c2
+        ON c1.parent_no = c2.cs_cate_no
+        ORDER BY f.faq_no DESC
     </select>
-    <select id="selectFaq" parameterType="int" resultType="kr.co.springkmarketapp.dto.cs.FaqDTO">
-        SELECT faq_no AS faqNo, cs_cate_no AS csCateNo, writer_no AS writerNo, title, content, hit, reg_date AS regDate, update_date AS updateDate
-        FROM faq WHERE faq_no=#{faqNo}
+    <select id="selectFaq" parameterType="int"
+            resultType="kr.co.springkmarketapp.dto.cs.FaqDTO">
+
+        SELECT
+        f.faq_no AS faqNo,
+        f.cs_cate_no AS csCateNo,
+        f.writer_no AS writerNo,
+        f.title,
+        f.content,
+        f.hit,
+        f.reg_date AS regDate,
+        f.update_date AS updateDate,
+        c1.cate_name AS cateName,
+        c2.cate_name AS parentCateName
+        FROM faq f
+        JOIN cs_category c1
+        ON f.cs_cate_no = c1.cs_cate_no
+        LEFT JOIN cs_category c2
+        ON c1.parent_no = c2.cs_cate_no
+        WHERE f.faq_no = #{faqNo}
+
     </select>
     <insert id="insertFaq" parameterType="kr.co.springkmarketapp.dto.cs.FaqDTO" useGeneratedKeys="true" keyProperty="faqNo">
         INSERT INTO faq(cs_cate_no, writer_no, title, content, hit, reg_date)
@@ -21,4 +53,31 @@
     <delete id="deleteFaq" parameterType="int">
         DELETE FROM faq WHERE faq_no=#{faqNo}
     </delete>
+    <select id="countFaq" resultType="int">
+        SELECT COUNT(*)
+        FROM faq
+    </select>
+    <select id="selectFaqListPaging"
+            resultType="kr.co.springkmarketapp.dto.cs.FaqDTO">
+
+        SELECT
+        f.faq_no AS faqNo,
+        f.cs_cate_no AS csCateNo,
+        f.writer_no AS writerNo,
+        f.title,
+        f.content,
+        f.hit,
+        f.reg_date AS regDate,
+        f.update_date AS updateDate,
+        c1.cate_name AS cateName,
+        c2.cate_name AS parentCateName
+        FROM faq f
+        JOIN cs_category c1
+        ON f.cs_cate_no = c1.cs_cate_no
+        LEFT JOIN cs_category c2
+        ON c1.parent_no = c2.cs_cate_no
+        ORDER BY f.faq_no DESC
+        LIMIT #{offset}, #{size}
+
+    </select>
 </mapper>

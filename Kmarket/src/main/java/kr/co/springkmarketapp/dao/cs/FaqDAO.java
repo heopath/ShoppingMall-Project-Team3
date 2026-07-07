@@ -2,6 +2,7 @@ package kr.co.springkmarketapp.dao.cs;
 
 import kr.co.springkmarketapp.dto.cs.FaqDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,4 +13,9 @@ public interface FaqDAO {
     List<FaqDTO> selectFaqList();
     int updateFaq(FaqDTO faqDTO);
     int deleteFaq(Integer faqNo);
+    int countFaq();
+
+    List<FaqDTO> selectFaqListPaging(
+            @Param("offset") int offset,
+            @Param("size") int size);
 }
