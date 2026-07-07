@@ -36,11 +36,11 @@ public class CategoryService {
 
     // 카테고리 목록 리스트 출력
     public List<CategoryDTO> getCategoryTree() {
-
         List<CategoryDTO> mainCategories = categoryDAO.selectMainCategories();
         List<CategoryDTO> subCategories = categoryDAO.selectSubCategories();
 
         for (CategoryDTO main : mainCategories) {
+            // NullPointerException 방지 처리가 안되어있다면 초기화 보완
             if (main.getChildren() == null) {
                 main.setChildren(new ArrayList<>());
             }
