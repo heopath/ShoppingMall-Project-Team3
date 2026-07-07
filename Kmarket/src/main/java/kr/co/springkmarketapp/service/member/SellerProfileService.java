@@ -33,4 +33,6 @@ public class SellerProfileService {
     public int deleteSellerProfile(Integer sellerNo) {
         return sellerProfileDAO.deleteSellerProfile(sellerNo);
     }
+
+
 }
