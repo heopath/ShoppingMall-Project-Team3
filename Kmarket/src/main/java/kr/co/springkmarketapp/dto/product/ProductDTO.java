@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -26,4 +27,15 @@ public class ProductDTO {
     private Integer viewCount;
     private Integer soldCount;
     private LocalDateTime regDate;
+
+    // 옵션 (동적, DB 저장용 아님 - 폼 전달용)
+    private List<String> optionNames;
+    private List<String> optionValues;
+
+    // 제공고시 (폼 전달용)
+    private String productStatus;
+    private String taxType;
+    private String receiptType;
+    private String businessType;
+    private String origin;
 }

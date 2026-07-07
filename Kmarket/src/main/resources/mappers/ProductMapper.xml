@@ -474,4 +474,41 @@
 
     </select>
 
+    <!-- 상품 등록 -->
+    <insert id="insertProduct" parameterType="kr.co.springkmarketapp.dto.product.ProductDTO"
+            useGeneratedKeys="true" keyProperty="productNo">
+        INSERT INTO product
+        (seller_no, cate_no, product_name, basic_desc, brand,
+        price, discount_rate, point, stock, delivery_fee, status)
+        VALUES
+        (#{sellerNo}, #{cateNo}, #{productName}, #{basicDesc}, #{brand},
+        #{price}, #{discountRate}, #{point}, #{stock}, #{deliveryFee}, '판매중')
+    </insert>
+
+    <!-- 이미지 일괄 등록 -->
+    <insert id="insertProductImages">
+        INSERT INTO product_image (product_no, image_type, image_path, sort_order)
+        VALUES
+        <foreach collection="list" item="img" separator=",">
+            (#{img.productNo}, #{img.imageType}, #{img.imagePath}, #{img.sortOrder})
+        </foreach>
+    </insert>
+
+    <!-- 옵션 일괄 등록 (옵션 있을 때만 호출) -->
+    <insert id="insertProductOptions">
+        INSERT INTO product_option (product_no, option_group_no, option_name, option_value, sort_order)
+        VALUES
+        <foreach collection="list" item="opt" separator=",">
+            (#{opt.productNo}, #{opt.optionGroupNo}, #{opt.optionName}, #{opt.optionValue}, #{opt.sortOrder})
+        </foreach>
+    </insert>
+
+    <!-- 제공고시 등록 -->
+    <insert id="insertProductNotice">
+        INSERT INTO product_notice
+        (product_no, product_status, tax_type, receipt_type, business_type, origin)
+        VALUES
+        (#{productNo}, #{productStatus}, #{taxType}, #{receiptType}, #{businessType}, #{origin})
+    </insert>
+
 </mapper>
