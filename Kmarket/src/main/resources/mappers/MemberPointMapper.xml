@@ -82,58 +82,39 @@
 <!--    기본 페이지 목록 조회 -->
     <select id="selectMemberPointListWithPaging" resultType="kr.co.springkmarketapp.dto.my.MemberPointDTO">
         SELECT
-        mp.point_no AS pointNo,
-        mp.member_no AS memberNo,
-        m.member_id AS memberId,
-        m.name AS name,
-        mp.order_no AS orderNo,
-        mp.point_type AS pointType,
-        mp.point_value AS pointValue,
-        mp.balance_point AS balancePoint,
-        mp.reason AS reason,
-        mp.expire_date AS expireDate,
-        mp.reg_date AS regDate,
-        CASE
-        WHEN EXISTS (
-        SELECT 1
-        FROM member_point r
-        WHERE r.point_type = 'REVOKE'
-        AND r.reason LIKE CONCAT('%[원포인트번호:', mp.point_no, ']%')
-        )
-        THEN 'Y'
-        ELSE 'N'
-        END AS revokedYn
+            mp.point_no AS pointNo,
+            mp.member_no AS memberNo,
+            m.member_id AS memberId,
+            m.name AS name,
+            mp.order_no AS orderNo,
+            mp.point_type AS pointType,
+            mp.point_value AS pointValue,
+            mp.balance_point AS balancePoint,
+            mp.reason AS reason,
+            mp.expire_date AS expireDate,
+            mp.reg_date AS regDate
         FROM member_point mp
         LEFT JOIN member m ON mp.member_no = m.member_no
         ORDER BY mp.point_no DESC
         LIMIT #{limit} OFFSET #{offset}
     </select>
+
 <!--    검색 + 페이지 목록 조회 -->
     <select id="selectMemberPointListBySearchWithPaging" resultType="kr.co.springkmarketapp.dto.my.MemberPointDTO">
         SELECT
-        mp.point_no AS pointNo,
-        mp.member_no AS memberNo,
-        m.member_id AS memberId,
-        m.name AS name,
-        mp.order_no AS orderNo,
-        mp.point_type AS pointType,
-        mp.point_value AS pointValue,
-        mp.balance_point AS balancePoint,
-        mp.reason AS reason,
-        mp.expire_date AS expireDate,
-        mp.reg_date AS regDate
+            mp.point_no AS pointNo,
+            mp.member_no AS memberNo,
+            m.member_id AS memberId,
+            m.name AS name,
+            mp.order_no AS orderNo,
+            mp.point_type AS pointType,
+            mp.point_value AS pointValue,
+            mp.balance_point AS balancePoint,
+            mp.reason AS reason,
+            mp.expire_date AS expireDate,
+            mp.reg_date AS regDate
         FROM member_point mp
         LEFT JOIN member m ON mp.member_no = m.member_no
-        CASE
-        WHEN EXISTS (
-        SELECT 1
-        FROM member_point r
-        WHERE r.point_type = 'REVOKE'
-        AND r.reason LIKE CONCAT('%[원포인트번호:', mp.point_no, ']%')
-        )
-        THEN 'Y'
-        ELSE 'N'
-        END AS revokedYn
         <where>
             <choose>
                 <when test="searchType == 'id'">
@@ -165,7 +146,6 @@
         LEFT JOIN member m ON mp.member_no = m.member_no
     </select>
 
-
 <!--    검색 결과 개수 조회 -->
     <select id="countMemberPointListBySearch" resultType="int">
         SELECT COUNT(*)
@@ -193,25 +173,25 @@
         </where>
     </select>
 
-
-
+<!--    회수 가능한 포인트 내역 조회 -->
     <select id="selectRevokeTargetPointList" resultType="kr.co.springkmarketapp.dto.my.MemberPointDTO">
         SELECT
-        point_no AS pointNo,
-        member_no AS memberNo,
-        order_no AS orderNo,
-        point_type AS pointType,
-        point_value AS pointValue,
-        balance_point AS balancePoint,
-        reason AS reason,
-        expire_date AS expireDate,
-        reg_date AS regDate
+            point_no AS pointNo,
+            member_no AS memberNo,
+            order_no AS orderNo,
+            point_type AS pointType,
+            point_value AS pointValue,
+            balance_point AS balancePoint,
+            reason AS reason,
+            expire_date AS expireDate,
+            reg_date AS regDate
         FROM member_point
         WHERE point_no IN
         <foreach collection="pointNoList" item="pointNo" open="(" separator="," close=")">
             #{pointNo}
         </foreach>
         AND point_value > 0
+        AND point_type != 'REVOKED'
     </select>
 
     <!-- 회원 현재 보유 포인트 조회 -->
@@ -228,29 +208,11 @@
         WHERE member_no = #{memberNo}
     </update>
 
-    <!-- 포인트 회수 이력 추가 -->
-    <insert id="insertRevokePointHistory">
-        INSERT INTO member_point
-        (
-        member_no,
-        order_no,
-        point_type,
-        point_value,
-        balance_point,
-        reason,
-        expire_date,
-        reg_date
-        )
-        VALUES
-        (
-        #{memberNo},
-        #{orderNo},
-        'REVOKE',
-        #{pointValue},
-        #{balancePoint},
-        #{reason},
-        NULL,
-        NOW()
-        )
-    </insert>
+    <!-- 기존 포인트 내역을 회수 상태로 변경 -->
+    <update id="updatePointTypeToRevoked">
+        UPDATE member_point
+        SET point_type = 'REVOKED'
+        WHERE point_no = #{pointNo}
+          AND point_type != 'REVOKED'
+    </update>
 </mapper>

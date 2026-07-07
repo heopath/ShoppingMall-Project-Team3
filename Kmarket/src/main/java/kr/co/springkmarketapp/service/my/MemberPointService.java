@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class MemberPointService {
@@ -79,15 +77,12 @@ public class MemberPointService {
 
             int newBalancePoint = Math.max(0, currentPoint - pointValue);
 
+            // 1. 회원 보유 포인트 차감
             memberPointDAO.updateMemberPointBalance(memberNo, newBalancePoint);
 
-            memberPointDAO.insertRevokePointHistory(
-                memberNo,
-                point.getOrderNo(),
-                -pointValue,
-                newBalancePoint,
-                "관리자 포인트 회수 [원포인트번호:" + point.getPointNo() + "]"
-            );
+            // 2. 기존 포인트 내역을 회수 상태로 변경
+            memberPointDAO.updatePointTypeToRevoked(point.getPointNo());
         }
     }
+
 }
