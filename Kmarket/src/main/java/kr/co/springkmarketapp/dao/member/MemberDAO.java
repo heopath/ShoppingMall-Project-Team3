@@ -25,4 +25,18 @@ public interface MemberDAO {
     int updateMemberBulk(@Param("memberNoList") List<Integer> memberNoList,
                          @Param("grade") String grade,
                          @Param("status") String status);
+
+    int countByNameAndEmail(@Param("name") String name,
+                            @Param("email") String email);
+
+    String findMemberId(@Param("name") String name,
+                        @Param("email") String email);
+
+    int countByMemberIdAndEmail(@Param("memberId") String memberId,
+                                @Param("email") String email);
+
+    int changePassword(@Param("memberId") String memberId,
+                       @Param("encoded") String encoded);
+
+    MemberDTO selectMemberByMemberId(@Param("memberId") String memberId);
 }

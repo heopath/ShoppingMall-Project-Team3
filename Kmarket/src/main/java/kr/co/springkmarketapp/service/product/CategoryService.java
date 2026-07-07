@@ -5,6 +5,7 @@ import kr.co.springkmarketapp.dto.product.CategoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,19 +41,46 @@ public class CategoryService {
         List<CategoryDTO> subCategories = categoryDAO.selectSubCategories();
 
         for (CategoryDTO main : mainCategories) {
+            if (main.getChildren() == null) {
+                main.setChildren(new ArrayList<>());
+            }
             for (CategoryDTO sub : subCategories) {
-
                 if (sub.getParentNo() != null && sub.getParentNo().equals(main.getCateNo())) {
-
                     main.getChildren().add(sub);
                 }
             }
         }
-
         return mainCategories;
     }
 
     public CategoryDTO getCategory(int cateNo) {
         return categoryDAO.selectCategoryByNo(cateNo);
+    }
+
+    // =========================================================================
+    // 🛠️ [관리자 페이지용 추가 보완 메서드]
+    // =========================================================================
+
+     // 관리자 카테고리 설정 화면 진입 시 1차 카테고리 selectbox를 채우기 위한 메서드
+    public List<CategoryDTO> selectMainCategories() {
+        return categoryDAO.selectMainCategories();
+    }
+
+    /**
+     * 관리자가 1차 카테고리를 선택했을 때, 자바스크립트(Fetch/Axios) 요청을 받아
+     * 해당 부모 밑에 있는 2차 중분류 목록만 실시간으로 반환해 주는 메서드
+     */
+    public List<CategoryDTO> selectSubCategoriesByParent(Integer parentNo) {
+        List<CategoryDTO> allSubs = categoryDAO.selectSubCategories();
+        List<CategoryDTO> filteredSubs = new ArrayList<>();
+
+        if (allSubs != null && parentNo != null) {
+            for (CategoryDTO sub : allSubs) {
+                if (parentNo.equals(sub.getParentNo())) {
+                    filteredSubs.add(sub);
+                }
+            }
+        }
+        return filteredSubs;
     }
 }
