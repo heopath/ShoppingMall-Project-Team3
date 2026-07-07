@@ -1,5 +1,6 @@
 package kr.co.springkmarketapp.dto.common;
 
+import lombok.Builder;
 import lombok.Getter;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class PageResponseDTO<T> {
     private final boolean prev;
     private final boolean next;
 
+    @Builder
     public PageResponseDTO(
             List<T> dtoList,
             PageRequestDTO pageRequestDTO,
