@@ -1,7 +1,9 @@
 package kr.co.springkmarketapp.dao.product;
 
 import kr.co.springkmarketapp.dto.common.PageRequestDTO;
-import kr.co.springkmarketapp.dto.product.*;
+import kr.co.springkmarketapp.dto.product.ProductDTO;
+import kr.co.springkmarketapp.dto.product.ProductListDTO;
+import kr.co.springkmarketapp.dto.product.ProductMainDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,14 +28,4 @@ public interface ProductDAO {
     // 카테고리 별 상품 list
     List<ProductListDTO> selectProductsByCategory(PageRequestDTO pageRequestDTO);
     int selectCountByCategory(PageRequestDTO pageRequestDTO);
-
-    // 상품 상세 페이지 정보
-    ProductViewDTO selectProductView(int productNo);
-    List<ProductOptionDTO> selectProductOptions(int productNo);
-    List<ProductImageDTO> selectDetailImages(int productNo);
-    ProductNoticeDTO selectProductNotice(int productNo);
-    List<ProductReviewDTO> selectProductReviewList(@Param("productNo") int productNo, @Param("pageRequestDTO") PageRequestDTO pageRequestDTO);
-    int selectProductReviewCount(int productNo);
-
-
 }

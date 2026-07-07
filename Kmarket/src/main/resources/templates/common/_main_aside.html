@@ -55,14 +55,7 @@
                     </span>
 
                     <span class="thumb">
-                        <!-- 1위: THUMB2 -->
-                        <img th:if="${stat.index == 0}"
-                             th:src="@{${product.imagePath}}"
-                             th:alt="${product.productName}" />
-
-                                            <!-- 2~5위: THUMB1 -->
-                        <img th:if="${stat.index != 0}"
-                             th:src="@{${product.thumb1Path}}"
+                        <img th:src="@{${product.imagePath}}"
                              th:alt="${product.productName}" />
                     </span>
 

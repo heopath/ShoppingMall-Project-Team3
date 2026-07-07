@@ -288,13 +288,6 @@ header {
     transition: 0.15s;
 }
 
-.side-best-item .thumb img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
 .side-best-item:last-child {
     border-bottom: none;
 }
