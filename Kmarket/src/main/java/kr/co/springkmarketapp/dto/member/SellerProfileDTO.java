@@ -13,6 +13,11 @@ import java.time.LocalDateTime;
 public class SellerProfileDTO {
     private Integer sellerNo;
     private Integer memberNo;
+
+    //상점등록 모달에서 등록받을 값
+    private String memberId;
+    private String password;
+
     private String companyName;
     private String ceoName;
     private String bizNo;

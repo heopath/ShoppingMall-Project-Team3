@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>관리자 상점목록</title>
@@ -20,85 +20,84 @@
 
     <div class="admin-body">
 
-<aside class="sidebar">
-    <ul class="admin-menu">
+        <aside class="sidebar">
+            <ul class="admin-menu">
 
-        <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
-            ⚙ 환경설정
-        </li>
-        <li class="sub-menu-wrap close" id="configMenu">
-            <ul class="sub-menu-list">
-                <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
-                <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
-                <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
-                <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
-                <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
+                    ⚙ 환경설정
+                </li>
+                <li class="sub-menu-wrap close" id="configMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
+                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
+                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title active" onclick="toggleMenu(this, 'shopMenu')">
+                    👥 상점관리
+                </li>
+                <li class="sub-menu-wrap" id="shopMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu active"><a href="/admin/shop/list">- 상점목록</a></li>
+                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">
+                    👤 회원관리
+                </li>
+                <li class="sub-menu-wrap close" id="memberMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
+                    📦 상품관리
+                </li>
+                <li class="sub-menu-wrap close" id="productMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
+                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
+                    🧾 주문관리
+                </li>
+                <li class="sub-menu-wrap close" id="orderMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'couponMenu')">
+                    🎟 쿠폰관리
+                </li>
+                <li class="sub-menu-wrap close" id="couponMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/coupon/list">- 쿠폰목록</a></li>
+                        <li class="sub-menu"><a href="/admin/coupon/issued">- 쿠폰발급현황</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">
+                    💬 고객센터
+                </li>
+                <li class="sub-menu-wrap close" id="csMenu">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
+                        <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+                    </ul>
+                </li>
+
             </ul>
-        </li>
-
-        <li class="menu-title active"  onclick="toggleMenu(this, 'shopMenu')">
-            👥 상점관리
-        </li>
-        <li class="sub-menu-wrap" id="shopMenu">
-            <ul class="sub-menu-list">
-                <li class="sub-menu active"><a href="/admin/shop/list">- 상점목록</a></li>
-                <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
-            </ul>
-        </li>
-
-        <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">
-            👤 회원관리
-        </li>
-        <li class="sub-menu-wrap close" id="memberMenu">
-            <ul class="sub-menu-list">
-                <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
-            </ul>
-        </li>
-
-        <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
-            📦 상품관리
-        </li>
-        <li class="sub-menu-wrap close" id="productMenu">
-            <ul class="sub-menu-list">
-                <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
-                <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
-            </ul>
-        </li>
-
-        <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
-            🧾 주문관리
-        </li>
-        <li class="sub-menu-wrap close" id="orderMenu">
-            <ul class="sub-menu-list">
-                <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
-            </ul>
-        </li>
-
-        <li class="menu-title" onclick="toggleMenu(this, 'couponMenu')">
-            🎟 쿠폰관리
-        </li>
-        <li class="sub-menu-wrap close" id="couponMenu">
-            <ul class="sub-menu-list">
-                <li class="sub-menu"><a href="/admin/coupon/list">- 쿠폰목록</a></li>
-                <li class="sub-menu"><a href="/admin/coupon/issued">- 쿠폰발급현황</a></li>
-            </ul>
-        </li>
-
-
-        <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">
-            💬 고객센터
-        </li>
-        <li class="sub-menu-wrap close" id="csMenu">
-            <ul class="sub-menu-list">
-                <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
-                <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
-                <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
-                <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
-            </ul>
-        </li>
-
-    </ul>
-</aside>
+        </aside>
 
         <main class="content">
             <div class="page-title">
@@ -107,15 +106,27 @@
             </div>
 
             <section class="shop-list-section">
+                <div th:if="${message}" class="alert-message" th:text="${message}"></div>
+                <div th:if="${errorMessage}" class="alert-error" th:text="${errorMessage}"></div>
+
                 <div class="search-wrap">
-                    <select>
-                        <option>상호명</option>
-                        <option>대표자</option>
-                        <option>사업자등록번호</option>
-                        <option>연락처</option>
-                    </select>
-                    <input type="text" placeholder="검색어입력">
-                    <button type="button" class="search-btn">검색</button>
+                    <form th:action="@{/admin/shop/list}" method="get" class="search-form">
+                        <select name="searchType">
+                            <option value="companyName" th:selected="${searchType == 'companyName'}">상호명</option>
+                            <option value="ceoName" th:selected="${searchType == 'ceoName'}">대표자</option>
+                            <option value="bizNo" th:selected="${searchType == 'bizNo'}">사업자등록번호</option>
+                            <option value="tel" th:selected="${searchType == 'tel'}">연락처</option>
+                        </select>
+
+                        <input type="text"
+                               name="keyword"
+                               placeholder="검색어입력"
+                               th:value="${keyword}">
+
+                        <input type="hidden" name="page" value="1">
+
+                        <button type="submit" class="search-btn">검색</button>
+                    </form>
 
                     <div class="status-indicators">
                         <span><span class="dot dot-green">●</span>운영 중</span>
@@ -126,92 +137,102 @@
 
                 <table class="shop-table">
                     <thead>
-                        <tr>
-                            <th><input type="checkbox"></th>
-                            <th>번호</th>
-                            <th>상호명</th>
-                            <th>대표</th>
-                            <th>사업자등록번호</th>
-                            <th>통신판매업번호</th>
-                            <th>연락처</th>
-                            <th>운영</th>
-                            <th>관리</th>
-                        </tr>
+                    <tr>
+                        <th><input type="checkbox" id="checkAll"></th>
+                        <th>번호</th>
+                        <th>상호명</th>
+                        <th>대표</th>
+                        <th>사업자등록번호</th>
+                        <th>통신판매업번호</th>
+                        <th>연락처</th>
+                        <th>운영</th>
+                        <th>관리</th>
+                    </tr>
                     </thead>
+
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>5</td>
-                            <td>㈜다나와</td>
-                            <td>홍무성</td>
-                            <td>112-12-12345</td>
-                            <td>2024-서울강서-<br>04433</td>
-                            <td>010-1234-1001</td>
-                            <td><span class="dot dot-green">●</span></td>
-                            <td><a href="#" class="action-link">[ 중단 ]</a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>4</td>
-                            <td>(주) 맛남</td>
-                            <td>이정재</td>
-                            <td>112-12-12344</td>
-                            <td>2024-서울강남-<br>04432</td>
-                            <td>010-1234-1002</td>
-                            <td><span class="dot dot-green">●</span></td>
-                            <td><a href="#" class="action-link">[ 중단 ]</a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>3</td>
-                            <td>(주) 컴튜존</td>
-                            <td>장동건</td>
-                            <td>112-12-12343</td>
-                            <td>2024-서울강남-<br>04429</td>
-                            <td>010-1234-1003</td>
-                            <td><span class="dot dot-green">●</span></td>
-                            <td><a href="#" class="action-link">[ 중단 ]</a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>2</td>
-                            <td>누리푸드</td>
-                            <td>조인성</td>
-                            <td>112-12-12342</td>
-                            <td>2024-부산진구-<br>01128</td>
-                            <td>010-1234-1004</td>
-                            <td><span class="dot dot-red">●</span></td>
-                            <td><a href="#" class="action-link">[ 제재 ]</a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>1</td>
-                            <td>롯데디스카운트</td>
-                            <td>강호동</td>
-                            <td>112-12-12341</td>
-                            <td>2024-서울강남-<br>04425</td>
-                            <td>010-1234-1005</td>
-                            <td><span class="dot dot-blue">●</span></td>
-                            <td><a href="#" class="action-link">[ 승인 ]</a></td>
-                        </tr>
+                    <tr th:if="${#lists.isEmpty(sellerList)}">
+                        <td colspan="9" style="text-align:center;">등록된 상점이 없습니다.</td>
+                    </tr>
+
+                    <tr th:each="seller : ${sellerList}">
+                        <td>
+                            <input type="checkbox"
+                                   class="seller-check"
+                                   th:value="${seller.sellerNo}">
+                        </td>
+
+                        <td th:text="${seller.sellerNo}">1</td>
+                        <td th:text="${seller.companyName}">상호명</td>
+                        <td th:text="${seller.ceoName}">대표</td>
+                        <td th:text="${seller.bizNo}">사업자등록번호</td>
+                        <td th:text="${seller.onlineSaleNo}">통신판매업번호</td>
+                        <td th:text="${seller.tel}">연락처</td>
+
+                        <td>
+                            <span th:if="${seller.status == '운영중'}" class="dot dot-green">●</span>
+                            <span th:if="${seller.status == '운영중지'}" class="dot dot-red">●</span>
+                            <span th:if="${seller.status == '운영준비'}" class="dot dot-blue">●</span>
+                            <span th:if="${seller.status == null}" class="dot dot-blue">●</span>
+                        </td>
+
+                        <td>
+                            <form th:if="${seller.status == '운영중'}"
+                                  th:action="@{/admin/shop/status}"
+                                  method="post"
+                                  style="display:inline;">
+                                <input type="hidden" name="sellerNo" th:value="${seller.sellerNo}">
+                                <input type="hidden" name="status" value="운영중지">
+                                <input type="hidden" name="page" th:value="${currentPage}">
+                                <input type="hidden" name="searchType" th:value="${searchType}">
+                                <input type="hidden" name="keyword" th:value="${keyword}">
+                                <button type="submit" class="action-link action-btn">[ 중단 ]</button>
+                            </form>
+
+                            <form th:if="${seller.status == '운영중지'}"
+                                  th:action="@{/admin/shop/status}"
+                                  method="post"
+                                  style="display:inline;">
+                                <input type="hidden" name="sellerNo" th:value="${seller.sellerNo}">
+                                <input type="hidden" name="status" value="운영중">
+                                <input type="hidden" name="page" th:value="${currentPage}">
+                                <input type="hidden" name="searchType" th:value="${searchType}">
+                                <input type="hidden" name="keyword" th:value="${keyword}">
+                                <button type="submit" class="action-link action-btn">[ 재개 ]</button>
+                            </form>
+
+                            <form th:if="${seller.status == '운영준비' || seller.status == null}"
+                                  th:action="@{/admin/shop/status}"
+                                  method="post"
+                                  style="display:inline;">
+                                <input type="hidden" name="sellerNo" th:value="${seller.sellerNo}">
+                                <input type="hidden" name="status" value="운영중">
+                                <input type="hidden" name="page" th:value="${currentPage}">
+                                <input type="hidden" name="searchType" th:value="${searchType}">
+                                <input type="hidden" name="keyword" th:value="${keyword}">
+                                <button type="submit" class="action-link action-btn">[ 승인 ]</button>
+                            </form>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
 
                 <div class="bottom-controls">
-                    <button type="button" class="del-btn">선택삭제</button>
-                    <div class="pagination">
-                        <a href="#">이전</a>
-                        <a href="#" class="active">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">다음</a>
-                    </div>
+                    <form th:action="@{/admin/shop/delete}" method="post" id="shopDeleteForm" style="display:inline;">
+                        <input type="hidden" name="page" th:value="${currentPage}">
+                        <input type="hidden" name="searchType" th:value="${searchType}">
+                        <input type="hidden" name="keyword" th:value="${keyword}">
+                        <button type="submit" class="del-btn">선택삭제</button>
+                    </form>
+
+                    <th:block th:replace="~{common/_admin_pagination :: pagination('/admin/shop/list')}"></th:block>
+
                     <button type="button" class="reg-btn" id="openShopModal">상점등록</button>
                 </div>
+
             </section>
         </main>
+
         <div id="shopModal" class="modal-overlay">
             <div class="shop-modal-container">
                 <div class="shop-modal-header">
@@ -219,90 +240,84 @@
                     <button type="button" class="modal-close" id="closeShopModal">X</button>
                 </div>
 
-                <div class="shop-modal-body">
+                <form th:action="@{/admin/shop/register}" method="post" class="shop-modal-body">
                     <table class="shop-form-table">
                         <tr>
-                            <th>아이디</th>
+                            <th>회원아이디</th>
                             <td>
-                                <input type="text" class="input-w-medium">
-                                <span class="input-guide">영문, 숫자 4~12자 설정</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>비밀번호</th>
-                            <td>
-                                <input type="password" class="input-w-medium">
-                                <span class="input-guide">영문, 숫자, 특수문자 8~12자 설정</span>
-                            </td>
-                        </tr>
-                        <tr class="divide-row">
-                            <th>비밀번호확인</th>
-                            <td>
-                                <input type="password" class="input-w-medium">
+                                <input type="text" name="memberId" class="input-w-medium" required>
+                                <span class="input-guide">기존 회원 아이디를 입력하세요.</span>
                             </td>
                         </tr>
 
                         <tr>
                             <th>상호명</th>
                             <td>
-                                <input type="text" class="input-w-medium" placeholder="상호명입력( ) (주)">
+                                <input type="text" name="companyName" class="input-w-medium" placeholder="상호명입력" required>
                             </td>
                         </tr>
+
                         <tr>
                             <th>대표</th>
                             <td>
-                                <input type="text" class="input-w-medium" placeholder="이름입력">
+                                <input type="text" name="ceoName" class="input-w-medium" placeholder="이름입력" required>
                             </td>
                         </tr>
+
                         <tr>
                             <th>사업자등록번호</th>
                             <td>
-                                <input type="text" class="input-w-medium" placeholder="사업자등록번호입력">
-                                <span class="input-guide">- 포함 12 자리 입력</span>
+                                <input type="text" name="bizNo" class="input-w-medium" placeholder="사업자등록번호입력" required>
+                                <span class="input-guide">- 포함 입력</span>
                             </td>
                         </tr>
+
                         <tr>
                             <th>통신판매업번호</th>
                             <td>
-                                <input type="text" class="input-w-medium" placeholder="통신판매업번호입력">
-                                <span class="input-guide">- 포함 12 자리 입력</span>
+                                <input type="text" name="onlineSaleNo" class="input-w-medium" placeholder="통신판매업번호입력">
                             </td>
                         </tr>
+
                         <tr>
                             <th>전화번호</th>
                             <td>
-                                <input type="text" class="input-w-medium" placeholder="전화번호입력">
+                                <input type="text" name="tel" class="input-w-medium" placeholder="전화번호입력">
                             </td>
                         </tr>
+
                         <tr>
                             <th>팩스</th>
                             <td>
-                                <input type="text" class="input-w-medium" placeholder="팩스번호입력">
+                                <input type="text" name="fax" class="input-w-medium" placeholder="팩스번호입력">
                             </td>
                         </tr>
+
                         <tr>
                             <th>주소</th>
                             <td class="address-row">
                                 <div class="address-zipcode-wrap">
-                                    <input type="text" class="input-w-medium" placeholder="우편번호검색클릭" readonly>
+                                    <input type="text" name="zip" class="input-w-medium" placeholder="우편번호검색클릭" readonly>
                                     <button type="button" class="btn-zipcode">우편번호 검색</button>
                                 </div>
-                                <input type="text" class="input-w-large" placeholder="기본주소검색" readonly>
-                                <input type="text" class="input-w-large" placeholder="상세주소입력">
+                                <input type="text" name="addr1" class="input-w-large" placeholder="기본주소검색" readonly>
+                                <input type="text" name="addr2" class="input-w-large" placeholder="상세주소입력">
                             </td>
                         </tr>
                     </table>
 
                     <div class="shop-modal-btn-area">
-                        <button type="button" class="btn-submit-green">등록하기</button>
+                        <button type="submit" class="btn-submit-green">등록하기</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 
     <th:block th:replace="~{common/_admin_footer :: footer}"></th:block>
 </div>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
     // 1. 좌측 사이드바 메뉴 토글 함수
@@ -318,31 +333,107 @@
         }
     }
 
-    // 2. 상점 등록 모달 열기/닫기 스크립트
+    // 2. 상점 등록 모달 열기/닫기
     const shopModal = document.getElementById("shopModal");
     const openShopModal = document.getElementById("openShopModal");
     const closeShopModal = document.getElementById("closeShopModal");
 
-    // '상점등록' 버튼 클릭 시 모달 열기
-    if(openShopModal) {
+    if (openShopModal) {
         openShopModal.addEventListener("click", function () {
             shopModal.classList.add("show");
         });
     }
 
-    // 모달 내부의 'X' 버튼 클릭 시 모달 닫기
-    if(closeShopModal) {
+    if (closeShopModal) {
         closeShopModal.addEventListener("click", function () {
             shopModal.classList.remove("show");
         });
     }
 
-    // 모달 바깥(어두운 배경) 클릭 시 모달 닫기
-    if(shopModal) {
+    if (shopModal) {
         shopModal.addEventListener("click", function (e) {
             if (e.target === shopModal) {
                 shopModal.classList.remove("show");
             }
+        });
+    }
+
+    // 3. 우편번호 검색
+    const zipcodeBtn = document.querySelector(".btn-zipcode");
+
+    if (zipcodeBtn) {
+        zipcodeBtn.addEventListener("click", function () {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    const zipInput = document.querySelector("input[name='zip']");
+                    const addr1Input = document.querySelector("input[name='addr1']");
+                    const addr2Input = document.querySelector("input[name='addr2']");
+
+                    let addr = "";
+
+                    if (data.userSelectedType === "R") {
+                        addr = data.roadAddress;
+                    } else {
+                        addr = data.jibunAddress;
+                    }
+
+                    if (zipInput) {
+                        zipInput.value = data.zonecode;
+                    }
+
+                    if (addr1Input) {
+                        addr1Input.value = addr;
+                    }
+
+                    if (addr2Input) {
+                        addr2Input.focus();
+                    }
+                }
+            }).open();
+        });
+    }
+
+    // 4. 상점 선택삭제
+    const checkAll = document.getElementById("checkAll");
+    const shopDeleteForm = document.getElementById("shopDeleteForm");
+
+    if (checkAll) {
+        checkAll.addEventListener("change", function () {
+            const sellerChecks = document.querySelectorAll(".seller-check");
+
+            sellerChecks.forEach(function (checkbox) {
+                checkbox.checked = checkAll.checked;
+            });
+        });
+    }
+
+    if (shopDeleteForm) {
+        shopDeleteForm.addEventListener("submit", function (e) {
+            const checkedList = document.querySelectorAll(".seller-check:checked");
+
+            if (checkedList.length === 0) {
+                alert("삭제할 상점을 선택하세요.");
+                e.preventDefault();
+                return;
+            }
+
+            if (!confirm("선택한 상점을 삭제하시겠습니까?")) {
+                e.preventDefault();
+                return;
+            }
+
+            const oldInputs = shopDeleteForm.querySelectorAll("input[name='sellerNos']");
+            oldInputs.forEach(function (input) {
+                input.remove();
+            });
+
+            checkedList.forEach(function (checkbox) {
+                const hiddenInput = document.createElement("input");
+                hiddenInput.type = "hidden";
+                hiddenInput.name = "sellerNos";
+                hiddenInput.value = checkbox.value;
+                shopDeleteForm.appendChild(hiddenInput);
+            });
         });
     }
 </script>
