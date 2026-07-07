@@ -160,6 +160,10 @@
                     </div>
 
                     <input type="hidden"
+                           id="productNo"
+                           th:value="${product.productNo}" />
+
+                    <input type="hidden"
                            id="basePrice"
                            th:value="${product.salePrice}" />
 
@@ -481,141 +485,36 @@
     <img src="../images/main/top.png" alt="위로 이동" />
 </a>
 
-<script>
+<!-- 장바구니 담기 완료 모달 -->
+<div id="cartModal" class="cart-modal" aria-hidden="true">
+    <div class="cart-modal-dim"></div>
 
-    // 카테고리 눌렀을때 반응
-    const items = document.querySelectorAll(".category-item");
+    <div class="cart-modal-box" role="dialog" aria-modal="true">
+        <button type="button"
+                id="cartModalClose"
+                class="cart-modal-close"
+                aria-label="닫기">
+            ×
+        </button>
 
-    items.forEach(function (item) {
-        const title = item.querySelector(".category-title");
-        const sub = item.querySelector(".sub-category");
+        <strong>장바구니에 상품을 담았습니다.</strong>
+        <p>장바구니에서 상품을 확인하거나 계속 쇼핑할 수 있습니다.</p>
 
-        if (!title || !sub) {
-            return;
-        }
+        <div class="cart-modal-buttons">
+            <button type="button"
+                    id="continueShoppingBtn"
+                    class="btn-continue-shopping">
+                계속 쇼핑하기
+            </button>
 
-        title.addEventListener("click", function () {
-            item.classList.toggle("active");
-        });
-    });
-
-    const qtyInput = document.getElementById("qtyInput");
-    const plusBtn = document.getElementById("plusBtn");
-    const minusBtn = document.getElementById("minusBtn");
-
-    const totalPrice = document.getElementById("totalPrice");
-    const selectedPrice = document.getElementById("selectedPrice");
-
-    const basePrice = document.getElementById("basePrice");
-    const selectedProductName = document.getElementById("selectedProductName");
-
-    const optionSelects = document.querySelectorAll(".option-select");
-
-    function formatPrice(num) {
-        return Number(num).toLocaleString() + "원";
-    }
-
-    function getUnitPrice() {
-        return Number(document.getElementById("basePrice").value);
-    }
-
-    function getSelectedOptionTexts() {
-        const selectedOptions = [];
-
-        optionSelects.forEach(function (select) {
-            const selectedOption = select.options[select.selectedIndex];
-
-            if (selectedOption.value !== "") {
-                selectedOptions.push(selectedOption.text);
-            }
-        });
-
-        return selectedOptions;
-    }
-
-    function updateSelectedProductName() {
-        const productName = selectedProductName.dataset.productName;
-        const selectedOptions = getSelectedOptionTexts();
-
-        if (selectedOptions.length === 0) {
-            selectedProductName.textContent = productName;
-            return;
-        }
-
-        selectedProductName.textContent =
-            productName + " / " + selectedOptions.join(" / ");
-    }
-
-    function updatePrice() {
-        const qty = Number(qtyInput.value);
-        const unitPrice = getUnitPrice();
-        const total = qty * unitPrice;
-
-        selectedPrice.textContent = formatPrice(total);
-        totalPrice.textContent = formatPrice(total);
-
-        updateSelectedProductName();
-    }
-
-    plusBtn.addEventListener("click", () => {
-        qtyInput.value = Number(qtyInput.value) + 1;
-        updatePrice();
-    });
-
-    minusBtn.addEventListener("click", () => {
-        const current = Number(qtyInput.value);
-        if (current > 1) {
-            qtyInput.value = current - 1;
-            updatePrice();
-        }
-    });
-
-    const detailTabs = document.querySelectorAll(".detail-tabs a");
-    detailTabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-            detailTabs.forEach((el) => el.classList.remove("active"));
-            tab.classList.add("active");
-        });
-    });
-
-    optionSelects.forEach(function (select) {
-        select.addEventListener("change", updatePrice);
-    });
-
-    function isAllOptionsSelected() {
-        for (const select of optionSelects) {
-            if (select.value === "") {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    const cartBtn = document.querySelector(".btn-cart");
-    const buyBtn = document.querySelector(".btn-buy");
-
-    cartBtn.addEventListener("click", function () {
-        if (!isAllOptionsSelected()) {
-            alert("상품 옵션을 모두 선택해주세요.");
-            return;
-        }
-
-        // 다음 단계: 장바구니 저장 요청
-        console.log("장바구니 가능");
-    });
-
-    buyBtn.addEventListener("click", function () {
-        if (!isAllOptionsSelected()) {
-            alert("상품 옵션을 모두 선택해주세요.");
-            return;
-        }
-
-        // 다음 단계: 바로구매 주문서 이동
-        console.log("구매 가능");
-    });
-
-    updatePrice();
-</script>
+            <button type="button"
+                    id="goCartBtn"
+                    class="btn-go-cart">
+                장바구니 가기
+            </button>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/product/view.js}"></script>
 </body>
 </html>

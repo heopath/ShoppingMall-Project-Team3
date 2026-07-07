@@ -1,7 +1,9 @@
 package kr.co.springkmarketapp.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,63 +12,138 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final MyUserDetailsService myUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
-                // CSRF 보안 토큰 무효화 (개발 단계 및 Rest API 테스트를 위해 필수)
+                /*
+                 * 현재 개발 단계 설정
+                 * Ajax / REST 요청 테스트 중이므로 우선 비활성화
+                 * 나중에 결제, 주문 등 완성 단계에서 활성화 예정
+                 */
                 .csrf(csrf -> csrf.disable())
 
-                // 시큐리티 기본 로그인 페이지와 폼 창을 비활성화합니다.
                 .httpBasic(basic -> basic.disable())
 
-                // 로그인 설정
+                .authenticationProvider(authenticationProvider())
+
+                .authorizeHttpRequests(authorize -> authorize
+
+                        /*
+                         * 로그인 없이 접근 가능한 주소
+                         */
+                        .requestMatchers(
+                                "/",
+                                "/member/login",
+                                "/member/register",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/uploads/**",
+                                "/error"
+                        ).permitAll()
+
+                        /*
+                         * 관리자 전용
+                         */
+                        .requestMatchers("/admin", "/admin/**")
+                        .hasRole("ADMIN")
+
+                        /*
+                         * 판매자 전용
+                         */
+                        .requestMatchers("/seller", "/seller/**")
+                        .hasRole("SELLER")
+
+                        /*
+                         * 로그인 회원 공통
+                         * USER / SELLER / ADMIN 모두 접근 가능
+                         */
+                        .requestMatchers(
+                                "/my/**",
+
+                                "/product/cart",
+                                "/product/cart/**",
+
+                                "/product/order",
+                                "/product/order/**",
+
+                                "/product/complete",
+                                "/product/complete/**"
+                        ).authenticated()
+
+                        /*
+                         * 아직 권한 설정 전인 나머지 주소는 공개
+                         */
+                        .anyRequest().permitAll()
+                )
+
                 .formLogin(form -> form
+
+                        /*
+                         * GET /member/login
+                         */
                         .loginPage("/member/login")
-                        .defaultSuccessUrl("/")
-                        .failureUrl("/member/login?login=fail")
+
+                        /*
+                         * POST /member/login
+                         * Spring Security가 직접 로그인 처리
+                         */
+                        .loginProcessingUrl("/member/login")
+
                         .usernameParameter("memberId")
                         .passwordParameter("password")
+
+                        .defaultSuccessUrl("/", true)
+
+                        .failureUrl("/member/login?login=fail")
+
+                        .permitAll()
                 )
 
-                // 로그아웃 설정
-                .logout(config -> config
+                .logout(logout -> logout
+
                         .logoutUrl("/member/logout")
-                        .invalidateHttpSession(true)
+
                         .logoutSuccessUrl("/member/login?logout=success")
+
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
+
+                        .permitAll()
                 )
 
-                // 인가 설정
-                .authorizeHttpRequests(authorize -> authorize
-                        // ===== 개발 중일 때 =====
-                        // 모든 페이지 접근 허용 (어떤 요청이든 로그인 없이 모두 허용(permitAll)하겠다는 핵심 설정!)
-                        //.anyRequest().permitAll()
-
-                        // ===== 프로젝트 완료되었을 때 =====
-                        // 아래 주석을 해제하고 위 anyRequest().permitAll()은 없애기
-                .requestMatchers(
-                        "/",
-                        "/member/login",
-                        "/member/register",
-                        "/css/**",
-                        "/js/**",
-                        "/images/**"
-                ).permitAll()
-
-//                .requestMatchers("/my/**").authenticated()   //  로그인해야 접근 가능
-//                .requestMatchers("/cart/**").authenticated()
-//                .requestMatchers("/order/**").authenticated()
-//                .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
-                .anyRequest().permitAll()
+                /*
+                 * 로그인 성공 시 기존 세션 ID를 변경한다.
+                 */
+                .sessionManagement(session -> session
+                        .sessionFixation()
+                        .changeSessionId()
                 );
 
         return http.build();
     }
 
     @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+
+        DaoAuthenticationProvider provider =
+                new DaoAuthenticationProvider();
+
+        provider.setUserDetailsService(myUserDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+
+        return provider;
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
-        // 비밀번호 암호화
         return new BCryptPasswordEncoder();
     }
 }

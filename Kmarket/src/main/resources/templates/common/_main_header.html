@@ -45,20 +45,19 @@
         <span class="login-user"> 안녕하세요, <span class="name" th:text="${#authentication.principal.member.name}"></span><span class="suffix">님</span></span>
         <a th:href="@{/member/logout}">로그아웃</a>
         <a th:href="@{/my/home}">마이페이지</a>
-        <a th:href="@{/cart}">장바구니</a>
+        <a th:href="@{/product/cart}">장바구니</a>
     </nav>
     <!-- 비로그인 -->
     <nav class="header-links"
          th:if="${#authorization.expression('isAnonymous()')}">
         <a th:href="@{/member/login}">로그인</a>
         <a th:href="@{/member/join}">회원가입</a>
-        <a th:href="@{/my/home}">마이페이지</a>
-        <a th:href="@{/cart}">장바구니</a>
     </nav>
 
 
     <!-- 관리자 -->
-    <nav th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+    <nav class="header-links"
+         th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
         <a th:href="@{/admin}">관리자</a>
     </nav>
 

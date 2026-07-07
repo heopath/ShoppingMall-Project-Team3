@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.springkmarketapp.dao.order.CartDAO">
+
+    <!-- =====================================================
+         기존 장바구니 기본 CRUD
+    ====================================================== -->
+
+    <!-- 장바구니 1개 조회 -->
+    <select id="selectCart"
+            resultType="kr.co.springkmarketapp.dto.order.CartDTO">
+
+        SELECT
+        cart_no AS cartNo,
+        member_no AS memberNo,
+        product_no AS productNo,
+        option_signature AS optionSignature,
+        quantity,
+        reg_date AS regDate
+        FROM cart
+        WHERE cart_no = #{cartNo}
+
+    </select>
+
+    <!-- 장바구니 전체 조회 : 테스트용 -->
+    <select id="selectCartList"
+            resultType="kr.co.springkmarketapp.dto.order.CartDTO">
+
+        SELECT
+        cart_no AS cartNo,
+        member_no AS memberNo,
+        product_no AS productNo,
+        option_signature AS optionSignature,
+        quantity,
+        reg_date AS regDate
+        FROM cart
+        ORDER BY cart_no DESC
+
+    </select>
+
+    <!-- 새 장바구니 상품 등록 -->
+    <insert id="insertCart"
+            useGeneratedKeys="true"
+            keyProperty="cartNo"
+            keyColumn="cart_no">
+
+        INSERT INTO cart (
+        member_no,
+        product_no,
+        option_signature,
+        quantity,
+        reg_date
+        ) VALUES (
+        #{memberNo},
+        #{productNo},
+        #{optionSignature},
+        #{quantity},
+        NOW()
+        )
+
+    </insert>
+
+    <!-- 장바구니 수정 : 기본 CRUD용 -->
+    <update id="updateCart">
+
+        UPDATE cart
+        SET
+        quantity = #{quantity}
+        WHERE cart_no = #{cartNo}
+
+    </update>
+
+    <!-- 장바구니 삭제 -->
+    <delete id="deleteCart">
+
+        DELETE FROM cart
+        WHERE cart_no = #{cartNo}
+
+    </delete>
+
+
+    <!-- =====================================================
+         상품 상세 → 장바구니 담기 기능
+    ====================================================== -->
+
+    <!-- 장바구니 담기 전 상품 판매 상태 / 재고 확인 -->
+    <select id="selectProductForCart"
+            resultType="kr.co.springkmarketapp.dto.order.CartProductDTO">
+
+        SELECT
+        product_no AS productNo,
+        stock,
+        status
+        FROM product
+        WHERE product_no = #{productNo}
+
+    </select>
+
+    <!-- 해당 상품의 전체 옵션 조회 -->
+    <select id="selectProductOptionsForCart"
+            resultType="kr.co.springkmarketapp.dto.product.ProductOptionDTO">
+
+        SELECT
+        option_no AS optionNo,
+        product_no AS productNo,
+        option_group_no AS optionGroupNo,
+        option_name AS optionName,
+        option_value AS optionValue,
+        sort_order AS sortOrder
+        FROM product_option
+        WHERE product_no = #{productNo}
+        ORDER BY option_group_no ASC, sort_order ASC, option_no ASC
+
+    </select>
+
+    <!-- 동일 회원 + 상품 + 옵션 조합 장바구니 조회 -->
+    <select id="selectCartByMemberProductOption"
+            resultType="kr.co.springkmarketapp.dto.order.CartDTO">
+
+        SELECT
+        cart_no AS cartNo,
+        member_no AS memberNo,
+        product_no AS productNo,
+        option_signature AS optionSignature,
+        quantity,
+        reg_date AS regDate
+        FROM cart
+        WHERE member_no = #{memberNo}
+        AND product_no = #{productNo}
+        AND option_signature = #{optionSignature}
+
+    </select>
+
+    <!-- 동일 옵션 조합이면 기존 수량 증가 -->
+    <update id="updateCartQuantity">
+
+        UPDATE cart
+        SET quantity = quantity + #{quantity}
+        WHERE cart_no = #{cartNo}
+
+    </update>
+
+    <!-- 새 장바구니의 선택 옵션 저장 -->
+    <insert id="insertCartOptions">
+
+        INSERT INTO cart_option (
+        cart_no,
+        option_no
+        ) VALUES
+
+        <foreach collection="optionNos"
+                 item="optionNo"
+                 separator=",">
+            (#{cartNo}, #{optionNo})
+        </foreach>
+
+    </insert>
+
+    <!-- 로그인한 회원의 장바구니 목록 -->
+    <select id="selectCartListByMemberNo"
+            resultType="kr.co.springkmarketapp.dto.order.CartListDTO">
+
+        SELECT
+        c.cart_no AS cartNo,
+        c.product_no AS productNo,
+        c.quantity AS quantity,
+
+        p.product_name AS productName,
+        p.basic_desc AS basicDesc,
+        p.price AS price,
+        p.discount_rate AS discountRate,
+        p.point AS point,
+        p.delivery_fee AS deliveryFee,
+
+        img.image_path AS imagePath,
+
+        COALESCE(
+        (
+        SELECT GROUP_CONCAT(
+        CONCAT(
+        po.option_name,
+        ' : ',
+        po.option_value
+        )
+        ORDER BY po.option_group_no ASC, po.sort_order ASC
+        SEPARATOR ' / '
+        )
+        FROM cart_option co
+        JOIN product_option po
+        ON co.option_no = po.option_no
+        WHERE co.cart_no = c.cart_no
+        ),
+        ''
+        ) AS optionText
+
+        FROM cart c
+
+        JOIN product p
+        ON c.product_no = p.product_no
+
+        LEFT JOIN (
+        SELECT
+        product_no,
+        MAX(
+        CASE
+        WHEN image_type = 'THUMB1'
+        THEN image_path
+        END
+        ) AS image_path
+        FROM product_image
+        GROUP BY product_no
+        ) img
+        ON p.product_no = img.product_no
+
+        WHERE c.member_no = #{memberNo}
+
+        ORDER BY c.reg_date DESC, c.cart_no DESC
+
+    </select>
+
+    <!-- 로그인 회원의 장바구니 1건 조회 -->
+    <select id="selectCartByCartNoAndMemberNo"
+            resultType="kr.co.springkmarketapp.dto.order.CartDTO">
+
+        SELECT
+        cart_no AS cartNo,
+        member_no AS memberNo,
+        product_no AS productNo,
+        option_signature AS optionSignature,
+        quantity,
+        reg_date AS regDate
+        FROM cart
+        WHERE cart_no = #{cartNo}
+        AND member_no = #{memberNo}
+
+    </select>
+
+    <!-- 장바구니 수량 직접 변경 -->
+    <update id="updateCartQuantityByMemberNo">
+
+        UPDATE cart
+        SET quantity = #{quantity}
+        WHERE cart_no = #{cartNo}
+        AND member_no = #{memberNo}
+
+    </update>
+
+    <!-- 선택 삭제 전 cart_option 먼저 삭제 -->
+    <delete id="deleteCartOptionsByMemberNo">
+
+        DELETE co
+        FROM cart_option co
+        JOIN cart c
+        ON co.cart_no = c.cart_no
+        WHERE c.member_no = #{memberNo}
+        AND c.cart_no IN
+
+        <foreach collection="cartNos"
+                 item="cartNo"
+                 open="("
+                 separator=","
+                 close=")">
+            #{cartNo}
+        </foreach>
+
+    </delete>
+
+    <!-- 선택한 cart 삭제 -->
+    <delete id="deleteCartsByMemberNo">
+
+        DELETE FROM cart
+        WHERE member_no = #{memberNo}
+        AND cart_no IN
+
+        <foreach collection="cartNos"
+                 item="cartNo"
+                 open="("
+                 separator=","
+                 close=")">
+            #{cartNo}
+        </foreach>
+
+    </delete>
+
+</mapper>
