@@ -31,11 +31,7 @@ public interface MemberPointDAO {
     int updateMemberPointBalance(@Param("memberNo") Integer memberNo,
                                  @Param("point") Integer point);
 
-    int insertRevokePointHistory(@Param("memberNo") Integer memberNo,
-                                 @Param("orderNo") Long orderNo,
-                                 @Param("pointValue") Integer pointValue,
-                                 @Param("balancePoint") Integer balancePoint,
-                                 @Param("reason") String reason);
+    int updatePointTypeToRevoked(@Param("pointNo") Integer pointNo);
     int countMemberPointList();
 
     int countMemberPointListBySearch(@Param("searchType") String searchType,

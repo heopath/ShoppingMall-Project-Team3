@@ -142,14 +142,17 @@
                             <input type="checkbox"
                                    class="point-check"
                                    th:value="${point.pointNo}"
-                                   th:disabled="${point.pointValue <= 0 || point.revokedYn == 'Y'}">                    </td>
+                                   th:disabled="${point.pointValue <= 0 || point.pointType == 'REVOKED'}">
+                        </td>
                         <td th:text="${point.pointNo}">5</td>
                         <td th:text="${point.memberId != null ? point.memberId : '-'}">abc1234</td>
                         <td th:text="${point.name != null ? point.name : '-'}">정우성</td>
                         <td th:text="${#numbers.formatInteger(point.pointValue, 0, 'COMMA')}">1,000</td>
                         <td th:text="${#numbers.formatInteger(point.balancePoint, 0, 'COMMA')}">15,000</td>
-                        <td th:text="${point.reason}">구매확정 포인트 지급</td>
-                        <span th:if="${point.revokedYn == 'Y'}" class="revoked-label">회수됨</span>
+                        <td>
+                            <span th:text="${point.reason}">구매확정 포인트 지급</span>
+                            <span th:if="${point.pointType == 'REVOKED'}" class="revoked-label">회수됨</span>
+                        </td>
                         <td th:text="${point.regDate != null ? #temporals.format(point.regDate, 'yyyy-MM-dd HH:mm:ss') : '-'}">
                             0000-00-00 00:00:00
                         </td>
@@ -185,7 +188,7 @@
 
     if (checkAllPoint) {
         checkAllPoint.addEventListener("change", function () {
-            document.querySelectorAll(".point-check").forEach(function (checkbox) {
+            document.querySelectorAll(".point-check:not(:disabled)").forEach(function (checkbox) {
                 checkbox.checked = checkAllPoint.checked;
             });
         });
