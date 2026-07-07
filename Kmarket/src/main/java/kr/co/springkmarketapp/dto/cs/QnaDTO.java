@@ -21,4 +21,9 @@ public class QnaDTO {
     private String status;
     private LocalDateTime regDate;
     private LocalDateTime answerDate;
+
+    // 질문 카테고리 추가 필드
+    private String cateName;
+    // 작성자 추가 필드
+    private String name;
 }

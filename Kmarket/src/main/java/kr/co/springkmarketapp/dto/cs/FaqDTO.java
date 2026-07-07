@@ -19,4 +19,7 @@ public class FaqDTO {
     private Integer hit;
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
+
+    private String cateName;
+    private String parentCateName;
 }

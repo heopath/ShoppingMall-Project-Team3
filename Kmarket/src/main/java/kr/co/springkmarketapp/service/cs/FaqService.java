@@ -25,11 +25,20 @@ public class FaqService {
         return faqDAO.selectFaqList();
     }
 
+
     public int updateFaq(FaqDTO faqDTO) {
         return faqDAO.updateFaq(faqDTO);
     }
 
     public int deleteFaq(Integer faqNo) {
         return faqDAO.deleteFaq(faqNo);
+    }
+
+    public int countFaq() {
+        return faqDAO.countFaq();
+    }
+
+    public List<FaqDTO> selectFaqList(int offset, int size) {
+        return faqDAO.selectFaqListPaging(offset, size);
     }
 }

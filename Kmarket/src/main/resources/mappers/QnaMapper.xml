@@ -2,10 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.springkmarketapp.dao.cs.QnaDAO">
     <select id="selectQnaList" resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
-        SELECT qna_no AS qnaNo, member_no AS memberNo, cs_cate_no AS csCateNo, title, content, answer,
-               answer_member_no AS answerMemberNo, status, reg_date AS regDate, answer_date AS answerDate
-        FROM qna
-        ORDER BY qna_no DESC
+        SELECT q.qna_no AS qnaNo, q.member_no AS memberNo, q.cs_cate_no AS csCateNo, q.title, q.content, q.answer,
+        q.answer_member_no AS answerMemberNo, q.status, q.reg_date AS regDate, q.answer_date AS answerDate,
+        c.cate_name AS cateName,
+        m.name AS name
+        FROM qna q
+        JOIN cs_category c
+        ON q.cs_cate_no = c.cs_cate_no
+        JOIN member m
+        ON q.member_no = m.member_no
+        ORDER BY q.qna_no DESC
     </select>
     <select id="selectQna" parameterType="long" resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
         SELECT qna_no AS qnaNo, member_no AS memberNo, cs_cate_no AS csCateNo, title, content, answer,

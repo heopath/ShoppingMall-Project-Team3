@@ -17,6 +17,14 @@ public class NoticeService {
         return noticeDAO.insertNotice(noticeDTO);
     }
 
+    public List<NoticeDTO> selectNoticeListByPage(int offset, int limit) {
+        return noticeDAO.selectNoticeListByPage(offset, limit);
+    }
+
+    public int countNotice() {
+        return noticeDAO.countNotice();
+    }
+
     public NoticeDTO selectNotice(Integer noticeNo) {
         return noticeDAO.selectNotice(noticeNo);
     }
