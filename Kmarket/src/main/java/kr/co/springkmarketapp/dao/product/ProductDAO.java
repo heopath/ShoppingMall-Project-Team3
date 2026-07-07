@@ -9,7 +9,14 @@ import java.util.List;
 
 @Mapper
 public interface ProductDAO {
+    // 상품 등록 (기존에 있다고 하셨음 - 시그니처 확인용)
     int insertProduct(ProductDTO productDTO);
+    // 이미지 일괄 등록
+    void insertProductImages(List<ProductImageDTO> imageList);
+    // 옵션 일괄 등록
+    void insertProductOptions(List<ProductOptionDTO> optionList);
+    // 제공고시 등록
+    void insertProductNotice(ProductNoticeDTO noticeDTO);
     ProductDTO selectProduct(Integer productNo);
     List<ProductDTO> selectProductList();
     int updateProduct(ProductDTO productDTO);

@@ -132,4 +132,17 @@ public class AdminConfigController {
         return "redirect:/admin/config/version";
     }
 
+    // 3. 1차 카테고리 목록 조회 API (상품등록 화면 select box용)
+    @GetMapping("/category/main-list")
+    @ResponseBody
+    public List<CategoryDTO> getMainCategories() {
+        return categoryService.selectMainCategories();
+    }
+
+    // 4. 특정 1차 카테고리 하위의 2차 카테고리 목록 조회 API
+    @GetMapping("/category/sub-list")
+    @ResponseBody
+    public List<CategoryDTO> getSubCategories(@RequestParam("parentNo") Integer parentNo) {
+        return categoryService.selectSubCategoriesByParent(parentNo);
+    }
 }
