@@ -1,19 +1,27 @@
 package kr.co.springkmarketapp.controller.product;
 
+import kr.co.springkmarketapp.config.MyUserDetails;
 import kr.co.springkmarketapp.dto.common.PageRequestDTO;
 import kr.co.springkmarketapp.dto.common.PageResponseDTO;
+import kr.co.springkmarketapp.dto.order.*;
 import kr.co.springkmarketapp.dto.product.CategoryDTO;
 import kr.co.springkmarketapp.dto.product.ProductListDTO;
 import kr.co.springkmarketapp.dto.product.ProductViewDTO;
 import kr.co.springkmarketapp.service.admin.BannerService;
 import kr.co.springkmarketapp.service.member.SellerProfileService;
+import kr.co.springkmarketapp.service.order.CartService;
 import kr.co.springkmarketapp.service.product.CategoryService;
 import kr.co.springkmarketapp.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,7 +32,10 @@ public class ProductController {
     private final BannerService bannerService;
     private final SellerProfileService sellerProfileService;
 
-    // aside 및 광고 부분 공통으로 메서드 처리
+    // 장바구니 Service 추가
+    private final CartService cartService;
+
+    // aside 및 광고 부분 공통 처리
     private void addCommonModel(Model model) {
         model.addAttribute("topBanner", bannerService.getTopBanner());
         model.addAttribute("categoryTree", categoryService.getCategoryTree());
@@ -54,7 +65,9 @@ public class ProductController {
 
     @GetMapping("/product/list")
     public String list(PageRequestDTO pageRequestDTO, Model model) {
-        CategoryDTO currentCategory = addCategoryModel(pageRequestDTO.getCateNo(), model);
+
+        CategoryDTO currentCategory =
+                addCategoryModel(pageRequestDTO.getCateNo(), model);
 
         if (currentCategory == null) {
             return "redirect:/";
@@ -62,7 +75,8 @@ public class ProductController {
 
         addCommonModel(model);
 
-        PageResponseDTO<ProductListDTO> pageResponseDTO = productService.getProductsByCategory(pageRequestDTO);
+        PageResponseDTO<ProductListDTO> pageResponseDTO =
+                productService.getProductsByCategory(pageRequestDTO);
 
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
@@ -70,17 +84,19 @@ public class ProductController {
     }
 
     @GetMapping("/product/view")
-    public String view( @RequestParam("productNo") int productNo,
-                        @RequestParam(value = "reviewPage", defaultValue = "1") int reviewPage,
-                        Model model) {
+    public String view(
+            @RequestParam("productNo") int productNo,
+            @RequestParam(value = "reviewPage", defaultValue = "1") int reviewPage,
+            Model model
+    ) {
 
-        // header + aside 공통 데이터
         addCommonModel(model);
 
-        // 상품 상세 데이터
-        ProductViewDTO product = productService.getProductView(productNo);
+        ProductViewDTO product =
+                productService.getProductView(productNo);
 
-        CategoryDTO currentCategory = addCategoryModel(product.getCateNo(), model);
+        CategoryDTO currentCategory =
+                addCategoryModel(product.getCateNo(), model);
 
         if (currentCategory == null) {
             return "redirect:/";
@@ -88,21 +104,204 @@ public class ProductController {
 
         PageRequestDTO reviewPageRequestDTO = new PageRequestDTO();
         reviewPageRequestDTO.setPage(Math.max(reviewPage, 1));
-        reviewPageRequestDTO.setSize(5); // 현재 화면에 리뷰 5개씩 출력
+        reviewPageRequestDTO.setSize(5);
 
         model.addAttribute("product", product);
-        model.addAttribute("optionGroups", productService.getProductOptionGroups(productNo));
-        model.addAttribute("seller", sellerProfileService.selectSellerProfile(product.getSellerNo()));
-        model.addAttribute("detailImages", productService.getDetailImages(productNo));
-        model.addAttribute("notice", productService.getProductNotice(productNo));
-        model.addAttribute("reviewPageResponseDTO", productService.getProductReviews(productNo, reviewPageRequestDTO));
+        model.addAttribute(
+                "optionGroups",
+                productService.getProductOptionGroups(productNo)
+        );
+        model.addAttribute(
+                "seller",
+                sellerProfileService.selectSellerProfile(product.getSellerNo())
+        );
+        model.addAttribute(
+                "detailImages",
+                productService.getDetailImages(productNo)
+        );
+        model.addAttribute(
+                "notice",
+                productService.getProductNotice(productNo)
+        );
+        model.addAttribute(
+                "reviewPageResponseDTO",
+                productService.getProductReviews(
+                        productNo,
+                        reviewPageRequestDTO
+                )
+        );
 
         return "product/view";
     }
 
+    /*
+     * 장바구니 화면
+     * GET /product/cart
+     */
     @GetMapping("/product/cart")
-    public String cart() {
+    public String cart(Model model) {
+
+        addCommonModel(model);
+
         return "product/cart";
+    }
+
+    @GetMapping("/product/cart/items")
+    public ResponseEntity<?> getCartItems(
+            @AuthenticationPrincipal MyUserDetails userDetails
+    ) {
+
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    "로그인이 필요합니다."
+            );
+        }
+
+        Integer memberNo = userDetails.getMember().getMemberNo();
+
+        List<CartListDTO> cartItems =
+                cartService.selectCartListByMemberNo(memberNo);
+
+        return ResponseEntity.ok(cartItems);
+    }
+
+    /*
+     * 장바구니 DB 저장
+     * POST /product/cart
+     */
+    @PostMapping("/product/cart")
+    public ResponseEntity<Map<String, Object>> addCart(
+            @AuthenticationPrincipal MyUserDetails userDetails,
+            @RequestBody CartAddRequestDTO request
+    ) {
+
+        /*
+         * Security에서 /product/cart를 authenticated()로 막았으므로
+         * 일반적으로 여기까지 비로그인 사용자가 들어오지는 않는다.
+         * 그래도 API 안전성 때문에 한 번 더 검사한다.
+         */
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    Map.<String, Object>of(
+                            "result", false,
+                            "message", "로그인이 필요합니다."
+                    )
+            );
+        }
+
+        try {
+            Integer memberNo =
+                    userDetails.getMember().getMemberNo();
+
+            CartDTO cartDTO =
+                    cartService.addCart(memberNo, request);
+
+            return ResponseEntity.ok(
+                    Map.<String, Object>of(
+                            "result", true,
+                            "message", "장바구니에 담았습니다.",
+                            "cartNo", cartDTO.getCartNo(),
+                            "quantity", cartDTO.getQuantity()
+                    )
+            );
+
+        } catch (IllegalArgumentException e) {
+
+            return ResponseEntity.badRequest().body(
+                    Map.<String, Object>of(
+                            "result", false,
+                            "message", e.getMessage()
+                    )
+            );
+        }
+    }
+
+    /*
+     * 장바구니 수량 변경
+     * PATCH /product/cart/{cartNo}
+     */
+    @PatchMapping("/product/cart/{cartNo}")
+    public ResponseEntity<Map<String, Object>> updateCartQuantity(
+            @AuthenticationPrincipal MyUserDetails userDetails,
+            @PathVariable Integer cartNo,
+            @RequestBody CartQuantityUpdateRequestDTO request
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    Map.of(
+                            "result", false,
+                            "message", "로그인이 필요합니다."
+                    )
+            );
+        }
+
+        try {
+            Integer memberNo = userDetails.getMember().getMemberNo();
+
+            CartDTO cartDTO = cartService.updateCartQuantity(
+                    memberNo,
+                    cartNo,
+                    request.getQuantity()
+            );
+
+            return ResponseEntity.ok(
+                    Map.of(
+                            "result", true,
+                            "quantity", cartDTO.getQuantity()
+                    )
+            );
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of(
+                            "result", false,
+                            "message", e.getMessage()
+                    )
+            );
+        }
+    }
+
+    /*
+     * 선택 장바구니 삭제
+     * DELETE /product/cart
+     */
+    @DeleteMapping("/product/cart")
+    public ResponseEntity<Map<String, Object>> deleteSelectedCart(
+            @AuthenticationPrincipal MyUserDetails userDetails,
+            @RequestBody CartDeleteRequestDTO request
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    Map.of(
+                            "result", false,
+                            "message", "로그인이 필요합니다."
+                    )
+            );
+        }
+
+        try {
+            Integer memberNo = userDetails.getMember().getMemberNo();
+
+            int deletedCount = cartService.deleteSelectedCarts(
+                    memberNo,
+                    request.getCartNos()
+            );
+
+            return ResponseEntity.ok(
+                    Map.of(
+                            "result", true,
+                            "deletedCount", deletedCount
+                    )
+            );
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of(
+                            "result", false,
+                            "message", e.getMessage()
+                    )
+            );
+        }
     }
 
     @GetMapping("/product/order")
