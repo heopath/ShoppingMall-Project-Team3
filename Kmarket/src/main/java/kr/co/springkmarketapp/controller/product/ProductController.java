@@ -10,6 +10,7 @@ import kr.co.springkmarketapp.dto.product.ProductViewDTO;
 import kr.co.springkmarketapp.service.admin.BannerService;
 import kr.co.springkmarketapp.service.member.SellerProfileService;
 import kr.co.springkmarketapp.service.order.CartService;
+import kr.co.springkmarketapp.service.order.OrdersService;
 import kr.co.springkmarketapp.service.product.CategoryService;
 import kr.co.springkmarketapp.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public class ProductController {
     private final CategoryService categoryService;
     private final BannerService bannerService;
     private final SellerProfileService sellerProfileService;
+    private final OrdersService ordersService;
 
     // 장바구니 Service 추가
     private final CartService cartService;
@@ -305,8 +308,100 @@ public class ProductController {
     }
 
     @GetMapping("/product/order")
-    public String order() {
+    public String order(
+            @AuthenticationPrincipal MyUserDetails userDetails,
+            @RequestParam(name = "cartNo", required = false) List<Integer> cartNos,
+            Model model
+    ) {
+        if (userDetails == null) {
+            return "redirect:/member/login";
+        }
+
+        if (cartNos == null || cartNos.isEmpty()) {
+            return "redirect:/product/cart";
+        }
+
+        List<Integer> selectedCartNos = cartNos.stream()
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+
+        if (selectedCartNos.isEmpty()) {
+            return "redirect:/product/cart";
+        }
+
+        Integer memberNo = userDetails.getMember().getMemberNo();
+
+        List<CartListDTO> orderItems = cartService.selectOrderItems(
+                memberNo,
+                selectedCartNos
+        );
+
+        /*
+         * URL로 넘긴 cartNo가 실제 로그인 회원의 장바구니인지 검증
+         * 다른 회원의 cartNo를 억지로 넣어도 주문 불가
+         */
+        if (orderItems.size() != selectedCartNos.size()) {
+            return "redirect:/product/cart";
+        }
+
+        addCommonModel(model);
+
+        model.addAttribute("orderItems", orderItems);
+        model.addAttribute("selectedCartNos", selectedCartNos);
+
+        // 회원정보 출력을 위한 모델 참조
+        model.addAttribute("loginMember", userDetails.getMember());
+
+        // 쿠폰 정보 참조
+        OrderDiscountDTO discountInfo = ordersService.getOrderDiscountInfo(memberNo);
+        model.addAttribute("discountInfo", discountInfo);
+
         return "product/order";
+    }
+
+    @PostMapping("/product/order")
+    public ResponseEntity<Map<String, Object>> createOrder(
+            @AuthenticationPrincipal MyUserDetails userDetails,
+            @RequestBody OrderCreateRequestDTO request
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    Map.of(
+                            "result", false,
+                            "message", "로그인이 필요합니다."
+                    )
+            );
+        }
+
+        try {
+            Integer memberNo = userDetails.getMember().getMemberNo();
+
+            String memberGrade = String.valueOf(
+                    userDetails.getMember().getGrade()
+            );
+
+            Long orderNo = ordersService.createOrder(
+                    memberNo,
+                    memberGrade,
+                    request
+            );
+
+            return ResponseEntity.ok(
+                    Map.of(
+                            "result", true,
+                            "orderNo", orderNo
+                    )
+            );
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of(
+                            "result", false,
+                            "message", e.getMessage()
+                    )
+            );
+        }
     }
 
     @GetMapping("/product/complete")

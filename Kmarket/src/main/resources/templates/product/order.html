@@ -5,204 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>K-Market 주문하기</title>
 
-    <link rel="stylesheet" href="../css/product/common.css" />
-    <link rel="stylesheet" href="../css/product/order.css" />
+    <link rel="stylesheet" th:href="@{/css/product/common.css}" />
+    <link rel="stylesheet" th:href="@{/css/product/order.css}" />
 </head>
 
 <body id="top">
-<!-- 상단 광고 배너 -->
-<div class="top-bar">
-    <a href="#" class="top-ad">
-        <img src="../images/main/vip_plcc_banner.png" alt="Kmarket 광고 배너" />
-    </a>
-</div>
-
-<!-- Header -->
-<header>
-    <a href="../index.html" class="logo-img">
-        <img src="../images/main/header_logo.png" alt="Kmarket 로고" />
-    </a>
-
-    <div class="search-box">
-        <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
-
-        <button type="button" aria-label="검색">
-            <svg viewBox="0 0 24 24">
-                <path
-                        d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
-                        stroke="#fff"
-                        stroke-width="2"
-                        fill="none"
-                        stroke-linecap="round"
-                />
-            </svg>
-        </button>
-    </div>
-
-    <nav class="header-links">
-        <a href="#">로그인</a>
-        <a href="#">회원가입</a>
-        <a href="#">마이페이지</a>
-        <a href="./cart.html">🛒 장바구니</a>
-    </nav>
-</header>
-
-<!-- GNB -->
-<nav class="gnb">
-    <div class="gnb-inner">
-        <a href="#">히트상품</a>
-        <a href="#">추천상품</a>
-        <a href="#">최신상품</a>
-        <a href="#">인기상품</a>
-        <a href="#">할인상품</a>
-    </div>
-</nav>
+<!-- 최상단 광고 배너, 헤더, nav include -->
+<th:block th:replace="~{common/_main_header}"></th:block>
 
 <div class="page-layout">
-    <!-- Aside -->
-    <aside class="side-cat">
-        <div class="category-box">
-            <h3>카테고리</h3>
-
-            <ul class="category-list">
-                <li>
-                    <a href="#">
-                        <span class="icon">👕</span>
-                        패션·의류·뷰티
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="icon">💻</span>
-                        가전·디지털
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="icon">🍎</span>
-                        식품·생필품
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="icon">🏠</span>
-                        홈·문구·취미
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="side-best-sticky">
-            <div class="side-best">
-                <h3>베스트 상품</h3>
-
-                <div class="side-best-list">
-                    <a href="#" class="side-best-item best-first">
-                        <span class="rank">01</span>
-
-                        <span class="thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                                d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
-
-                        <span class="txt">
-                                    <b>베스트 인기상품</b>
-                                    <em>27,000원</em>
-                                </span>
-                    </a>
-
-                    <a href="#" class="side-best-item">
-                        <span class="rank">02</span>
-
-                        <span class="thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                                d="M21 19V5a2 2 0 00-2-2H5a2 2 0 002 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
-
-                        <span class="txt">
-                                    <b>상품명 2위</b>
-                                    <em>13,000원</em>
-                                </span>
-                    </a>
-
-                    <a href="#" class="side-best-item">
-                        <span class="rank">03</span>
-
-                        <span class="thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                                d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
-
-                        <span class="txt">
-                                    <b>상품명 3위</b>
-                                    <em>22,320원</em>
-                                </span>
-                    </a>
-
-                    <a href="#" class="side-best-item">
-                        <span class="rank">04</span>
-
-                        <span class="thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                                d="M21 19V5a2 2 0 00-2-2H5a2 2 0 002 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
-
-                        <span class="txt">
-                                    <b>상품명 4위</b>
-                                    <em>18,900원</em>
-                                </span>
-                    </a>
-
-                    <a href="#" class="side-best-item">
-                        <span class="rank">05</span>
-
-                        <span class="thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                                d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
-
-                        <span class="txt">
-                                    <b>상품명 5위</b>
-                                    <em>9,900원</em>
-                                </span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </aside>
+    <!-- Aside : index와 동일 -->
+    <th:block th:replace="~{common/_main_aside}"></th:block>
 
     <!-- 주문 내용 -->
     <main class="content-area">
         <div class="breadcrumb">HOME <span>›</span> 장바구니 <span>›</span> 주문하기</div>
 
         <section class="order-page">
-            <div class="page-title">
-                <h1>주문하기</h1>
-            </div>
 
             <!-- 주문 상품 -->
             <section class="order-product-section">
                 <div class="order-table-head">
-                    <label class="check-wrap">
-                        <input type="checkbox" id="checkAllOrder" />
-                        <span></span>
-                    </label>
-
                     <span>상품명</span>
                     <span>수량</span>
                     <span>판매가</span>
@@ -212,39 +35,94 @@
                     <span>총합</span>
                 </div>
 
-                <div class="order-product-row">
-                    <label class="check-wrap">
-                        <input type="checkbox" class="order-item-check" />
-                        <span></span>
-                    </label>
+                <div th:if="${orderItems == null or #lists.isEmpty(orderItems)}"
+                     class="empty-order">
+                    주문할 상품이 없습니다.
+                </div>
 
-                    <a href="./view.html" class="order-product-info">
-                                <span class="order-product-thumb">
-                                    <svg viewBox="0 0 24 24" fill="#ccc">
-                                        <path
-                                                d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"
-                                        />
-                                    </svg>
-                                </span>
+                <div th:each="item : ${orderItems}"
+                     th:with="
+                        price=${item.price != null ? item.price : 0},
+                        discountRate=${item.discountRate != null ? item.discountRate : 0},
+                        quantity=${item.quantity != null ? item.quantity : 0},
+                        deliveryFee=${item.deliveryFee != null ? item.deliveryFee : 0},
+                        discountPrice=${price * discountRate / 100},
+                        salePrice=${price - discountPrice},
+                        itemTotal=${salePrice * quantity + deliveryFee}
+                     "
+                     class="order-product-row"
+                     th:data-cart-no="${item.cartNo}"
+                     th:data-product-no="${item.productNo}"
+                     th:data-product-name="${item.productName}"
+                     th:data-seller-no="${item.sellerNo}"
+                     th:data-price="${price}"
+                     th:data-discount-rate="${discountRate}"
+                     th:data-quantity="${quantity}"
+                     th:data-delivery-fee="${deliveryFee}"
+                     th:data-point="${item.point != null ? item.point : 0}">
+
+
+                    <a th:href="@{/product/view(productNo=${item.productNo})}"
+                       class="order-product-info">
+
+                    <span class="order-product-thumb">
+                        <img th:if="${item.imagePath != null and item.imagePath != ''}"
+                             th:src="@{${item.imagePath}}"
+                             th:alt="${item.productName}" />
+
+                        <svg th:if="${item.imagePath == null or item.imagePath == ''}"
+                             viewBox="0 0 24 24"
+                             fill="#ccc">
+                            <path d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                        </svg>
+                    </span>
 
                         <span class="order-product-text">
-                                    <b>상품명</b>
-                                    <em>상품설명</em>
-                                </span>
+                        <b th:text="${item.productName}">상품명</b>
+
+                        <em th:if="${item.basicDesc != null and item.basicDesc != ''}"
+                            th:text="${item.basicDesc}">
+                            상품설명
+                        </em>
+
+                        <em th:if="${item.optionText != null and item.optionText != ''}"
+                            th:text="'옵션 : ' + ${item.optionText}">
+                            옵션
+                        </em>
+                    </span>
                     </a>
 
-                    <span>1</span>
-                    <span>27,000원</span>
-                    <span class="discount-text">5%</span>
-                    <span>270</span>
-                    <span>무료배송</span>
-                    <strong>25,650원</strong>
+                    <span th:text="${quantity}">1</span>
+
+                    <span th:text="${#numbers.formatInteger(price, 1, 'COMMA')} + '원'">
+                        0원
+                    </span>
+
+                    <span class="discount-text"
+                          th:text="${discountRate} + '%'">
+                        0%
+                    </span>
+
+                    <span th:text="${#numbers.formatInteger(item.point != null ? item.point * quantity : 0, 1, 'COMMA')}">
+                        0
+                    </span>
+
+                    <span th:text="${deliveryFee == 0 ? '무료배송' : #numbers.formatInteger(deliveryFee, 1, 'COMMA') + '원'}">
+                        무료배송
+                    </span>
+
+                    <strong th:text="${#numbers.formatInteger(itemTotal, 1, 'COMMA')} + '원'">
+                        0원
+                    </strong>
                 </div>
             </section>
 
-            <div class="order-product-actions">
-                <button type="button" class="delete-selected-btn" id="deleteSelectedBtn">선택삭제</button>
-            </div>
+            <input type="hidden"
+                   id="memberGrade"
+                   th:value="${loginMember.grade}" />
+            <input type="hidden"
+                   id="availablePoint"
+                   th:value="${discountInfo.availablePoint}" />
 
             <div class="order-main-grid">
                 <!-- 배송 정보 -->
@@ -255,39 +133,82 @@
                         <div class="form-table">
                             <div class="form-row">
                                 <label for="receiverName">수령자</label>
-                                <input type="text" id="receiverName" value="홍길동" />
+                                <input
+                                        type="text"
+                                        id="receiverName"
+                                        name="receiverName"
+                                        th:value="${loginMember.name}"
+                                />
                             </div>
 
                             <div class="form-row">
                                 <label for="receiverHp">휴대폰</label>
-                                <input type="text" id="receiverHp" value="010-1234-5678" />
+                                <input
+                                        type="text"
+                                        id="receiverHp"
+                                        name="receiverHp"
+                                        th:value="${loginMember.hp}"
+                                />
                             </div>
 
                             <div class="form-row address-row">
                                 <label for="zip">우편번호</label>
 
                                 <div class="address-input-wrap">
-                                    <input type="text" id="zip" value="12345" readonly />
-                                    <button type="button" class="address-search-btn">검색</button>
+                                    <input
+                                            type="text"
+                                            id="zip"
+                                            name="zip"
+                                            th:value="${loginMember.zip}"
+                                            readonly
+                                    />
+                                    <button type="button" class="address-search-btn" onclick="postcode()">검색</button>
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <label for="addr1">기본주소</label>
-                                <input type="text" id="addr1" value="부산광역시 부산진구 중앙대로 103" />
+                                <input
+                                        type="text"
+                                        id="addr1"
+                                        name="addr1"
+                                        th:value="${loginMember.addr1}"
+                                        readonly
+                                />
                             </div>
 
                             <div class="form-row">
                                 <label for="addr2">상세주소</label>
-                                <input type="text" id="addr2" value="그린타워 13층" />
+                                <input
+                                        type="text"
+                                        id="addr2"
+                                        name="addr2"
+                                        th:value="${loginMember.addr2}"
+                                />
                             </div>
 
-                            <div class="form-row memo-row">
-                                <label for="deliveryMemo">기타</label>
-                                <textarea
-                                        id="deliveryMemo"
-                                        placeholder="배송 요청사항을 입력하세요."
-                                ></textarea>
+                            <div class="form-row">
+                                <label for="deliveryRequest">배송요청사항</label>
+
+                                <div class="delivery-request-wrap">
+                                    <select id="deliveryRequest" name="deliveryRequest">
+                                        <option value="">배송 요청사항을 선택하세요</option>
+                                        <option value="문 앞에 놓아주세요.">문 앞에 놓아주세요.</option>
+                                        <option value="경비실에 맡겨주세요.">경비실에 맡겨주세요.</option>
+                                        <option value="배송 전 연락주세요.">배송 전 연락주세요.</option>
+                                        <option value="부재 시 전화 또는 문자주세요.">부재 시 전화 또는 문자주세요.</option>
+                                        <option value="직접 수령하겠습니다.">직접 수령하겠습니다.</option>
+                                        <option value="direct">직접 입력</option>
+                                    </select>
+
+                                    <input
+                                            type="text"
+                                            id="deliveryRequestDirect"
+                                            placeholder="배송 요청사항을 입력하세요."
+                                            hidden
+                                            disabled
+                                    />
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -300,14 +221,17 @@
                             <div class="discount-row">
                                         <span class="discount-label">
                                             현재포인트 :
-                                            <b>7,200점</b>
+                                            <b id="availablePointText"
+                                               th:text="${#numbers.formatInteger(discountInfo.availablePoint, 1, 'COMMA')} + '점'">
+                                                0점
+                                            </b>
                                         </span>
 
                                 <input
                                         type="number"
                                         id="pointInput"
                                         min="0"
-                                        max="7200"
+                                        th:max="${discountInfo.availablePoint}"
                                         placeholder="사용할 포인트"
                                 />
 
@@ -322,13 +246,33 @@
                                 <span class="discount-label">쿠폰선택</span>
 
                                 <select id="couponSelect">
-                                    <option value="0">쿠폰 선택</option>
-                                    <option value="1000">신규가입 1,000원 할인 쿠폰</option>
-                                    <option value="3000">3,000원 할인 쿠폰</option>
+                                    <option value="0"
+                                            data-coupon-type="NONE"
+                                            data-seller-no=""
+                                            data-benefit-type="NONE"
+                                            data-benefit-value="0"
+                                            data-min-order="0"
+                                            data-max-discount="0">
+                                        쿠폰 선택
+                                    </option>
+
+                                    <option th:each="coupon : ${discountInfo.coupons}"
+                                            th:value="${coupon.couponIssueNo}"
+                                            th:data-coupon-type="${coupon.couponType}"
+                                            th:data-seller-no="${coupon.sellerNo}"
+                                            th:data-benefit-type="${coupon.benefitType}"
+                                            th:data-benefit-value="${coupon.benefitValue}"
+                                            th:data-min-order="${coupon.minOrderPrice}"
+                                            th:data-max-discount="${coupon.maxDiscountPrice}"
+                                            th:text="${coupon.couponName}">
+                                        쿠폰명
+                                    </option>
                                 </select>
 
                                 <button type="button" class="use-btn" id="couponUseBtn">사용하기</button>
                             </div>
+
+                            <p id="couponApplyInfo" class="coupon-apply-info"></p>
                         </div>
                     </section>
 
@@ -380,17 +324,17 @@
                     <dl>
                         <div>
                             <dt>상품수</dt>
-                            <dd>1</dd>
+                            <dd id="summaryCount">0</dd>
                         </div>
 
                         <div>
                             <dt>상품금액</dt>
-                            <dd id="productPrice">27,000원</dd>
+                            <dd id="productPrice">0원</dd>
                         </div>
 
                         <div>
                             <dt>할인금액</dt>
-                            <dd id="discountPrice">-1,350원</dd>
+                            <dd id="discountPrice">0원</dd>
                         </div>
 
                         <div>
@@ -399,18 +343,18 @@
                         </div>
 
                         <div>
-                            <dt>할인</dt>
+                            <dt>쿠폰/포인트 할인</dt>
                             <dd id="extraDiscount">0원</dd>
                         </div>
 
                         <div class="pay-total-row">
                             <dt>결제주문액</dt>
-                            <dd id="payPrice">25,650원</dd>
+                            <dd id="payPrice">0원</dd>
                         </div>
 
                         <div>
                             <dt>적립 포인트</dt>
-                            <dd>270</dd>
+                            <dd id="earnedPoint">0</dd>
                         </div>
                     </dl>
 
@@ -459,122 +403,13 @@
     <img src="../images/main/top.png" alt="위로 이동" />
 </a>
 
-<script>
-    const productPrice = 27000;
-    const productDiscount = 1350;
-    const deliveryFee = 0;
-    const availablePoint = 7200;
 
-    let usedPoint = 0;
-    let usedCoupon = 0;
+<!-- 카카오/다음 우편번호 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-    const pointInput = document.getElementById("pointInput");
-    const couponSelect = document.getElementById("couponSelect");
+<!-- 우편번호 검색 함수 -->
+<script th:src="@{/js/postcode.js}"></script>
+<script th:src="@{/js/product/order.js}"></script>
 
-    const discountPriceEl = document.getElementById("discountPrice");
-    const extraDiscountEl = document.getElementById("extraDiscount");
-    const payPriceEl = document.getElementById("payPrice");
-
-    function formatPrice(price) {
-        return Number(price).toLocaleString() + "원";
-    }
-
-    function updatePaymentSummary() {
-        const basePrice = productPrice - productDiscount + deliveryFee;
-        const extraDiscount = usedPoint + usedCoupon;
-        const finalPrice = Math.max(basePrice - extraDiscount, 0);
-
-        discountPriceEl.textContent = "-" + formatPrice(productDiscount);
-        extraDiscountEl.textContent = extraDiscount > 0 ? "-" + formatPrice(extraDiscount) : "0원";
-        payPriceEl.textContent = formatPrice(finalPrice);
-    }
-
-    document.getElementById("pointUseBtn").addEventListener("click", () => {
-        const inputPoint = Number(pointInput.value);
-
-        if (!inputPoint) {
-            alert("사용할 포인트를 입력하세요.");
-            return;
-        }
-
-        if (inputPoint < 5000) {
-            alert("포인트는 5,000점 이상부터 사용할 수 있습니다.");
-            return;
-        }
-
-        if (inputPoint > availablePoint) {
-            alert("보유 포인트를 초과할 수 없습니다.");
-            return;
-        }
-
-        usedPoint = inputPoint;
-        updatePaymentSummary();
-    });
-
-    document.getElementById("couponUseBtn").addEventListener("click", () => {
-        usedCoupon = Number(couponSelect.value);
-        updatePaymentSummary();
-    });
-
-    document.getElementById("paymentBtn").addEventListener("click", () => {
-        const receiverName = document.getElementById("receiverName").value.trim();
-        const receiverHp = document.getElementById("receiverHp").value.trim();
-        const addr1 = document.getElementById("addr1").value.trim();
-
-        if (!receiverName || !receiverHp || !addr1) {
-            alert("배송정보를 모두 입력하세요.");
-            return;
-        }
-
-        const selectedPayment = document.querySelector('input[name="payment"]:checked');
-
-        alert(`결제수단: ${selectedPayment.value}\n결제금액: ${payPriceEl.textContent}`);
-
-        // 실제 Spring 연결 시
-        // form submit 또는 fetch()로 주문정보 전송 후
-        // location.href = "./complete.html";
-    });
-
-    const checkAllOrder = document.getElementById("checkAllOrder");
-    const deleteSelectedBtn = document.getElementById("deleteSelectedBtn");
-
-    checkAllOrder.addEventListener("change", function () {
-        document.querySelectorAll(".order-item-check").forEach((checkbox) => {
-            checkbox.checked = this.checked;
-        });
-    });
-
-    deleteSelectedBtn.addEventListener("click", () => {
-        const checkedItems = document.querySelectorAll(".order-item-check:checked");
-
-        if (checkedItems.length === 0) {
-            alert("삭제할 상품을 선택하세요.");
-            return;
-        }
-
-        if (!confirm("선택한 상품을 주문목록에서 삭제하시겠습니까?")) {
-            return;
-        }
-
-        checkedItems.forEach((checkbox) => {
-            checkbox.closest(".order-product-row").remove();
-        });
-
-        const remainItems = document.querySelectorAll(".order-product-row");
-
-        if (remainItems.length === 0) {
-            document.querySelector(".order-product-section").innerHTML = `
-                                                                                    <div class="empty-order">
-                                                                                        주문할 상품이 없습니다.
-                                                                                    </div>
-                                                                                `;
-
-            document.querySelector(".order-main-grid").style.display = "none";
-            document.querySelector(".order-product-actions").style.display = "none";
-        }
-    });
-
-    updatePaymentSummary();
-</script>
 </body>
 </html>

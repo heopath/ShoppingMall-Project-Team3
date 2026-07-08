@@ -465,16 +465,26 @@ deleteSelectedBtn.addEventListener("click", async function () {
 
 // 주문하기
 orderBtn.addEventListener("click", function () {
-    const selectedItems = cartItems.filter(function (item) {
-        return item.checked;
-    });
+    const selectedCartNos = cartItems
+        .filter(function (item) {
+            return item.checked;
+        })
+        .map(function (item) {
+            return item.cartNo;
+        });
 
-    if (selectedItems.length === 0) {
+    if (selectedCartNos.length === 0) {
         alert("주문할 상품을 선택하세요.");
         return;
     }
 
-    alert("다음 단계에서 주문서 페이지로 연결합니다.");
+    const params = new URLSearchParams();
+
+    selectedCartNos.forEach(function (cartNo) {
+        params.append("cartNo", cartNo);
+    });
+
+    location.href = `/product/order?${params.toString()}`;
 });
 
 loadCartItems();
