@@ -2,6 +2,7 @@ package kr.co.springkmarketapp.controller.cs.qna;
 
 import kr.co.springkmarketapp.config.MyUserDetails;
 import kr.co.springkmarketapp.dto.cs.QnaDTO;
+import kr.co.springkmarketapp.service.cs.CsCategoryService;
 import kr.co.springkmarketapp.service.cs.QnaService;
 import kr.co.springkmarketapp.util.PageHandler;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CsQnaController {
 
-    private  final QnaService qnaService;
+    private final QnaService qnaService;
+    private final CsCategoryService csCategoryService;
 
     @GetMapping("/cs/qna/list")
     public String qnaList(
@@ -57,15 +59,41 @@ public class CsQnaController {
     }
 
     @GetMapping("/cs/qna/write")
-    public String qnaWrite() {
+    public String qnaWrite(
+            @RequestParam(defaultValue = "1") int parentNo,
+            Model model) {
+
+        model.addAttribute("parentNo", parentNo);
+
+        model.addAttribute("parentCategoryList",
+                csCategoryService.selectParentCategoryList());
+
+        model.addAttribute("childCategoryList",
+                csCategoryService.selectChildCategoryList(parentNo));
+
         return "cs/qna/write";
     }
 
     @PostMapping("/cs/qna/write")
-    public String qnaWrite(QnaDTO qnaDTO, Authentication authentication) {
-    MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+    public String qnaWrite(
+            QnaDTO qnaDTO,
+            @RequestParam int parentNo,
+            Authentication authentication) {
+
+        if (qnaDTO.getCsCateNo() == null ||
+                qnaDTO.getTitle() == null || qnaDTO.getTitle().isBlank() ||
+                qnaDTO.getContent() == null || qnaDTO.getContent().isBlank()) {
+
+            return "redirect:/cs/qna/write?parentNo=" + parentNo;
+        }
+
+        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+
+        qnaDTO.setMemberNo(userDetails.getMember().getMemberNo());
+
         qnaService.insertQna(qnaDTO);
-        return "cs/qna/write";
+
+        return "redirect:/cs/qna/list?parentNo=" + parentNo;
     }
 
 }

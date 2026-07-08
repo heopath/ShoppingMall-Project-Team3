@@ -32,4 +32,13 @@ public class CsCategoryService {
     public int deleteCsCategory(Integer csCateNo) {
         return csCategoryDAO.deleteCsCategory(csCateNo);
     }
+
+
+    public List<CsCategoryDTO> selectParentCategoryList() {
+        return csCategoryDAO.selectParentCategoryList();
+    }
+
+    public List<CsCategoryDTO> selectChildCategoryList(int parentNo) {
+        return csCategoryDAO.selectChildCategoryList(parentNo);
+    }
 }

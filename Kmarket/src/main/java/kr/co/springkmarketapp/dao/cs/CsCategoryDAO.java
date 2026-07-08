@@ -12,4 +12,6 @@ public interface CsCategoryDAO {
     List<CsCategoryDTO> selectCsCategoryList();
     int updateCsCategory(CsCategoryDTO csCategoryDTO);
     int deleteCsCategory(Integer csCateNo);
+    List<CsCategoryDTO> selectParentCategoryList();
+    List<CsCategoryDTO> selectChildCategoryList(int parentNo);
 }
