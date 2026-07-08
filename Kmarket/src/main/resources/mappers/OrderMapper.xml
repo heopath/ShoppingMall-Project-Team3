@@ -23,7 +23,12 @@
         (SELECT COUNT(*) FROM order_item oi WHERE oi.order_no = o.order_no) AS itemTotalCount
         FROM orders o
         JOIN member m ON o.member_no = m.member_no
-        LEFT JOIN delivery d ON o.order_no = d.order_no
+        LEFT JOIN delivery d
+        ON d.delivery_no = (
+        SELECT MIN(d2.delivery_no)
+        FROM delivery d2
+        WHERE d2.order_no = o.order_no
+        )
         <where>
             <if test="searchType != null and keyword != null and keyword != ''">
                 <choose>
@@ -73,7 +78,12 @@
         d.addr1             AS addr1,
         d.addr2             AS addr2
         FROM orders o
-        LEFT JOIN delivery d ON o.order_no = d.order_no
+        LEFT JOIN delivery d
+        ON d.delivery_no = (
+        SELECT MIN(d2.delivery_no)
+        FROM delivery d2
+        WHERE d2.order_no = o.order_no
+        )
         WHERE o.order_no = #{orderNo}
     </select>
 

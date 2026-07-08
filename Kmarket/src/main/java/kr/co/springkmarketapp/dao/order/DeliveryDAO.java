@@ -25,4 +25,14 @@ public interface DeliveryDAO {
     // 관리자 배송상세
     DeliveryDetailDTO selectDeliveryDetail(@Param("deliveryNo") int deliveryNo);
     List<DeliveryDetailDTO.DeliveryItemDTO> selectDeliveryItems(@Param("deliveryNo") int deliveryNo);
+
+
+    // 관리자 배송별 송장처리
+    int updateInvoiceByDeliveryNo(@Param("deliveryNo") Integer deliveryNo,
+                                  @Param("courier") String courier,
+                                  @Param("invoiceNo") String invoiceNo,
+                                  @Param("memo") String memo);
+
+    // 주문번호 기준 배송목록 조회
+    List<DeliveryDetailDTO> selectDeliveryDetailsByOrderNo(@Param("orderNo") Long orderNo);
 }

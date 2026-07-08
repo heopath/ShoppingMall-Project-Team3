@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -96,6 +97,34 @@ public class AdminOrderController {
 
         return "admin/order/delivery";
     }
+
+    @PostMapping("/delivery/update-invoice")
+    @ResponseBody
+    public Map<String, Object> updateDeliveryInvoiceByDeliveryNo(
+            @RequestParam Integer deliveryNo,
+            @RequestParam String courier,
+            @RequestParam String invoiceNo,
+            @RequestParam(required = false) String memo
+    ) {
+        deliveryService.updateInvoiceByDeliveryNo(
+                deliveryNo,
+                courier,
+                invoiceNo,
+                memo
+        );
+
+        return Map.of(
+                "status", "success",
+                "message", "배송 정보가 등록되었습니다."
+        );
+    }
+
+    @GetMapping("/delivery/list")
+    @ResponseBody
+    public List<DeliveryDetailDTO> getDeliveryListByOrderNo(@RequestParam Long orderNo) {
+        return deliveryService.getDeliveryDetailsByOrderNo(orderNo);
+    }
+
 
     @GetMapping("/delivery/detail")
     @ResponseBody
