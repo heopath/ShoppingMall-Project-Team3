@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>자주묻는질문 보기</title>
@@ -108,28 +108,32 @@
                 <span>HOME &gt; 고객센터 &gt; 자주묻는질문</span>
             </div>
 
-            <section class="faq-view-section">
+            <section class="faq-view-section" th:object="${faq}">
                 <table class="faq-view-table">
                     <tr>
                         <th>유형</th>
-                        <td>회원 - 가입</td>
+                        <td>
+                            <span th:text="${faq.parentCateName != null ? faq.parentCateName : '-'}">회원</span>
+                            <span th:text="${faq.cateName != null ? faq.cateName : '-'}">가입</span>
+                        </td>
                     </tr>
                     <tr>
                         <th>제목</th>
-                        <td>개인회원과 법인회원 차이가 있나요?</td>
+                        <td th:text="*{title}">개인회원과 법인회원 차이가 있나요?</td>
                     </tr>
                     <tr>
                         <th>내용</th>
-                        <td class="content-cell">개인회원은 본인인증 후, 법인회원은 사업자등록번호를 기준으로 사업자 인증 후 가입가능합니다.
-
-개인회원에서 법인회원으로 전환은 불가하므로 법인회원으로 진행을 원하신다면 신규가입으로 진행을 해야합니다.</td>
+                        <td class="content-cell" th:text="*{content}">내용</td>
                     </tr>
                 </table>
 
                 <div class="faq-view-btn-area">
-                    <a href="#" class="btn-gray">삭제</a>
-                    <a href="/admin/cs/faq/modify" class="btn-gray">수정</a>
-                    <a href="/admin/cs/faq/list" class="btn-blue">목록</a>
+                    <form th:action="@{/admin/cs/faq/delete}" method="post" style="display:inline;" onsubmit="return confirm('FAQ를 삭제하시겠습니까?');">
+                        <input type="hidden" name="faqNo" th:value="*{faqNo}">
+                        <button type="submit" class="btn-gray">삭제</button>
+                    </form>
+                    <a th:href="@{/admin/cs/faq/modify(faqNo=${faq.faqNo})}" class="btn-gray">수정</a>
+                    <a th:href="@{/admin/cs/faq/list}" class="btn-blue">목록</a>
                 </div>
             </section>
 
@@ -141,7 +145,18 @@
 
 </div>
 
-<script>
+<script th:inline="javascript">
+    const message = /*[[${message}]]*/ null;
+    const errorMessage = /*[[${errorMessage}]]*/ null;
+
+    if (message) {
+        alert(message);
+    }
+
+    if (errorMessage) {
+        alert(errorMessage);
+    }
+
     function toggleMenu(clickedTitle, menuId) {
         const menu = document.getElementById(menuId);
         menu.classList.toggle("close");

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>관리자 주문현황</title>
-    <link rel="stylesheet" href="../../css/admin/admin-common.css">
-    <link rel="stylesheet" href="../../css/admin/order/list.css">
+    <link th:href="@{/css/admin/admin-common.css}" rel="stylesheet">
+    <link th:href="@{/css/admin/order/list.css}" rel="stylesheet">
 </head>
 <body>
 
@@ -74,6 +74,7 @@
                     </ul>
                 </li>
 
+
                 <li class="menu-title" onclick="toggleMenu(this, 'csMenu')">💬 고객센터</li>
                 <li class="sub-menu-wrap close" id="csMenu">
                     <ul class="sub-menu-list">
@@ -84,7 +85,7 @@
                     </ul>
                 </li>
             </ul>
-        </aside>
+            </aside>
 
         <main class="content">
             <div class="page-title">
@@ -94,13 +95,12 @@
 
             <section class="order-section">
                 <div class="order-search-wrap">
-                    <select>
-                        <option>주문번호</option>
-                        <option>주문자</option>
-                        <option>수령자</option>
+                    <select id="searchType">
+                        <option value="orderCode" th:selected="${searchType == 'orderCode'}">주문번호</option>
+                        <option value="ordererName" th:selected="${searchType == 'ordererName'}">주문자명</option>
                     </select>
-                    <input type="text" placeholder="검색어입력">
-                    <button type="button" class="order-search-btn">검색</button>
+                    <input type="text" id="keyword" th:value="${keyword}" placeholder="검색어입력">
+                    <button type="button" class="order-search-btn" onclick="searchOrder()">검색</button>
                 </div>
 
                 <table class="order-table">
@@ -118,181 +118,99 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td><a href="javascript:void(0)" class="order-no openOrderDetail">10121211341</a></td>
-                        <td>abc123</td>
-                        <td>김유신</td>
-                        <td>2</td>
-                        <td>102,900</td>
-                        <td>신용카드</td>
-                        <td><span class="state green">결제완료</span></td>
-                        <td>0000-00-00<br>00:00:00</td>
-                        <td><button type="button" class="delivery-btn openDeliveryInput">배송하기</button></td>
+                    <tr th:if="${#lists.isEmpty(orders)}">
+                        <td colspan="9" style="text-align:center; padding:20px;">접수된 주문 내역이 없습니다.</td>
                     </tr>
-                    <tr>
-                        <td><a href="javascript:void(0)" class="order-no openOrderDetail">10121211340</a></td>
-                        <td>afra123</td>
-                        <td>김춘추</td>
-                        <td>1</td>
-                        <td>36,000</td>
-                        <td>계좌이체</td>
-                        <td><span class="state green">입금대기</span></td>
-                        <td>0000-00-00<br>00:00:00</td>
-                        <td><button type="button" class="delivery-btn openDeliveryInput">배송하기</button></td>
-                    </tr>
-                    <tr>
-                        <td><a href="javascript:void(0)" class="order-no openOrderDetail">10121211339</a></td>
-                        <td>pewoq12</td>
-                        <td>장보고</td>
-                        <td>2</td>
-                        <td>9,000</td>
-                        <td>신용카드</td>
-                        <td><span class="state green">결제완료</span></td>
-                        <td>0000-00-00<br>00:00:00</td>
-                        <td><span class="delivery-text">배송완료</span></td>
-                    </tr>
-                    <tr>
-                        <td><a href="javascript:void(0)" class="order-no openOrderDetail">10121211338</a></td>
-                        <td>yaouw33</td>
-                        <td>강감찬</td>
-                        <td>1</td>
-                        <td>89,000</td>
-                        <td>무통장</td>
-                        <td><span class="state red">주문취소</span></td>
-                        <td>0000-00-00<br>00:00:00</td>
-                        <td><span class="delivery-text">주문취소</span></td>
-                    </tr>
-                    <tr>
-                        <td><a href="javascript:void(0)" class="order-no openOrderDetail">10121211337</a></td>
-                        <td>enpo909</td>
-                        <td>이순신</td>
-                        <td>3</td>
-                        <td>260,000</td>
-                        <td>계좌이체</td>
-                        <td><span class="state green">입금대기</span></td>
-                        <td>0000-00-00<br>00:00:00</td>
-                        <td><button type="button" class="delivery-btn openDeliveryInput">배송하기</button></td>
+                    <tr th:each="o : ${orders}">
+                        <td>
+                            <a href="javascript:void(0)" class="order-no"
+                               th:text="${o.orderCode}" th:onclick="openOrderDetail([[${o.orderNo}]])"></a>
+                        </td>
+                        <td th:text="${o.memberId}">주문자ID</td>
+                        <td th:text="${o.ordererName}">주문자명</td>
+                        <td th:text="${o.itemTotalCount}">1</td>
+                        <td th:text="${#numbers.formatInteger(o.payPrice, 0, 'COMMA')}">0</td>
+                        <td th:text="${o.paymentMethod}">신용카드</td>
+                        <td>
+                            <span class="state"
+                                  th:classappend="${o.orderStatus == '주문취소'} ? 'red' : 'green'"
+                                  th:text="${o.orderStatus}">결제완료</span>
+                        </td>
+                        <td th:text="${#temporals.format(o.orderDate, 'yyyy-MM-dd HH:mm:ss')}">0000-00-00</td>
+                        <td>
+                            <button type="button" th:if="${o.deliveryStatus == '배송준비' and o.orderStatus != '주문취소'}"
+                                    class="delivery-btn" th:onclick="openDeliveryInput([[${o.orderNo}]], [[${o.orderCode}]])">배송하기</button>
+                            <span class="delivery-text" th:if="${o.deliveryStatus != '배송준비' or o.orderStatus == '주문취소'}"
+                                  th:text="${o.orderStatus == '주문취소' ? '주문취소' : o.deliveryStatus}">배송완료</span>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
 
-                <div class="order-pagination">
-                    <a href="#">이전</a>
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">다음</a>
+                <div class="order-pagination" th:if="${totalPages > 0}">
+                    <a th:if="${startPage > 1}" th:href="@{/admin/order/list(page=${startPage - 1}, searchType=${searchType}, keyword=${keyword})}">이전</a>
+                    <th:block th:if="${endPage >= startPage}">
+                        <a th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                           th:href="@{/admin/order/list(page=${i}, searchType=${searchType}, keyword=${keyword})}"
+                           th:text="${i}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                    </th:block>
+                    <a th:if="${endPage < totalPages}" th:href="@{/admin/order/list(page=${endPage + 1}, searchType=${searchType}, keyword=${keyword})}">다음</a>
                 </div>
             </section>
         </main>
 
-        <!-- 주문상세 모달 -->
         <div id="orderDetailModal" class="modal-overlay">
             <div class="order-modal order-detail-modal">
                 <div class="modal-header">
-                    <h3>주문상세 <span>10121211341</span></h3>
-                    <button type="button" class="modal-close" id="closeOrderDetailModal">X</button>
+                    <h3>주문상세 <span id="modalOrderCode"></span></h3>
+                    <button type="button" class="modal-close" onclick="closeModal('orderDetailModal')">X</button>
                 </div>
-                <div class="modal-body">
-                    <h4>상품정보</h4>
-                    <table class="modal-product-table">
-                        <thead>
-                        <tr>
-                            <th>상품사진</th>
-                            <th>상품번호</th>
-                            <th>상품명</th>
-                            <th>판매자</th>
-                            <th>가격</th>
-                            <th>할인</th>
-                            <th>수량</th>
-                            <th>배송비</th>
-                            <th>결제금액</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><div class="modal-thumb">이미지</div></td>
-                            <td>120120021</td>
-                            <td>OOO</td>
-                            <td>(주)상호명</td>
-                            <td>24,000</td>
-                            <td>-1,200</td>
-                            <td>3</td>
-                            <td>0</td>
-                            <td>68,400</td>
-                        </tr>
-                        <tr>
-                            <td><div class="modal-thumb">이미지</div></td>
-                            <td>114514326</td>
-                            <td>OOO</td>
-                            <td>(주)상호명</td>
-                            <td>35,000</td>
-                            <td>-3,500</td>
-                            <td>1</td>
-                            <td>3,000</td>
-                            <td>34,500</td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="modal-summary">
-                        <p><span>총 상품금액</span><strong>107,000 원</strong></p>
-                        <p><span>총 할인금액</span><strong>-7,100 원</strong></p>
-                        <p><span>배송비</span><strong>3,000 원</strong></p>
-                        <p><span>총 결제금액</span><strong class="price-red">102,900 원</strong></p>
-                    </div>
-
-                    <h4>결제정보</h4>
-                    <table class="modal-info-table">
-                        <tr><th>주문번호</th><td>10121211341</td></tr>
-                        <tr><th>결제방법</th><td>신용카드 / 1234 **** **** 4432</td></tr>
-                        <tr><th>주문자</th><td>김유신 / 010-1234-1234</td></tr>
-                        <tr><th>연락처</th><td>결제완료</td></tr>
-                    </table>
-
-                    <h4>주문자</h4>
-                    <table class="modal-info-table">
-                        <tr><th>수령자</th><td>김유신</td></tr>
-                        <tr><th>연락처</th><td>010-1234-1234</td></tr>
-                        <tr><th>배송지 주소</th><td>부산 부산진구 123-11 06</td></tr>
-                    </table>
+                <div class="modal-body" id="detailModalBody">
                 </div>
             </div>
         </div>
 
-        <!-- 배송입력 모달 -->
         <div id="deliveryInputModal" class="modal-overlay">
             <div class="order-modal delivery-input-modal">
                 <div class="modal-header">
-                    <h3>배송입력 <span>10121211341</span></h3>
-                    <button type="button" class="modal-close" id="closeDeliveryInputModal">X</button>
+                    <h3>배송입력 <span id="deliveryModalCode"></span></h3>
+                    <button type="button" class="modal-close" onclick="closeModal('deliveryInputModal')">X</button>
                 </div>
                 <div class="modal-body">
-                    <table class="delivery-form-table">
-                        <tr><th>주문번호</th><td><input type="text" value="10121211341"></td></tr>
-                        <tr><th>수령인</th><td><input type="text" value="홍길동"></td></tr>
-                        <tr><th>우편번호</th><td><input type="text" value="12345"></td></tr>
-                        <tr><th>기본주소</th><td><input type="text" class="long-input" value="부산광역시 부산진구 부전동 123"></td></tr>
-                        <tr><th>상세주소</th><td><input type="text" class="long-input" value="OO 빌딩 3층 301호"></td></tr>
-                        <tr>
-                            <th>택배사</th>
-                            <td>
-                                <select>
-                                    <option>택배사선택</option>
-                                    <option>CJ대한통운</option>
-                                    <option>로젠택배</option>
-                                    <option>한진택배</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr><th>운송장번호</th><td><input type="text" class="long-input" placeholder="발급받은 택배사 송장번호입력"></td></tr>
-                        <tr><th>기타</th><td><textarea placeholder="기타정보입력"></textarea></td></tr>
-                    </table>
-                    <div class="modal-btn-area">
-                        <button type="button" class="green-submit-btn">등록하기</button>
-                    </div>
+                    <form id="deliveryForm">
+                        <input type="hidden" name="orderNo" id="deliveryOrderNo">
+                        <table class="delivery-form-table">
+                            <tr><th>주문번호</th><td id="deliveryOrderCode"></td></tr>
+                            <tr><th>수령인</th><td><input type="text" name="receiverName" id="modalReceiverName" readonly></td></tr>
+                            <tr><th>연락처</th><td><input type="text" name="receiverHp" id="modalReceiverHp" readonly></td></tr>
+                            <tr><th>우편번호</th><td><input type="text" name="zip" id="modalZip" readonly></td></tr>
+                            <tr><th>기본주소</th><td><input type="text" name="addr1" id="modalAddr1" class="long-input" readonly></td></tr>
+                            <tr><th>상세주소</th><td><input type="text" name="addr2" id="modalAddr2" class="long-input" readonly></td></tr>
+                            <tr>
+                                <th>택배사</th>
+                                <td>
+                                    <select name="courier" id="modalCourier">
+                                        <option value="">택배사선택</option>
+                                        <option value="CJ대한통운">CJ대한통운</option>
+                                        <option value="로젠택배">로젠택배</option>
+                                        <option value="한진택배">한진택배</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr><th>운송장번호</th>
+                                <td>
+                                    <input type="text" name="invoiceNo" id="modalInvoiceNo" class="long-input" placeholder="발급받은 택배사 송장번호입력"></td></tr>
+                            <tr>
+                                <th>기타</th>
+                                <td>
+                                    <textarea name="memo" id="modalMemo" class="long-input" placeholder="기타정보입력"></textarea>
+                                </td>
+                            </tr>
+                            </table>
+                        <div class="modal-btn-area">
+                            <button type="button" class="green-submit-btn" onclick="submitDelivery()">등록하기</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -301,53 +219,175 @@
     <th:block th:replace="~{common/_admin_footer :: footer}"></th:block>
 </div>
 
-<script>
+<script th:inline="javascript">
     function toggleMenu(clickedTitle, menuId) {
         const menu = document.getElementById(menuId);
         menu.classList.toggle("close");
-
-        if (menu.classList.contains("close")) {
-            clickedTitle.classList.remove("active");
-        } else {
-            clickedTitle.classList.add("active");
-        }
     }
 
-    const orderDetailModal = document.getElementById("orderDetailModal");
-    const deliveryInputModal = document.getElementById("deliveryInputModal");
+    function searchOrder() {
+        const type = document.getElementById('searchType').value;
+        const keyword = document.getElementById('keyword').value.trim();
+        location.href = `/admin/order/list?page=1&searchType=${type}&keyword=${encodeURIComponent(keyword)}`;
+    }
 
-    document.querySelectorAll(".openOrderDetail").forEach(button => {
-        button.addEventListener("click", function () {
-            orderDetailModal.classList.add("show");
-        });
-    });
+    function openModal(id) { document.getElementById(id).classList.add("show"); }
+    function closeModal(id) { document.getElementById(id).classList.remove("show"); }
 
-    document.querySelectorAll(".openDeliveryInput").forEach(button => {
-        button.addEventListener("click", function () {
-            deliveryInputModal.classList.add("show");
-        });
-    });
+    // 비동기 주문 상세 조회 자바스크립트 함수
+    function openOrderDetail(orderNo) {
+        fetch(`/admin/order/detail?orderNo=${orderNo}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('modalOrderCode').textContent = data.orderCode;
 
-    document.getElementById("closeOrderDetailModal").addEventListener("click", function () {
-        orderDetailModal.classList.remove("show");
-    });
+                let html = `
+                    <h4>상품정보</h4>
+                    <table class="modal-product-table">
+                        <thead>
+                        <tr>
+                            <th>상품번호</th><th>상품명</th><th>판매자</th><th>가격</th><th>수량</th><th>결제금액</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            ${data.items.map(item => `
+                                <tr>
+                                    <td>${item.productNo}</td>
+                                    <td>${item.productName}</td>
+                                    <td>${item.companyName}</td>
+                                    <td>${item.price.toLocaleString()}원</td>
+                                    <td>${item.quantity}개</td>
+                                    <td>${item.totalPrice.toLocaleString()}원</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
 
-    document.getElementById("closeDeliveryInputModal").addEventListener("click", function () {
-        deliveryInputModal.classList.remove("show");
-    });
+                    <div class="modal-summary">
+                        <p><span>총 상품금액</span><strong>${data.totalPrice.toLocaleString()} 원</strong></p>
+                        <p><span>총 할인금액</span><strong>${data.discountPrice.toLocaleString()} 원</strong></p>
+                        <p><span>배송비</span><strong>${data.deliveryFee.toLocaleString()} 원</strong></p>
+                        <p><span>총 결제금액</span><strong class="price-red">${data.payPrice.toLocaleString()} 원</strong></p>
+                    </div>
 
-    orderDetailModal.addEventListener("click", function (e) {
-        if (e.target === orderDetailModal) {
-            orderDetailModal.classList.remove("show");
-        }
-    });
+                    <h4>결제정보</h4>
+                    <table class="modal-info-table">
+                        <tr><th>주문번호</th><td>${data.orderCode}</td></tr>
+                        <tr><th>결제방법</th><td>${data.paymentMethod}</td></tr>
+                        <tr><th>주문자</th><td>${data.ordererName} / ${data.ordererHp}</td></tr>
+                    </table>
 
-    deliveryInputModal.addEventListener("click", function (e) {
-        if (e.target === deliveryInputModal) {
-            deliveryInputModal.classList.remove("show");
-        }
-    });
+                    <h4>배송지정보</h4>
+                    <table class="modal-info-table">
+                        <tr><th>수령자</th><td>${data.receiverName}</td></tr>
+                        <tr><th>연락처</th><td>${data.receiverHp}</td></tr>
+                        <tr><th>배송지 주소</th><td>[${data.zip}] ${data.addr1} ${data.addr2}</td></tr>
+                    </table>
+                `;
+                document.getElementById('detailModalBody').innerHTML = html;
+                openModal('orderDetailModal');
+            })
+            .catch(err => console.error('주문상세 에러:', err));
+    }
+
+    function openDeliveryInput(orderNo, orderCode) {
+        document.getElementById('deliveryModalCode').textContent = orderCode;
+        document.getElementById('deliveryOrderNo').value = orderNo;
+        openModal('deliveryInputModal');
+    }
+
+    function submitDelivery() {
+        const courier = document.getElementById('modalCourier').value;
+        const invoiceNo = document.getElementById('modalInvoiceNo').value.trim();
+
+        if(!courier) { alert('택배사를 선택하세요.'); return; }
+        if(!invoiceNo) { alert('운송장 번호를 입력하세요.'); return; }
+
+        const form = document.getElementById('deliveryForm');
+        const formData = new FormData(form);
+
+        fetch('/admin/order/update-invoice', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if(data.status === 'success') location.reload();
+            })
+            .catch(err => console.error('배송등록 에러:', err));
+    }
+
+    function openOrderDetail(orderNo) {
+        fetch(`/admin/order/detail?orderNo=${orderNo}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('modalOrderCode').textContent = data.orderCode;
+
+                let html = `
+                <h4>상품정보</h4>
+                <table class="modal-product-table">
+                    <thead>
+                    <tr>
+                        <th>이미지</th><th>상품번호</th><th>상품명</th><th>판매자</th><th>가격</th><th>수량</th><th>결제금액</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        ${data.items.map(item => `
+                            <tr>
+                                <td><img src="${item.productImage}" class="modal-thumb-img"></td>
+                                <td>${item.productNo}</td>
+                                <td>${item.productName}</td>
+                                <td>${item.companyName}</td>
+                                <td>${item.price.toLocaleString()}원</td>
+                                <td>${item.quantity}개</td>
+                                <td>${item.totalPrice.toLocaleString()}원</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+
+                <div class="modal-summary">
+                    <p><span>총 상품금액</span><strong>${data.totalPrice.toLocaleString()} 원</strong></p>
+                    <p><span>총 할인금액</span><strong>${data.discountPrice.toLocaleString()} 원</strong></p>
+                    <p><span>배송비</span><strong>${data.deliveryFee.toLocaleString()} 원</strong></p>
+                    <p><span>총 결제금액</span><strong class="price-red">${data.payPrice.toLocaleString()} 원</strong></p>
+                </div>
+
+                <h4>결제정보</h4>
+                <table class="modal-info-table">
+                    <tr><th>주문번호</th><td>${data.orderCode}</td></tr>
+                    <tr><th>결제방법</th><td>${data.paymentMethod}</td></tr>
+                    <tr><th>주문자</th><td>${data.ordererName} / ${data.ordererHp}</td></tr>
+                </table>
+
+                <h4>배송지정보</h4>
+                <table class="modal-info-table">
+                    <tr><th>수령자</th><td>${data.receiverName}</td></tr>
+                    <tr><th>연락처</th><td>${data.receiverHp}</td></tr>
+                    <tr><th>배송지 주소</th><td>[${data.zip}] ${data.addr1} ${data.addr2}</td></tr>
+                </table>
+            `;
+                document.getElementById('detailModalBody').innerHTML = html;
+                openModal('orderDetailModal');
+            })
+            .catch(err => console.error('주문상세 에러:', err));
+    }
+
+    function openDeliveryInput(orderNo, orderCode) {
+        document.getElementById('deliveryModalCode').textContent = orderCode;
+        document.getElementById('deliveryOrderNo').value = orderNo;
+        document.getElementById('deliveryOrderCode').textContent = orderCode;
+
+        fetch(`/admin/order/detail?orderNo=${orderNo}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('modalReceiverName').value = data.receiverName ?? '';
+                document.getElementById('modalReceiverHp').value = data.receiverHp ?? '';
+                document.getElementById('modalZip').value = data.zip ?? '';
+                document.getElementById('modalAddr1').value = data.addr1 ?? '';
+                document.getElementById('modalAddr2').value = data.addr2 ?? '';
+            });
+
+        openModal('deliveryInputModal');
+    }
 </script>
-
 </body>
 </html>

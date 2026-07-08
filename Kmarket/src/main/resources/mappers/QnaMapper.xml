@@ -13,18 +13,124 @@
         ON q.member_no = m.member_no
         ORDER BY q.qna_no DESC
     </select>
-    <select id="selectQna" parameterType="long" resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
-        SELECT qna_no AS qnaNo, member_no AS memberNo, cs_cate_no AS csCateNo, title, content, answer,
-               answer_member_no AS answerMemberNo, status, reg_date AS regDate, answer_date AS answerDate
-        FROM qna WHERE qna_no=#{qnaNo}
+
+<!--    관리자페이지에서 1차카테고리 추가해서 조회-->
+    <select id="selectAdminQnaList" resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
+        SELECT
+        q.qna_no AS qnaNo,
+        q.member_no AS memberNo,
+        q.cs_cate_no AS csCateNo,
+        q.title,
+        q.content,
+        q.answer,
+        q.answer_member_no AS answerMemberNo,
+        q.status,
+        q.reg_date AS regDate,
+        q.answer_date AS answerDate,
+        child.cate_name AS cateName,
+        parent.cate_name AS parentCateName,
+        m.name AS name
+        FROM qna q
+        JOIN cs_category child
+        ON q.cs_cate_no = child.cs_cate_no
+        LEFT JOIN cs_category parent
+        ON child.parent_no = parent.cs_cate_no
+        JOIN member m
+        ON q.member_no = m.member_no
+        ORDER BY q.qna_no DESC
+    </select>
+
+    <select id="selectQnaListLimit"
+            resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
+
+        SELECT
+        q.qna_no AS qnaNo,
+        q.member_no AS memberNo,
+        q.cs_cate_no AS csCateNo,
+        q.title,
+        q.content,
+        q.answer,
+        q.answer_member_no AS answerMemberNo,
+        q.status,
+        q.reg_date AS regDate,
+        q.answer_date AS answerDate,
+
+        c.cate_name AS cateName,
+        p.cate_name AS parentCateName,
+
+        m.name
+
+        FROM qna q
+
+        JOIN cs_category c
+        ON q.cs_cate_no = c.cs_cate_no
+
+        JOIN cs_category p
+        ON c.parent_no = p.cs_cate_no
+
+        JOIN member m
+        ON q.member_no = m.member_no
+
+        WHERE c.parent_no = #{parentNo}
+
+        ORDER BY q.qna_no DESC
+
+        LIMIT #{offset}, #{size}
+
+    </select>
+    <select id="countQna" parameterType="int" resultType="int">
+
+        SELECT COUNT(*)
+
+        FROM qna q
+        JOIN cs_category c
+        ON q.cs_cate_no = c.cs_cate_no
+
+        WHERE c.parent_no = #{parentNo}
+
+    </select>
+    <select id="selectQna"
+            parameterType="long"
+            resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
+
+        SELECT
+        q.qna_no AS qnaNo,
+        q.member_no AS memberNo,
+        q.cs_cate_no AS csCateNo,
+        q.title,
+        q.content,
+        q.answer,
+        q.answer_member_no AS answerMemberNo,
+        q.status,
+        q.reg_date AS regDate,
+        q.answer_date AS answerDate,
+
+        c.cate_name AS cateName,
+        p.cate_name AS parentCateName,
+
+        m.name
+
+        FROM qna q
+
+        JOIN cs_category c
+        ON q.cs_cate_no = c.cs_cate_no
+
+        JOIN cs_category p
+        ON c.parent_no = p.cs_cate_no
+
+        JOIN member m
+        ON q.member_no = m.member_no
+
+        WHERE q.qna_no = #{qnaNo}
+
     </select>
     <insert id="insertQna" parameterType="kr.co.springkmarketapp.dto.cs.QnaDTO" useGeneratedKeys="true" keyProperty="qnaNo">
         INSERT INTO qna(member_no, cs_cate_no, title, content, answer, answer_member_no, status, reg_date, answer_date)
-        VALUES(#{memberNo}, #{csCateNo}, #{title}, #{content}, #{answer}, #{answerMemberNo}, COALESCE(#{status}, 'WAIT'), NOW(), #{answerDate})
+        VALUES(#{memberNo}, #{csCateNo}, #{title}, #{content}, #{answer}, #{answerMemberNo}, COALESCE(#{status}, '검토중'), NOW(), #{answerDate})
     </insert>
     <update id="updateQna" parameterType="kr.co.springkmarketapp.dto.cs.QnaDTO">
         UPDATE qna SET member_no=#{memberNo}, cs_cate_no=#{csCateNo}, title=#{title}, content=#{content}, answer=#{answer},
-            answer_member_no=#{answerMemberNo}, status=#{status}, answer_date=#{answerDate}
+        answer_member_no=#{answerMemberNo}, status=#{status}, answer_date=#{answerDate}
         WHERE qna_no=#{qnaNo}
     </update>
     <delete id="deleteQna" parameterType="long">

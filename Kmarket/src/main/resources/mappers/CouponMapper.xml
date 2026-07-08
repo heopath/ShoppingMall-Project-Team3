@@ -1,35 +1,179 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.springkmarketapp.dao.coupon.CouponDAO">
+
+    <sql id="couponColumns">
+        c.coupon_no AS couponNo,
+        c.coupon_code AS couponCode,
+        c.seller_no AS sellerNo,
+        c.coupon_type AS couponType,
+        c.coupon_name AS couponName,
+        c.benefit_type AS benefitType,
+        c.benefit_value AS benefitValue,
+        c.min_order_price AS minOrderPrice,
+        c.max_discount_price AS maxDiscountPrice,
+        c.issue_limit AS issueLimit,
+        c.start_date AS startDate,
+        c.end_date AS endDate,
+        c.caution,
+        c.status,
+        c.reg_date AS regDate,
+        sp.company_name AS companyName
+    </sql>
+
+    <sql id="couponFrom">
+        FROM coupon c
+        LEFT JOIN seller_profile sp ON c.seller_no = sp.seller_no
+    </sql>
+
+    <sql id="couponWhere">
+        <where>
+            c.status NOT IN ('DELETED', '삭제')
+            <if test="keyword != null and keyword != ''">
+                AND
+                <choose>
+                    <when test="searchType == 'couponNo'">
+                        CAST(c.coupon_no AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'couponCode'">
+                        c.coupon_code LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'couponName'">
+                        c.coupon_name LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'companyName'">
+                        sp.company_name LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <otherwise>
+                        (
+                            CAST(c.coupon_no AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
+                            OR c.coupon_code LIKE CONCAT('%', #{keyword}, '%')
+                            OR c.coupon_name LIKE CONCAT('%', #{keyword}, '%')
+                            OR sp.company_name LIKE CONCAT('%', #{keyword}, '%')
+                        )
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </sql>
+
     <select id="selectCouponList" resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
-        SELECT coupon_no AS couponNo, coupon_code AS couponCode, seller_no AS sellerNo, coupon_type AS couponType,
-               coupon_name AS couponName, benefit_type AS benefitType, benefit_value AS benefitValue,
-               min_order_price AS minOrderPrice, max_discount_price AS maxDiscountPrice, issue_limit AS issueLimit,
-               start_date AS startDate, end_date AS endDate, caution, status, reg_date AS regDate
-        FROM coupon
-        ORDER BY coupon_no DESC
+        SELECT <include refid="couponColumns" />
+        <include refid="couponFrom" />
+        WHERE c.status NOT IN ('DELETED', '삭제')
+        ORDER BY c.coupon_no DESC
     </select>
+
+    <select id="selectCouponListWithPaging" resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
+        SELECT <include refid="couponColumns" />
+        <include refid="couponFrom" />
+        WHERE c.status NOT IN ('DELETED', '삭제')
+        ORDER BY c.coupon_no DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="selectCouponListBySearchWithPaging" resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
+        SELECT <include refid="couponColumns" />
+        <include refid="couponFrom" />
+        <include refid="couponWhere" />
+        ORDER BY c.coupon_no DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countCouponList" resultType="int">
+        SELECT COUNT(*)
+        FROM coupon c
+        WHERE c.status NOT IN ('DELETED', '삭제')
+    </select>
+
+    <select id="countCouponListBySearch" resultType="int">
+        SELECT COUNT(*)
+        <include refid="couponFrom" />
+        <include refid="couponWhere" />
+    </select>
+
     <select id="selectCoupon" parameterType="int" resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
-        SELECT coupon_no AS couponNo, coupon_code AS couponCode, seller_no AS sellerNo, coupon_type AS couponType,
-               coupon_name AS couponName, benefit_type AS benefitType, benefit_value AS benefitValue,
-               min_order_price AS minOrderPrice, max_discount_price AS maxDiscountPrice, issue_limit AS issueLimit,
-               start_date AS startDate, end_date AS endDate, caution, status, reg_date AS regDate
-        FROM coupon
-        WHERE coupon_no=#{couponNo}
+        SELECT <include refid="couponColumns" />
+        <include refid="couponFrom" />
+        WHERE c.coupon_no = #{couponNo}
     </select>
+
     <insert id="insertCoupon" parameterType="kr.co.springkmarketapp.dto.coupon.CouponDTO" useGeneratedKeys="true" keyProperty="couponNo">
-        INSERT INTO coupon(coupon_code, seller_no, coupon_type, coupon_name, benefit_type, benefit_value, min_order_price,
-                           max_discount_price, issue_limit, start_date, end_date, caution, status, reg_date)
-        VALUES(#{couponCode}, #{sellerNo}, #{couponType}, #{couponName}, #{benefitType}, #{benefitValue}, #{minOrderPrice},
-               #{maxDiscountPrice}, #{issueLimit}, #{startDate}, #{endDate}, #{caution}, COALESCE(#{status}, 'ACTIVE'), NOW())
+        INSERT INTO coupon
+        (
+            coupon_code,
+            seller_no,
+            coupon_type,
+            coupon_name,
+            benefit_type,
+            benefit_value,
+            min_order_price,
+            max_discount_price,
+            issue_limit,
+            start_date,
+            end_date,
+            caution,
+            status,
+            reg_date
+        )
+        VALUES
+        (
+            #{couponCode},
+            #{sellerNo},
+            #{couponType},
+            #{couponName},
+            #{benefitType},
+            COALESCE(#{benefitValue}, 0),
+            COALESCE(#{minOrderPrice}, 0),
+            COALESCE(#{maxDiscountPrice}, 0),
+            #{issueLimit},
+            #{startDate},
+            #{endDate},
+            #{caution},
+            COALESCE(#{status}, '사용'),
+            NOW()
+        )
     </insert>
+
     <update id="updateCoupon" parameterType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
         UPDATE coupon
-        SET coupon_code=#{couponCode}, seller_no=#{sellerNo}, coupon_type=#{couponType}, coupon_name=#{couponName}, benefit_type=#{benefitType},
-            benefit_value=#{benefitValue}, min_order_price=#{minOrderPrice}, max_discount_price=#{maxDiscountPrice}, issue_limit=#{issueLimit},
-            start_date=#{startDate}, end_date=#{endDate}, caution=#{caution}, status=#{status}
-        WHERE coupon_no=#{couponNo}
+        SET coupon_code = #{couponCode},
+            seller_no = #{sellerNo},
+            coupon_type = #{couponType},
+            coupon_name = #{couponName},
+            benefit_type = #{benefitType},
+            benefit_value = COALESCE(#{benefitValue}, 0),
+            min_order_price = COALESCE(#{minOrderPrice}, 0),
+            max_discount_price = COALESCE(#{maxDiscountPrice}, 0),
+            issue_limit = #{issueLimit},
+            start_date = #{startDate},
+            end_date = #{endDate},
+            caution = #{caution},
+            status = #{status}
+        WHERE coupon_no = #{couponNo}
     </update>
+
+    <update id="updateCouponStatus">
+        UPDATE coupon
+        SET status = #{status}
+        WHERE coupon_no = #{couponNo}
+    </update>
+
+    <update id="deleteCoupon" parameterType="int">
+        UPDATE coupon
+        SET status = '삭제'
+        WHERE coupon_no = #{couponNo}
+    </update>
+
+    <update id="deleteCoupons">
+        UPDATE coupon
+        SET status = '삭제'
+        WHERE coupon_no IN
+        <foreach collection="couponNos" item="couponNo" open="(" separator="," close=")">
+            #{couponNo}
+        </foreach>
+    </update>
+
     <delete id="deleteCoupon" parameterType="int">
         DELETE FROM coupon WHERE coupon_no=#{couponNo}
     </delete>
@@ -143,4 +287,5 @@
         AND status IN ('발급', 'ISSUED')
 
     </update>
+
 </mapper>

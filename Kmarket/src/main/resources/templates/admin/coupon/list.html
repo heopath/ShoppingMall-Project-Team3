@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>관리자 쿠폰목록</title>
@@ -91,20 +91,26 @@
             </div>
 
             <section class="coupon-section">
+                <div th:if="${message}" class="alert-message" th:text="${message}"></div>
+                <div th:if="${errorMessage}" class="alert-error" th:text="${errorMessage}"></div>
+
                 <div class="coupon-search-wrap">
-                    <select>
-                        <option>쿠폰번호</option>
-                        <option>쿠폰명</option>
-                        <option>발급처</option>
-                    </select>
-                    <input type="text" placeholder="검색어입력">
-                    <button type="button" class="search-btn">검색</button>
+                    <form th:action="@{/admin/coupon/list}" method="get" class="coupon-search-form">
+                        <select name="searchType">
+                            <option value="couponNo" th:selected="${searchType == 'couponNo'}">쿠폰번호</option>
+                            <option value="couponName" th:selected="${searchType == 'couponName'}">쿠폰명</option>
+                            <option value="companyName" th:selected="${searchType == 'companyName'}">발급처</option>
+                        </select>
+                        <input type="text" name="keyword" placeholder="검색어입력" th:value="${keyword}">
+                        <input type="hidden" name="page" value="1">
+                        <button type="submit" class="search-btn">검색</button>
+                    </form>
                 </div>
 
                 <table class="coupon-table">
                     <thead>
                     <tr>
-                        <th><input type="checkbox"></th>
+                        <th><input type="checkbox" id="checkAll"></th>
                         <th>쿠폰번호</th>
                         <th>발급처</th>
                         <th>쿠폰종류</th>
@@ -116,75 +122,86 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><a href="javascript:void(0)" class="coupon-no openCouponInfo">10121211341</a></td>
-                        <td>개별상품</td>
-                        <td>개별상품 할인</td>
-                        <td>10월 한달 감사 쿠폰 이벤트</td>
-                        <td>2,000 할인</td>
-                        <td>0000-00-00 ~<br>0000-00-00</td>
-                        <td>0000-00-00<br>00:00:00</td>
-                        <td><button type="button" class="small-btn">중단</button></td>
+                    <tr th:if="${#lists.isEmpty(couponList)}">
+                        <td colspan="9">등록된 쿠폰이 없습니다.</td>
                     </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><a href="javascript:void(0)" class="coupon-no openCouponInfo">10121211342</a></td>
-                        <td>주문상품</td>
-                        <td>회원가입 축하 쿠폰</td>
-                        <td>신규회원 첫 구매 할인</td>
-                        <td>10% 할인</td>
-                        <td>0000-00-00 ~<br>0000-00-00</td>
-                        <td>0000-00-00<br>00:00:00</td>
-                        <td><button type="button" class="small-btn gray">종료</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><a href="javascript:void(0)" class="coupon-no openCouponInfo">10121211343</a></td>
-                        <td>배송비 무료</td>
-                        <td>배송비 무료 쿠폰</td>
-                        <td>배송비 무료 이벤트</td>
-                        <td>배송비 무료</td>
-                        <td>0000-00-00 ~<br>0000-00-00</td>
-                        <td>0000-00-00<br>00:00:00</td>
-                        <td><button type="button" class="small-btn">중단</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><a href="javascript:void(0)" class="coupon-no openCouponInfo">10121211344</a></td>
-                        <td>개별상품</td>
-                        <td>즉시 할인</td>
-                        <td>브랜드 특별 할인 쿠폰</td>
-                        <td>5,000 할인</td>
-                        <td>0000-00-00 ~<br>0000-00-00</td>
-                        <td>0000-00-00<br>00:00:00</td>
-                        <td><button type="button" class="small-btn gray">종료</button></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><a href="javascript:void(0)" class="coupon-no openCouponInfo">10121211345</a></td>
-                        <td>(주)다있어</td>
-                        <td>상품 할인 쿠폰</td>
-                        <td>구매 감사 쿠폰</td>
-                        <td>1,500 할인</td>
-                        <td>0000-00-00 ~<br>0000-00-00</td>
-                        <td>0000-00-00<br>00:00:00</td>
-                        <td><button type="button" class="small-btn gray">종료</button></td>
+
+                    <tr th:each="coupon : ${couponList}">
+                        <td>
+                            <input type="checkbox" class="coupon-check" th:value="${coupon.couponNo}">
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)"
+                               class="coupon-no openCouponInfo"
+                               th:text="${coupon.couponNo}"
+                               th:attr="data-coupon-no=${coupon.couponNo},
+                                        data-company-name=${coupon.companyName},
+                                        data-coupon-type=${coupon.couponType},
+                                        data-coupon-name=${coupon.couponName},
+                                        data-benefit-type=${coupon.benefitType},
+                                        data-benefit-value=${coupon.benefitValue},
+                                        data-start-date=${coupon.startDate},
+                                        data-end-date=${coupon.endDate},
+                                        data-caution=${coupon.caution}">
+                                10121211341
+                            </a>
+                        </td>
+                        <td th:text="${coupon.companyName != null ? coupon.companyName : '(주)다있어'}">(주)다있어</td>
+                        <td th:text="${coupon.couponType}">개별상품 할인</td>
+                        <td th:text="${coupon.couponName}">10월 한달 감사 쿠폰 이벤트</td>
+                        <td>
+                            <span th:if="${coupon.benefitType == 'AMOUNT'}"
+                                  th:text="${#numbers.formatInteger(coupon.benefitValue, 0, 'COMMA') + ' 할인'}">2,000 할인</span>
+                            <span th:if="${coupon.benefitType == 'PERCENT'}"
+                                  th:text="${coupon.benefitValue + '% 할인'}">10% 할인</span>
+                            <span th:if="${coupon.benefitType == 'FREE_SHIPPING'}">배송비 무료</span>
+                            <span th:if="${coupon.benefitType != 'AMOUNT' and coupon.benefitType != 'PERCENT' and coupon.benefitType != 'FREE_SHIPPING'}"
+                                  th:text="${coupon.benefitValue != null ? coupon.benefitValue + ' 할인' : '-'}">-</span>
+                        </td>
+                        <td>
+                            <span th:text="${coupon.startDate}">0000-00-00</span> ~<br>
+                            <span th:text="${coupon.endDate}">0000-00-00</span>
+                        </td>
+                        <td th:text="${#temporals.format(coupon.regDate, 'yyyy-MM-dd HH:mm:ss')}">0000-00-00 00:00:00</td>
+                        <td>
+                            <form th:if="${coupon.status == 'ACTIVE' or coupon.status == '사용'}"
+                                  th:action="@{/admin/coupon/status}"
+                                  method="post"
+                                  style="display:inline;">
+                                <input type="hidden" name="couponNo" th:value="${coupon.couponNo}">
+                                <input type="hidden" name="status" value="중단">
+                                <input type="hidden" name="page" th:value="${currentPage}">
+                                <input type="hidden" name="searchType" th:value="${searchType}">
+                                <input type="hidden" name="keyword" th:value="${keyword}">
+                                <button type="submit" class="small-btn">중단</button>
+                            </form>
+
+                            <form th:if="${coupon.status == 'STOPPED' or coupon.status == '중단'}"
+                                  th:action="@{/admin/coupon/status}"
+                                  method="post"
+                                  style="display:inline;">
+                                <input type="hidden" name="couponNo" th:value="${coupon.couponNo}">
+                                <input type="hidden" name="status" value="사용">
+                                <input type="hidden" name="page" th:value="${currentPage}">
+                                <input type="hidden" name="searchType" th:value="${searchType}">
+                                <input type="hidden" name="keyword" th:value="${keyword}">
+                                <button type="submit" class="small-btn gray">재개</button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
 
                 <div class="coupon-bottom">
-                    <button type="button" class="delete-btn">선택삭제</button>
-                    <div class="pagination">
-                        <a href="#">이전</a>
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">다음</a>
-                    </div>
+                    <form th:action="@{/admin/coupon/delete}" method="post" id="couponDeleteForm" style="display:inline;">
+                        <input type="hidden" name="page" th:value="${currentPage}">
+                        <input type="hidden" name="searchType" th:value="${searchType}">
+                        <input type="hidden" name="keyword" th:value="${keyword}">
+                        <button type="submit" class="delete-btn">선택삭제</button>
+                    </form>
+
+                    <th:block th:replace="~{common/_admin_pagination :: pagination('/admin/coupon/list')}"></th:block>
+
                     <button type="button" class="register-btn" id="openCouponRegister">쿠폰등록</button>
                 </div>
             </section>
@@ -194,36 +211,36 @@
         <div id="couponInfoModal" class="modal-overlay">
             <div class="coupon-modal coupon-info-modal">
                 <div class="modal-header">
-                    <h3>쿠폰정보 <span>10121211341</span></h3>
+                    <h3>쿠폰정보 <span id="infoCouponNoTitle">10121211341</span></h3>
                     <button type="button" class="modal-close" id="closeCouponInfo">X</button>
                 </div>
                 <div class="modal-body">
                     <table class="coupon-info-table">
                         <tr>
                             <th>쿠폰번호</th>
-                            <td>10121211341</td>
+                            <td id="infoCouponNo">10121211341</td>
                             <th>발급처</th>
-                            <td>(주)다있어</td>
+                            <td id="infoCompanyName">(주)다있어</td>
                         </tr>
                         <tr>
                             <th>쿠폰종류</th>
-                            <td colspan="3">개별상품 할인</td>
+                            <td colspan="3" id="infoCouponType">개별상품 할인</td>
                         </tr>
                         <tr>
                             <th>쿠폰명</th>
-                            <td colspan="3">10월 한달 감사 쿠폰 이벤트</td>
+                            <td colspan="3" id="infoCouponName">10월 한달 감사 쿠폰 이벤트</td>
                         </tr>
                         <tr>
                             <th>혜택</th>
-                            <td colspan="3">2,000 원 할인</td>
+                            <td colspan="3" id="infoBenefit">2,000 원 할인</td>
                         </tr>
                         <tr>
                             <th>사용기간</th>
-                            <td colspan="3">0000-00-00 ~ 0000-00-00</td>
+                            <td colspan="3" id="infoPeriod">0000-00-00 ~ 0000-00-00</td>
                         </tr>
                         <tr>
                             <th>유의사항</th>
-                            <td colspan="3" class="notice-text">
+                            <td colspan="3" class="notice-text" id="infoCaution">
                                 상품 중복 할인 쿠폰<br>
                                 - 상품 1개에 대해 사용 가능<br>
                                 - 판매자 즉시할인/상품할인 쿠폰과 중복 사용 가능<br><br>
@@ -246,49 +263,63 @@
                     <h3>쿠폰등록</h3>
                     <button type="button" class="modal-close" id="closeCouponRegister">X</button>
                 </div>
-                <div class="modal-body">
+                <form th:action="@{/admin/coupon/register}" method="post" id="couponRegisterForm" class="modal-body">
+                    <input type="hidden" name="couponCode" value="">
+                    <input type="hidden" name="benefitType" id="benefitTypeInput">
+                    <input type="hidden" name="benefitValue" id="benefitValueInput">
+                    <input type="hidden" name="minOrderPrice" value="0">
+                    <input type="hidden" name="maxDiscountPrice" value="0">
+                    <input type="hidden" name="status" value="사용">
+
                     <table class="coupon-form-table">
                         <tr>
                             <th>발급처</th>
-                            <td><input type="text" value="(주)다있어"></td>
+                            <td>
+                                <select name="sellerNo">
+                                    <option value="">전체 발급</option>
+                                    <option th:each="seller : ${sellerList}"
+                                            th:value="${seller.sellerNo}"
+                                            th:text="${seller.companyName}">발급처</option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <th>쿠폰종류</th>
                             <td>
-                                <select>
-                                    <option>종류선택</option>
-                                    <option>개별상품 할인</option>
-                                    <option>배송비 무료</option>
-                                    <option>회원가입 축하</option>
+                                <select name="couponType" required>
+                                    <option value="">종류선택</option>
+                                    <option value="개별상품 할인">개별상품 할인</option>
+                                    <option value="배송비 무료">배송비 무료</option>
+                                    <option value="회원가입 축하">회원가입 축하</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <th>쿠폰명</th>
-                            <td><input type="text"></td>
+                            <td><input type="text" name="couponName" required></td>
                         </tr>
                         <tr>
                             <th>혜택</th>
                             <td class="benefit-area">
-                                <label><input type="radio" name="benefit"> 1,000 할인</label>
-                                <label><input type="radio" name="benefit"> 2,000 할인</label>
-                                <label><input type="radio" name="benefit"> 3,000 할인</label>
-                                <label><input type="radio" name="benefit"> 4,000 할인</label>
-                                <label><input type="radio" name="benefit"> 5,000 할인</label>
-                                <label><input type="radio" name="benefit"> 10% 할인</label>
-                                <label><input type="radio" name="benefit"> 20% 할인</label>
-                                <label><input type="radio" name="benefit"> 30% 할인</label>
-                                <label><input type="radio" name="benefit"> 40% 할인</label>
-                                <label><input type="radio" name="benefit"> 50% 할인</label>
-                                <label><input type="radio" name="benefit"> 배송비 무료</label>
+                                <label><input type="radio" name="benefitOption" data-type="AMOUNT" data-value="1000"> 1,000 할인</label>
+                                <label><input type="radio" name="benefitOption" data-type="AMOUNT" data-value="2000" checked> 2,000 할인</label>
+                                <label><input type="radio" name="benefitOption" data-type="AMOUNT" data-value="3000"> 3,000 할인</label>
+                                <label><input type="radio" name="benefitOption" data-type="AMOUNT" data-value="4000"> 4,000 할인</label>
+                                <label><input type="radio" name="benefitOption" data-type="AMOUNT" data-value="5000"> 5,000 할인</label>
+                                <label><input type="radio" name="benefitOption" data-type="PERCENT" data-value="10"> 10% 할인</label>
+                                <label><input type="radio" name="benefitOption" data-type="PERCENT" data-value="20"> 20% 할인</label>
+                                <label><input type="radio" name="benefitOption" data-type="PERCENT" data-value="30"> 30% 할인</label>
+                                <label><input type="radio" name="benefitOption" data-type="PERCENT" data-value="40"> 40% 할인</label>
+                                <label><input type="radio" name="benefitOption" data-type="PERCENT" data-value="50"> 50% 할인</label>
+                                <label><input type="radio" name="benefitOption" data-type="FREE_SHIPPING" data-value="0"> 배송비 무료</label>
                             </td>
                         </tr>
                         <tr>
                             <th>사용기간</th>
                             <td class="period-area">
-                                <input type="date">
+                                <input type="date" name="startDate" required>
                                 <span>~</span>
-                                <input type="date">
+                                <input type="date" name="endDate" required>
                                 <br>
                                 <span>또는 발급일로부터</span>
                                 <input type="text" class="day-input">
@@ -297,14 +328,14 @@
                         </tr>
                         <tr>
                             <th>유의사항</th>
-                            <td><textarea></textarea></td>
+                            <td><textarea name="caution"></textarea></td>
                         </tr>
                     </table>
                     <div class="modal-btn-area">
                         <button type="button" class="gray-btn" id="cancelCouponRegister">취소</button>
-                        <button type="button" class="green-btn">등록</button>
+                        <button type="submit" class="green-btn">등록</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -325,6 +356,19 @@
         }
     }
 
+    function formatBenefit(type, value) {
+        if (type === "AMOUNT") {
+            return Number(value || 0).toLocaleString() + " 원 할인";
+        }
+        if (type === "PERCENT") {
+            return (value || 0) + "% 할인";
+        }
+        if (type === "FREE_SHIPPING") {
+            return "배송비 무료";
+        }
+        return value ? value + " 할인" : "-";
+    }
+
     const couponInfoModal = document.getElementById("couponInfoModal");
     const openCouponInfoButtons = document.querySelectorAll(".openCouponInfo");
     const closeCouponInfo = document.getElementById("closeCouponInfo");
@@ -332,46 +376,126 @@
 
     openCouponInfoButtons.forEach(button => {
         button.addEventListener("click", function () {
+            const dataset = this.dataset;
+
+            document.getElementById("infoCouponNoTitle").textContent = dataset.couponNo || "";
+            document.getElementById("infoCouponNo").textContent = dataset.couponNo || "";
+            document.getElementById("infoCompanyName").textContent = dataset.companyName || "(주)다있어";
+            document.getElementById("infoCouponType").textContent = dataset.couponType || "";
+            document.getElementById("infoCouponName").textContent = dataset.couponName || "";
+            document.getElementById("infoBenefit").textContent = formatBenefit(dataset.benefitType, dataset.benefitValue);
+            document.getElementById("infoPeriod").textContent = (dataset.startDate || "") + " ~ " + (dataset.endDate || "");
+            document.getElementById("infoCaution").innerText = dataset.caution || "";
+
             couponInfoModal.classList.add("show");
         });
     });
 
-    closeCouponInfo.addEventListener("click", function () {
-        couponInfoModal.classList.remove("show");
-    });
-
-    bottomCloseCouponInfo.addEventListener("click", function () {
-        couponInfoModal.classList.remove("show");
-    });
-
-    couponInfoModal.addEventListener("click", function (e) {
-        if (e.target === couponInfoModal) {
+    if (closeCouponInfo) {
+        closeCouponInfo.addEventListener("click", function () {
             couponInfoModal.classList.remove("show");
-        }
-    });
+        });
+    }
+
+    if (bottomCloseCouponInfo) {
+        bottomCloseCouponInfo.addEventListener("click", function () {
+            couponInfoModal.classList.remove("show");
+        });
+    }
+
+    if (couponInfoModal) {
+        couponInfoModal.addEventListener("click", function (e) {
+            if (e.target === couponInfoModal) {
+                couponInfoModal.classList.remove("show");
+            }
+        });
+    }
 
     const couponRegisterModal = document.getElementById("couponRegisterModal");
     const openCouponRegister = document.getElementById("openCouponRegister");
     const closeCouponRegister = document.getElementById("closeCouponRegister");
     const cancelCouponRegister = document.getElementById("cancelCouponRegister");
 
-    openCouponRegister.addEventListener("click", function () {
-        couponRegisterModal.classList.add("show");
-    });
+    if (openCouponRegister) {
+        openCouponRegister.addEventListener("click", function () {
+            couponRegisterModal.classList.add("show");
+        });
+    }
 
-    closeCouponRegister.addEventListener("click", function () {
-        couponRegisterModal.classList.remove("show");
-    });
-
-    cancelCouponRegister.addEventListener("click", function () {
-        couponRegisterModal.classList.remove("show");
-    });
-
-    couponRegisterModal.addEventListener("click", function (e) {
-        if (e.target === couponRegisterModal) {
+    if (closeCouponRegister) {
+        closeCouponRegister.addEventListener("click", function () {
             couponRegisterModal.classList.remove("show");
-        }
-    });
+        });
+    }
+
+    if (cancelCouponRegister) {
+        cancelCouponRegister.addEventListener("click", function () {
+            couponRegisterModal.classList.remove("show");
+        });
+    }
+
+    if (couponRegisterModal) {
+        couponRegisterModal.addEventListener("click", function (e) {
+            if (e.target === couponRegisterModal) {
+                couponRegisterModal.classList.remove("show");
+            }
+        });
+    }
+
+    const couponRegisterForm = document.getElementById("couponRegisterForm");
+    if (couponRegisterForm) {
+        couponRegisterForm.addEventListener("submit", function (e) {
+            const checkedBenefit = document.querySelector("input[name='benefitOption']:checked");
+
+            if (!checkedBenefit) {
+                alert("혜택을 선택하세요.");
+                e.preventDefault();
+                return;
+            }
+
+            document.getElementById("benefitTypeInput").value = checkedBenefit.dataset.type;
+            document.getElementById("benefitValueInput").value = checkedBenefit.dataset.value;
+        });
+    }
+
+    const checkAll = document.getElementById("checkAll");
+    if (checkAll) {
+        checkAll.addEventListener("change", function () {
+            document.querySelectorAll(".coupon-check").forEach(function (checkbox) {
+                checkbox.checked = checkAll.checked;
+            });
+        });
+    }
+
+    const couponDeleteForm = document.getElementById("couponDeleteForm");
+    if (couponDeleteForm) {
+        couponDeleteForm.addEventListener("submit", function (e) {
+            const checkedList = document.querySelectorAll(".coupon-check:checked");
+
+            if (checkedList.length === 0) {
+                alert("삭제할 쿠폰을 선택하세요.");
+                e.preventDefault();
+                return;
+            }
+
+            if (!confirm("선택한 쿠폰을 삭제하시겠습니까?")) {
+                e.preventDefault();
+                return;
+            }
+
+            couponDeleteForm.querySelectorAll("input[name='couponNos']").forEach(function (input) {
+                input.remove();
+            });
+
+            checkedList.forEach(function (checkbox) {
+                const hiddenInput = document.createElement("input");
+                hiddenInput.type = "hidden";
+                hiddenInput.name = "couponNos";
+                hiddenInput.value = checkbox.value;
+                couponDeleteForm.appendChild(hiddenInput);
+            });
+        });
+    }
 </script>
 
 </body>

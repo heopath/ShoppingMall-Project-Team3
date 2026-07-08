@@ -145,4 +145,11 @@ public class AdminConfigController {
     public List<CategoryDTO> getSubCategories(@RequestParam("parentNo") Integer parentNo) {
         return categoryService.selectSubCategoriesByParent(parentNo);
     }
+
+    // 특정 카테고리 단건 조회 API (상품수정 화면에서 부모 카테고리 역추적용)
+    @GetMapping("/category/detail")
+    @ResponseBody
+    public CategoryDTO getCategoryDetail(@RequestParam("cateNo") int cateNo) {
+        return categoryService.getCategory(cateNo);
+    }
 }

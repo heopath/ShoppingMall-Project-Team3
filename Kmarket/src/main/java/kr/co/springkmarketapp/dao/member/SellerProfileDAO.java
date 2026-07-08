@@ -52,5 +52,11 @@ public interface SellerProfileDAO {
                                                @Param("limit") int limit);
 
     int countSellerSalesList(@Param("salesPeriod") String salesPeriod);
+
+    int countCompanyName(String companyName);
+
+    int countOnlineSaleNo(String onlineSaleNo);
+
+    int countTel(String tel);
 }
 

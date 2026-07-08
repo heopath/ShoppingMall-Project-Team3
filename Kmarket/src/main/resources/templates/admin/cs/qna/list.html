@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>문의하기 목록</title>
-    <link rel="stylesheet" href="../../../css/admin/admin-common.css">
-    <link rel="stylesheet" href="../../../css/admin/cs/qna/list.css">
+    <link rel="stylesheet" th:href="@{/css/admin/admin-common.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/cs/qna/list.css}">
 </head>
 <body>
 
@@ -12,248 +12,241 @@
 
     <header class="admin-header">
         <div class="logo">CI ( 로고 )</div>
-
         <div class="top-menu">
-            <a href="/">홈</a>
-            <a href="/logout">로그아웃</a>
-            <a href="/cs">고객센터</a>
+            <a th:href="@{/}">홈</a>
+            <a th:href="@{/logout}">로그아웃</a>
+            <a th:href="@{/cs}">고객센터</a>
         </div>
     </header>
 
     <div class="admin-body">
-
         <aside class="sidebar">
             <ul class="admin-menu">
-
-                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
-                    ⚙ 환경설정
-                </li>
+                <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">⚙ 환경설정</li>
                 <li class="sub-menu-wrap close" id="configMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
-                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
-                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
-                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
-                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/config/basic}">- 기본설정</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/config/banner}">- 배너관리</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/config/policy}">- 약관관리</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/config/category}">- 카테고리</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/config/version}">- 버전관리</a></li>
                     </ul>
                 </li>
 
-                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">
-                    👥 상점관리
-                </li>
+                <li class="menu-title" onclick="toggleMenu(this, 'shopMenu')">👥 상점관리</li>
                 <li class="sub-menu-wrap close" id="shopMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
-                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/shop/list}">- 상점목록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/shop/sales}">- 매출현황</a></li>
                     </ul>
                 </li>
 
-                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">
-                    👤 회원관리
-                </li>
+                <li class="menu-title" onclick="toggleMenu(this, 'memberMenu')">👤 회원관리</li>
                 <li class="sub-menu-wrap close" id="memberMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/member/list}">- 회원목록</a></li>
                     </ul>
                 </li>
 
-                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">
-                    📦 상품관리
-                </li>
+                <li class="menu-title" onclick="toggleMenu(this, 'productMenu')">📦 상품관리</li>
                 <li class="sub-menu-wrap close" id="productMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
-                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/product/list}">- 상품목록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/product/register}">- 상품등록</a></li>
                     </ul>
                 </li>
 
-                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">
-                    🧾 주문관리
-                </li>
+                <li class="menu-title" onclick="toggleMenu(this, 'orderMenu')">🧾 주문관리</li>
                 <li class="sub-menu-wrap close" id="orderMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/order/list}">- 주문목록</a></li>
                     </ul>
                 </li>
 
-                <li class="menu-title" onclick="toggleMenu(this, 'couponMenu')">
-                    🎟 쿠폰관리
-                </li>
+                <li class="menu-title" onclick="toggleMenu(this, 'couponMenu')">🎟 쿠폰관리</li>
                 <li class="sub-menu-wrap close" id="couponMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/coupon/list">- 쿠폰목록</a></li>
-                        <li class="sub-menu"><a href="/admin/coupon/issued">- 쿠폰발급현황</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/coupon/list}">- 쿠폰목록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/coupon/issued}">- 쿠폰발급현황</a></li>
                     </ul>
                 </li>
 
-
-                <li class="menu-title active" onclick="toggleMenu(this, 'csMenu')">
-                    💬 고객센터
-                </li>
+                <li class="menu-title active" onclick="toggleMenu(this, 'csMenu')">💬 고객센터</li>
                 <li class="sub-menu-wrap" id="csMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
-                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
-                        <li class="sub-menu active"><a href="/admin/cs/qna/list">- 문의하기</a></li>
-                        <li class="sub-menu"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/cs/notice/list}">- 공지사항</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/cs/faq/list}">- 자주묻는질문</a></li>
+                        <li class="sub-menu active"><a th:href="@{/admin/cs/qna/list}">- 문의하기</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/cs/recruit/list}">- 채용관리</a></li>
                     </ul>
                 </li>
-
             </ul>
         </aside>
 
         <main class="content">
-
             <div class="page-title">
                 <h2>문의하기 목록</h2>
                 <span>HOME &gt; 고객센터 &gt; 문의하기</span>
             </div>
 
-
-
             <section class="qna-section">
-
-                <div class="qna-search">
-                    <select>
-                        <option>1차 선택</option>
-                        <option>회원</option>
-                        <option>쿠폰/이벤트</option>
-                        <option>주문/결제</option>
-                        <option>배송</option>
-                        <option>취소/교환/반품</option>
+                <form th:action="@{/admin/cs/qna/list}" method="get" class="qna-search" id="qnaSearchForm">
+                    <input type="hidden" name="searchType" value="csCateNo">
+                    <select id="qnaParentCate">
+                        <option value="">1차 선택</option>
+                        <option th:each="category : ${parentCategoryList}"
+                                th:value="${category.csCateNo}"
+                                th:text="${category.cateName}">회원</option>
                     </select>
-                    <select>
-                        <option>2차 선택</option>
-                        <option>가입</option>
-                        <option>탈퇴</option>
-                        <option>로그인</option>
-                        <option>결제</option>
+                    <select name="keyword" id="qnaChildCate" onchange="document.getElementById('qnaSearchForm').submit()">
+                        <option value="">2차 선택</option>
+                        <option th:each="category : ${childCategoryList}"
+                                th:value="${category.csCateNo}"
+                                th:text="${category.cateName}"
+                                th:attr="data-parent-no=${category.parentNo}"
+                                th:selected="${searchType == 'csCateNo' and keyword != null and keyword == #strings.toString(category.csCateNo)}">가입</option>
                     </select>
-                </div>
+                    <select name="status" id="statusFilter" onchange="document.getElementById('qnaSearchForm').submit()">
+                        <option value="" th:selected="${status == null or status == ''}">상태 전체</option>
+                        <option value="검토중" th:selected="${status == '검토중'}">검토중</option>
+                        <option value="답변완료" th:selected="${status == '답변완료'}">답변완료</option>
+                    </select>
+                </form>
 
-                <table class="qna-table">
-                    <thead>
-                    <tr>
-                        <th class="check-cell"><input type="checkbox"></th>
-                        <th>번호</th>
-                        <th>1차유형</th>
-                        <th>2차유형</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성일</th>
-                        <th>상태</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>120</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title-cell"><a href="/admin/cs/qna/view">개인회원과 법인회원의 차이가 있나요?</a></td>
-                        <td>chh***</td>
-                        <td>00.00.00</td>
-                        <td class="state-ready"><a href="/admin/cs/qna/reply">검토 중</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>119</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title-cell"><a href="/admin/cs/qna/view">본인인증 시 이미 가입되어 있는 정보라고 나옵니다.</a></td>
-                        <td>chh***</td>
-                        <td>00.00.00</td>
-                        <td class="state-ready"><a href="/admin/cs/qna/reply">검토 중</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>118</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title-cell"><a href="/admin/cs/qna/view">아이디를 여러 개 사용할 수 있나요?</a></td>
-                        <td>chh***</td>
-                        <td>00.00.00</td>
-                        <td class="state-complete">답변완료</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>117</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title-cell"><a href="/admin/cs/qna/view">회원 종류 및 혜택 안내</a></td>
-                        <td>chh***</td>
-                        <td>00.00.00</td>
-                        <td class="state-complete">답변완료</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>113</td>
-                        <td>상품</td>
-                        <td>탈퇴</td>
-                        <td class="title-cell"><a href="/admin/cs/qna/view">회원 탈퇴 후 재가입이 가능한가요?</a></td>
-                        <td>chh***</td>
-                        <td>00.00.00</td>
-                        <td class="state-complete">답변완료</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>112</td>
-                        <td>회원</td>
-                        <td>탈퇴</td>
-                        <td class="title-cell"><a href="/admin/cs/qna/view">회원탈퇴는 어떻게 하나요?</a></td>
-                        <td>chh***</td>
-                        <td>00.00.00</td>
-                        <td class="state-complete">답변완료</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>111</td>
-                        <td>회원</td>
-                        <td>탈퇴</td>
-                        <td class="title-cell"><a href="/admin/cs/qna/view">탈퇴하면 개인정보는 모두 삭제되나요?</a></td>
-                        <td>chh***</td>
-                        <td>00.00.00</td>
-                        <td class="state-complete">답변완료</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <form th:action="@{/admin/cs/qna/delete}" method="post" id="qnaDeleteForm">
+                    <input type="hidden" name="page" th:value="${currentPage}">
+                    <input type="hidden" name="searchType" th:value="${searchType}">
+                    <input type="hidden" name="keyword" th:value="${keyword}">
+                    <input type="hidden" name="status" th:value="${status}">
 
-                <div class="qna-bottom">
-                    <button type="button" class="qna-delete-btn">선택삭제</button>
+                    <table class="qna-table">
+                        <thead>
+                        <tr>
+                            <th class="check-cell"><input type="checkbox" id="checkAll" onclick="toggleAll(this)"></th>
+                            <th>번호</th>
+                            <th>1차유형</th>
+                            <th>2차유형</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>작성일</th>
+                            <th>상태</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(qnaList)}">
+                            <td colspan="8" style="text-align:center;">등록된 문의가 없습니다.</td>
+                        </tr>
+                        <tr th:each="qna : ${qnaList}">
+                            <td><input type="checkbox" name="qnaNos" class="qna-check" th:value="${qna.qnaNo}"></td>
+                            <td th:text="${qna.qnaNo}">120</td>
+                            <td th:text="${qna.parentCateName != null ? qna.parentCateName : '-'}">회원</td>
+                            <td th:text="${qna.cateName != null ? qna.cateName : '-'}">가입</td>
+                            <td class="title-cell">
+                                <a th:href="@{/admin/cs/qna/view(qnaNo=${qna.qnaNo})}" th:text="${qna.title}">문의 제목</a>
+                            </td>
+                            <td th:text="${qna.name != null ? qna.name : qna.memberNo}">홍길동</td>                            <td th:text="${qna.regDate != null ? #temporals.format(qna.regDate, 'yy.MM.dd') : '-'}">00.00.00</td>
+                            <td th:class="${qna.status == '답변완료' ? 'state-complete' : 'state-ready'}">
+                                <a th:if="${qna.status != '답변완료'}" th:href="@{/admin/cs/qna/reply(qnaNo=${qna.qnaNo})}" th:text="${qna.status != null ? qna.status : '검토중'}">검토중</a>
+                                <span th:unless="${qna.status != '답변완료'}">답변완료</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
 
+                    <div class="qna-bottom">
+                        <button type="submit" class="qna-delete-btn" onclick="return confirmSelectedDelete()">선택삭제</button>
+                        <div class="pagination">
+                            <a th:if="${hasPrevPage}"
+                               th:href="@{/admin/cs/qna/list(page=${currentPage - 1}, searchType=${searchType}, keyword=${keyword}, status=${status})}">이전</a>
+                            <span th:unless="${hasPrevPage}" class="disabled">이전</span>
 
-                    <div class="qna-pagination">
-                        <a href="#">이전</a>
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">다음</a>
+                            <a th:each="pageNo : ${#numbers.sequence(startPage, endPage)}"
+                               th:href="@{/admin/cs/qna/list(page=${pageNo}, searchType=${searchType}, keyword=${keyword}, status=${status})}"
+                               th:text="${pageNo}"
+                               th:classappend="${pageNo == currentPage} ? 'active'">1</a>
+
+                            <a th:if="${hasNextPage}"
+                               th:href="@{/admin/cs/qna/list(page=${currentPage + 1}, searchType=${searchType}, keyword=${keyword}, status=${status})}">다음</a>
+                            <span th:unless="${hasNextPage}" class="disabled">다음</span>
+                        </div>
                     </div>
-                </div>
-
+                </form>
             </section>
-
         </main>
-
     </div>
 
     <th:block th:replace="~{common/_admin_footer :: footer}"></th:block>
-
 </div>
 
-<script>
+<script th:inline="javascript">
+    const message = /*[[${message}]]*/ null;
+    const errorMessage = /*[[${errorMessage}]]*/ null;
+    const selectedKeyword = /*[[${keyword}]]*/ null;
+
+    if (message) alert(message);
+    if (errorMessage) alert(errorMessage);
+
     function toggleMenu(clickedTitle, menuId) {
         const menu = document.getElementById(menuId);
         menu.classList.toggle("close");
-
-        if (menu.classList.contains("close")) {
-            clickedTitle.classList.remove("active");
-        } else {
-            clickedTitle.classList.add("active");
-        }
+        if (menu.classList.contains("close")) clickedTitle.classList.remove("active");
+        else clickedTitle.classList.add("active");
     }
+
+    function filterQnaChildOptions() {
+        const parentSelect = document.getElementById('qnaParentCate');
+        const childSelect = document.getElementById('qnaChildCate');
+        if (!parentSelect || !childSelect) return;
+
+        const parentNo = parentSelect.value;
+        let selectedParentNo = '';
+
+        Array.from(childSelect.options).forEach(function (option) {
+            if (!option.value) {
+                option.hidden = false;
+                return;
+            }
+
+            const optionParentNo = option.getAttribute('data-parent-no');
+            const visible = !parentNo || optionParentNo === parentNo;
+            option.hidden = !visible;
+
+            if (selectedKeyword && option.value === selectedKeyword) {
+                selectedParentNo = optionParentNo;
+            }
+        });
+
+        if (selectedKeyword && !parentSelect.value && selectedParentNo) {
+            parentSelect.value = selectedParentNo;
+            filterQnaChildOptions();
+            return;
+        }
+
+        const selectedOption = childSelect.options[childSelect.selectedIndex];
+        if (selectedOption && selectedOption.hidden) childSelect.value = '';
+    }
+
+
+    function toggleAll(source) {
+        document.querySelectorAll('.qna-check').forEach(function (checkbox) {
+            checkbox.checked = source.checked;
+        });
+    }
+
+    function confirmSelectedDelete() {
+        const checkedCount = document.querySelectorAll('.qna-check:checked').length;
+        if (checkedCount === 0) {
+            alert('삭제할 문의를 선택하세요.');
+            return false;
+        }
+        return confirm('선택한 문의를 삭제하시겠습니까?');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const parentSelect = document.getElementById('qnaParentCate');
+        if (parentSelect) parentSelect.addEventListener('change', filterQnaChildOptions);
+        filterQnaChildOptions();
+    });
 </script>
 
 </body>

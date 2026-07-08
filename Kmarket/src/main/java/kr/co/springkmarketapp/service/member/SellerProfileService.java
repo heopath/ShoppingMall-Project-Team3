@@ -90,5 +90,21 @@ public class SellerProfileService {
     public int countSellerSalesList(String salesPeriod) {
         return sellerProfileDAO.countSellerSalesList(salesPeriod);
     }
+
+    public int countBizNo(String bizNo) {
+        return sellerProfileDAO.countBizNo(bizNo);
+    }
+
+    public int countCompanyName(String companyName){
+        return sellerProfileDAO.countCompanyName(companyName);
+    }
+
+    public int countOnlineSaleNo(String onlineSaleNo){
+        return sellerProfileDAO.countOnlineSaleNo(onlineSaleNo);
+    }
+
+    public int countTel(String tel){
+        return sellerProfileDAO.countTel(tel);
+    }
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>자주묻는질문 수정</title>
@@ -110,38 +110,40 @@
             </div>
 
             <section class="faq-form-section">
-                <form>
+                <form th:action="@{/admin/cs/faq/modify}" method="post" th:object="${faq}">
+                    <input type="hidden" name="faqNo" th:value="${faq.faqNo}">
                     <table class="faq-form-table">
                         <tr>
                             <th>유형</th>
                             <td>
-                                <select>
-                                    <option selected>회원</option>
-                                    <option>쿠폰/이벤트</option>
-                                    <option>주문/결제</option>
+                                <select id="faqModifyParent" onchange="filterFaqChildOptions('faqModifyParent', 'faqModifyChild')" required>
+                                    <option value="">1차 선택</option>
+                                    <option th:each="cate : ${parentCategoryList}"
+                                            th:value="${cate.csCateNo}"
+                                            th:text="${cate.cateName}">회원</option>
                                 </select>
-                                <select>
-                                    <option selected>가입</option>
-                                    <option>탈퇴</option>
-                                    <option>로그인</option>
+                                <select id="faqModifyChild" name="csCateNo" required>
+                                    <option value="">2차 선택</option>
+                                    <option th:each="cate : ${childCategoryList}"
+                                            th:value="${cate.csCateNo}"
+                                            th:attr="data-parent-no=${cate.parentNo}"
+                                            th:text="${cate.cateName}">가입</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <th>제목</th>
-                            <td><input type="text" class="title-input" value="개인회원과 법인회원 차이가 있나요?"></td>
+                            <td><input type="text" name="title" class="title-input" th:value="*{title}" placeholder="제목을 입력합니다." required></td>
                         </tr>
                         <tr>
                             <th>내용</th>
-                            <td><textarea>개인회원은 본인인증 후, 법인회원은 사업자등록번호를 기준으로 사업자 인증 후 가입가능합니다.
-
-개인회원에서 법인회원으로 전환은 불가하므로 법인회원으로 진행을 원하신다면 신규가입으로 진행을 해야합니다.</textarea></td>
+                            <td><textarea name="content" th:text="*{content}" placeholder="내용을 입력합니다." required></textarea></td>
                         </tr>
                     </table>
 
                     <div class="faq-form-btn-area">
-                        <a href="/admin/cs/faq/view" class="btn-gray">취소하기</a>
-                        <button type="button" class="btn-blue">수정하기</button>
+                        <a th:href="@{/admin/cs/faq/view(faqNo=${faq.faqNo})}" class="btn-gray">취소하기</a>
+                        <button type="submit" class="btn-blue">수정하기</button>
                     </div>
                 </form>
             </section>
@@ -154,7 +156,7 @@
 
 </div>
 
-<script>
+<script th:inline="javascript">
     function toggleMenu(clickedTitle, menuId) {
         const menu = document.getElementById(menuId);
         menu.classList.toggle("close");
@@ -163,6 +165,48 @@
             clickedTitle.classList.remove("active");
         } else {
             clickedTitle.classList.add("active");
+        }
+    }
+
+    function filterFaqChildOptions(parentSelectId, childSelectId, selectedValue) {
+        const parentSelect = document.getElementById(parentSelectId);
+        const childSelect = document.getElementById(childSelectId);
+        if (!parentSelect || !childSelect) return;
+
+        const parentNo = parentSelect.value;
+        Array.from(childSelect.options).forEach(function (option) {
+            if (!option.value) {
+                option.hidden = false;
+                option.disabled = false;
+                return;
+            }
+
+            const match = !parentNo || option.dataset.parentNo === parentNo;
+            option.hidden = !match;
+            option.disabled = !match;
+        });
+
+        if (selectedValue) {
+            childSelect.value = String(selectedValue);
+        } else {
+            childSelect.value = '';
+        }
+    }
+
+    const selectedFaqCateNo = /*[[${faq.csCateNo}]]*/ null;
+
+    const faqModifyParent = document.getElementById('faqModifyParent');
+    const faqModifyChild = document.getElementById('faqModifyChild');
+
+    if (faqModifyParent && faqModifyChild && selectedFaqCateNo) {
+        const selectedChildOption = Array.from(faqModifyChild.options)
+            .find(option => option.value === String(selectedFaqCateNo));
+
+        if (selectedChildOption) {
+            const parentNo = selectedChildOption.dataset.parentNo;
+
+            faqModifyParent.value = parentNo;
+            filterFaqChildOptions('faqModifyParent', 'faqModifyChild', selectedFaqCateNo);
         }
     }
 </script>

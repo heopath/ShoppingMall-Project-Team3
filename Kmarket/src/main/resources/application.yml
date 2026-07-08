@@ -1,3 +1,5 @@
+file:
+    upload-dir: uploads
 logging:
     file:
         name: /logs/spring-board-app.log
@@ -13,7 +15,7 @@ server:
 spring:
     application:
         name: spring-board-app
-        version: ${version:0.0.4}
+        version: ${version:0.0.6}
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: 1q2w3E4R!
@@ -51,8 +53,5 @@ spring:
             max-file-size: 10MB
             max-request-size: 50MB
     thymeleaf:
-        prefix: classpath:/templates/
         cache: false
-
-file:
-    upload-dir: uploads
+        prefix: classpath:/templates/

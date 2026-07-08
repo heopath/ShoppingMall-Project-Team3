@@ -27,4 +27,7 @@ public class CouponDTO {
     private String caution;
     private String status;
     private LocalDateTime regDate;
+
+    // 관리자 화면 표시용
+    private String companyName;
 }

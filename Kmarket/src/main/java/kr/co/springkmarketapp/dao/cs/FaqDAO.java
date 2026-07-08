@@ -15,7 +15,7 @@ public interface FaqDAO {
     int deleteFaq(Integer faqNo);
     int countFaq();
 
-    List<FaqDTO> selectFaqListPaging(
-            @Param("offset") int offset,
-            @Param("size") int size);
+    int countFaq(int parentNo);
+
+    List<FaqDTO> selectFaqListByParent(int parentNo);
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>공지사항 목록</title>
@@ -109,103 +109,69 @@
             </div>
 
             <section class="notice-section">
-
-                <div class="notice-search">
-                    <select>
-                        <option>유형선택</option>
-                        <option>고객서비스</option>
-                        <option>이벤트당첨</option>
-                        <option>안전거래</option>
-                        <option>위해상품</option>
+                <form class="notice-search" th:action="@{/admin/cs/notice/list}" method="get">
+                    <input type="hidden" name="searchType" value="noticeType">
+                    <select name="keyword" onchange="this.form.submit()">
+                        <option value="" th:selected="${keyword == null or keyword == ''}">유형선택</option>
+                        <option value="고객서비스" th:selected="${keyword == '고객서비스'}">고객서비스</option>
+                        <option value="이벤트당첨" th:selected="${keyword == '이벤트당첨'}">이벤트당첨</option>
+                        <option value="안전거래" th:selected="${keyword == '안전거래'}">안전거래</option>
+                        <option value="위해상품" th:selected="${keyword == '위해상품'}">위해상품</option>
                     </select>
-                </div>
+                    <input type="hidden" name="page" value="1">
+                </form>
 
-                <table class="notice-table">
-                    <thead>
-                    <tr>
-                        <th class="check-cell"><input type="checkbox"></th>
-                        <th>번호</th>
-                        <th>유형</th>
-                        <th>제목</th>
-                        <th>조회</th>
-                        <th>날짜</th>
-                        <th>관리</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>100</td>
-                        <td>고객서비스</td>
-                        <td class="title-cell"><a href="/admin/cs/notice/view">[안내] 해외 결제 사칭 문자 주의</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>99</td>
-                        <td>이벤트 당첨</td>
-                        <td class="title-cell"><a href="/admin/cs/notice/view">[발표] L&Live X SX쇼핑 상반기 이벤트 당첨자</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>98</td>
-                        <td>안전거래</td>
-                        <td class="title-cell"><a href="/admin/cs/notice/view">[안내] 로젠택배 배송 / 교환 수거지연 안내</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>97</td>
-                        <td>고객서비스</td>
-                        <td class="title-cell"><a href="/admin/cs/notice/view">[안내] 위치정보이용 약관 개정 공지</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>93</td>
-                        <td>고객서비스</td>
-                        <td class="title-cell"><a href="/admin/cs/notice/view">[안내] 구글회원 이용약관 개정</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>92</td>
-                        <td>위해상품</td>
-                        <td class="title-cell"><a href="/admin/cs/notice/view">[위해상품정보] 우주 주지표 지도점검 회사 수 주발</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>91</td>
-                        <td>고객서비스</td>
-                        <td class="title-cell"><a href="/admin/cs/notice/view">[안내] 셀티온홈 시스템 점검에 따른 결제</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/notice/modify">[수정]</a></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <form th:action="@{/admin/cs/notice/delete}" method="post" id="noticeDeleteForm">
+                    <input type="hidden" name="page" th:value="${currentPage}">
+                    <input type="hidden" name="searchType" th:value="${searchType}">
+                    <input type="hidden" name="keyword" th:value="${keyword}">
 
-                <div class="notice-bottom">
-                    <button type="button" class="notice-delete-btn">선택삭제</button>
-                    <div class="notice-pagination">
-                        <a href="#">이전</a><a href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a><a href="#">다음</a>
+                    <table class="notice-table">
+                        <thead>
+                        <tr>
+                            <th class="check-cell"><input type="checkbox" id="checkAll"></th>
+                            <th>번호</th>
+                            <th>유형</th>
+                            <th>제목</th>
+                            <th>조회</th>
+                            <th>날짜</th>
+                            <th>관리</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(noticeList)}">
+                            <td colspan="7" style="text-align:center;">등록된 공지사항이 없습니다.</td>
+                        </tr>
+                        <tr th:each="notice : ${noticeList}">
+                            <td><input type="checkbox" name="noticeNos" class="notice-check" th:value="${notice.noticeNo}"></td>
+                            <td th:text="${notice.noticeNo}">100</td>
+                            <td th:text="${notice.noticeType}">고객서비스</td>
+                            <td class="title-cell">
+                                <a th:href="@{/admin/cs/notice/view(noticeNo=${notice.noticeNo})}" th:text="${notice.title}">[안내] 해외 결제 사칭 문자 주의</a>
+                            </td>
+                            <td th:text="${notice.hit != null ? notice.hit : 0}">120</td>
+                            <td th:text="${notice.regDate != null ? #temporals.format(notice.regDate, 'yy.MM.dd') : '-'}">00.00.00</td>
+                            <td class="manage-cell">
+                                <button type="button" class="link-btn" th:attr="data-notice-no=${notice.noticeNo}" onclick="deleteNotice(this)">[삭제]</button>
+                                <a th:href="@{/admin/cs/notice/modify(noticeNo=${notice.noticeNo})}">[수정]</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="notice-bottom">
+                        <button type="submit" class="notice-delete-btn" onclick="return confirmSelectedDelete()">선택삭제</button>
+                        <th:block th:replace="~{common/_admin_pagination :: pagination('/admin/cs/notice/list')}"></th:block>
+                        <a th:href="@{/admin/cs/notice/write}" class="notice-write-btn">작성하기</a>
                     </div>
-                    <a href="/admin/cs/notice/write" class="notice-write-btn">작성하기</a>
-                </div>
+                </form>
+
+                <form th:action="@{/admin/cs/notice/delete}" method="post" id="noticeSingleDeleteForm">
+                    <input type="hidden" name="noticeNo" id="singleNoticeNo">
+                    <input type="hidden" name="page" th:value="${currentPage}">
+                    <input type="hidden" name="searchType" th:value="${searchType}">
+                    <input type="hidden" name="keyword" th:value="${keyword}">
+                </form>
 
             </section>
 
@@ -227,7 +193,55 @@
             clickedTitle.classList.add("active");
         }
     }
+    document.getElementById('checkAll')?.addEventListener('change', function () {
+        document.querySelectorAll('.notice-check').forEach(function (checkbox) {
+            checkbox.checked = document.getElementById('checkAll').checked;
+        });
+    });
+
+    function confirmSelectedDelete() {
+        const checked = document.querySelectorAll('.notice-check:checked').length;
+        if (checked === 0) {
+            alert('삭제할 공지사항을 선택하세요.');
+            return false;
+        }
+        return confirm('선택한 공지사항을 삭제하시겠습니까?');
+    }
+
+    function deleteNotice(button) {
+        if (!confirm('공지사항을 삭제하시겠습니까?')) return;
+        document.getElementById('singleNoticeNo').value = button.dataset.noticeNo;
+        document.getElementById('noticeSingleDeleteForm').submit();
+    }
+
+
+
 </script>
 
+<script th:inline="javascript">
+    const message = /*[[${message}]]*/ null;
+    const errorMessage = /*[[${errorMessage}]]*/ null;
+
+    if (message) {
+        alert(message);
+    }
+
+    if (errorMessage) {
+        alert(errorMessage);
+    }
+
+    function toggleMenu(clickedTitle, menuId) {
+        const menu = document.getElementById(menuId);
+        menu.classList.toggle("close");
+
+        if (menu.classList.contains("close")) {
+            clickedTitle.classList.remove("active");
+        } else {
+            clickedTitle.classList.add("active");
+        }
+    }
+
+    // 기존 checkAll, confirmSelectedDelete, deleteNotice 함수는 그대로
+</script>
 </body>
 </html>

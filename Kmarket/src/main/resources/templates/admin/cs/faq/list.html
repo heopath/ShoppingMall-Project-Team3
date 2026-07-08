@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>자주묻는질문 목록</title>
@@ -110,124 +110,78 @@
 
             <section class="faq-section">
 
-                <div class="faq-search">
-                    <select>
-                        <option>1차 선택</option>
-                        <option>회원</option>
-                        <option>쿠폰/이벤트</option>
-                        <option>주문/결제</option>
-                        <option>배송</option>
-                        <option>취소/교환/반품</option>
+                <form class="faq-search" th:action="@{/admin/cs/faq/list}" method="get" id="faqSearchForm">
+                    <input type="hidden" name="searchType" value="csCateNo">
+                    <select id="faqSearchParent" onchange="filterFaqChildOptions('faqSearchParent', 'faqSearchChild')">
+                        <option value="">1차 선택</option>
+                        <option th:each="cate : ${parentCategoryList}"
+                                th:value="${cate.csCateNo}"
+                                th:text="${cate.cateName}">회원</option>
                     </select>
-                    <select>
-                        <option>2차 선택</option>
-                        <option>가입</option>
-                        <option>탈퇴</option>
-                        <option>로그인</option>
-                        <option>결제</option>
+                    <select id="faqSearchChild" name="keyword" onchange="document.getElementById('faqSearchForm').submit();">
+                        <option value="">2차 선택</option>
+                        <option th:each="cate : ${childCategoryList}"
+                                th:value="${cate.csCateNo}"
+                                th:attr="data-parent-no=${cate.parentNo}"
+                                th:text="${cate.cateName}">가입</option>
                     </select>
-                </div>
+                    <a th:href="@{/admin/cs/faq/list}" class="faq-reset-btn">전체보기</a>
+                    <input type="hidden" name="page" value="1">
+                </form>
 
-                <table class="faq-table">
-                    <thead>
-                    <tr>
-                        <th class="check-cell"><input type="checkbox"></th>
-                        <th>번호</th>
-                        <th>1차유형</th>
-                        <th>2차유형</th>
-                        <th>제목</th>
-                        <th>조회</th>
-                        <th>날짜</th>
-                        <th>관리</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>10</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title-cell"><a href="/admin/cs/faq/view">개인회원과 법인회원 차이가 있나요?</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/faq/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>9</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title-cell"><a href="/admin/cs/faq/view">본인인증 시 이미 가입되어 있는 정보라고 나옵니다.</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/faq/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>8</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title-cell"><a href="/admin/cs/faq/view">아이디를 여러 개 사용할 수 있나요?</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/faq/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>7</td>
-                        <td>회원</td>
-                        <td>가입</td>
-                        <td class="title-cell"><a href="/admin/cs/faq/view">회원 종류 및 혜택 안내</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/faq/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>3</td>
-                        <td>회원</td>
-                        <td>탈퇴</td>
-                        <td class="title-cell"><a href="/admin/cs/faq/view">회원 탈퇴 후 재가입이 가능한가요?</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/faq/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>2</td>
-                        <td>회원</td>
-                        <td>탈퇴</td>
-                        <td class="title-cell"><a href="/admin/cs/faq/view">회원 탈퇴는 어떻게 하나요?</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/faq/modify">[수정]</a></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>1</td>
-                        <td>회원</td>
-                        <td>탈퇴</td>
-                        <td class="title-cell"><a href="/admin/cs/faq/view">탈퇴하면 개인정보는 모두 삭제되나요?</a></td>
-                        <td>120</td>
-                        <td>00.00.00</td>
-                        <td class="manage-cell"><a href="#">[삭제]</a><a href="/admin/cs/faq/modify">[수정]</a></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <form th:action="@{/admin/cs/faq/delete}" method="post" id="faqDeleteForm">
+                    <input type="hidden" name="page" th:value="${currentPage}">
+                    <input type="hidden" name="searchType" th:value="${searchType}">
+                    <input type="hidden" name="keyword" th:value="${keyword}">
 
-                <div class="faq-bottom">
-                    <button type="button" class="faq-delete-btn">선택삭제</button>
-                    <div class="faq-pagination">
-                        <a href="#">이전</a>
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">다음</a>
+                    <table class="faq-table">
+                        <thead>
+                        <tr>
+                            <th class="check-cell"><input type="checkbox" id="checkAll"></th>
+                            <th>번호</th>
+                            <th>1차유형</th>
+                            <th>2차유형</th>
+                            <th>제목</th>
+                            <th>조회</th>
+                            <th>날짜</th>
+                            <th>관리</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(faqList)}">
+                            <td colspan="8" style="text-align:center;">등록된 자주묻는 질문이 없습니다.</td>
+                        </tr>
+                        <tr th:each="faq : ${faqList}">
+                            <td><input type="checkbox" name="faqNos" class="faq-check" th:value="${faq.faqNo}"></td>
+                            <td th:text="${faq.faqNo}">10</td>
+                            <td th:text="${faq.parentCateName != null ? faq.parentCateName : '-'}">회원</td>
+                            <td th:text="${faq.cateName != null ? faq.cateName : '-'}">가입</td>
+                            <td class="title-cell">
+                                <a th:href="@{/admin/cs/faq/view(faqNo=${faq.faqNo})}" th:text="${faq.title}">개인회원과 법인회원 차이가 있나요?</a>
+                            </td>
+                            <td th:text="${faq.hit != null ? faq.hit : 0}">120</td>
+                            <td th:text="${faq.regDate != null ? #temporals.format(faq.regDate, 'yy.MM.dd') : '-'}">00.00.00</td>
+                            <td class="manage-cell">
+                                <button type="button" class="link-btn" th:attr="data-faq-no=${faq.faqNo}" onclick="deleteFaq(this)">[삭제]</button>
+                                <a th:href="@{/admin/cs/faq/modify(faqNo=${faq.faqNo})}">[수정]</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="faq-bottom">
+                        <button type="submit" class="faq-delete-btn" onclick="return confirmSelectedDelete()">선택삭제</button>
+                        <th:block th:replace="~{common/_admin_pagination :: pagination('/admin/cs/faq/list')}"></th:block>
+                        <a th:href="@{/admin/cs/faq/write}" class="faq-write-btn">작성하기</a>
                     </div>
-                    <a href="/admin/cs/faq/write" class="faq-write-btn">작성하기</a>
-                </div>
+                </form>
+
+                <form th:action="@{/admin/cs/faq/delete}" method="post" id="faqSingleDeleteForm">
+                    <input type="hidden" name="faqNo" id="singleFaqNo">
+                    <input type="hidden" name="page" th:value="${currentPage}">
+                    <input type="hidden" name="searchType" th:value="${searchType}">
+                    <input type="hidden" name="keyword" th:value="${keyword}">
+                </form>
 
             </section>
 
@@ -239,7 +193,19 @@
 
 </div>
 
-<script>
+<script th:inline="javascript">
+    const message = /*[[${message}]]*/ null;
+    const errorMessage = /*[[${errorMessage}]]*/ null;
+    const selectedKeyword = /*[[${keyword}]]*/ null;
+
+    if (message) {
+        alert(message);
+    }
+
+    if (errorMessage) {
+        alert(errorMessage);
+    }
+
     function toggleMenu(clickedTitle, menuId) {
         const menu = document.getElementById(menuId);
         menu.classList.toggle("close");
@@ -249,6 +215,66 @@
         } else {
             clickedTitle.classList.add("active");
         }
+    }
+
+    function filterFaqChildOptions(parentSelectId, childSelectId, selectedValue) {
+        const parentSelect = document.getElementById(parentSelectId);
+        const childSelect = document.getElementById(childSelectId);
+        if (!parentSelect || !childSelect) return;
+
+        const parentNo = parentSelect.value;
+        let selectedOptionParentNo = '';
+
+        Array.from(childSelect.options).forEach(function (option) {
+            if (!option.value) {
+                option.hidden = false;
+                option.disabled = false;
+                return;
+            }
+
+            const match = !parentNo || option.dataset.parentNo === parentNo;
+            option.hidden = !match;
+            option.disabled = !match;
+
+            if (selectedValue && String(option.value) === String(selectedValue)) {
+                selectedOptionParentNo = option.dataset.parentNo || '';
+            }
+        });
+
+        if (selectedValue) {
+            childSelect.value = String(selectedValue);
+            if (selectedOptionParentNo) {
+                parentSelect.value = selectedOptionParentNo;
+                filterFaqChildOptions(parentSelectId, childSelectId);
+                childSelect.value = String(selectedValue);
+            }
+            return;
+        }
+
+        childSelect.value = '';
+    }
+
+    filterFaqChildOptions('faqSearchParent', 'faqSearchChild', selectedKeyword);
+
+    document.getElementById('checkAll')?.addEventListener('change', function () {
+        document.querySelectorAll('.faq-check').forEach(function (checkbox) {
+            checkbox.checked = document.getElementById('checkAll').checked;
+        });
+    });
+
+    function confirmSelectedDelete() {
+        const checked = document.querySelectorAll('.faq-check:checked').length;
+        if (checked === 0) {
+            alert('삭제할 FAQ를 선택하세요.');
+            return false;
+        }
+        return confirm('선택한 FAQ를 삭제하시겠습니까?');
+    }
+
+    function deleteFaq(button) {
+        if (!confirm('FAQ를 삭제하시겠습니까?')) return;
+        document.getElementById('singleFaqNo').value = button.dataset.faqNo;
+        document.getElementById('faqSingleDeleteForm').submit();
     }
 </script>
 
