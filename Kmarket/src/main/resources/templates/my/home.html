@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./../css/main.css" />
     <link rel="stylesheet" href="./../css/my/common.css" />
     <link rel="stylesheet" href="./../css/my/home.css" />
-    <script th:src="@{/js/my/popup.js}"></script>
+    <script src="../js/my/popup.js"></script>
   </head>
   <body>
   <th:block th:replace="~{common/_main_header}"></th:block>
@@ -52,84 +52,63 @@
           </div>
 
           <div class="mypage-banner">
-            <img src="/images/my/banner5.png" alt="myBanner">
+            <img src="/images/my/myBanner3.png" alt="myBanner">
           </div>
 
-
+          
           <!-- 최근주문내역 -->
           <section class="mypage-section">
             <div class="section-header">
               <h3>최근주문내역</h3>
-              <a th:href="@{/my/order/list}">더보기 ></a>
+              <a href="./order.html">더보기 ></a>
             </div>
 
             <table class="order-table">
               <thead>
-              <tr>
-                <th>날짜</th>
-                <th>상품정보</th>
-                <th>상태</th>
-                <th>확인 / 신청</th>
-              </tr>
+                <tr>
+                  <th>날짜</th>
+                  <th>상품정보</th>
+                  <th>상태</th>
+                  <th>확인 / 신청</th>
+                </tr>
               </thead>
 
               <tbody>
+                <tr>
+                  <td>2026-06-18</td>
 
-              <tr th:each="order : ${orderList}">
+                  <td>
+                    <div class="order-info">
+                      <img src="./../images/main/slider_item1.jpg" alt="" />
 
-                <td th:text="${#temporals.format(order.orderDate,'yyyy-MM-dd')}"></td>
+                      <div class="order-detail">
+                        <a
+                          href="#"
+                          class="order-link"
+                          data-order-id="1012211341"
+                        >
+                          주문번호 : 1012211341
+                        </a>
 
-                <td>
-                  <div class="order-info">
-
-                    <img th:src="@{${order.productImage}}" alt="상품이미지">
-
-                    <div class="order-detail">
-
-                      <a href="javascript:void(0)"
-                         class="order-link"
-                         th:data-order-no="${order.orderNo}"
-                         th:text="'주문번호 : ' + ${order.orderCode}">
-                      </a>
-
-                      <a href="javascript:void(0)"
-                         class="seller-link"
-                         th:data-seller-no="${order.sellerNo}"
-                         th:text="${order.companyName}">
-                      </a>
-
-                      <p class="product-name"
-                         th:text="${order.productName}">
-                      </p>
-
-                      <p>
-                        수량 :
-                        <span th:text="${order.quantity}"></span>개
-                      </p>
-
-                      <strong th:text="${#numbers.formatInteger(order.totalPrice,3,'COMMA')} + '원'"></strong>
-
+                        <a href="#" class="seller-link">[주] 상호명</a>
+                        <p class="product-name">[조르지오] 샘플상품</p>
+                        <p>수량 : 1개</p>
+                        <strong>34,000원</strong>
+                      </div>
                     </div>
-                  </div>
-                </td>
+                  </td>
 
-                <td th:text="${order.deliveryStatus}"></td>
+                  <td>배송완료</td>
 
-                <td>
-                  <div class="order-btns">
-                    <a href="#" class="confirm-link">구매확정</a>
-                    <a href="#" class="review-link">상품평쓰기</a>
-                    <a href="#" class="return-link">반품신청</a>
-                    <a href="#" class="exchange-link">교환신청</a>
-                  </div>
-                </td>
-
-              </tr>
-
-              <tr th:if="${#lists.isEmpty(orderList)}">
-                <td colspan="4">최근 주문내역이 없습니다.</td>
-              </tr>
-
+                  <td>
+                    <div class="order-btns">
+                      <a href="#" class="confirm-link">구매확정</a>
+                      <a href="#" class="review-link">상품평쓰기</a>
+                      <a href="#" class="return-link">반품신청</a>
+                      <a href="#" class="exchange-link">교환신청</a>
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </section>
@@ -298,188 +277,171 @@
 
 
   <!-- 팝업 - 주문상세 -->
-  <div class="order-modal">
-    <div class="modal-box">
+    <div class="order-modal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div>
+            <strong>주문상세</strong>
+            <span>20xx-12-13</span>
+          </div>
 
-      <div class="modal-header">
-        <div>
-          <strong>주문상세</strong>
-          <span id="modalOrderDate"></span>
+          <button class="modal-close">✕</button>
         </div>
 
-        <button class="modal-close">✕</button>
-      </div>
+        <div class="modal-body">
+          <!-- 주문정보 -->
+          <section class="modal-section">
+            <h3>주문정보</h3>
 
-      <div class="modal-body">
+            <table class="modal-order-table">
+              <thead>
+                <tr>
+                  <th>날짜</th>
+                  <th>상품정보</th>
+                  <th>결제금액</th>
+                  <th>상태</th>
+                </tr>
+              </thead>
 
-        <!-- 주문정보 -->
-        <section class="modal-section">
-          <h3>주문정보</h3>
+              <tbody>
+                <tr>
+                  <td>20xx-01-01</td>
 
-          <table class="modal-order-table">
-            <thead>
-            <tr>
-              <th>날짜</th>
-              <th>상품정보</th>
-              <th>결제금액</th>
-              <th>상태</th>
-            </tr>
-            </thead>
+                  <td>
+                    <div class="modal-product">
+                      <img src="./../images/main/slider_item1.jpg" alt="" />
 
-            <tbody>
-            <tr>
+                      <div>
+                        <p>주문번호 : 1012211341</p>
+                        <p>(주) 상호명</p>
+                        <p>상품명</p>
+                        <p>수량 : 1개</p>
 
-              <td id="detailOrderDate"></td>
+                        <strong>34,000원</strong>
+                      </div>
+                    </div>
+                  </td>
 
-              <td>
-                <div class="modal-product">
+                  <!-- <td>
+                    <p>판매가 34,000원</p>
+                    <p>할인 -3,000원</p>
 
-                  <img id="detailProductImage" src="" alt="상품">
+                    <strong>결제금액 34,000원</strong>
+                  </td> -->
+                  <td class="td_payment">
+                    <div class="payment-info">
+                      <p><span>판매가</span><strong>34,000원</strong></p>
+                      <p><span>할인</span><strong>-3,000원</strong></p>
+                      <p class="final-price">
+                        <span>결제금액</span>
+                        <strong>34,000원</strong>
+                      </p>
+                    </div>
+                  </td>
 
-                  <div>
-                    <p id="detailOrderCode"></p>
-                    <p id="detailCompanyName"></p>
-                    <p id="detailProductName"></p>
-                    <p>
-                      수량 :
-                      <span id="detailQuantity"></span>
-                    </p>
+                  <td>배송완료</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
 
-                    <strong id="detailTotalPrice"></strong>
-                  </div>
+          <!-- 배송정보 -->
+          <section class="modal-section">
+            <h3>배송정보</h3>
 
-                </div>
-              </td>
+            <table class="delivery-table">
+              <tbody>
+                <tr>
+                  <th>이름</th>
+                  <td>홍길동</td>
+                </tr>
 
-              <td class="td_payment">
-                <div class="payment-info">
+                <tr>
+                  <th>연락처</th>
+                  <td>010-1234-1001</td>
+                </tr>
 
-                  <p>
-                    <span>판매가</span>
-                    <strong id="detailPrice"></strong>
-                  </p>
+                <tr>
+                  <th>주소</th>
+                  <td>[210**] 부산광역시 부산진구 대연동 121 10층 1004호</td>
+                </tr>
 
-                  <p>
-                    <span>할인</span>
-                    <strong id="detailDiscount"></strong>
-                  </p>
-
-                  <p class="final-price">
-                    <span>결제금액</span>
-                    <strong id="detailTotalPrice2"></strong>
-                  </p>
-
-                </div>
-              </td>
-
-              <td id="detailDeliveryStatus"></td>
-
-            </tr>
-            </tbody>
-          </table>
-        </section>
-
-        <!-- 배송정보 -->
-        <section class="modal-section">
-          <h3>배송정보</h3>
-
-          <table class="delivery-table">
-            <tbody>
-
-            <tr>
-              <th>이름</th>
-              <td id="receiverName"></td>
-            </tr>
-
-            <tr>
-              <th>연락처</th>
-              <td id="receiverHp"></td>
-            </tr>
-
-            <tr>
-              <th>주소</th>
-              <td id="receiverAddress"></td>
-            </tr>
-
-            <tr>
-              <th>배송요청사항</th>
-              <td id="receiverMemo"></td>
-            </tr>
-
-            </tbody>
-          </table>
-        </section>
-
-      </div>
-
-    </div>
-  </div>
-
-  <!-- 팝업 - 판매자정보 -->
-  <div class="seller-modal">
-    <div class="seller-modal-box">
-      <div class="seller-modal-header">
-        <h3>판매자정보</h3>
-
-        <button type="button" class="modal-close">✕</button>
-      </div>
-
-      <div class="seller-modal-body">
-        <table class="seller-info-table">
-          <tbody>
-          <tr>
-            <th>판매자 등급</th>
-            <td id="sellerGrade"></td>
-          </tr>
-
-          <tr>
-            <th>상호</th>
-            <td id="sellerCompanyName"></td>
-          </tr>
-
-          <tr>
-            <th>대표자</th>
-            <td id="sellerCeo"></td>
-          </tr>
-
-          <tr>
-            <th>전화번호</th>
-            <td id="sellerHp"></td>
-          </tr>
-
-          <tr>
-            <th>FAX</th>
-            <td id="sellerFax"></td>
-          </tr>
-
-          <tr>
-            <th>Email</th>
-            <td id="sellerEmail"></td>
-          </tr>
-
-          <tr>
-            <th>사업자번호</th>
-            <td id="sellerBizNo"></td>
-          </tr>
-
-          <tr>
-            <th>영업소재지</th>
-            <td id="sellerAddress"></td>
-          </tr>
-          </tbody>
-        </table>
-
-        <div class="seller-notice">
-          ※ 위 정보는 전자상거래법 제20조 제2항 및 동법 시행령 제25조 제2항에
-          의거하여 소비자보호에 의거 공개합니다.
-        </div>
-
-        <div class="seller-btn-area">
-          <button class="seller-inquiry-btn">문의하기</button>
+                <tr>
+                  <th>배송요청사항</th>
+                  <td>없음</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- 팝업 - 판매자정보 -->
+    <div class="seller-modal">
+      <div class="seller-modal-box">
+        <div class="seller-modal-header">
+          <h3>판매자정보</h3>
+
+          <button type="button" class="modal-close">✕</button>
+        </div>
+
+        <div class="seller-modal-body">
+          <table class="seller-info-table">
+            <tbody>
+              <tr>
+                <th>판매자 등급</th>
+                <td>파워 딜러</td>
+              </tr>
+
+              <tr>
+                <th>상호</th>
+                <td>(주) 상호명</td>
+              </tr>
+
+              <tr>
+                <th>대표자</th>
+                <td>홍길동</td>
+              </tr>
+
+              <tr>
+                <th>전화번호</th>
+                <td>051-123-1000</td>
+              </tr>
+
+              <tr>
+                <th>FAX</th>
+                <td>051-123-1001</td>
+              </tr>
+
+              <tr>
+                <th>Email</th>
+                <td>company@abc.com</td>
+              </tr>
+
+              <tr>
+                <th>사업자번호</th>
+                <td>123-12-123457</td>
+              </tr>
+
+              <tr>
+                <th>영업소재지</th>
+                <td>[210**] 부산광역시 부산진구 대연동 121 10층 1004호</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="seller-notice">
+            ※ 위 정보는 전자상거래법 제20조 제2항 및 동법 시행령 제25조 제2항에
+            의거하여 소비자보호에 의거 공개합니다.
+          </div>
+
+          <div class="seller-btn-area">
+            <button class="seller-inquiry-btn">문의하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- 팝업 - 문의하기 -->
     <div class="inquiry-modal">
