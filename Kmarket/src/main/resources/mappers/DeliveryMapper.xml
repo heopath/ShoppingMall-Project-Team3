@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.springkmarketapp.dao.order.DeliveryDAO">
+
+    <!-- 기본 등록 -->
+    <insert id="insertDelivery" parameterType="kr.co.springkmarketapp.dto.order.DeliveryDTO"
+            useGeneratedKeys="true" keyProperty="deliveryNo">
+        INSERT INTO delivery
+        (order_no, seller_no, receiver_name, receiver_hp, zip, addr1, addr2,
+        courier, invoice_no, delivery_fee, delivery_status, memo, receipt_date)
+        VALUES
+        (#{orderNo}, #{sellerNo}, #{receiverName}, #{receiverHp}, #{zip}, #{addr1}, #{addr2},
+        #{courier}, #{invoiceNo}, #{deliveryFee}, #{deliveryStatus}, #{memo}, NOW())
+    </insert>
+
+    <select id="selectDelivery" resultType="kr.co.springkmarketapp.dto.order.DeliveryDTO">
+        SELECT
+        delivery_no AS deliveryNo, order_no AS orderNo, seller_no AS sellerNo,
+        receiver_name AS receiverName, receiver_hp AS receiverHp,
+        zip, addr1, addr2, courier, invoice_no AS invoiceNo,
+        delivery_fee AS deliveryFee, delivery_status AS deliveryStatus, memo,
+        receipt_date AS receiptDate, shipped_date AS shippedDate, delivered_date AS deliveredDate
+        FROM delivery
+        WHERE delivery_no = #{deliveryNo}
+    </select>
+
+    <select id="selectDeliveryAll" resultType="kr.co.springkmarketapp.dto.order.DeliveryDTO">
+        SELECT
+        delivery_no AS deliveryNo, order_no AS orderNo, seller_no AS sellerNo,
+        receiver_name AS receiverName, receiver_hp AS receiverHp,
+        zip, addr1, addr2, courier, invoice_no AS invoiceNo,
+        delivery_fee AS deliveryFee, delivery_status AS deliveryStatus, memo,
+        receipt_date AS receiptDate, shipped_date AS shippedDate, delivered_date AS deliveredDate
+        FROM delivery
+        ORDER BY delivery_no DESC
+    </select>
+
+    <update id="updateDelivery" parameterType="kr.co.springkmarketapp.dto.order.DeliveryDTO">
+        UPDATE delivery SET
+        courier = #{courier}, invoice_no = #{invoiceNo},
+        delivery_status = #{deliveryStatus}, memo = #{memo}
+        WHERE delivery_no = #{deliveryNo}
+    </update>
+
+    <delete id="deleteDelivery">
+        DELETE FROM delivery WHERE delivery_no = #{deliveryNo}
+    </delete>
+
+    <!-- 관리자 배송현황 검색조건 -->
+    <sql id="deliverySearchWhere">
+        <where>
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'invoiceNo'">
+                        AND d.invoice_no LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'courier'">
+                        AND d.courier LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'orderCode'">
+                        AND o.order_code LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </sql>
+
+    <!-- 관리자 배송현황 목록 -->
+    <select id="selectDeliveryList" resultType="kr.co.springkmarketapp.dto.order.DeliveryDTO">
+        SELECT
+        d.delivery_no       AS deliveryNo,
+        d.invoice_no        AS invoiceNo,
+        d.courier           AS courier,
+        o.order_code        AS orderCode,
+        d.receiver_name     AS receiverName,
+        (SELECT COUNT(*) FROM order_item oi WHERE oi.delivery_no = d.delivery_no) AS itemCount,
+        d.delivery_fee      AS deliveryFee,
+        CASE
+        WHEN o.order_status = '주문취소' THEN '주문취소'
+        WHEN o.order_status IN ('반품진행', '반품완료', '교환진행', '교환완료') THEN o.order_status
+        WHEN DATEDIFF(NOW(), d.receipt_date) >= 3 THEN '배송완료'
+        WHEN DATEDIFF(NOW(), d.receipt_date) >= 1 THEN '배송중'
+        ELSE '배송준비'
+        END AS deliveryStatus,
+        d.receipt_date      AS receiptDate
+        FROM delivery d
+        JOIN orders o ON d.order_no = o.order_no
+        <include refid="deliverySearchWhere"/>
+        ORDER BY d.delivery_no DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="selectDeliveryCount" resultType="int">
+        SELECT COUNT(*)
+        FROM delivery d
+        JOIN orders o ON d.order_no = o.order_no
+        <include refid="deliverySearchWhere"/>
+    </select>
+
+    <!-- 관리자 배송상세 -->
+    <select id="selectDeliveryDetail" resultType="kr.co.springkmarketapp.dto.order.DeliveryDetailDTO">
+        SELECT
+        d.delivery_no   AS deliveryNo,
+        o.order_code    AS orderCode,
+        d.receiver_name AS receiverName,
+        d.receiver_hp   AS receiverHp,
+        d.zip           AS zip,
+        d.addr1         AS addr1,
+        d.addr2         AS addr2,
+        d.courier       AS courier,
+        d.invoice_no    AS invoiceNo,
+        d.memo          AS memo
+        FROM delivery d
+        JOIN orders o ON d.order_no = o.order_no
+        WHERE d.delivery_no = #{deliveryNo}
+    </select>
+
+    <select id="selectDeliveryItems" resultType="kr.co.springkmarketapp.dto.order.DeliveryDetailDTO$DeliveryItemDTO">
+        SELECT
+        oi.product_no     AS productNo,
+        oi.product_name   AS productName,
+        oi.product_image  AS productImage,
+        sp.company_name   AS companyName,
+        oi.price          AS price,
+        oi.quantity       AS quantity,
+        d.delivery_fee    AS deliveryFee,
+        oi.total_price    AS totalPrice
+        FROM order_item oi
+        JOIN seller_profile sp ON oi.seller_no = sp.seller_no
+        JOIN delivery d ON oi.delivery_no = d.delivery_no
+        WHERE oi.delivery_no = #{deliveryNo}
+    </select>
+
+</mapper>

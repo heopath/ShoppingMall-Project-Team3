@@ -4,17 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeliveryDTO {
+public class DeliveryDetailDTO {
     private Integer deliveryNo;
-    private Long orderNo;
-    private Integer sellerNo;
+    private String orderCode;
     private String receiverName;
     private String receiverHp;
     private String zip;
@@ -22,17 +20,9 @@ public class DeliveryDTO {
     private String addr2;
     private String courier;
     private String invoiceNo;
-    private Integer deliveryFee;
-    private String deliveryStatus;
     private String memo;
-    private LocalDateTime receiptDate;
-    private LocalDateTime shippedDate;
-    private LocalDateTime deliveredDate;
 
-    // ▼ 목록/상세 조회 전용 (JOIN 결과, DB 컬럼 아님)
-    private String orderCode;      // orders.order_code
-    private Integer itemCount;     // 상품 건수
-    private List<DeliveryItemDTO> items;  // 상세 모달용 상품 목록
+    private List<DeliveryItemDTO> items;
 
     @Data
     @Builder

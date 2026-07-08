@@ -95,13 +95,13 @@
 
             <section class="delivery-section">
                 <div class="delivery-search-wrap">
-                    <select>
-                        <option>송장번호</option>
-                        <option>택배사</option>
-                        <option>주문번호</option>
+                    <select id="searchType">
+                        <option value="invoiceNo" th:selected="${searchType == 'invoiceNo' or searchType == null}">송장번호</option>
+                        <option value="courier" th:selected="${searchType == 'courier'}">택배사</option>
+                        <option value="orderCode" th:selected="${searchType == 'orderCode'}">주문번호</option>
                     </select>
-                    <input type="text" placeholder="검색어입력">
-                    <button type="button" class="delivery-search-btn">검색</button>
+                    <input type="text" id="keyword" th:value="${keyword}" placeholder="검색어입력">
+                    <button type="button" class="delivery-search-btn" onclick="searchDelivery()">검색</button>
                 </div>
 
                 <table class="delivery-table">
@@ -118,55 +118,27 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td><a href="javascript:void(0)" class="invoice-link openDeliveryDetail">101212021</a></td>
-                        <td>로젠택배</td>
-                        <td>10121211341</td>
-                        <td>김유신</td>
-                        <td>3</td>
-                        <td>68,400</td>
-                        <td><span class="fee-free">무료</span></td>
-                        <td>0000-00-00<br>00:00:00</td>
+                    <tr th:if="${#lists.isEmpty(deliveries)}">
+                        <td colspan="8" style="text-align:center; padding:20px;">배송 내역이 없습니다.</td>
                     </tr>
-                    <tr>
-                        <td><a href="javascript:void(0)" class="invoice-link openDeliveryDetail">1012120219</a></td>
-                        <td>한진택배</td>
-                        <td>10121211341</td>
-                        <td>김춘추</td>
-                        <td>2</td>
-                        <td>34,500</td>
-                        <td><a href="javascript:void(0)" class="delivery-view openDeliveryDetail">배송상세</a></td>
-                        <td>0000-00-00<br>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td><a href="javascript:void(0)" class="invoice-link openDeliveryDetail">101211957</a></td>
-                        <td>우체국</td>
-                        <td>10121211339</td>
-                        <td>장보고</td>
-                        <td>2</td>
-                        <td>8,000</td>
-                        <td><span class="fee-blue">배송 중</span></td>
-                        <td>0000-00-00<br>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td><a href="javascript:void(0)" class="invoice-link openDeliveryDetail">1012120215</a></td>
-                        <td>CJ<br>대한통운</td>
-                        <td>10121211338</td>
-                        <td>강감찬</td>
-                        <td>1</td>
-                        <td>89,000</td>
-                        <td><span class="fee-red">운송중</span></td>
-                        <td>0000-00-00<br>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td><a href="javascript:void(0)" class="invoice-link openDeliveryDetail">20122221213</a></td>
-                        <td>경동택배</td>
-                        <td>10121211337</td>
-                        <td>이순신</td>
-                        <td>3</td>
-                        <td>260,000</td>
-                        <td><span class="fee-green">배송완료</span></td>
-                        <td>0000-00-00<br>00:00:00</td>
+                    <tr th:each="d : ${deliveries}">
+                        <td>
+                            <a href="javascript:void(0)" class="invoice-link"
+                               th:text="${d.invoiceNo}" th:onclick="|openDeliveryDetail(${d.deliveryNo})|"></a>
+                        </td>
+                        <td th:text="${d.courier}"></td>
+                        <td th:text="${d.orderCode}"></td>
+                        <td th:text="${d.receiverName}"></td>
+                        <td th:text="${d.itemCount}"></td>
+                        <td>
+                            <span th:if="${d.deliveryFee == 0}" class="fee-free">무료</span>
+                            <span th:if="${d.deliveryFee != 0}" th:text="${#numbers.formatInteger(d.deliveryFee, 0, 'COMMA')}"></span>
+                        </td>
+                        <td>
+            <span th:classappend="${d.deliveryStatus == '배송완료'} ? 'fee-green' : (${d.deliveryStatus == '배송중'} ? 'fee-blue' : 'fee-red')"
+                  th:text="${d.deliveryStatus}"></span>
+                        </td>
+                        <td th:text="${#temporals.format(d.receiptDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -174,13 +146,11 @@
                 <div class="delivery-bottom">
                     <button type="button" class="delivery-delete-btn">선택삭제</button>
                     <div class="delivery-pagination">
-                        <a href="#">이전</a>
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">다음</a>
+                        <a th:if="${startPage > 1}" th:href="@{/admin/order/delivery(page=${startPage - 1}, searchType=${searchType}, keyword=${keyword})}">이전</a>
+                        <a th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                           th:href="@{/admin/order/delivery(page=${i}, searchType=${searchType}, keyword=${keyword})}"
+                           th:text="${i}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                        <a th:if="${endPage < totalPages}" th:href="@{/admin/order/delivery(page=${endPage + 1}, searchType=${searchType}, keyword=${keyword})}">다음</a>
                     </div>
                 </div>
             </section>
@@ -190,51 +160,10 @@
         <div id="deliveryDetailModal" class="modal-overlay">
             <div class="delivery-modal delivery-detail-modal">
                 <div class="modal-header">
-                    <h3>배송상세 <span>1012120215</span></h3>
+                    <h3>배송상세 <span id="modalDeliveryCode"></span></h3>
                     <button type="button" class="modal-close" id="closeDeliveryDetailModal">X</button>
                 </div>
-                <div class="modal-body">
-                    <h4>상품정보</h4>
-                    <table class="detail-product-table">
-                        <thead>
-                        <tr>
-                            <th>상품사진</th>
-                            <th>상품번호</th>
-                            <th>상품명</th>
-                            <th>판매자</th>
-                            <th>가격</th>
-                            <th>수량</th>
-                            <th>배송비</th>
-                            <th>결제금액</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><div class="modal-thumb">이미지</div></td>
-                            <td>120120021</td>
-                            <td>OOO</td>
-                            <td>(주)상호명</td>
-                            <td>24,000</td>
-                            <td>3</td>
-                            <td>0</td>
-                            <td>68,400</td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-                    <h4>배송정보</h4>
-                    <table class="detail-info-table">
-                        <tr><th>주문번호</th><td>10121211341</td></tr>
-                        <tr><th>수령인</th><td>김유신</td></tr>
-                        <tr><th>연락처</th><td>010-1234-1234</td></tr>
-                        <tr><th>배송지 주소</th><td>부산 부산진구 123-11 06</td></tr>
-                    </table>
-
-                    <table class="detail-info-table second">
-                        <tr><th>택배사</th><td>로젠택배</td></tr>
-                        <tr><th>송장번호</th><td>1012120215</td></tr>
-                        <tr><th>기타</th><td>감사합니다. 수고하세요.</td></tr>
-                    </table>
+                <div class="modal-body" id="deliveryDetailBody">
                 </div>
             </div>
         </div>
@@ -247,7 +176,6 @@
     function toggleMenu(clickedTitle, menuId) {
         const menu = document.getElementById(menuId);
         menu.classList.toggle("close");
-
         if (menu.classList.contains("close")) {
             clickedTitle.classList.remove("active");
         } else {
@@ -255,13 +183,64 @@
         }
     }
 
+    function searchDelivery() {
+        const type = document.getElementById('searchType').value;
+        const keyword = document.getElementById('keyword').value.trim();
+        location.href = `/admin/order/delivery?page=1&searchType=${type}&keyword=${encodeURIComponent(keyword)}`;
+    }
+
     const deliveryDetailModal = document.getElementById("deliveryDetailModal");
 
-    document.querySelectorAll(".openDeliveryDetail").forEach(button => {
-        button.addEventListener("click", function () {
-            deliveryDetailModal.classList.add("show");
-        });
-    });
+    function openDeliveryDetail(deliveryNo) {
+        fetch(`/admin/order/delivery/detail?deliveryNo=${deliveryNo}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('modalDeliveryCode').textContent = data.orderCode;
+
+                let html = `
+                    <h4>상품정보</h4>
+                    <table class="detail-product-table">
+                        <thead>
+                        <tr>
+                            <th>상품사진</th><th>상품번호</th><th>상품명</th><th>판매자</th>
+                            <th>가격</th><th>수량</th><th>배송비</th><th>결제금액</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            ${data.items.map(item => `
+                                <tr>
+                                    <td><img src="${item.productImage}" class="modal-thumb-img"></td>
+                                    <td>${item.productNo}</td>
+                                    <td>${item.productName}</td>
+                                    <td>${item.companyName}</td>
+                                    <td>${item.price.toLocaleString()}원</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.deliveryFee.toLocaleString()}원</td>
+                                    <td>${item.totalPrice.toLocaleString()}원</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <h4>배송정보</h4>
+                    <table class="detail-info-table">
+                        <tr><th>주문번호</th><td>${data.orderCode}</td></tr>
+                        <tr><th>수령인</th><td>${data.receiverName}</td></tr>
+                        <tr><th>연락처</th><td>${data.receiverHp}</td></tr>
+                        <tr><th>배송지 주소</th><td>[${data.zip}] ${data.addr1} ${data.addr2}</td></tr>
+                    </table>
+
+                    <table class="detail-info-table second">
+                        <tr><th>택배사</th><td>${data.courier}</td></tr>
+                        <tr><th>송장번호</th><td>${data.invoiceNo}</td></tr>
+                        <tr><th>기타</th><td>${data.memo ?? ''}</td></tr>
+                    </table>
+                `;
+                document.getElementById('deliveryDetailBody').innerHTML = html;
+                deliveryDetailModal.classList.add("show");
+            })
+            .catch(err => console.error('배송상세 에러:', err));
+    }
 
     document.getElementById("closeDeliveryDetailModal").addEventListener("click", function () {
         deliveryDetailModal.classList.remove("show");
