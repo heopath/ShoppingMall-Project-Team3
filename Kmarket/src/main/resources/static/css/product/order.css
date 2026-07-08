@@ -22,7 +22,7 @@
 .order-table-head,
 .order-product-row {
     display: grid;
-    grid-template-columns: 40px minmax(260px, 1fr) 70px 85px 60px 70px 90px 100px;
+    grid-template-columns: minmax(260px, 1fr) 70px 85px 60px 70px 90px 100px;
     align-items: center;
     gap: 8px;
 }
@@ -36,33 +36,9 @@
     text-align: center;
 }
 
-.order-table-head > span:nth-child(2) {
+.order-table-head > span:nth-child(1) {
     padding-left: 18px;
     text-align: left;
-}
-
-.order-product-actions {
-    display: flex;
-    justify-content: flex-start;
-    margin: 14px 0 4px;
-}
-
-.delete-selected-btn {
-    min-width: 92px;
-    height: 36px;
-    border: 1px solid #bbb;
-    border-radius: 5px;
-    background: #fff;
-    color: #555;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.delete-selected-btn:hover {
-    border-color: #777;
-    background: #fafafa;
-    color: #222;
 }
 
 .order-product-row {
@@ -94,8 +70,16 @@
     width: 82px;
     height: 82px;
     flex-shrink: 0;
+    overflow: hidden;
     border: 1px solid var(--line);
     background: #f6f6f6;
+}
+
+.order-product-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .order-product-thumb svg {
@@ -130,43 +114,6 @@
 .discount-text {
     color: var(--orange);
     font-weight: 800;
-}
-
-.check-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.check-wrap input {
-    display: none;
-}
-
-.check-wrap span {
-    position: relative;
-    width: 17px;
-    height: 17px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    background: #fff;
-}
-
-.check-wrap input:checked + span {
-    border-color: var(--green);
-    background: var(--green);
-}
-
-.check-wrap input:checked + span::after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 5px;
-    width: 4px;
-    height: 8px;
-    border-right: 2px solid #fff;
-    border-bottom: 2px solid #fff;
-    transform: rotate(45deg);
 }
 
 .empty-order {
@@ -222,6 +169,7 @@
 
 .form-row input,
 .form-row textarea,
+.form-row select,
 .coupon-row select,
 .discount-row input {
     height: 34px;
@@ -282,6 +230,17 @@
     resize: vertical;
 }
 
+.delivery-request-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.delivery-request-wrap select,
+.delivery-request-wrap input {
+    width: 100%;
+}
+
 /* 할인 */
 .discount-box {
     padding: 16px;
@@ -322,6 +281,13 @@
 .coupon-row select {
     width: 200px;
     background: #fff;
+}
+
+.coupon-apply-info {
+    margin: 8px 0 0 158px;
+    color: var(--orange);
+    font-size: 12px;
+    font-weight: 700;
 }
 
 /* 결제 방법 */
@@ -374,22 +340,32 @@
 
 .payment-summary dl > div {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    gap: 12px;
     padding: 7px 0;
     color: #555;
     font-size: 13px;
 }
 
 .payment-summary dt {
+    flex-shrink: 0;
+    color: #555;
     font-weight: 400;
+    white-space: nowrap;
 }
 
 .payment-summary dd {
+    margin: 0;
     color: #333;
     font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
 }
 
+/* 결제주문액 */
 .payment-summary .pay-total-row {
+    align-items: center;
     margin-top: 8px;
     padding-top: 14px;
     border-top: 1px solid var(--line);
@@ -403,6 +379,37 @@
 
 .payment-summary .pay-total-row dd {
     font-size: 17px;
+}
+
+/* 적립 포인트 */
+.payment-summary dl > div:has(#earnedPoint) {
+    align-items: flex-start;
+}
+
+#earnedPoint {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+    max-width: 170px;
+    white-space: normal;
+}
+
+#earnedPoint strong {
+    color: #333;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+#earnedPoint small {
+    color: #666;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.3;
+    text-align: right;
+    word-break: keep-all;
 }
 
 .payment-btn {

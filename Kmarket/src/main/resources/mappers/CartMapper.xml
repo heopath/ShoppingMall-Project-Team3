@@ -285,4 +285,75 @@
 
     </delete>
 
+    <select id="selectCartListByMemberNoAndCartNos"
+            resultType="kr.co.springkmarketapp.dto.order.CartListDTO">
+
+        SELECT
+        c.cart_no AS cartNo,
+        c.product_no AS productNo,
+        c.quantity AS quantity,
+
+        p.seller_no AS sellerNo,
+        p.product_name AS productName,
+        p.basic_desc AS basicDesc,
+        p.price AS price,
+        p.discount_rate AS discountRate,
+        p.point AS point,
+        p.delivery_fee AS deliveryFee,
+
+        img.image_path AS imagePath,
+
+        COALESCE(
+        (
+        SELECT GROUP_CONCAT(
+        CONCAT(
+        po.option_name,
+        ' : ',
+        po.option_value
+        )
+        ORDER BY po.option_group_no ASC, po.sort_order ASC
+        SEPARATOR ' / '
+        )
+        FROM cart_option co
+        JOIN product_option po
+        ON co.option_no = po.option_no
+        WHERE co.cart_no = c.cart_no
+        ),
+        ''
+        ) AS optionText
+
+        FROM cart c
+
+        JOIN product p
+        ON c.product_no = p.product_no
+
+        LEFT JOIN (
+        SELECT
+        product_no,
+        MAX(
+        CASE
+        WHEN image_type = 'THUMB1'
+        THEN image_path
+        END
+        ) AS image_path
+        FROM product_image
+        GROUP BY product_no
+        ) img
+        ON p.product_no = img.product_no
+
+        WHERE c.member_no = #{memberNo}
+
+        AND c.cart_no IN
+        <foreach collection="cartNos"
+                 item="cartNo"
+                 open="("
+                 separator=","
+                 close=")">
+            #{cartNo}
+        </foreach>
+
+        ORDER BY c.reg_date DESC, c.cart_no DESC
+
+    </select>
+
 </mapper>

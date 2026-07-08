@@ -80,4 +80,9 @@ public interface CartDAO {
             @Param("memberNo") Integer memberNo,
             @Param("cartNos") List<Integer> cartNos
     );
+
+    List<CartListDTO> selectCartListByMemberNoAndCartNos(
+            @Param("memberNo") Integer memberNo,
+            @Param("cartNos") List<Integer> cartNos
+    );
 }

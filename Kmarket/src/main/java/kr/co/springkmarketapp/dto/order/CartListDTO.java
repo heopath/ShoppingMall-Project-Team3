@@ -13,6 +13,7 @@ public class CartListDTO {
 
     private Integer cartNo;
     private Integer productNo;
+    private Integer sellerNo;
 
     private String productName;
     private String basicDesc;

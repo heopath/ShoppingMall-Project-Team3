@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.springkmarketapp.dao.order.OrdersDAO">
+
+    <!-- 회원 보유 포인트 조회 -->
+    <select id="selectAvailablePoint" resultType="int">
+
+        SELECT COALESCE(point, 0)
+        FROM member
+        WHERE member_no = #{memberNo}
+
+    </select>
+
+    <!-- 주문 저장 -->
+    <insert id="insertOrder"
+            useGeneratedKeys="true"
+            keyProperty="orderNo"
+            keyColumn="order_no">
+
+        INSERT INTO orders (
+        order_code,
+        member_no,
+        orderer_name,
+        orderer_hp,
+        total_price,
+        discount_price,
+        coupon_discount,
+        delivery_fee,
+        point_use,
+        point_save,
+        pay_price,
+        payment_method,
+        payment_status,
+        paid_date,
+        cancel_date,
+        order_status,
+        order_date
+        )
+        VALUES (
+        #{orderCode},
+        #{memberNo},
+        #{ordererName},
+        #{ordererHp},
+        #{totalPrice},
+        #{discountPrice},
+        #{couponDiscount},
+        #{deliveryFee},
+        #{pointUse},
+        #{pointSave},
+        #{payPrice},
+        #{paymentMethod},
+        #{paymentStatus},
+        NOW(),
+        NULL,
+        #{orderStatus},
+        NOW()
+        )
+
+    </insert>
+
+
+    <!-- 배송 저장 -->
+    <insert id="insertDelivery"
+            useGeneratedKeys="true"
+            keyProperty="deliveryNo"
+            keyColumn="delivery_no">
+
+        INSERT INTO delivery (
+        order_no,
+        seller_no,
+        receiver_name,
+        receiver_hp,
+        zip,
+        addr1,
+        addr2,
+        courier,
+        invoice_no,
+        delivery_fee,
+        delivery_status,
+        memo,
+        receipt_date,
+        shipped_date,
+        delivered_date
+        )
+        VALUES (
+        #{orderNo},
+        #{sellerNo},
+        #{receiverName},
+        #{receiverHp},
+        #{zip},
+        #{addr1},
+        #{addr2},
+        #{courier},
+        #{invoiceNo},
+        #{deliveryFee},
+        #{deliveryStatus},
+        #{memo},
+        NOW(),
+        NULL,
+        NULL
+        )
+
+    </insert>
+
+
+    <!-- 주문상품 저장 -->
+    <insert id="insertOrderItem"
+            useGeneratedKeys="true"
+            keyProperty="orderItemNo"
+            keyColumn="order_item_no">
+
+        INSERT INTO order_item (
+        order_no,
+        delivery_no,
+        product_no,
+        seller_no,
+        product_name,
+        product_image,
+        price,
+        discount_rate,
+        coupon_discount,
+        point,
+        quantity,
+        total_price,
+        item_status,
+        purchase_confirm_date
+        )
+        VALUES (
+        #{orderNo},
+        #{deliveryNo},
+        #{productNo},
+        #{sellerNo},
+        #{productName},
+        #{productImage},
+        #{price},
+        #{discountRate},
+        #{couponDiscount},
+        #{point},
+        #{quantity},
+        #{totalPrice},
+        #{itemStatus},
+        NULL
+        )
+
+    </insert>
+
+
+    <!-- 재고 차감 -->
+    <update id="updateProductStock">
+
+        UPDATE product
+        SET stock = stock - #{quantity}
+        WHERE product_no = #{productNo}
+        AND stock &gt;= #{quantity}
+
+    </update>
+
+</mapper>

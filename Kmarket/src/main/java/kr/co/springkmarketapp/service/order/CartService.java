@@ -243,6 +243,16 @@ public class CartService {
         return cartDAO.deleteCartsByMemberNo(memberNo, uniqueCartNos);
     }
 
+    public List<CartListDTO> selectOrderItems(
+            Integer memberNo,
+            List<Integer> cartNos
+    ) {
+        return cartDAO.selectCartListByMemberNoAndCartNos(
+                memberNo,
+                cartNos
+        );
+    }
+
     public CartDTO selectCart(Integer cartNo) {
         return cartDAO.selectCart(cartNo);
     }
