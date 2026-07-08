@@ -154,8 +154,8 @@
                         <tr th:each="faq : ${faqList}">
                             <td><input type="checkbox" name="faqNos" class="faq-check" th:value="${faq.faqNo}"></td>
                             <td th:text="${faq.faqNo}">10</td>
-                            <td th:text="${faq.cate1Name != null ? faq.cate1Name : '-'}">회원</td>
-                            <td th:text="${faq.cate2Name != null ? faq.cate2Name : '-'}">가입</td>
+                            <td th:text="${faq.parentCateName != null ? faq.parentCateName : '-'}">회원</td>
+                            <td th:text="${faq.cateName != null ? faq.cateName : '-'}">가입</td>
                             <td class="title-cell">
                                 <a th:href="@{/admin/cs/faq/view(faqNo=${faq.faqNo})}" th:text="${faq.title}">개인회원과 법인회원 차이가 있나요?</a>
                             </td>

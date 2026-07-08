@@ -65,7 +65,10 @@
                 <table class="qna-view-table">
                     <tr>
                         <th>유형</th>
-                        <td><span th:text="${qna.cate1Name != null ? qna.cate1Name : '-'}">회원</span> - <span th:text="${qna.cate2Name != null ? qna.cate2Name : '-'}">가입</span></td>
+                        <td>
+                            <span th:text="${qna.parentCateName != null ? qna.parentCateName : '-'}">회원</span> -
+                            <span th:text="${qna.cateName != null ? qna.cateName : '-'}">가입</span>
+                        </td>
                     </tr>
                     <tr>
                         <th>제목</th>
@@ -73,8 +76,7 @@
                     </tr>
                     <tr>
                         <th>작성자</th>
-                        <td th:text="${qna.memberId != null ? qna.memberId : qna.memberNo}">chh***</td>
-                    </tr>
+                        <td th:text="${qna.name != null ? qna.name : qna.memberNo}">홍길동</td>                    </tr>
                     <tr>
                         <th>작성일</th>
                         <td th:text="${qna.regDate != null ? #temporals.format(qna.regDate, 'yyyy.MM.dd HH:mm') : '-'}">0000.00.00</td>

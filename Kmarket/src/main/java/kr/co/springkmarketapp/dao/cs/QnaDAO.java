@@ -11,6 +11,9 @@ public interface QnaDAO {
     int insertQna(QnaDTO qnaDTO);
     QnaDTO selectQna(Long qnaNo);
     List<QnaDTO> selectQnaList();
+
+    // 관리자페이지에서의 parent 1차,2차 카테고리 조회
+    List<QnaDTO> selectAdminQnaList();
     int updateQna(QnaDTO qnaDTO);
     int deleteQna(Long qnaNo);
 

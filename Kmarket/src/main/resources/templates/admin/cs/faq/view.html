@@ -113,9 +113,8 @@
                     <tr>
                         <th>유형</th>
                         <td>
-                            <span th:text="${faq.cate1Name != null ? faq.cate1Name : '-'}">회원</span>
-                            <span> - </span>
-                            <span th:text="${faq.cate2Name != null ? faq.cate2Name : '-'}">가입</span>
+                            <span th:text="${faq.parentCateName != null ? faq.parentCateName : '-'}">회원</span>
+                            <span th:text="${faq.cateName != null ? faq.cateName : '-'}">가입</span>
                         </td>
                     </tr>
                     <tr>

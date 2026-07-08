@@ -139,13 +139,12 @@
                         <tr th:each="qna : ${qnaList}">
                             <td><input type="checkbox" name="qnaNos" class="qna-check" th:value="${qna.qnaNo}"></td>
                             <td th:text="${qna.qnaNo}">120</td>
-                            <td th:text="${qna.cate1Name != null ? qna.cate1Name : '-'}">회원</td>
-                            <td th:text="${qna.cate2Name != null ? qna.cate2Name : '-'}">가입</td>
+                            <td th:text="${qna.parentCateName != null ? qna.parentCateName : '-'}">회원</td>
+                            <td th:text="${qna.cateName != null ? qna.cateName : '-'}">가입</td>
                             <td class="title-cell">
                                 <a th:href="@{/admin/cs/qna/view(qnaNo=${qna.qnaNo})}" th:text="${qna.title}">문의 제목</a>
                             </td>
-                            <td th:text="${qna.memberId != null ? qna.memberId : qna.memberNo}">chh***</td>
-                            <td th:text="${qna.regDate != null ? #temporals.format(qna.regDate, 'yy.MM.dd') : '-'}">00.00.00</td>
+                            <td th:text="${qna.name != null ? qna.name : qna.memberNo}">홍길동</td>                            <td th:text="${qna.regDate != null ? #temporals.format(qna.regDate, 'yy.MM.dd') : '-'}">00.00.00</td>
                             <td th:class="${qna.status == '답변완료' ? 'state-complete' : 'state-ready'}">
                                 <a th:if="${qna.status != '답변완료'}" th:href="@{/admin/cs/qna/reply(qnaNo=${qna.qnaNo})}" th:text="${qna.status != null ? qna.status : '검토중'}">검토중</a>
                                 <span th:unless="${qna.status != '답변완료'}">답변완료</span>
