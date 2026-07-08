@@ -5,7 +5,11 @@ import kr.co.springkmarketapp.dto.cs.FaqDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,11 +38,32 @@ public class FaqService {
         return faqDAO.deleteFaq(faqNo);
     }
 
-    public int countFaq() {
-        return faqDAO.countFaq();
+    public int countFaq(int parentNo) {
+        return faqDAO.countFaq(parentNo);
     }
 
-    public List<FaqDTO> selectFaqList(int offset, int size) {
-        return faqDAO.selectFaqListPaging(offset, size);
+    public List<FaqDTO> selectFaqListByParent(int parentNo) {
+        return faqDAO.selectFaqListByParent(parentNo);
+    }
+
+    public Map<String, List<FaqDTO>> selectFaqGroup(int parentNo){
+
+        List<FaqDTO> list = faqDAO.selectFaqListByParent(parentNo);
+        System.out.println(list);
+
+        Map<String, List<FaqDTO>> result = new LinkedHashMap<>();
+
+        for(FaqDTO faq : list){
+
+            String cate = faq.getCateName();
+
+            if(!result.containsKey(cate)){
+                result.put(cate, new ArrayList<>());
+            }
+
+            result.get(cate).add(faq);
+        }
+
+        return result;
     }
 }

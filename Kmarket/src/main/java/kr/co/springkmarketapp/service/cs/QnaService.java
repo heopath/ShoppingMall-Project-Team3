@@ -32,4 +32,12 @@ public class QnaService {
     public int deleteQna(Long qnaNo) {
         return qnaDAO.deleteQna(qnaNo);
     }
+
+    public int countQna(int parentNo) {
+        return qnaDAO.countQna(parentNo);
+    }
+
+    public List<QnaDTO> selectQnaListLimit(int parentNo, int offset, int size) {
+        return qnaDAO.selectQnaListLimit(parentNo, offset, size);
+    }
 }

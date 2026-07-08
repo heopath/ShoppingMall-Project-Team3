@@ -108,4 +108,6 @@ public class MemberService {
     public MemberDTO selectMemberByMemberId(String memberId) {
         return memberDAO.selectMemberByMemberId(memberId);
     }
+
+
 }

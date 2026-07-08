@@ -4,13 +4,16 @@ import kr.co.springkmarketapp.dto.cs.FaqDTO;
 import kr.co.springkmarketapp.service.cs.FaqService;
 import kr.co.springkmarketapp.util.PageHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class CsFaqController {
@@ -18,19 +21,12 @@ public class CsFaqController {
     private final FaqService faqService;
 
     @GetMapping("/cs/faq/list")
-    public String faqList(
-            @RequestParam(defaultValue = "1") int pg,
-            Model model) {
+    public String faqList(Model model){
 
-        int total = faqService.countFaq();
+        Map<String, List<FaqDTO>> faqMap =
+                faqService.selectFaqGroup(1);
 
-        PageHandler page = new PageHandler(pg, total, 10);
-
-        List<FaqDTO> faqDTOList =
-                faqService.selectFaqList(page.getOffset(), 10);
-
-        model.addAttribute("faqDTOList", faqDTOList);
-        model.addAttribute("page", page);
+        model.addAttribute("faqMap", faqMap);
 
         return "cs/faq/list";
     }

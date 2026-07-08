@@ -327,4 +327,23 @@
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
+
+    <select id="countCompanyName" resultType="int">
+        SELECT COUNT(*)
+        FROM seller_profile
+        WHERE company_name = #{companyName}
+    </select>
+
+    <select id="countOnlineSaleNo" resultType="int">
+        SELECT COUNT(*)
+        FROM seller_profile
+        WHERE online_sale_no = #{onlineSaleNo}
+    </select>
+
+    <select id="countTel" resultType="int">
+        SELECT COUNT(*)
+        FROM seller_profile
+        WHERE tel = #{tel}
+    </select>
+
 </mapper>
