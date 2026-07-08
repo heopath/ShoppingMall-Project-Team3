@@ -94,14 +94,14 @@
 
             <section class="product-list-section">
                 <div class="product-search-wrap">
-                    <select>
-                        <option>상품명</option>
-                        <option>상품코드</option>
-                        <option>판매자</option>
-                        <option>카테고리</option>
+                    <select id="searchType">
+                        <option value="productName" th:selected="${searchType == 'productName' or searchType == null}">상품명</option>
+                        <option value="productNo" th:selected="${searchType == 'productNo'}">상품코드</option>
+                        <option value="sellerName" th:selected="${searchType == 'sellerName'}">판매자</option>
+                        <option value="cateName" th:selected="${searchType == 'cateName'}">카테고리</option>
                     </select>
-                    <input type="text" placeholder="키워드입력">
-                    <button type="button" class="product-search-btn">검색</button>
+                    <input type="text" id="keyword" th:value="${keyword}" placeholder="키워드입력">
+                    <button type="button" class="product-search-btn" onclick="searchProduct()">검색</button>
                 </div>
 
                 <table class="product-table">
@@ -121,72 +121,29 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><div class="thumb-box">이미지</div></td>
-                        <td>201603292</td>
-                        <td class="product-name">상품명 #1</td>
-                        <td>32,000</td>
-                        <td>10%</td>
-                        <td>320</td>
-                        <td>1,000</td>
-                        <td>(주)<br>다짜고</td>
-                        <td>120</td>
-                        <td class="manage-cell">
-                            <a href="#">[보기]</a>
-                            <a href="#">[수정]</a>
-                            <a href="#">[삭제]</a>
-                        </td>
+                    <tr th:if="${#lists.isEmpty(products)}">
+                        <td colspan="11" style="text-align:center; padding:20px;">등록된 상품이 없습니다.</td>
                     </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><div class="thumb-box">이미지</div></td>
-                        <td>201603292</td>
-                        <td class="product-name">상품명 #2</td>
-                        <td>32,000</td>
-                        <td>5%</td>
-                        <td>200</td>
-                        <td>1,000</td>
-                        <td>(주)<br>다짜고</td>
-                        <td>120</td>
-                        <td class="manage-cell">
-                            <a href="#">[보기]</a>
-                            <a href="#">[수정]</a>
-                            <a href="#">[삭제]</a>
+                    <tr th:each="p : ${products}">
+                        <td><input type="checkbox" th:value="${p.productNo}" name="productCheckbox"></td>
+                        <td>
+                            <div class="thumb-box">
+                                <img th:if="${p.thumbPath != null}" th:src="${p.thumbPath}" width="60">
+                                <span th:if="${p.thumbPath == null}">이미지없음</span>
+                            </div>
                         </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><div class="thumb-box">이미지</div></td>
-                        <td>201603292</td>
-                        <td class="product-name">상품명 #3</td>
-                        <td>32,000</td>
+                        <td th:text="${p.productNo}"></td>
+                        <td class="product-name" th:text="${p.productName}"></td>
+                        <td th:text="${#numbers.formatInteger(p.price, 0, 'COMMA')}"></td>
+                        <td th:text="${p.discountRate != null and p.discountRate > 0} ? ${p.discountRate} + '%' : '-'"></td>
+                        <td th:text="${p.point}"></td>
+                        <td th:text="${p.stock}"></td>
+                        <td th:text="${p.sellerName}"></td>
                         <td>-</td>
-                        <td>100</td>
-                        <td>1,000</td>
-                        <td>(주)<br>다짜고</td>
-                        <td>120</td>
                         <td class="manage-cell">
-                            <a href="#">[보기]</a>
-                            <a href="#">[수정]</a>
-                            <a href="#">[삭제]</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td><div class="thumb-box">이미지</div></td>
-                        <td>201603292</td>
-                        <td class="product-name">상품명 #4</td>
-                        <td>32,000</td>
-                        <td>15%</td>
-                        <td>300</td>
-                        <td>1,000</td>
-                        <td>(주)<br>다짜고</td>
-                        <td>120</td>
-                        <td class="manage-cell">
-                            <a href="#">[보기]</a>
-                            <a href="#">[수정]</a>
-                            <a href="#">[삭제]</a>
+                            <a href="#" th:onclick="|viewProduct(${p.productNo}); return false;|">[보기]</a>
+                            <a href="#" th:onclick="|modifyProduct(${p.productNo}); return false;|">[수정]</a>
+                            <a href="#" th:onclick="|stopProduct(${p.productNo}); return false;|">[삭제]</a>
                         </td>
                     </tr>
                     </tbody>
@@ -196,19 +153,92 @@
                     <button type="button" class="product-delete-btn">선택삭제</button>
 
                     <div class="product-pagination">
-                        <a href="#">이전</a>
-                        <a href="#" class="active">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">다음</a>
+                        <a th:if="${startPage > 1}"
+                           th:href="@{/admin/product/list(page=${startPage - 1}, searchType=${searchType}, keyword=${keyword})}">이전</a>
+
+                        <th:block th:if="${endPage >= startPage}">
+                            <a th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                               th:href="@{/admin/product/list(page=${i}, searchType=${searchType}, keyword=${keyword})}"
+                               th:text="${i}"
+                               th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                        </th:block>
+
+                        <a th:if="${endPage < totalPages}"
+                           th:href="@{/admin/product/list(page=${endPage + 1}, searchType=${searchType}, keyword=${keyword})}">다음</a>
                     </div>
 
                     <a href="/admin/product/register" class="product-register-btn">상품등록</a>
                 </div>
             </section>
+
+            <!-- 상세보기 모달 -->
+            <div id="viewModal" class="modal-overlay" style="display:none;">
+                <div class="modal-box">
+                    <button type="button" class="modal-close" onclick="closeModal('viewModal')">×</button>
+                    <h3>상품 상세보기</h3>
+                    <div id="viewContent"></div>
+                </div>
+            </div>
         </main>
+    </div>
+
+    <!-- 수정 모달 -->
+    <div id="modifyModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <button type="button" class="modal-close" onclick="closeModal('modifyModal')">×</button>
+            <h3>상품 수정</h3>
+            <form id="modifyForm" enctype="multipart/form-data">
+                <input type="hidden" name="productNo" id="mod_productNo">
+
+                <table class="register-table">
+                    <tr>
+                        <th>1차 분류</th>
+                        <td><select id="mod_cate1"><option value="">1차분류 선택</option></select></td>
+                    </tr>
+                    <tr>
+                        <th>2차 분류</th>
+                        <td><select id="mod_cate2" name="cateNo"><option value="">2차분류 선택</option></select></td>
+                    </tr>
+                    <tr><th>상품명</th><td><input type="text" name="productName" id="mod_productName" class="text-input"></td></tr>
+                    <tr><th>기본설명</th><td><input type="text" name="basicDesc" id="mod_basicDesc" class="text-input"></td></tr>
+                    <tr><th>제조사</th><td><input type="text" name="brand" id="mod_brand" class="text-input"></td></tr>
+                    <tr><th>가격</th><td><input type="number" name="price" id="mod_price" class="text-input small-input"></td></tr>
+                    <tr><th>할인율</th><td><input type="number" name="discountRate" id="mod_discountRate" class="text-input small-input"></td></tr>
+                    <tr><th>포인트</th><td><input type="number" name="point" id="mod_point" class="text-input small-input"></td></tr>
+                    <tr><th>재고</th><td><input type="number" name="stock" id="mod_stock" class="text-input small-input"></td></tr>
+                    <tr><th>배송비</th><td><input type="number" name="deliveryFee" id="mod_deliveryFee" class="text-input small-input"></td></tr>
+                    <tr>
+                        <th>이미지 교체</th>
+                        <td>
+                            <div class="file-row-inline">
+                                <span class="file-label">THUMB1</span>
+                                <input type="file" name="thumb1">
+                            </div>
+                            <div class="file-row-inline">
+                                <span class="file-label">THUMB2</span>
+                                <input type="file" name="thumb2">
+                            </div>
+                            <div class="file-row-inline">
+                                <span class="file-label">THUMB3</span>
+                                <input type="file" name="thumb3">
+                            </div>
+                            <div class="file-row-inline">
+                                <span class="file-label">상세</span>
+                                <input type="file" name="detailImages" multiple>
+                            </div>
+                            <span class="file-guide-small">비워두면 기존 이미지가 유지됩니다.</span>
+                        </td>
+                    </tr>
+                    <tr><th>상품상태</th><td><input type="text" name="productStatus" id="mod_productStatus" class="text-input"></td></tr>
+                    <tr><th>부가세</th><td><input type="text" name="taxType" id="mod_taxType" class="text-input"></td></tr>
+                    <tr><th>영수증발행</th><td><input type="text" name="receiptType" id="mod_receiptType" class="text-input"></td></tr>
+                    <tr><th>사업자구분</th><td><input type="text" name="businessType" id="mod_businessType" class="text-input"></td></tr>
+                    <tr><th>원산지</th><td><input type="text" name="origin" id="mod_origin" class="text-input"></td></tr>
+                </table>
+
+                <button type="button" class="submit-btn" onclick="submitModify()">수정저장</button>
+            </form>
+        </div>
     </div>
 
     <th:block th:replace="~{common/_admin_footer :: footer}"></th:block>
@@ -225,6 +255,177 @@
             clickedTitle.classList.add("active");
         }
     }
+
+    function stopProduct(no) {
+        if (!confirm('이 상품을 판매중지 처리하시겠습니까?')) return;
+        const fd = new FormData();
+        fd.append('no', no);
+        fetch('/admin/product/stop', { method: 'POST', body: fd })
+            .then(res => res.json())
+            .then(data => { alert(data.message); if (data.status === 'success') location.reload(); });
+    }
+
+    document.querySelector('.product-delete-btn').addEventListener('click', function () {
+        const checked = document.querySelectorAll('input[name="productCheckbox"]:checked');
+        if (checked.length === 0) { alert('처리할 상품을 선택하세요.'); return; }
+        if (!confirm(checked.length + '개 상품을 판매중지 처리하시겠습니까?')) return;
+
+        const fd = new FormData();
+        checked.forEach(c => fd.append('nos', c.value));
+        fetch('/admin/product/stop-multi', { method: 'POST', body: fd })
+            .then(res => res.json())
+            .then(data => { alert(data.message); if (data.status === 'success') location.reload(); });
+    });
+
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function viewProduct(no) {
+        fetch(`/admin/product/detail?no=${no}`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data.product) {
+                    alert('상품 정보를 불러오지 못했습니다.');
+                    console.error('응답 확인:', data);
+                    return;
+                }
+
+                const p = data.product;
+                const images = data.images;
+                const notice = data.notice;
+
+                let html = `
+                <table class="register-table">
+                    <tr><th>상품명</th><td>${p.productName}</td></tr>
+                    <tr><th>기본설명</th><td>${p.basicDesc ?? ''}</td></tr>
+                    <tr><th>제조사</th><td>${p.brand ?? ''}</td></tr>
+                    <tr><th>가격</th><td>${p.price.toLocaleString()}원</td></tr>
+                    <tr><th>할인율</th><td>${p.discountRate ?? 0}%</td></tr>
+                    <tr><th>재고</th><td>${p.stock}</td></tr>
+                    <tr><th>상태</th><td>${p.status}</td></tr>
+                </table>
+                <h4>이미지</h4>
+                <div class="modal-thumb-wrap">
+                    ${images.map(img => `<img src="${img.imagePath}">`).join('')}
+                </div>
+            `;
+
+                if (notice) {
+                    html += `
+                    <h4>제공고시</h4>
+                    <table class="register-table">
+                        <tr><th>상품상태</th><td>${notice.productStatus ?? ''}</td></tr>
+                        <tr><th>부가세</th><td>${notice.taxType ?? ''}</td></tr>
+                        <tr><th>원산지</th><td>${notice.origin ?? ''}</td></tr>
+                    </table>
+                `;
+                }
+
+                document.getElementById('viewContent').innerHTML = html;
+                openModal('viewModal');
+            })
+            .catch(err => console.error('viewProduct 에러:', err));
+    }
+
+    function modifyProduct(no) {
+        fetch(`/admin/product/detail?no=${no}`)
+            .then(res => res.json())
+            .then(async data => {
+                if (!data.product) {
+                    alert('상품 정보를 불러오지 못했습니다.');
+                    console.error('응답 확인:', data);
+                    return;
+                }
+
+                const p = data.product;
+                const notice = data.notice;
+
+                document.getElementById('mod_productNo').value = p.productNo;
+                document.getElementById('mod_productName').value = p.productName ?? '';
+                document.getElementById('mod_basicDesc').value = p.basicDesc ?? '';
+                document.getElementById('mod_brand').value = p.brand ?? '';
+                document.getElementById('mod_price').value = p.price ?? '';
+                document.getElementById('mod_discountRate').value = p.discountRate ?? '';
+                document.getElementById('mod_point').value = p.point ?? '';
+                document.getElementById('mod_stock').value = p.stock ?? '';
+                document.getElementById('mod_deliveryFee').value = p.deliveryFee ?? '';
+
+                if (notice) {
+                    document.getElementById('mod_productStatus').value = notice.productStatus ?? '';
+                    document.getElementById('mod_taxType').value = notice.taxType ?? '';
+                    document.getElementById('mod_receiptType').value = notice.receiptType ?? '';
+                    document.getElementById('mod_businessType').value = notice.businessType ?? '';
+                    document.getElementById('mod_origin').value = notice.origin ?? '';
+                }
+
+                // 1차 카테고리 목록 로드
+                const mainList = await fetch('/admin/config/category/main-list').then(r => r.json());
+                const cate1 = document.getElementById('mod_cate1');
+                cate1.innerHTML = '<option value="">1차분류 선택</option>';
+                mainList.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.cateNo; opt.textContent = c.cateName;
+                    cate1.appendChild(opt);
+                });
+
+                // 현재 상품의 부모 카테고리 찾기
+                const currentCate = await fetch(`/admin/config/category/detail?cateNo=${p.cateNo}`).then(r => r.json());
+                cate1.value = currentCate.parentNo;
+
+                // 2차 목록 로드 후 현재 값 선택
+                const subList = await fetch(`/admin/config/category/sub-list?parentNo=${currentCate.parentNo}`).then(r => r.json());
+                const cate2 = document.getElementById('mod_cate2');
+                cate2.innerHTML = '<option value="">2차분류 선택</option>';
+                subList.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.cateNo; opt.textContent = c.cateName;
+                    cate2.appendChild(opt);
+                });
+                cate2.value = p.cateNo;
+
+                openModal('modifyModal');
+            })
+            .catch(err => console.error('modifyProduct 에러:', err));
+    }
+
+    document.getElementById('mod_cate1').addEventListener('change', function () {
+        const parentNo = this.value;
+        const cate2 = document.getElementById('mod_cate2');
+        cate2.innerHTML = '<option value="">2차분류 선택</option>';
+        if (!parentNo) return;
+        fetch(`/admin/config/category/sub-list?parentNo=${parentNo}`)
+            .then(res => res.json())
+            .then(data => data.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.cateNo; opt.textContent = c.cateName;
+                cate2.appendChild(opt);
+            }));
+    });
+
+    function submitModify() {
+        const form = document.getElementById('modifyForm');
+        const formData = new FormData(form);
+
+        fetch('/admin/product/modify', { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === 'success') location.reload();
+            });
+    }
+
+    function searchProduct() {
+        const type = document.getElementById('searchType').value;
+        const keyword = document.getElementById('keyword').value.trim();
+        const params = new URLSearchParams({ page: 1, searchType: type, keyword: keyword });
+        location.href = '/admin/product/list?' + params.toString();
+    }
+
+    // 엔터키로도 검색되게
+    document.getElementById('keyword').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') searchProduct();
+    });
+
 </script>
 
 </body>

@@ -38,4 +38,9 @@ public class ProductDTO {
     private String receiptType;
     private String businessType;
     private String origin;
+
+    // ▼ 목록 조회 전용 (JOIN 결과, DB 컬럼 아님)
+    private String cateName;
+    private String sellerName;
+    private String thumbPath;
 }
