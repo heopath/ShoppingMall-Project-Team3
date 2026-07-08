@@ -103,8 +103,13 @@
     color: #fff;
 }
 
+/* 하단 컨트롤 및 공통 페이지네이션 */
 .coupon-bottom {
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
     min-height: 55px;
     margin-top: 15px;
 }
@@ -133,17 +138,6 @@
     color: #fff;
     font-size: 12px;
     cursor: pointer;
-}
-
-.pagination {
-    padding-top: 9px;
-    text-align: center;
-}
-
-.pagination a {
-    margin: 0 5px;
-    color: #111;
-    font-size: 12px;
 }
 
 /* =========================================================
@@ -328,3 +322,48 @@
 .green-btn:hover {
     background: #23943a;
 }
+
+.coupon-search-form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.alert-message {
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    background: #eef8ee;
+    border: 1px solid #b9dfb9;
+    color: #237023;
+    font-size: 12px;
+}
+
+.alert-error {
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    background: #fff0f0;
+    border: 1px solid #efb7b7;
+    color: #b00000;
+    font-size: 12px;
+}
+
+.state.green {
+    color: #19a64a;
+    font-weight: bold;
+}
+
+.state.red {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.state.gray {
+    color: #777;
+    font-weight: bold;
+}
+
+.coupon-form-table .small-input {
+    width: 90px !important;
+    margin-right: 8px;
+}
+

@@ -297,3 +297,72 @@
     display: block;
 }
 
+
+
+/* notice 기능 연결 후 추가 스타일 */
+.notice-search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.notice-form-table select.type-input {
+    width: 120px;
+    height: 30px;
+    padding: 0 8px;
+    border: 1px solid #bdbdbd;
+    font-size: 12px;
+    background: #fff;
+}
+
+.notice-bottom .pagination {
+    justify-content: center;
+    padding-top: 8px;
+}
+
+.notice-bottom .pagination a.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.notice-bottom .pagination .disabled {
+    color: #aaa;
+}
+
+.manage-cell .link-btn {
+    display: block;
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #111;
+    font-size: 12px;
+    line-height: 17px;
+    cursor: pointer;
+}
+
+.manage-cell .link-btn:hover {
+    text-decoration: underline;
+}
+
+.alert-success,
+.alert-error {
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    font-size: 12px;
+}
+
+.alert-success {
+    border: 1px solid #b7dfb7;
+    background: #f0fff0;
+    color: #2d7a2d;
+}
+
+.alert-error {
+    border: 1px solid #f0b8b8;
+    background: #fff5f5;
+    color: #b00020;
+}
+
+.notice-view-table .view-content {
+    white-space: pre-line;
+}

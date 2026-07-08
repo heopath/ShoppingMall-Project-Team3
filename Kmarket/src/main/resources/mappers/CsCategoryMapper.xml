@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.cs.CsCategoryDAO">
+
+    <select id="selectCsCategoryList" resultType="kr.co.springkmarketapp.dto.cs.CsCategoryDTO">
+        SELECT
+            cs_cate_no AS csCateNo,
+            parent_no AS parentNo,
+            cate_name AS cateName,
+            depth,
+            sort_order AS sortOrder,
+            use_yn AS useYn
+        FROM cs_category
+        WHERE use_yn = 'Y'
+        ORDER BY depth ASC, sort_order ASC, cs_cate_no ASC
+    </select>
+
+    <select id="selectCsCategory" parameterType="int" resultType="kr.co.springkmarketapp.dto.cs.CsCategoryDTO">
+        SELECT
+            cs_cate_no AS csCateNo,
+            parent_no AS parentNo,
+            cate_name AS cateName,
+            depth,
+            sort_order AS sortOrder,
+            use_yn AS useYn
+        FROM cs_category
+        WHERE cs_cate_no = #{csCateNo}
+    </select>
+
+    <insert id="insertCsCategory" parameterType="kr.co.springkmarketapp.dto.cs.CsCategoryDTO" useGeneratedKeys="true" keyProperty="csCateNo">
+        INSERT INTO cs_category(parent_no, cate_name, depth, sort_order, use_yn)
+        VALUES(#{parentNo}, #{cateName}, COALESCE(#{depth}, 1), COALESCE(#{sortOrder}, 0), COALESCE(#{useYn}, 'Y'))
+    </insert>
+
+    <update id="updateCsCategory" parameterType="kr.co.springkmarketapp.dto.cs.CsCategoryDTO">
+        UPDATE cs_category
+        SET parent_no = #{parentNo},
+            cate_name = #{cateName},
+            depth = #{depth},
+            sort_order = #{sortOrder},
+            use_yn = #{useYn}
+        WHERE cs_cate_no = #{csCateNo}
+    </update>
+
+    <delete id="deleteCsCategory" parameterType="int">
+        DELETE FROM cs_category WHERE cs_cate_no = #{csCateNo}
+    </delete>
+</mapper>

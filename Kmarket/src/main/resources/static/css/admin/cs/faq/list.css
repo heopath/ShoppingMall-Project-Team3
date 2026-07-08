@@ -258,3 +258,59 @@
     padding-bottom: 38px;
     white-space: pre-line;
 }
+
+
+/* FAQ 기능 연결 후 추가 스타일 */
+.faq-search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.faq-reset-btn {
+    display: inline-block;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 10px;
+    border: 1px solid #bbb;
+    background: #fff;
+    color: #333;
+    font-size: 12px;
+}
+
+.faq-reset-btn:hover {
+    text-decoration: underline;
+}
+
+.faq-bottom .pagination {
+    justify-content: center;
+    padding-top: 8px;
+}
+
+.faq-bottom .pagination a.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.faq-bottom .pagination .disabled {
+    color: #aaa;
+}
+
+.manage-cell .link-btn {
+    display: block;
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #111;
+    font-size: 12px;
+    line-height: 18px;
+    cursor: pointer;
+}
+
+.manage-cell .link-btn:hover {
+    text-decoration: underline;
+}
+
+.faq-view-btn-area form .btn-gray {
+    margin-right: 6px;
+}

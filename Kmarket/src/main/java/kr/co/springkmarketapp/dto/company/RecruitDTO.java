@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class RecruitDTO {
     private Integer recruitNo;
     private Integer writerNo;
+    private String writerId;
     private String title;
     private String department;
     private String career;

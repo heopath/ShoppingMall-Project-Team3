@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>채용하기 목록</title>
-    <link rel="stylesheet" href="../../../css/admin/admin-common.css">
-    <link rel="stylesheet" href="../../../css/admin/cs/recruit/list.css">
+    <title>채용관리 목록</title>
+    <link rel="stylesheet" th:href="@{/css/admin/admin-common.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/cs/recruit/list.css}">
 </head>
 <body>
 
@@ -14,9 +14,9 @@
         <div class="logo">CI ( 로고 )</div>
 
         <div class="top-menu">
-            <a href="/">홈</a>
-            <a href="/logout">로그아웃</a>
-            <a href="/cs">고객센터</a>
+            <a th:href="@{/}">홈</a>
+            <a th:href="@{/logout}">로그아웃</a>
+            <a th:href="@{/cs/index}">고객센터</a>
         </div>
     </header>
 
@@ -30,11 +30,11 @@
                 </li>
                 <li class="sub-menu-wrap close" id="configMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/config/basic">- 기본설정</a></li>
-                        <li class="sub-menu"><a href="/admin/config/banner">- 배너관리</a></li>
-                        <li class="sub-menu"><a href="/admin/config/policy">- 약관관리</a></li>
-                        <li class="sub-menu"><a href="/admin/config/category">- 카테고리</a></li>
-                        <li class="sub-menu"><a href="/admin/config/version">- 버전관리</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/config/basic}">- 기본설정</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/config/banner}">- 배너관리</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/config/policy}">- 약관관리</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/config/category}">- 카테고리</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/config/version}">- 버전관리</a></li>
                     </ul>
                 </li>
 
@@ -43,8 +43,8 @@
                 </li>
                 <li class="sub-menu-wrap close" id="shopMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/shop/list">- 상점목록</a></li>
-                        <li class="sub-menu"><a href="/admin/shop/sales">- 매출현황</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/shop/list}">- 상점목록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/shop/sales}">- 매출현황</a></li>
                     </ul>
                 </li>
 
@@ -53,7 +53,7 @@
                 </li>
                 <li class="sub-menu-wrap close" id="memberMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/member/list">- 회원목록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/member/list}">- 회원목록</a></li>
                     </ul>
                 </li>
 
@@ -62,8 +62,8 @@
                 </li>
                 <li class="sub-menu-wrap close" id="productMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/product/list">- 상품목록</a></li>
-                        <li class="sub-menu"><a href="/admin/product/register">- 상품등록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/product/list}">- 상품목록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/product/register}">- 상품등록</a></li>
                     </ul>
                 </li>
 
@@ -72,7 +72,7 @@
                 </li>
                 <li class="sub-menu-wrap close" id="orderMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/order/list">- 주문목록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/order/list}">- 주문목록</a></li>
                     </ul>
                 </li>
 
@@ -81,8 +81,8 @@
                 </li>
                 <li class="sub-menu-wrap close" id="couponMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/coupon/list">- 쿠폰목록</a></li>
-                        <li class="sub-menu"><a href="/admin/coupon/issued">- 쿠폰발급현황</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/coupon/list}">- 쿠폰목록</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/coupon/issued}">- 쿠폰발급현황</a></li>
                     </ul>
                 </li>
 
@@ -91,10 +91,10 @@
                 </li>
                 <li class="sub-menu-wrap" id="csMenu">
                     <ul class="sub-menu-list">
-                        <li class="sub-menu"><a href="/admin/cs/notice/list">- 공지사항</a></li>
-                        <li class="sub-menu"><a href="/admin/cs/faq/list">- 자주묻는질문</a></li>
-                        <li class="sub-menu"><a href="/admin/cs/qna/list">- 문의하기</a></li>
-                        <li class="sub-menu active"><a href="/admin/cs/recruit/list">- 채용관리</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/cs/notice/list}">- 공지사항</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/cs/faq/list}">- 자주묻는질문</a></li>
+                        <li class="sub-menu"><a th:href="@{/admin/cs/qna/list}">- 문의하기</a></li>
+                        <li class="sub-menu active"><a th:href="@{/admin/cs/recruit/list}">- 채용관리</a></li>
                     </ul>
                 </li>
 
@@ -104,118 +104,114 @@
         <main class="content">
 
             <div class="page-title">
-                <h2>채용하기 목록</h2>
-                <span>HOME &gt; 고객센터 &gt; 채용하기</span>
+                <h2>채용관리 목록</h2>
+                <span>HOME &gt; 고객센터 &gt; 채용관리</span>
             </div>
 
             <section class="recruit-section">
 
-                <div class="recruit-search">
-                    <select>
-                        <option>채용부서</option>
-                        <option>IT</option>
-                        <option>경영지원</option>
-                        <option>영업</option>
-                        <option>마케팅</option>
+                <form id="recruitSearchForm" class="recruit-search" th:action="@{/admin/cs/recruit/list}" method="get">
+                    <select name="searchType">
+                        <option value="" th:selected="${searchType == null or searchType == ''}">전체</option>
+                        <option value="department" th:selected="${searchType == 'department'}">채용부서</option>
+                        <option value="title" th:selected="${searchType == 'title'}">제목</option>
+                        <option value="career" th:selected="${searchType == 'career'}">경력사항</option>
+                        <option value="recruitType" th:selected="${searchType == 'recruitType'}">채용형태</option>
                     </select>
-                    <input type="text" placeholder="검색어입력">
-                    <button type="button" class="recruit-search-btn">검색</button>
-                </div>
+                    <input type="text" name="keyword" placeholder="검색어입력" th:value="${keyword}">
+                    <select name="status" onchange="document.getElementById('recruitSearchForm').submit()">
+                        <option value="" th:selected="${status == null or status == ''}">상태 전체</option>
+                        <option value="모집중" th:selected="${status == '모집중'}">모집중</option>
+                        <option value="마감" th:selected="${status == '마감'}">마감</option>
+                    </select>
+                    <button type="submit" class="recruit-search-btn">검색</button>
+                </form>
 
-                <table class="recruit-table">
-                    <thead>
-                    <tr>
-                        <th class="check-cell"><input type="checkbox"></th>
-                        <th>번호</th>
-                        <th>채용부서</th>
-                        <th>경력사항</th>
-                        <th>채용형태</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>상태</th>
-                        <th>모집기간</th>
-                        <th>작성일</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>120</td>
-                        <td>도서</td>
-                        <td>경력 4 ~ 5년</td>
-                        <td>정규직</td>
-                        <td class="title-cell">코드 검토역 기획</td>
-                        <td>관리자</td>
-                        <td class="status-open">모집중</td>
-                        <td>0000-00-00<br>~ 0000-00-00</td>
-                        <td>0000-00-00<br>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>119</td>
-                        <td>IT</td>
-                        <td>경력 2 ~ 3년</td>
-                        <td>정규직</td>
-                        <td class="title-cell">IT 개발 서버 정규직 채용</td>
-                        <td>관리자</td>
-                        <td class="status-open">모집중</td>
-                        <td>0000-00-00<br>~ 0000-00-00</td>
-                        <td>0000-00-00<br>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>118</td>
-                        <td>운영</td>
-                        <td>무관</td>
-                        <td>계약직</td>
-                        <td class="title-cell">단기 아르바이트 모집</td>
-                        <td>관리자</td>
-                        <td>마감</td>
-                        <td>0000-00-00<br>~ 0000-00-00</td>
-                        <td>0000-00-00<br>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>117</td>
-                        <td>경영</td>
-                        <td>신입</td>
-                        <td>계약직</td>
-                        <td class="title-cell">경력지원 부분 공개 채용</td>
-                        <td>관리자</td>
-                        <td>마감</td>
-                        <td>0000-00-00<br>~ 0000-00-00</td>
-                        <td>0000-00-00<br>00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>113</td>
-                        <td>IT</td>
-                        <td>경력</td>
-                        <td>정규직</td>
-                        <td class="title-cell">웹 개발자 경력직 채용</td>
-                        <td>관리자</td>
-                        <td class="status-open">모집중</td>
-                        <td>0000-00-00<br>~ 0000-00-00</td>
-                        <td>0000-00-00<br>00:00:00</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <form id="recruitDeleteForm" th:action="@{/admin/cs/recruit/delete}" method="post">
+                    <input type="hidden" name="page" th:value="${currentPage}">
+                    <input type="hidden" name="searchType" th:value="${searchType}">
+                    <input type="hidden" name="keyword" th:value="${keyword}">
+                    <input type="hidden" name="status" th:value="${status}">
 
-                <div class="recruit-bottom">
-                    <button type="button" class="recruit-delete-btn">선택삭제</button>
+                    <table class="recruit-table">
+                        <thead>
+                        <tr>
+                            <th class="check-cell"><input type="checkbox" id="checkAll" onclick="toggleAll(this)"></th>
+                            <th>번호</th>
+                            <th>채용부서</th>
+                            <th>경력사항</th>
+                            <th>채용형태</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>상태</th>
+                            <th>모집기간</th>
+                            <th>작성일</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(recruitList)}">
+                            <td colspan="10">등록된 채용공고가 없습니다.</td>
+                        </tr>
+                        <tr th:each="recruit : ${recruitList}">
+                            <td><input type="checkbox" name="recruitNos" th:value="${recruit.recruitNo}"></td>
+                            <td th:text="${recruit.recruitNo}">120</td>
+                            <td th:text="${recruit.department}">IT</td>
+                            <td th:text="${recruit.career}">경력</td>
+                            <td th:text="${recruit.recruitType}">정규직</td>
+                            <td class="title-cell">
+                                <button type="button"
+                                        class="recruit-title-btn"
+                                        th:text="${recruit.title}"
+                                        th:attr="data-recruit-no=${recruit.recruitNo},
+                                                 data-title=${recruit.title},
+                                                 data-department=${recruit.department},
+                                                 data-career=${recruit.career},
+                                                 data-recruit-type=${recruit.recruitType},
+                                                 data-start-date=${recruit.startDate},
+                                                 data-end-date=${recruit.endDate},
+                                                 data-note=${recruit.note},
+                                                 data-status=${recruit.status}"
+                                        onclick="openModifyModal(this)">웹 개발자 채용</button>
+                            </td>
+                            <td th:text="${recruit.writerId != null ? recruit.writerId : '관리자'}">관리자</td>
+                            <td>
+                                <select class="status-select"
+                                        th:attr="data-recruit-no=${recruit.recruitNo}"
+                                        onchange="changeRecruitStatus(this)">
+                                    <option value="모집중" th:selected="${recruit.status == '모집중'}">모집중</option>
+                                    <option value="마감" th:selected="${recruit.status == '마감'}">마감</option>
+                                </select>
+                            </td>
+                            <td>
+                                <span th:text="${recruit.startDate}">0000-00-00</span><br>
+                                ~ <span th:text="${recruit.endDate}">0000-00-00</span>
+                            </td>
+                            <td th:text="${#temporals.format(recruit.regDate, 'yyyy-MM-dd HH:mm:ss')}">0000-00-00 00:00:00</td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                    <div class="recruit-pagination">
-                        <a href="#">이전</a>
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">다음</a>
+                    <div class="recruit-bottom">
+                        <button type="button" class="recruit-delete-btn" onclick="deleteSelectedRecruits()">선택삭제</button>
+
+                        <div class="recruit-pagination">
+                            <a th:if="${hasPrevPage}"
+                               th:href="@{/admin/cs/recruit/list(page=${currentPage - 1}, searchType=${searchType}, keyword=${keyword}, status=${status})}">이전</a>
+                            <span th:unless="${hasPrevPage}">이전</span>
+
+                            <a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
+                               th:href="@{/admin/cs/recruit/list(page=${pageNum}, searchType=${searchType}, keyword=${keyword}, status=${status})}"
+                               th:text="${pageNum}"
+                               th:classappend="${pageNum == currentPage} ? ' active' : ''">1</a>
+
+                            <a th:if="${hasNextPage}"
+                               th:href="@{/admin/cs/recruit/list(page=${currentPage + 1}, searchType=${searchType}, keyword=${keyword}, status=${status})}">다음</a>
+                            <span th:unless="${hasNextPage}">다음</span>
+                        </div>
+
+                        <button type="button" class="recruit-register-btn" id="openRecruitModal">채용등록</button>
                     </div>
-
-                    <button type="button" class="recruit-register-btn" id="openRecruitModal">채용등록</button>
-                </div>
+                </form>
 
             </section>
 
@@ -224,69 +220,90 @@
         <div id="recruitModal" class="modal-overlay">
             <div class="recruit-modal">
                 <div class="recruit-modal-header">
-                    <h3>채용등록</h3>
+                    <h3 id="recruitModalTitle">채용등록</h3>
                     <button type="button" class="modal-close" id="closeRecruitModal">X</button>
                 </div>
 
-                <div class="recruit-modal-body">
-                    <table class="recruit-form-table">
-                        <tr>
-                            <th>제목</th>
-                            <td><input type="text" class="recruit-input title-input"></td>
-                        </tr>
-                        <tr>
-                            <th>채용부서</th>
-                            <td>
-                                <select class="recruit-select">
-                                    <option>채용부서 선택</option>
-                                    <option>IT</option>
-                                    <option>경영지원</option>
-                                    <option>영업</option>
-                                    <option>마케팅</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>경력사항</th>
-                            <td>
-                                <select class="recruit-select">
-                                    <option>경력사항 선택</option>
-                                    <option>신입</option>
-                                    <option>경력</option>
-                                    <option>무관</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>채용형태</th>
-                            <td>
-                                <select class="recruit-select">
-                                    <option>채용형태 선택</option>
-                                    <option>정규직</option>
-                                    <option>계약직</option>
-                                    <option>인턴</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>모집기간</th>
-                            <td class="date-row">
-                                <input type="date" class="date-input">
-                                <span>~</span>
-                                <input type="date" class="date-input">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>비고</th>
-                            <td><textarea class="recruit-textarea"></textarea></td>
-                        </tr>
-                    </table>
+                <form id="recruitModalForm" th:action="@{/admin/cs/recruit/register}" method="post">
+                    <input type="hidden" name="recruitNo" id="modalRecruitNo">
+                    <input type="hidden" name="page" th:value="${currentPage}">
+                    <input type="hidden" name="searchType" th:value="${searchType}">
+                    <input type="hidden" name="keyword" th:value="${keyword}">
+                    <input type="hidden" name="status" th:value="${status}">
 
-                    <div class="recruit-modal-btn-area">
-                        <button type="button" class="modal-cancel-btn" id="cancelRecruitModal">취소</button>
-                        <button type="button" class="modal-submit-btn">등록</button>
+                    <div class="recruit-modal-body">
+                        <table class="recruit-form-table">
+                            <tr>
+                                <th>제목</th>
+                                <td><input type="text" name="title" id="modalTitle" class="recruit-input title-input" required></td>
+                            </tr>
+                            <tr>
+                                <th>채용부서</th>
+                                <td>
+                                    <select name="department" id="modalDepartment" class="recruit-select" required>
+                                        <option value="">채용부서 선택</option>
+                                        <option value="IT">IT</option>
+                                        <option value="개발">개발</option>
+                                        <option value="기획">기획</option>
+                                        <option value="운영">운영</option>
+                                        <option value="경영지원">경영지원</option>
+                                        <option value="영업">영업</option>
+                                        <option value="마케팅">마케팅</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>경력사항</th>
+                                <td>
+                                    <select name="career" id="modalCareer" class="recruit-select" required>
+                                        <option value="">경력사항 선택</option>
+                                        <option value="신입">신입</option>
+                                        <option value="경력">경력</option>
+                                        <option value="무관">무관</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>채용형태</th>
+                                <td>
+                                    <select name="recruitType" id="modalRecruitType" class="recruit-select" required>
+                                        <option value="">채용형태 선택</option>
+                                        <option value="정규직">정규직</option>
+                                        <option value="계약직">계약직</option>
+                                        <option value="인턴">인턴</option>
+                                        <option value="아르바이트">아르바이트</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>상태</th>
+                                <td>
+                                    <select name="status" id="modalStatus" class="recruit-select" required>
+                                        <option value="모집중">모집중</option>
+                                        <option value="마감">마감</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>모집기간</th>
+                                <td class="date-row">
+                                    <input type="date" name="startDate" id="modalStartDate" class="date-input" required>
+                                    <span>~</span>
+                                    <input type="date" name="endDate" id="modalEndDate" class="date-input" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>비고</th>
+                                <td><textarea name="note" id="modalNote" class="recruit-textarea"></textarea></td>
+                            </tr>
+                        </table>
+
+                        <div class="recruit-modal-btn-area">
+                            <button type="button" class="modal-cancel-btn" id="cancelRecruitModal">취소</button>
+                            <button type="submit" class="modal-submit-btn" id="modalSubmitBtn">등록</button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -296,7 +313,18 @@
 
 </div>
 
-<script>
+<script th:inline="javascript">
+    const message = /*[[${message}]]*/ null;
+    const errorMessage = /*[[${errorMessage}]]*/ null;
+
+    if (message) {
+        alert(message);
+    }
+
+    if (errorMessage) {
+        alert(errorMessage);
+    }
+
     function toggleMenu(clickedTitle, menuId) {
         const menu = document.getElementById(menuId);
         menu.classList.toggle("close");
@@ -308,13 +336,57 @@
         }
     }
 
+    function toggleAll(checkAll) {
+        document.querySelectorAll('input[name="recruitNos"]').forEach((checkbox) => {
+            checkbox.checked = checkAll.checked;
+        });
+    }
+
+    function deleteSelectedRecruits() {
+        const checked = document.querySelectorAll('input[name="recruitNos"]:checked');
+        if (checked.length === 0) {
+            alert('삭제할 채용공고를 선택하세요.');
+            return;
+        }
+        if (confirm('선택한 채용공고를 삭제하시겠습니까?')) {
+            document.getElementById('recruitDeleteForm').submit();
+        }
+    }
+
+    function changeRecruitStatus(selectBox) {
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = /*[[@{/admin/cs/recruit/status}]]*/ '/admin/cs/recruit/status';
+
+        const values = {
+            recruitNo: selectBox.dataset.recruitNo,
+            status: selectBox.value,
+            page: /*[[${currentPage}]]*/ 1,
+            searchType: /*[[${searchType}]]*/ '',
+            keyword: /*[[${keyword}]]*/ '',
+            currentStatus: /*[[${status}]]*/ ''
+        };
+
+        Object.entries(values).forEach(([name, value]) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value || '';
+            form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
     const recruitModal = document.getElementById("recruitModal");
     const openRecruitModal = document.getElementById("openRecruitModal");
     const closeRecruitModal = document.getElementById("closeRecruitModal");
     const cancelRecruitModal = document.getElementById("cancelRecruitModal");
+    const recruitModalForm = document.getElementById("recruitModalForm");
 
     openRecruitModal.addEventListener("click", function () {
-        recruitModal.classList.add("show");
+        openRegisterModal();
     });
 
     closeRecruitModal.addEventListener("click", function () {
@@ -330,6 +402,38 @@
             recruitModal.classList.remove("show");
         }
     });
+
+    function openRegisterModal() {
+        recruitModalForm.action = /*[[@{/admin/cs/recruit/register}]]*/ '/admin/cs/recruit/register';
+        document.getElementById('recruitModalTitle').innerText = '채용등록';
+        document.getElementById('modalSubmitBtn').innerText = '등록';
+        document.getElementById('modalRecruitNo').value = '';
+        document.getElementById('modalTitle').value = '';
+        document.getElementById('modalDepartment').value = '';
+        document.getElementById('modalCareer').value = '';
+        document.getElementById('modalRecruitType').value = '';
+        document.getElementById('modalStatus').value = '모집중';
+        document.getElementById('modalStartDate').value = '';
+        document.getElementById('modalEndDate').value = '';
+        document.getElementById('modalNote').value = '';
+        recruitModal.classList.add("show");
+    }
+
+    function openModifyModal(button) {
+        recruitModalForm.action = /*[[@{/admin/cs/recruit/modify}]]*/ '/admin/cs/recruit/modify';
+        document.getElementById('recruitModalTitle').innerText = '채용수정';
+        document.getElementById('modalSubmitBtn').innerText = '수정';
+        document.getElementById('modalRecruitNo').value = button.dataset.recruitNo || '';
+        document.getElementById('modalTitle').value = button.dataset.title || '';
+        document.getElementById('modalDepartment').value = button.dataset.department || '';
+        document.getElementById('modalCareer').value = button.dataset.career || '';
+        document.getElementById('modalRecruitType').value = button.dataset.recruitType || '';
+        document.getElementById('modalStatus').value = button.dataset.status || '모집중';
+        document.getElementById('modalStartDate').value = button.dataset.startDate || '';
+        document.getElementById('modalEndDate').value = button.dataset.endDate || '';
+        document.getElementById('modalNote').value = button.dataset.note || '';
+        recruitModal.classList.add("show");
+    }
 </script>
 
 </body>
