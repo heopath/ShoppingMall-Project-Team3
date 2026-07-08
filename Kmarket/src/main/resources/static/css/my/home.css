@@ -1,39 +1,22 @@
 .mypage-banner {
+  width: 100%;
+  height: 90px;
   margin-bottom: 30px;
+  border-radius: 14px;
+  overflow: hidden;
 }
 
 .mypage-banner img {
   width: 100%;
-  border-radius: 14px;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
 .mypage-section {
   margin-bottom: 40px;
 }
-/* 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 
-  margin-bottom: 14px;
-}
-
-.section-header h3,
-.setting-title {
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.section-header a {
-  font-size: 13px;
-  color: #666;
-}
-
-.section-header a:hover {
-  color: #3fbf3f;
-} */
 
 .mypage-table th,
 .mypage-table td {

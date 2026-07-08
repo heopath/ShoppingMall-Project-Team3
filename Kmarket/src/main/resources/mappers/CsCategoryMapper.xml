@@ -45,4 +45,37 @@
     <delete id="deleteCsCategory" parameterType="int">
         DELETE FROM cs_category WHERE cs_cate_no = #{csCateNo}
     </delete>
+
+    <select id="selectParentCategoryList"
+            resultType="kr.co.springkmarketapp.dto.cs.CsCategoryDTO">
+
+        SELECT
+        cs_cate_no AS csCateNo,
+        parent_no AS parentNo,
+        cate_name AS cateName,
+        depth,
+        sort_order AS sortOrder,
+        use_yn AS useYn
+        FROM cs_category
+        WHERE depth = 1
+        ORDER BY sort_order
+
+    </select>
+
+    <select id="selectChildCategoryList"
+            parameterType="int"
+            resultType="kr.co.springkmarketapp.dto.cs.CsCategoryDTO">
+
+        SELECT
+        cs_cate_no AS csCateNo,
+        parent_no AS parentNo,
+        cate_name AS cateName,
+        depth,
+        sort_order AS sortOrder,
+        use_yn AS useYn
+        FROM cs_category
+        WHERE parent_no = #{parentNo}
+        ORDER BY sort_order
+
+    </select>
 </mapper>
