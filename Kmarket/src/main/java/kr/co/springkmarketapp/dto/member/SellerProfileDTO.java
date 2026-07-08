@@ -18,6 +18,7 @@ public class SellerProfileDTO {
     private String memberId;
     private String password;
 
+    // 마이페이지 주문상세 모달 조회 추가필드
     private String companyName;
     private String ceoName;
     private String bizNo;
@@ -29,4 +30,11 @@ public class SellerProfileDTO {
     private String addr2;
     private String status;
     private LocalDateTime regDate;
+
+    // 마이페이지 판매자 상세 모달 조회 추가필드
+    private String ceo;
+    private String hp;
+    private String email;
+    private String bizRegNo;
+    private String grade;
 }

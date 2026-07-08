@@ -26,4 +26,16 @@ public class OrderItemDTO {
     private Integer totalPrice;
     private String itemStatus;
     private LocalDateTime purchaseConfirmDate;
+
+    private String orderCode;
+    private LocalDateTime orderDate;
+    private String companyName;
+    private String deliveryStatus;
+
+    private String receiverName;
+    private String receiverHp;
+    private String zip;
+    private String addr1;
+    private String addr2;
+    private String memo;
 }
