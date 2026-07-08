@@ -227,3 +227,36 @@
 .qna-reply-btn-area .btn-blue {
     margin-left: 6px;
 }
+
+/* =========================================================
+   QNA 추가 연결 스타일
+========================================================= */
+.qna-search select#statusFilter {
+    width: 100px;
+}
+
+.qna-bottom .pagination {
+    width: 100%;
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+}
+
+.qna-bottom .pagination a,
+.qna-bottom .pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 24px;
+    font-size: 13px;
+}
+
+.qna-view-btn-area button,
+.qna-reply-btn-area button {
+    font-family: inherit;
+    vertical-align: middle;
+}

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,4 +20,19 @@ public class CouponIssueDTO {
     private String status;
     private LocalDateTime usedDate;
     private LocalDateTime issueDate;
+
+    // 관리자 화면 표시용
+    private String couponCode;
+    private String couponType;
+    private String couponName;
+    private String benefitType;
+    private Integer benefitValue;
+    private Integer minOrderPrice;
+    private Integer maxDiscountPrice;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String caution;
+    private String companyName;
+    private String memberId;
+    private String memberName;
 }

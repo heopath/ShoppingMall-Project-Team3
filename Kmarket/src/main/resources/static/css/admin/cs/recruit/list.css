@@ -355,3 +355,64 @@
 .date-input::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
+
+/* =========================================================
+   DB 연동 후 추가 보정
+========================================================= */
+.recruit-search select[name="status"] {
+    width: 95px;
+}
+
+.recruit-title-btn {
+    border: none;
+    background: transparent;
+    padding: 0;
+    color: #111;
+    font-size: 11px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.recruit-title-btn:hover {
+    text-decoration: underline;
+}
+
+.status-select {
+    width: 72px;
+    height: 26px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 11px;
+    color: #333;
+}
+
+.status-select option[value="모집중"] {
+    color: #31aa00;
+}
+
+.recruit-pagination {
+    width: 100%;
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+}
+
+.recruit-pagination a,
+.recruit-pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 24px;
+    color: #111;
+    font-size: 13px;
+}
+
+.recruit-pagination a.active {
+    font-weight: bold;
+    color: #0b63c7;
+    text-decoration: underline;
+}
