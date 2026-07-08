@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.admin.AdminOrderDAO">
+
+    <select id="selectAdminOrderList" resultType="kr.co.springkmarketapp.dto.admin.AdminOrderListDTO">
+        SELECT
+        o.order_no        AS orderNo,
+        o.order_code      AS orderCode,
+        m.member_id       AS memberId,
+        o.orderer_name    AS ordererName,
+        o.pay_price       AS payPrice,
+        o.payment_method  AS paymentMethod,
+        o.order_status    AS orderStatus,
+        o.order_date      AS orderDate,
+        CASE
+        WHEN o.order_status = '주문취소' THEN '주문취소'
+        WHEN o.order_status IN ('반품진행', '반품완료', '교환진행', '교환완료') THEN o.order_status
+        WHEN d.receipt_date IS NULL THEN '배송준비'
+        WHEN DATEDIFF(NOW(), d.receipt_date) >= 3 THEN '배송완료'
+        WHEN DATEDIFF(NOW(), d.receipt_date) >= 1 THEN '배송중'
+        ELSE '배송준비'
+        END AS deliveryStatus,
+        (SELECT COUNT(*) FROM order_item oi WHERE oi.order_no = o.order_no) AS itemTotalCount
+        FROM orders o
+        JOIN member m ON o.member_no = m.member_no
+        LEFT JOIN delivery d ON o.order_no = d.order_no
+        <where>
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'orderCode'">
+                        AND o.order_code LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'ordererName'">
+                        AND o.orderer_name LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY o.order_no DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="selectAdminOrderCount" resultType="int">
+        SELECT COUNT(*)
+        FROM orders o
+        <where>
+            <if test="searchType != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'orderCode'">
+                        AND o.order_code LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'ordererName'">
+                        AND o.orderer_name LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAdminOrderDetail" resultType="kr.co.springkmarketapp.dto.admin.AdminOrderDetailDTO">
+        SELECT
+        o.order_code        AS orderCode,
+        o.payment_method    AS paymentMethod,
+        o.orderer_name      AS ordererName,
+        o.orderer_hp        AS ordererHp,
+        o.total_price       AS totalPrice,
+        o.discount_price    AS discountPrice,
+        o.delivery_fee      AS deliveryFee,
+        o.pay_price         AS payPrice,
+        d.receiver_name     AS receiverName,
+        d.receiver_hp       AS receiverHp,
+        d.zip               AS zip,
+        d.addr1             AS addr1,
+        d.addr2             AS addr2
+        FROM orders o
+        LEFT JOIN delivery d ON o.order_no = d.order_no
+        WHERE o.order_no = #{orderNo}
+    </select>
+
+    <select id="selectAdminOrderItemDetails" resultType="kr.co.springkmarketapp.dto.admin.AdminOrderDetailDTO$OrderItemDetail">
+        SELECT
+        oi.product_no       AS productNo,
+        oi.product_name     AS productName,
+        oi.product_image    AS productImage,
+        oi.price             AS price,
+        oi.discount_rate    AS discountRate,
+        oi.quantity          AS quantity,
+        oi.total_price       AS totalPrice,
+        sp.company_name      AS companyName
+        FROM order_item oi
+        JOIN seller_profile sp ON oi.seller_no = sp.seller_no
+        WHERE oi.order_no = #{orderNo}
+    </select>
+
+    <insert id="insertOrUpdateDelivery">
+        INSERT INTO delivery (order_no, seller_no, receiver_name, receiver_hp, zip, addr1, addr2, courier, invoice_no, memo, delivery_status, receipt_date)
+        VALUES (#{orderNo}, #{sellerNo}, #{receiverName}, #{receiverHp}, #{zip}, #{addr1}, #{addr2}, #{courier}, #{invoiceNo}, #{memo}, '배송중', NOW())
+        ON DUPLICATE KEY UPDATE
+        courier = #{courier},
+        invoice_no = #{invoiceNo},
+        memo = #{memo},
+        delivery_status = '배송중',
+        shipped_date = NOW()
+    </insert>
+
+</mapper>

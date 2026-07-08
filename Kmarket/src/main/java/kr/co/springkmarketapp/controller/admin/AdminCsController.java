@@ -213,7 +213,7 @@ public class AdminCsController {
         int pageSize = 10;
         int pageBlock = 5;
 
-        List<QnaDTO> filteredList = filterQnaList(qnaService.selectQnaList(), searchType, keyword, status);
+        List<QnaDTO> filteredList = filterQnaList(qnaService.selectAdminQnaList(), searchType, keyword, status);
         int totalCount = filteredList.size();
         int totalPages = Math.max(1, (int) Math.ceil((double) totalCount / pageSize));
         int currentPage = Math.min(Math.max(page, 1), totalPages);
