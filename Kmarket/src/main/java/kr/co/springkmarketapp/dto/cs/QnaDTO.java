@@ -26,4 +26,6 @@ public class QnaDTO {
     private String cateName;
     // 작성자 추가 필드
     private String name;
+    // 부모 카테고리 추가 필드
+    private String parentCateName;
 }

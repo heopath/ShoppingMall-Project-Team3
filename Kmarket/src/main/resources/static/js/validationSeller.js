@@ -163,6 +163,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // 3) 회사명 유효성 검사
     //--------------------------
     const company = document.getElementsByName('companyName')[0];
+    const companyInput = document.querySelector('input[name="companyName"]');
     const companyResult = document.getElementsByClassName('companyResult')[0];
 
     company.addEventListener('focusout', function(){
@@ -178,6 +179,26 @@ document.addEventListener('DOMContentLoaded', function(){
             isCompanyOk = true;
         }
     });
+
+    companyInput.addEventListener("blur", async ()=>{
+
+        const value = companyInput.value.trim();
+
+        const res = await fetch(`/member/checkCompanyName?companyName=${encodeURIComponent(value)}`);
+        const count = await res.text();
+
+        if(Number(count)>0){
+            companyResult.textContent="이미 등록된 상호명입니다.";
+            companyResult.style.color="red";
+            isCompanyOk = false;
+        }else{
+            companyResult.textContent="사용 가능한 상호명입니다.";
+            companyResult.style.color="green";
+            isCompanyOk = true;
+        }
+
+    });
+
     //--------------------------
     // 4) 대표자명 유효성 검사
     //--------------------------
@@ -201,6 +222,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // 5) 사업자등록번호 유효성 검사
     //--------------------------
     const bizNo = document.getElementsByName('bizNo')[0];
+    const bizNoInput = document.querySelector('input[name="bizNo"]');
     const bizNoResult = document.getElementsByClassName('bizNoResult')[0];
 
     bizNo.addEventListener('focusout', function(){
@@ -216,10 +238,40 @@ document.addEventListener('DOMContentLoaded', function(){
             isBizNoOk = true;
         }
     });
+
+
+
+    bizNoInput.addEventListener("blur", async () => {
+
+        const bizNo = bizNoInput.value.trim();
+
+        if (!bizNo) {
+            bizNoResult.textContent = "사업자등록번호를 입력하세요.";
+            bizNoResult.style.color = "red";
+            isBizNoOk = false;
+            return;
+        }
+
+        const response = await fetch(`/member/checkBizNo?bizNo=${encodeURIComponent(bizNo)}`);
+
+        const count = await response.text();
+
+        if (Number(count) > 0) {
+            bizNoResult.textContent = "이미 등록된 사업자등록번호입니다.";
+            bizNoResult.style.color = "red";
+            isBizNoOk = false;
+        } else {
+            bizNoResult.textContent = "사용 가능한 사업자등록번호입니다.";
+            bizNoResult.style.color = "green";
+            isBizNoOk = true;
+        }
+
+    });
     //--------------------------
     // 6) 통신판매업번호 유효성 검사
     //--------------------------
     const onlineSaleNo = document.getElementsByName('onlineSaleNo')[0];
+    const onlineInput = document.querySelector('input[name="onlineSaleNo"]');
     const onlineSaleNoResult = document.getElementsByClassName('onlineSaleNoResult')[0];
 
     onlineSaleNo.addEventListener('focusout', function(){
@@ -235,10 +287,30 @@ document.addEventListener('DOMContentLoaded', function(){
             isOnlineSaleNoOk = true;
         }
     });
+    onlineInput.addEventListener("blur", async ()=>{
+
+        const value = onlineInput.value.trim();
+
+        const res = await fetch(`/member/checkOnlineSaleNo?onlineSaleNo=${encodeURIComponent(value)}`);
+        const count = await res.text();
+
+        if(Number(count)>0){
+            onlineSaleNoResult.textContent="이미 등록된 통신판매업번호입니다.";
+            onlineSaleNoResult.style.color="red";
+            isOnlineSaleNoOk = false;
+        }else{
+            onlineSaleNoResult.textContent="사용 가능한 통신판매업번호입니다.";
+            onlineSaleNoResult.style.color="green";
+            isOnlineSaleNoOk = true;
+        }
+
+    });
+
     //--------------------------
     // 7) 전화번호 유효성 검사
     //--------------------------
     const tel = document.getElementsByName('tel')[0];
+    const telInput = document.querySelector('input[name="tel"]');
     const telResult = document.getElementsByClassName('telResult')[0];
 
     tel.addEventListener('focusout', function(){
@@ -253,6 +325,24 @@ document.addEventListener('DOMContentLoaded', function(){
             telResult.innerText = '';
             isTelOk = true;
         }
+    });
+    telInput.addEventListener("blur", async ()=>{
+
+        const value = telInput.value.trim();
+
+        const res = await fetch(`/member/checkTel?tel=${encodeURIComponent(value)}`);
+        const count = await res.text();
+
+        if(Number(count)>0){
+            telResult.textContent="이미 등록된 전화번호입니다.";
+            telResult.style.color="red";
+            isTelOk = false;
+        }else{
+            telResult.textContent="사용 가능한 전화번호입니다.";
+            telResult.style.color="green";
+            isTelOk = true;
+        }
+
     });
 
     //--------------------------
@@ -280,7 +370,6 @@ document.addEventListener('DOMContentLoaded', function(){
     //--------------------------
     const zip = document.getElementsByName('zip')[0];
     const addr1 = document.getElementsByName('addr1')[0];
-    // const addr2 = document.getElementsByName('addr2')[0];
 
     function checkAddress(){
 
@@ -297,8 +386,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
     zip.addEventListener('input', checkAddress);
     addr1.addEventListener('input', checkAddress);
-    addr2.addEventListener('input', checkAddress);
-//
 
 
 }); // DOMContentLoaded 끝

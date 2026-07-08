@@ -41,103 +41,68 @@
 
         <!-- 컨텐츠 -->
         <section class="cs-content">
+
           <div class="content-header">
-            <h2>회원</h2>
-            <p>회원 관련 문의내용 입니다.</p>
+            <h2>[[${qnaDTOList[0].parentCateName}]]</h2>
+            <p>[[${qnaDTOList[0].parentCateName}]] 관련 문의내용 입니다.</p>
           </div>
 
           <table class="inquiry-table">
             <tbody>
-              <tr onclick="location.href = './view.html'">
-                <td>[가입] 가입문의내용</td>
-                <td class="answer">답변완료</td>
-                <td>chh**</td>
-                <td>26.06.18</td>
-              </tr>
 
-              <tr onclick="location.href = '#'">
-                <td>[탈퇴] 탈퇴 문의내용</td>
-                <td class="status">검토중</td>
-                <td>chh**</td>
-                <td>26.06.17</td>
-              </tr>
+            <tr th:each="qna : ${qnaDTOList}"
+                th:onclick="|location.href='@{/cs/qna/view(qnaNo=${qna.qnaNo},pg=${page.currentPage},parentNo=${parentNo})}'|">
 
-              <tr onclick="location.href = '#'">
-                <td>[회원정보] 회원정보문의내용</td>
-                <td class="status">검토중</td>
-                <td>chh**</td>
-                <td>26.06.16</td>
-              </tr>
+              <td>
+                [[|[${qna.cateName}] ${qna.title}|]]
+              </td>
 
-              <tr onclick="location.href = '#'">
-                <td>[로그인] 회원정보문의내용</td>
-                <td class="answer">답변완료</td>
-                <td>chh**</td>
-                <td>26.06.15</td>
-              </tr>
+              <td th:class="${qna.status == '검토중'} ? 'status' : 'answer'"
+                  th:text="${qna.status == '검토중'} ? '검토중' : '답변완료'">
+              </td>
 
-              <tr onclick="location.href = '#'">
-                <td>[로그인] 회원정보문의내용</td>
-                <td class="answer">답변완료</td>
-                <td>chh**</td>
-                <td>26.06.14</td>
-              </tr>
+              <td>[[${qna.name}]]</td>
 
-              <tr onclick="location.href = '#'">
-                <td>[로그인] 회원정보문의내용</td>
-                <td class="answer">답변완료</td>
-                <td>chh**</td>
-                <td>26.06.13</td>
-              </tr>
+              <td>
+                [[${#temporals.format(qna.regDate,'yy.MM.dd')}]]
+              </td>
 
-              <tr onclick="location.href = '#'">
-                <td>[로그인] 회원정보문의내용</td>
-                <td class="answer">답변완료</td>
-                <td>chh**</td>
-                <td>26.06.12</td>
-              </tr>
+            </tr>
 
-              <tr onclick="location.href = '#'">
-                <td>[로그인] 회원정보문의내용</td>
-                <td class="answer">답변완료</td>
-                <td>chh**</td>
-                <td>26.06.11</td>
-              </tr>
-
-              <tr onclick="location.href = '#'">
-                <td>[로그인] 회원정보문의내용</td>
-                <td class="answer">답변완료</td>
-                <td>chh**</td>
-                <td>26.06.10</td>
-              </tr>
-
-              <tr onclick="location.href = '#'">
-                <td>[로그인] 회원정보문의내용</td>
-                <td class="answer">답변완료</td>
-                <td>chh**</td>
-                <td>26.06.09</td>
-              </tr>
             </tbody>
           </table>
+
           <div class="bottom-area">
+
             <div class="pagination">
-              <a href="#" class="page-btn">
+
+              <a class="page-btn"
+                 th:if="${page.currentPage > 1}"
+                 th:href="@{/cs/qna/list(parentNo=${parentNo},pg=${page.currentPage-1})}">
                 <i class="bi bi-chevron-left"></i>
               </a>
 
-              <a href="#" class="active">1</a>
-              <a href="#">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              <a href="#">5</a>
+              <a th:each="i : ${#numbers.sequence(page.startPage,page.endPage)}"
+                 th:href="@{/cs/qna/list(parentNo=${parentNo},pg=${i})}"
+                 th:text="${i}"
+                 th:classappend="${i == page.currentPage} ? ' active'">
+              </a>
 
-              <a href="#" class="page-btn">
+              <a class="page-btn"
+                 th:if="${page.currentPage < page.lastPage}"
+                 th:href="@{/cs/qna/list(parentNo=${parentNo},pg=${page.currentPage+1})}">
                 <i class="bi bi-chevron-right"></i>
               </a>
+
             </div>
 
-            <a href="./write.html" class="btn-write">문의하기</a>
+            <a th:href="@{/cs/qna/write(parentNo=${parentNo})}"
+               class="btn-write">
+              문의하기
+            </a>
+
           </div>
+
         </section>
       </div>
     </main>

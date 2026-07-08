@@ -121,5 +121,34 @@ public class MemberController {
                 .body(Map.of("count", 1));
     }
 
+    // 사업자등록번호 중복 확인
+    @GetMapping("/member/checkBizNo")
+    @ResponseBody
+    public int checkBizNo(String bizNo) {
+        return sellerProfileService.countBizNo(bizNo);
+    }
+
+    // 상호명 중복 확인
+    @GetMapping("/member/checkCompanyName")
+    @ResponseBody
+    public int checkCompanyName(String companyName) {
+        return sellerProfileService.countCompanyName(companyName);
+    }
+
+    // 통신판매업번호 중복 확인
+    @GetMapping("/member/checkOnlineSaleNo")
+    @ResponseBody
+    public int checkOnlineSaleNo(String onlineSaleNo) {
+        return sellerProfileService.countOnlineSaleNo(onlineSaleNo);
+    }
+
+
+    // 전화번호 중복 확인
+    @GetMapping("/member/checkTel")
+    @ResponseBody
+    public int checkTel(String tel) {
+        return sellerProfileService.countTel(tel);
+    }
+
 
 }

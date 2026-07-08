@@ -105,3 +105,13 @@
 .btn-list:hover {
   background: #35aa35;
 }
+
+.answer-badge.done {
+  background: #33c24d;
+  color: #fff;
+}
+
+.answer-badge.wait {
+  background: #999;
+  color: #fff;
+}

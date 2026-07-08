@@ -20,7 +20,8 @@
         ON c1.parent_no = c2.cs_cate_no
         ORDER BY f.faq_no DESC
     </select>
-    <select id="selectFaq" parameterType="int"
+    <select id="selectFaq"
+            parameterType="int"
             resultType="kr.co.springkmarketapp.dto.cs.FaqDTO">
 
         SELECT
@@ -32,13 +33,15 @@
         f.hit,
         f.reg_date AS regDate,
         f.update_date AS updateDate,
-        c1.cate_name AS cateName,
-        c2.cate_name AS parentCateName
+        c.cate_name AS cateName,
+        p.cate_name AS parentCateName
+
         FROM faq f
-        JOIN cs_category c1
-        ON f.cs_cate_no = c1.cs_cate_no
-        LEFT JOIN cs_category c2
-        ON c1.parent_no = c2.cs_cate_no
+        JOIN cs_category c
+        ON f.cs_cate_no = c.cs_cate_no
+        LEFT JOIN cs_category p
+        ON c.parent_no = p.cs_cate_no
+
         WHERE f.faq_no = #{faqNo}
 
     </select>
@@ -53,9 +56,14 @@
     <delete id="deleteFaq" parameterType="int">
         DELETE FROM faq WHERE faq_no=#{faqNo}
     </delete>
-    <select id="countFaq" resultType="int">
+    <select id="countFaq" parameterType="int" resultType="int">
+
         SELECT COUNT(*)
-        FROM faq
+        FROM faq f
+        JOIN cs_category c
+        ON f.cs_cate_no = c.cs_cate_no
+        WHERE c.parent_no = #{parentNo}
+
     </select>
     <select id="selectFaqListPaging"
             resultType="kr.co.springkmarketapp.dto.cs.FaqDTO">
@@ -78,6 +86,27 @@
         ON c1.parent_no = c2.cs_cate_no
         ORDER BY f.faq_no DESC
         LIMIT #{offset}, #{size}
+
+    </select>
+    <select id="selectFaqListByParent"
+            parameterType="int"
+            resultType="kr.co.springkmarketapp.dto.cs.FaqDTO">
+
+        SELECT
+        f.faq_no AS faqNo,
+        f.cs_cate_no AS csCateNo,
+        f.writer_no AS writerNo,
+        f.title,
+        f.content,
+        f.hit,
+        f.reg_date AS regDate,
+        f.update_date AS updateDate,
+        c.cate_name AS cateName
+        FROM faq f
+        JOIN cs_category c
+        ON f.cs_cate_no = c.cs_cate_no
+        WHERE c.parent_no = #{parentNo}
+        ORDER BY c.sort_order ASC, f.faq_no DESC
 
     </select>
 </mapper>
