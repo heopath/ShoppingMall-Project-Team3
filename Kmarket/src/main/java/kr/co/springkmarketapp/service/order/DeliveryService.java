@@ -57,4 +57,44 @@ public class DeliveryService {
         return detail;
     }
 
+    public List<DeliveryDetailDTO> getDeliveryDetailsByOrderNo(Long orderNo) {
+
+        List<DeliveryDetailDTO> deliveries = deliveryDAO.selectDeliveryDetailsByOrderNo(orderNo);
+
+        for (DeliveryDetailDTO delivery : deliveries) {
+            delivery.setItems(deliveryDAO.selectDeliveryItems(delivery.getDeliveryNo()));
+        }
+
+        return deliveries;
+    }
+
+    public void updateInvoiceByDeliveryNo(Integer deliveryNo,
+                                          String courier,
+                                          String invoiceNo,
+                                          String memo) {
+
+        if (deliveryNo == null) {
+            throw new IllegalArgumentException("배송번호가 없습니다.");
+        }
+
+        if (courier == null || courier.isBlank()) {
+            throw new IllegalArgumentException("택배사를 선택하세요.");
+        }
+
+        if (invoiceNo == null || invoiceNo.isBlank()) {
+            throw new IllegalArgumentException("송장번호를 입력하세요.");
+        }
+
+        int result = deliveryDAO.updateInvoiceByDeliveryNo(
+                deliveryNo,
+                courier,
+                invoiceNo,
+                memo
+        );
+
+        if (result != 1) {
+            throw new IllegalArgumentException("배송정보 수정에 실패했습니다.");
+        }
+    }
+
 }

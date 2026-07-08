@@ -118,6 +118,24 @@
         WHERE d.delivery_no = #{deliveryNo}
     </select>
 
+    <select id="selectDeliveryDetailsByOrderNo" resultType="kr.co.springkmarketapp.dto.order.DeliveryDetailDTO">
+        SELECT
+        d.delivery_no   AS deliveryNo,
+        o.order_code    AS orderCode,
+        d.receiver_name AS receiverName,
+        d.receiver_hp   AS receiverHp,
+        d.zip           AS zip,
+        d.addr1         AS addr1,
+        d.addr2         AS addr2,
+        d.courier       AS courier,
+        d.invoice_no    AS invoiceNo,
+        d.memo          AS memo
+        FROM delivery d
+        JOIN orders o ON d.order_no = o.order_no
+        WHERE d.order_no = #{orderNo}
+        ORDER BY d.delivery_no ASC
+    </select>
+
     <select id="selectDeliveryItems" resultType="kr.co.springkmarketapp.dto.order.DeliveryDetailDTO$DeliveryItemDTO">
         SELECT
         oi.product_no     AS productNo,
@@ -133,5 +151,16 @@
         JOIN delivery d ON oi.delivery_no = d.delivery_no
         WHERE oi.delivery_no = #{deliveryNo}
     </select>
+
+    <update id="updateInvoiceByDeliveryNo">
+        UPDATE delivery
+        SET
+        courier = #{courier},
+        invoice_no = #{invoiceNo},
+        memo = #{memo},
+        delivery_status = '배송중',
+        shipped_date = NOW()
+        WHERE delivery_no = #{deliveryNo}
+    </update>
 
 </mapper>

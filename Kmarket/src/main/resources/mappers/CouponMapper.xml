@@ -159,11 +159,11 @@
         WHERE coupon_no = #{couponNo}
     </update>
 
-    <update id="deleteCoupon" parameterType="int">
-        UPDATE coupon
-        SET status = '삭제'
-        WHERE coupon_no = #{couponNo}
-    </update>
+<!--    <update id="deleteCoupon" parameterType="int">-->
+<!--        UPDATE coupon-->
+<!--        SET status = '삭제'-->
+<!--        WHERE coupon_no = #{couponNo}-->
+<!--    </update>-->
 
     <update id="deleteCoupons">
         UPDATE coupon
