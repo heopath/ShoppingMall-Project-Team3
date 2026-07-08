@@ -25,6 +25,9 @@ public class QnaService {
         return qnaDAO.selectQnaList();
     }
 
+    // 관리자 페이지에서의 1차2차카테고리 조회를위해 부모카테고리 조인
+    public List<QnaDTO> selectAdminQnaList() {return qnaDAO.selectAdminQnaList();}
+
     public int updateQna(QnaDTO qnaDTO) {
         return qnaDAO.updateQna(qnaDTO);
     }

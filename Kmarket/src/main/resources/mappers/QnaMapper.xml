@@ -13,6 +13,33 @@
         ON q.member_no = m.member_no
         ORDER BY q.qna_no DESC
     </select>
+
+<!--    관리자페이지에서 1차카테고리 추가해서 조회-->
+    <select id="selectAdminQnaList" resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
+        SELECT
+        q.qna_no AS qnaNo,
+        q.member_no AS memberNo,
+        q.cs_cate_no AS csCateNo,
+        q.title,
+        q.content,
+        q.answer,
+        q.answer_member_no AS answerMemberNo,
+        q.status,
+        q.reg_date AS regDate,
+        q.answer_date AS answerDate,
+        child.cate_name AS cateName,
+        parent.cate_name AS parentCateName,
+        m.name AS name
+        FROM qna q
+        JOIN cs_category child
+        ON q.cs_cate_no = child.cs_cate_no
+        LEFT JOIN cs_category parent
+        ON child.parent_no = parent.cs_cate_no
+        JOIN member m
+        ON q.member_no = m.member_no
+        ORDER BY q.qna_no DESC
+    </select>
+
     <select id="selectQnaListLimit"
             resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
 

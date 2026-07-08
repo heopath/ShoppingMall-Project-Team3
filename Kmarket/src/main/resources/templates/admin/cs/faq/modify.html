@@ -111,7 +111,7 @@
 
             <section class="faq-form-section">
                 <form th:action="@{/admin/cs/faq/modify}" method="post" th:object="${faq}">
-                    <input type="hidden" name="faqNo" th:value="*{faqNo}">
+                    <input type="hidden" name="faqNo" th:value="${faq.faqNo}">
                     <table class="faq-form-table">
                         <tr>
                             <th>유형</th>
@@ -194,11 +194,20 @@
     }
 
     const selectedFaqCateNo = /*[[${faq.csCateNo}]]*/ null;
-    const selectedParentCateNo = /*[[${faq.parentCateNo}]]*/ null;
+
     const faqModifyParent = document.getElementById('faqModifyParent');
-    if (faqModifyParent && selectedParentCateNo) {
-        faqModifyParent.value = String(selectedParentCateNo);
-        filterFaqChildOptions('faqModifyParent', 'faqModifyChild', selectedFaqCateNo);
+    const faqModifyChild = document.getElementById('faqModifyChild');
+
+    if (faqModifyParent && faqModifyChild && selectedFaqCateNo) {
+        const selectedChildOption = Array.from(faqModifyChild.options)
+            .find(option => option.value === String(selectedFaqCateNo));
+
+        if (selectedChildOption) {
+            const parentNo = selectedChildOption.dataset.parentNo;
+
+            faqModifyParent.value = parentNo;
+            filterFaqChildOptions('faqModifyParent', 'faqModifyChild', selectedFaqCateNo);
+        }
     }
 </script>
 
