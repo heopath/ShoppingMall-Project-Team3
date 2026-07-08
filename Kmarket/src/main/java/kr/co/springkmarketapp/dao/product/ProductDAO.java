@@ -42,5 +42,21 @@ public interface ProductDAO {
     List<ProductReviewDTO> selectProductReviewList(@Param("productNo") int productNo, @Param("pageRequestDTO") PageRequestDTO pageRequestDTO);
     int selectProductReviewCount(int productNo);
 
+    // 관리자 상품 상세 보기
+    List<ProductImageDTO> selectAllImagesByProduct(int productNo);
 
+    // 관리자 상품 조회
+    List<ProductDTO> selectAdminProductList(@Param("offset") int offset, @Param("size") int size,
+                                            @Param("searchType") String searchType, @Param("keyword") String keyword);
+    int selectAdminProductCount(@Param("searchType") String searchType, @Param("keyword") String keyword);
+
+    // 관리자 상품 수정
+    void updateProductNotice(ProductNoticeDTO noticeDTO);
+
+
+    // 관리자 상품 삭제
+    void deleteProductImageByType(@Param("productNo") int productNo, @Param("imageType") String imageType);
+    void updateProductStatus(@Param("productNo") int productNo, @Param("status") String status);
+    void updateProductStatusMulti(@Param("list") List<Integer> productNos, @Param("status") String status);
+    void deleteProductOptions(int productNo);
 }
