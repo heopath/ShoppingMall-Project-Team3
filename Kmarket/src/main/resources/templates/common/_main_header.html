@@ -22,7 +22,13 @@
 
 <header>
     <a th:href="@{/}" class="logo-img">
-        <img src="/images/main/header_logo.png" alt="Kmarket 로고" />
+        <img th:if="${settings.header_logo != null and settings.header_logo != ''}"
+             th:src="${settings.header_logo}"
+             alt="Kmarket 로고" />
+
+        <img th:if="${settings.header_logo == null or settings.header_logo == ''}"
+             src="/images/main/header_logo.png"
+             alt="Kmarket 기본 로고" />
     </a>
 
     <form class="search-box"

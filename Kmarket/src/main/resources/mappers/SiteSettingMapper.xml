@@ -22,6 +22,25 @@
         WHERE setting_no = #{_parameter}
     </select>
 
+    <select id="selectSiteSettingByKey" resultMap="SiteSettingResultMap">
+        SELECT *
+        FROM site_setting
+        WHERE setting_key = #{settingKey}
+    </select>
+
+    <insert id="upsertSiteSetting" parameterType="kr.co.springkmarketapp.dto.admin.SiteSettingDTO">
+        INSERT INTO site_setting (
+        setting_key,
+        setting_value
+        ) VALUES (
+        #{settingKey},
+        #{settingValue}
+        )
+        ON DUPLICATE KEY UPDATE
+        setting_value = VALUES(setting_value),
+        update_date = CURRENT_TIMESTAMP
+    </insert>
+
     <select id="selectSiteSettingList" resultMap="SiteSettingResultMap">
         SELECT *
         FROM site_setting
