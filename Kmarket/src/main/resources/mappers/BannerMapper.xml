@@ -105,22 +105,29 @@
     <update id="updateBanner" parameterType="kr.co.springkmarketapp.dto.admin.BannerDTO">
         UPDATE banner
         SET banner_name = #{bannerName},
-            banner_size = #{bannerSize},
-            bg_color = #{bgColor},
-            link_url = #{linkUrl},
-            banner_position = #{bannerPosition},
-            image_path = #{imagePath},
-            sort_order = #{sortOrder},
-            start_datetime = #{startDatetime},
-            end_datetime = #{endDatetime},
-            use_yn = #{useYn},
-            reg_date = #{regDate}
+        banner_size = #{bannerSize},
+        bg_color = #{bgColor},
+        link_url = #{linkUrl},
+        banner_position = #{bannerPosition},
+        image_path = #{imagePath},
+        sort_order = #{sortOrder},
+        start_datetime = #{startDatetime},
+        end_datetime = #{endDatetime},
+        use_yn = #{useYn}
         WHERE banner_no = #{bannerNo}
     </update>
 
     <delete id="deleteBanner">
         DELETE FROM banner
         WHERE banner_no = #{_parameter}
+    </delete>
+
+    <delete id="deleteBanners">
+        DELETE FROM banner
+        WHERE banner_no IN
+        <foreach item="no" collection="bannerNos" open="(" separator="," close=")">
+            #{no}
+        </foreach>
     </delete>
 
 </mapper>
