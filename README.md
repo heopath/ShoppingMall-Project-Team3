@@ -1013,6 +1013,8 @@ CREATE TABLE visit_daily (
 
 - AWS RDS(MySQL) DB 테이블 구축 및 Spring Boot 연동
 
+* 일정 및 작업 상세 내용은 notion 참고 : https://app.notion.com/p/2-6c4346ade5b783118cd7810fef52109d
+
 ### 🎯 프로젝트 목표
 - 쇼핑몰 IA 구조에 맞는 완벽한 프론트엔드 화면 구현
 
