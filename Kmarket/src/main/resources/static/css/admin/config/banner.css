@@ -160,11 +160,14 @@
     text-overflow: ellipsis;
 }
 
+.manage {
+    text-align: center;
+    vertical-align: middle;
+}
+
 .manage a {
-    display: block;
-    color: #111;
-    line-height: 20px;
-    font-size: 11px;
+    display: inline-block;
+    white-space: nowrap;
 }
 
 .manage a:hover {

@@ -83,7 +83,7 @@
                 <table class="banner-table">
                     <thead>
                     <tr>
-                        <th><input type="checkbox"></th>
+                        <th><input type="checkbox" id="checkAll"></th>
                         <th>번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -102,7 +102,7 @@
                     </tr>
 
                     <tr th:each="banner, loop : ${banners}">
-                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox" class="banner-check" th:value="${banner.bannerNo}"></td>
                         <td th:text="${loop.count}">1</td>
                         <td>
                             <img th:if="${banner.imagePath != null and banner.imagePath != ''}"
@@ -123,8 +123,17 @@
                         <td th:text="${#temporals.format(banner.startDatetime, 'HH:mm')}">13:00</td>
                         <td th:text="${#temporals.format(banner.endDatetime, 'HH:mm')}">15:00</td>
                         <td class="manage">
-                            <a th:href="@{/admin/config/banner/delete/{id}(id=${banner.bannerNo})}"
-                               onclick="return confirm('이 배너를 삭제하시겠습니까?')" style="color: #d9534f;">[ 삭제 ]</a>
+                            <a href="javascript:void(0)" class="btn-modify"
+                               th:attr="data-no=${banner.bannerNo}"
+                               th:data-name="${banner.bannerName}"
+                               th:data-size="${banner.bannerSize}"
+                               th:data-bgcolor="${banner.bgColor}"
+                               th:data-link="${banner.linkUrl}"
+                               th:data-position="${banner.bannerPosition}"
+                               th:data-start="${#temporals.format(banner.startDatetime, 'yyyy-MM-dd''T''HH:mm')}"
+                               th:data-end="${#temporals.format(banner.endDatetime, 'yyyy-MM-dd''T''HH:mm')}"
+                               th:data-sort="${banner.sortOrder}"
+                               th:data-useyn="${banner.useYn}">[ 수정 ]</a>
                         </td>
                     </tr>
                     </tbody>
@@ -141,33 +150,34 @@
         <div id="bannerModal" class="modal-overlay">
             <div class="banner-modal">
                 <div class="banner-modal-header">
-                    <h3>배너등록</h3>
+                    <h3 id="bannerModalTitle">배너등록</h3>
                     <button type="button" class="modal-close" id="closeBannerModal">X</button>
                 </div>
 
                 <div class="banner-modal-body">
-                    <form th:action="@{/admin/config/banner/register}" method="post" enctype="multipart/form-data">
+                    <form id="bannerForm" th:action="@{/admin/config/banner/register}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="bannerNo" id="bannerNo" value="">
                         <table class="banner-form-table">
                             <tr>
                                 <th>배너이름</th>
-                                <td><input type="text" name="bannerName" required placeholder="배너이름 입력"></td>
+                                <td><input type="text" name="bannerName" id="bannerName" required placeholder="배너이름 입력"></td>
                             </tr>
                             <tr>
                                 <th>배너크기</th>
-                                <td><input type="text" name="bannerSize" placeholder="예: 1200 × 80"></td>
+                                <td><input type="text" name="bannerSize" id="bannerSize" placeholder="예: 1200 × 80"></td>
                             </tr>
                             <tr>
                                 <th>배경색</th>
-                                <td><input type="text" name="bgColor" placeholder="예: #ffffff"></td>
+                                <td><input type="text" name="bgColor" id="bgColor" placeholder="예: #ffffff"></td>
                             </tr>
                             <tr>
                                 <th>배너링크</th>
-                                <td><input type="text" name="linkUrl" placeholder="클릭 시 이동할 URL 주소 입력"></td>
+                                <td><input type="text" name="linkUrl" id="linkUrl" placeholder="클릭 시 이동할 URL 주소 입력"></td>
                             </tr>
                             <tr>
                                 <th>배너위치</th>
                                 <td>
-                                    <select name="bannerPosition" required>
+                                    <select name="bannerPosition" id="bannerPosition" required>
                                         <option value="">선택</option>
                                         <option value="MAIN1">MAIN1 (메인 상단)</option>
                                         <option value="MAIN2">MAIN2 (메인 슬라이더)</option>
@@ -179,20 +189,16 @@
                             </tr>
                             <tr>
                                 <th>노출 시작일시</th>
-                                <td>
-                                    <input type="datetime-local" name="startDatetime" required>
-                                </td>
+                                <td><input type="datetime-local" name="startDatetime" id="startDatetime" required></td>
                             </tr>
                             <tr>
                                 <th>노출 종료일시</th>
-                                <td>
-                                    <input type="datetime-local" name="endDatetime" required>
-                                </td>
+                                <td><input type="datetime-local" name="endDatetime" id="endDatetime" required></td>
                             </tr>
                             <tr>
                                 <th>출력 순서</th>
                                 <td>
-                                    <input type="number" name="sortOrder" value="0" min="0" style="width: 80px; padding: 5px;">
+                                    <input type="number" name="sortOrder" id="sortOrder" value="0" min="0" style="width: 80px; padding: 5px;">
                                     <span class="file-guide">낮은 숫자가 먼저 출력됩니다.</span>
                                 </td>
                             </tr>
@@ -206,14 +212,14 @@
                             <tr>
                                 <th>배너파일</th>
                                 <td class="file-row">
-                                    <input type="file" name="bannerFile" required>
-                                    <span class="file-guide">노출 위치에 맞는 크기 권장</span>
+                                    <input type="file" name="bannerFile" id="bannerFile">
+                                    <span class="file-guide" id="fileGuideText">노출 위치에 맞는 크기 권장</span>
                                 </td>
                             </tr>
                         </table>
 
                         <div class="banner-modal-btn-area">
-                            <button type="submit" class="banner-submit-btn">등록하기</button>
+                            <button type="submit" class="banner-submit-btn" id="bannerSubmitBtn">등록하기</button>
                         </div>
                     </form>
                 </div>
@@ -233,39 +239,122 @@
     }
 
     const bannerModal = document.getElementById("bannerModal");
-    const openBannerModal = document.getElementById("openBannerModal");
-    const closeBannerModal = document.getElementById("closeBannerModal");
+    const openBannerModalBtn = document.getElementById("openBannerModal");
+    const closeBannerModalBtn = document.getElementById("closeBannerModal");
 
+    const bannerForm = document.getElementById("bannerForm");
+    const bannerModalTitle = document.getElementById("bannerModalTitle");
+    const bannerSubmitBtn = document.getElementById("bannerSubmitBtn");
+    const fileGuideText = document.getElementById("fileGuideText");
+
+    // 배너등록 버튼 → 등록 모드로 초기화
     openBannerModal.addEventListener("click", function () {
+        resetToRegisterMode();
         bannerModal.classList.add("show");
     });
 
-    closeBannerModal.addEventListener("click", function () {
-        bannerModal.classList.remove("show");
-    });
+    // X 버튼 → 모달 닫기 + 등록모드로 리셋
+    closeBannerModalBtn.addEventListener("click", closeModal);
 
+    // 모달 바깥(오버레이) 클릭 → 모달 닫기 + 등록모드로 리셋
     bannerModal.addEventListener("click", function (e) {
         if (e.target === bannerModal) {
-            bannerModal.classList.remove("show");
+            closeModal();
         }
     });
 
-    document.querySelector('form').addEventListener('submit', function(e) {
-        const start = new Date(document.querySelector('input[name="startDatetime"]').value);
-        const end = new Date(document.querySelector('input[name="endDatetime"]').value);
-        const fileInput = document.querySelector('input[name="bannerFile"]');
+    function closeModal() {
+        bannerModal.classList.remove("show");
+        resetToRegisterMode();
+    }
+
+    // [수정] 링크 클릭 → 수정 모드로 전환
+    document.querySelectorAll(".btn-modify").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            const d = btn.dataset;
+
+            bannerModalTitle.textContent = "배너수정";
+            bannerForm.action = "/admin/config/banner/modify";
+            bannerSubmitBtn.textContent = "수정하기";
+
+            document.getElementById("bannerNo").value = d.no;
+            document.getElementById("bannerName").value = d.name;
+            document.getElementById("bannerSize").value = d.size;
+            document.getElementById("bgColor").value = d.bgcolor;
+            document.getElementById("linkUrl").value = d.link;
+            document.getElementById("bannerPosition").value = d.position;
+            document.getElementById("startDatetime").value = d.start;
+            document.getElementById("endDatetime").value = d.end;
+            document.getElementById("sortOrder").value = d.sort;
+            document.querySelector(`input[name="useYn"][value="${d.useyn}"]`).checked = true;
+
+            // 수정할 땐 파일 재첨부 필수 아님
+            document.getElementById("bannerFile").removeAttribute("required");
+            fileGuideText.textContent = "이미지를 바꾸지 않으려면 비워두세요";
+
+            bannerModal.classList.add("show");
+        });
+    });
+
+    function resetToRegisterMode() {
+        bannerForm.reset();
+        bannerModalTitle.textContent = "배너등록";
+        bannerForm.action = "/admin/config/banner/register";
+        bannerSubmitBtn.textContent = "등록하기";
+        document.getElementById("bannerNo").value = "";
+        document.getElementById("bannerFile").setAttribute("required", "required");
+        fileGuideText.textContent = "노출 위치에 맞는 크기 권장";
+    }
+
+    bannerForm.addEventListener('submit', function(e) {
+        const start = new Date(document.getElementById('startDatetime').value);
+        const end = new Date(document.getElementById('endDatetime').value);
+        const fileInput = document.getElementById('bannerFile');
+        const isModify = document.getElementById('bannerNo').value !== "";
 
         if (start >= end) {
             alert('종료 일시는 시작 일시보다 이후의 시간이어야 합니다.');
-            e.preventDefault(); // 서브밋 차단
+            e.preventDefault();
             return false;
         }
 
-        if (!fileInput.files || fileInput.files.length === 0) {
+        // 등록 모드일 때만 파일 필수
+        if (!isModify && (!fileInput.files || fileInput.files.length === 0)) {
             alert('배너 이미지는 필수 첨부 사항입니다.');
             e.preventDefault();
             return false;
         }
+    });
+
+    // 헤더 체크박스 → 전체 선택/해제
+    document.getElementById("checkAll").addEventListener("change", function () {
+        document.querySelectorAll(".banner-check").forEach(cb => cb.checked = this.checked);
+    });
+
+    // 선택삭제 버튼
+    document.querySelector(".delete-btn").addEventListener("click", function () {
+        const checked = document.querySelectorAll(".banner-check:checked");
+
+        if (checked.length === 0) {
+            alert("삭제할 배너를 선택해주세요.");
+            return;
+        }
+        if (!confirm(`선택한 ${checked.length}개 배너를 삭제하시겠습니까?`)) return;
+
+        const form = document.createElement("form");
+        form.method = "post";
+        form.action = "/admin/config/banner/delete-multi";
+
+        checked.forEach(cb => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "bannerNos";
+            input.value = cb.value;
+            form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
     });
 </script>
 

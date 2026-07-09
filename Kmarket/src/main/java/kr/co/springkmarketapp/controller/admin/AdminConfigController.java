@@ -65,6 +65,21 @@ public class AdminConfigController {
         return "redirect:/admin/config/banner"; // 삭제 후 배너 목록으로 리다이렉트
     }
 
+    // 배너 다건(선택) 삭제 처리
+    @PostMapping("/banner/delete-multi")
+    public String bannerDeleteMulti(@RequestParam("bannerNos") List<Integer> bannerNos) {
+        if (bannerNos != null && !bannerNos.isEmpty()) {
+            bannerService.deleteBanners(bannerNos);
+        }
+        return "redirect:/admin/config/banner";
+    }
+
+    @PostMapping("/banner/modify")
+    public String bannerModify(@ModelAttribute BannerDTO bannerDTO) {
+        bannerService.modifyBanner(bannerDTO);
+        return "redirect:/admin/config/banner";
+    }
+
     //약관정책
     @GetMapping("/policy")
     public String policy(Model model) {

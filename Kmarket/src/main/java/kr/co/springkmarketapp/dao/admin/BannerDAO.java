@@ -14,6 +14,7 @@ public interface BannerDAO {
     List<BannerDTO> selectBannerList();
     int updateBanner(BannerDTO bannerDTO);
     int deleteBanner(Integer bannerNo);
+    int deleteBanners(List<Integer> bannerNos);
 
     List<BannerDTO> selectBannerListByPosition(String bannerPosition);
 }
