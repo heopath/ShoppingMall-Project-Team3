@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.my.MyDAO"><!-- 주문 개수 -->
+    <select id="selectOrderCount"
+            parameterType="int"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM orders
+        WHERE member_no = #{memberNo}
+    </select>
+
+    <!-- 쿠폰 개수 -->
+    <select id="selectCouponCount"
+            parameterType="int"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM coupon_issue
+        WHERE member_no = #{memberNo}
+        AND status = '발급'
+    </select>
+
+    <!-- 보유 포인트 -->
+    <select id="selectPoint"
+            parameterType="int"
+            resultType="int">
+        SELECT point
+        FROM member
+        WHERE member_no = #{memberNo}
+    </select>
+
+    <!-- 문의 개수 -->
+    <select id="selectQnaCount"
+            parameterType="int"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM qna
+        WHERE member_no = #{memberNo}
+    </select>
+
+    <!-- 최근 주문내역 -->
+    <select id="selectRecentOrderList"
+            parameterType="long"
+            resultType="kr.co.springkmarketapp.dto.order.OrderItemDTO">
+
+        SELECT
+        oi.order_item_no         AS orderItemNo,
+        oi.order_no              AS orderNo,
+        oi.delivery_no           AS deliveryNo,
+        oi.product_no            AS productNo,
+        oi.seller_no             AS sellerNo,
+        oi.product_name          AS productName,
+        oi.product_image         AS productImage,
+        oi.price                 AS price,
+        oi.discount_rate         AS discountRate,
+        oi.coupon_discount       AS couponDiscount,
+        oi.point                 AS point,
+        oi.quantity              AS quantity,
+        oi.total_price           AS totalPrice,
+        oi.item_status           AS itemStatus,
+        oi.purchase_confirm_date AS purchaseConfirmDate,
+
+        o.order_code             AS orderCode,
+        o.order_date             AS orderDate,
+
+        sp.company_name          AS companyName,
+
+        d.delivery_status        AS deliveryStatus,
+
+        pr.review_no             AS reviewNo
+
+        FROM orders o
+
+        INNER JOIN order_item oi
+        ON o.order_no = oi.order_no
+
+        INNER JOIN seller_profile sp
+        ON oi.seller_no = sp.seller_no
+
+        LEFT JOIN delivery d
+        ON oi.delivery_no = d.delivery_no
+
+        LEFT JOIN product_review pr
+        ON oi.order_item_no = pr.order_item_no
+
+        WHERE o.member_no = #{memberNo}
+
+        ORDER BY o.order_date DESC
+
+        <choose>
+            <when test="start != null">
+                LIMIT #{start}, #{size}
+            </when>
+            <otherwise>
+                LIMIT 5
+            </otherwise>
+        </choose>
+
+    </select>
+
+
+    <!-- 주문 상세 팝업 -->
+    <select id="selectOrderDetail"
+            parameterType="long"
+            resultType="kr.co.springkmarketapp.dto.order.OrderItemDTO">
+
+        SELECT
+        o.order_no                 AS orderNo,
+        o.order_code               AS orderCode,
+        o.order_date               AS orderDate,
+
+        oi.order_item_no           AS orderItemNo,
+        oi.product_no              AS productNo,
+        oi.seller_no               AS sellerNo,
+        oi.product_name            AS productName,
+        oi.product_image           AS productImage,
+        oi.price                   AS price,
+        oi.discount_rate           AS discountRate,
+        oi.coupon_discount         AS couponDiscount,
+        oi.quantity                AS quantity,
+        oi.total_price             AS totalPrice,
+        oi.item_status             AS itemStatus,
+        oi.purchase_confirm_date   AS purchaseConfirmDate,
+
+        sp.company_name            AS companyName,
+
+        d.receiver_name            AS receiverName,
+        d.receiver_hp              AS receiverHp,
+        d.zip                      AS zip,
+        d.addr1                    AS addr1,
+        d.addr2                    AS addr2,
+        d.memo                     AS memo,
+        d.delivery_status          AS deliveryStatus
+
+        FROM orders o
+
+        INNER JOIN order_item oi
+        ON o.order_no = oi.order_no
+
+        INNER JOIN seller_profile sp
+        ON oi.seller_no = sp.seller_no
+
+        LEFT JOIN delivery d
+        ON oi.delivery_no = d.delivery_no
+
+        WHERE o.order_no = #{orderNo}
+
+        ORDER BY oi.order_item_no
+
+    </select>
+
+
+    <!-- 판매자 정보 -->
+    <select id="selectSellerDetail"
+            parameterType="int"
+            resultType="kr.co.springkmarketapp.dto.member.SellerProfileDTO">
+
+        SELECT
+        sp.seller_no      AS sellerNo,
+        sp.company_name   AS companyName,
+        sp.ceo_name       AS ceo,
+        sp.biz_no         AS bizRegNo,
+        sp.tel            AS hp,
+        sp.fax            AS fax,
+        m.email           AS email,
+        sp.zip            AS zip,
+        sp.addr1          AS addr1,
+        sp.addr2          AS addr2,
+        sp.status         AS grade
+        FROM seller_profile sp
+        JOIN member m
+        ON sp.member_no = m.member_no
+        WHERE sp.seller_no = #{sellerNo}
+
+    </select>
+
+
+    <!-- 포인트 적립내역 조회 -->
+    <select id="selectPointList"
+            parameterType="int"
+            resultType="kr.co.springkmarketapp.dto.my.MemberPointDTO">
+
+        SELECT
+        point_no AS pointNo,
+        member_no AS memberNo,
+        order_no AS orderNo,
+        point_type AS pointType,
+        point_value AS pointValue,
+        balance_point AS balancePoint,
+        reason,
+        expire_date AS expireDate,
+        reg_date AS regDate
+
+        FROM member_point
+
+        WHERE member_no = #{memberNo}
+
+        ORDER BY reg_date DESC
+
+    </select>
+
+
+    <!-- 내가 작성한 상품평 -->
+    <select id="selectReviewList"
+            parameterType="int"
+            resultType="kr.co.springkmarketapp.dto.product.ProductReviewDTO">
+        SELECT
+        r.review_no      AS reviewNo,
+        r.rating,
+        r.content,
+        r.reg_date       AS regDate,
+        oi.product_name  AS productName,
+        oi.product_image AS imagePath
+        FROM product_review r
+        INNER JOIN order_item oi
+        ON r.order_item_no = oi.order_item_no
+        WHERE r.member_no = #{memberNo}
+        ORDER BY r.reg_date DESC
+    </select>
+
+    <!-- 1:1 문의내역 -->
+    <select id="selectMyQnaList"
+            parameterType="int"
+            resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
+
+        SELECT
+        q.qna_no      AS qnaNo,
+        c.cate_name   AS cateName,
+        p.cate_name   AS parentCateName,
+        q.title       AS title,
+        q.status      AS status,
+        q.reg_date    AS regDate,
+        q.answer_date AS answerDate
+
+        FROM qna q
+
+        JOIN cs_category c
+        ON q.cs_cate_no = c.cs_cate_no
+
+        JOIN cs_category p
+        ON c.parent_no = p.cs_cate_no
+
+        WHERE q.member_no = #{memberNo}
+
+        ORDER BY q.reg_date DESC
+
+    </select>
+
+    <!-- 카테고리  조회 -->
+    <select id="selectQnaCategory"
+            resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
+
+        SELECT
+        c.cs_cate_no AS csCateNo,
+        c.cate_name AS cateName
+        FROM cs_category c
+        INNER JOIN cs_category p
+        ON c.parent_no = p.cs_cate_no
+        WHERE p.cate_name = '상품'
+        ORDER BY c.sort_order
+
+    </select>
+
+    <!-- 문의 등록 -->
+    <insert id="insertQna"
+            parameterType="kr.co.springkmarketapp.dto.cs.QnaDTO">
+
+        INSERT INTO qna
+        (
+        member_no,
+        cs_cate_no,
+        title,
+        content,
+        status
+        )
+        VALUES
+        (
+        #{memberNo},
+        #{csCateNo},
+        #{title},
+        #{content},
+        '검토중'
+        )
+
+    </insert>
+
+    <!--  구매 확정 -->
+    <update id="confirmOrder"
+            parameterType="long">
+
+        UPDATE order_item
+        SET
+        item_status = '구매확정',
+        purchase_confirm_date = NOW()
+        WHERE order_item_no = #{orderItemNo}
+
+    </update>
+
+    <!-- 상품평 작성 모달 정보 조회 -->
+    <select id="selectReviewInfo"
+            parameterType="long"
+            resultType="kr.co.springkmarketapp.dto.product.ProductReviewDTO">
+
+        SELECT
+        oi.order_item_no AS orderItemNo,
+        oi.product_no    AS productNo,
+        oi.product_name  AS productName
+        FROM order_item oi
+        WHERE oi.order_item_no = #{orderItemNo}
+    </select>
+
+    <!-- 상품번호 조회 -->
+    <select id="selectProductNo"
+            parameterType="long"
+            resultType="int">
+
+        SELECT product_no
+        FROM order_item
+        WHERE order_item_no = #{orderItemNo}
+
+    </select>
+
+    <!-- 상품평 등록 -->
+    <insert id="insertReview"
+            parameterType="kr.co.springkmarketapp.dto.product.ProductReviewDTO"
+            useGeneratedKeys="true"
+            keyProperty="reviewNo">
+
+        INSERT INTO product_review
+        (
+        order_item_no,
+        member_no,
+        product_no,
+        rating,
+        content
+        )
+        VALUES
+        (
+        #{orderItemNo},
+        #{memberNo},
+        #{productNo},
+        #{rating},
+        #{content}
+        )
+
+    </insert>
+
+    <!-- 리뷰 이미지 등록 -->
+    <insert id="insertReviewImage"
+            parameterType="kr.co.springkmarketapp.dto.product.ReviewImageDTO">
+
+        INSERT INTO review_image
+        (
+        review_no,
+        image_path,
+        sort_order
+        )
+        VALUES
+        (
+        #{reviewNo},
+        #{imagePath},
+        #{sortOrder}
+        )
+
+    </insert>
+
+</mapper>

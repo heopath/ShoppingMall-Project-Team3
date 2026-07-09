@@ -10,7 +10,15 @@ import java.util.List;
 public interface QnaDAO {
     int insertQna(QnaDTO qnaDTO);
     QnaDTO selectQna(Long qnaNo);
+    // 고객센터 메인용
     List<QnaDTO> selectQnaList();
+
+    // QnA 목록 페이징용
+    List<QnaDTO> selectQnaListPage(
+            @Param("parentNo") int parentNo,
+            @Param("offset") int offset,
+            @Param("size") int size
+    );
 
     // 관리자페이지에서의 parent 1차,2차 카테고리 조회
     List<QnaDTO> selectAdminQnaList();
@@ -18,10 +26,5 @@ public interface QnaDAO {
     int deleteQna(Long qnaNo);
 
     int countQna(int parentNo);
-
-    List<QnaDTO> selectQnaListLimit(
-            @Param("parentNo") int parentNo,
-            @Param("offset") int offset,
-            @Param("size") int size);
 
 }

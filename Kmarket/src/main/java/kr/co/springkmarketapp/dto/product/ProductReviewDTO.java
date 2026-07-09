@@ -47,4 +47,7 @@ public class ProductReviewDTO {
     }
 
 
+    // 마이페이지 - 상품평 쓰기에서 상품명 조회용
+    private String productName;
+
 }
