@@ -15,10 +15,15 @@
         CASE
         WHEN o.order_status = '주문취소' THEN '주문취소'
         WHEN o.order_status IN ('반품진행', '반품완료', '교환진행', '교환완료') THEN o.order_status
-        WHEN d.receipt_date IS NULL THEN '배송준비'
-        WHEN DATEDIFF(NOW(), d.receipt_date) >= 3 THEN '배송완료'
-        WHEN DATEDIFF(NOW(), d.receipt_date) >= 1 THEN '배송중'
-        ELSE '배송준비'
+        WHEN NOT EXISTS (
+        SELECT 1 FROM delivery d2 WHERE d2.order_no = o.order_no
+        ) THEN '배송준비'
+        WHEN EXISTS (
+        SELECT 1 FROM delivery d2
+        WHERE d2.order_no = o.order_no
+        AND DATEDIFF(NOW(), d2.receipt_date) &lt; 3
+        ) THEN '배송중'
+        ELSE '배송완료'
         END AS deliveryStatus,
         (SELECT COUNT(*) FROM order_item oi WHERE oi.order_no = o.order_no) AS itemTotalCount
         FROM orders o
