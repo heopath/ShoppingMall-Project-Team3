@@ -1,140 +1,127 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>문의하기 목록</title>
-    <link rel="stylesheet" href="../../css/main.css" />
-    <link rel="stylesheet" href="../../css/cs/common.css" />
-    <link rel="stylesheet" href="../../css/cs/qna/list.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-    />
-  </head>
-  <body>
-  <th:block th:replace="~{common/_main_header}"></th:block>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>문의하기 목록</title>
+  <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/cs/common.css" />
+  <link rel="stylesheet" href="../../css/cs/qna/list.css" />
+  <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+  />
+</head>
+<body>
+<th:block th:replace="~{common/_main_header}"></th:block>
 
+<main class="main-layout">
+  <div class="breadcrumb">
+    <a th:href="@{/cs/index}">홈</a>
+    <span>></span>
+    <span>문의하기</span>
+  </div>
 
-  <main class="main-layout">
-      <div class="breadcrumb">
-        <a th:href="@{/cs/index}">홈</a>
-        <span>></span>
-        <span>문의하기</span>
+  <div class="cs-layout">
+    <aside class="cs-sidebar">
+      <h3>문의하기</h3>
+      <ul>
+        <li th:classappend="${parentNo == 1} ? 'active'">
+          <a th:href="@{/cs/qna/list(parentNo=1)}">회원</a>
+        </li>
+        <li th:classappend="${parentNo == 2} ? 'active'">
+          <a th:href="@{/cs/qna/list(parentNo=2)}">주문·결제</a>
+        </li>
+        <li th:classappend="${parentNo == 3} ? 'active'">
+          <a th:href="@{/cs/qna/list(parentNo=3)}">배송</a>
+        </li>
+        <li th:classappend="${parentNo == 4} ? 'active'">
+          <a th:href="@{/cs/qna/list(parentNo=4)}">취소·반품·교환</a>
+        </li>
+        <li th:classappend="${parentNo == 5} ? 'active'">
+          <a th:href="@{/cs/qna/list(parentNo=5)}">상품</a>
+        </li>
+      </ul>
+    </aside>
+
+    <section class="cs-content">
+
+      <div class="content-header">
+        <h2 th:switch="${parentNo}">
+          <span th:case="1">회원</span>
+          <span th:case="2">주문·결제</span>
+          <span th:case="3">배송</span>
+          <span th:case="4">취소·반품·교환</span>
+          <span th:case="5">상품</span>
+          <span th:case="*">문의하기</span>
+        </h2>
+        <p th:switch="${parentNo}">
+          <span th:case="1">회원 관련 문의내용 입니다.</span>
+          <span th:case="2">주문·결제 관련 문의내용 입니다.</span>
+          <span th:case="3">배송 관련 문의내용 입니다.</span>
+          <span th:case="4">취소·반품·교환 관련 문의내용 입니다.</span>
+          <span th:case="5">상품 관련 문의내용 입니다.</span>
+          <span th:case="*">문의내용 입니다.</span>
+        </p>
       </div>
 
-      <div class="cs-layout">
-        <!-- 사이드바 -->
-        <aside class="cs-sidebar">
-          <h3>문의하기</h3>
+      <table class="inquiry-table">
+        <tbody>
 
-          <ul>
-            <li th:classappend="${parentNo == 1} ? 'active'">
-              <a th:href="@{/cs/qna/list(parentNo=1)}">회원</a>
-            </li>
+        <tr th:each="qna : ${qnaDTOList}"
+            th:onclick="|location.href='@{/cs/qna/view(qnaNo=${qna.qnaNo},pg=${page.currentPage},parentNo=${parentNo})}'|">
 
-            <li th:classappend="${parentNo == 2} ? 'active'">
-              <a th:href="@{/cs/qna/list(parentNo=2)}">주문·결제</a>
-            </li>
+          <td>
+            [[|[${qna.cateName}] ${qna.title}|]]
+          </td>
 
-            <li th:classappend="${parentNo == 3} ? 'active'">
-              <a th:href="@{/cs/qna/list(parentNo=3)}">배송</a>
-            </li>
+          <td th:class="${qna.status == '검토중'} ? 'status' : 'answer'"
+              th:text="${qna.status == '검토중'} ? '검토중' : '답변완료'">
+          </td>
 
-            <li th:classappend="${parentNo == 4} ? 'active'">
-              <a th:href="@{/cs/qna/list(parentNo=4)}">취소·반품·교환</a>
-            </li>
+          <td>[[${qna.name}]]</td>
 
-            <li th:classappend="${parentNo == 5} ? 'active'">
-              <a th:href="@{/cs/qna/list(parentNo=5)}">상품</a>
-            </li>
-          </ul>
-        </aside>
+          <td>
+            [[${#temporals.format(qna.regDate,'yy.MM.dd')}]]
+          </td>
 
-        <!-- 컨텐츠 -->
-        <section class="cs-content">
+        </tr>
 
-          <div class="content-header">
-            <h2 th:switch="${parentNo}">
-              <span th:case="1">회원</span>
-              <span th:case="2">주문·결제</span>
-              <span th:case="3">배송</span>
-              <span th:case="4">취소·반품·교환</span>
-              <span th:case="5">상품</span>
-              <span th:case="*">문의하기</span>
-            </h2>
+        </tbody>
+      </table>
 
-            <p th:switch="${parentNo}">
-              <span th:case="1">회원 관련 문의내용 입니다.</span>
-              <span th:case="2">주문·결제 관련 문의내용 입니다.</span>
-              <span th:case="3">배송 관련 문의내용 입니다.</span>
-              <span th:case="4">취소·반품·교환 관련 문의내용 입니다.</span>
-              <span th:case="5">상품 관련 문의내용 입니다.</span>
-              <span th:case="*">문의내용 입니다.</span>
-            </p>
-          </div>
+      <div class="bottom-area">
+        <div class="pagination">
 
-          <table class="inquiry-table">
-            <tbody>
+          <a class="page-btn"
+             th:if="${page.currentPage > 1}"
+             th:href="@{/cs/qna/list(parentNo=${parentNo},pg=${page.currentPage-1})}">
+            <i class="bi bi-chevron-left"></i>
+          </a>
 
-            <tr th:each="qna : ${qnaDTOList}"
-                th:onclick="|location.href='@{/cs/qna/view(qnaNo=${qna.qnaNo},pg=${page.currentPage},parentNo=${parentNo})}'|">
+          <a th:each="i : ${#numbers.sequence(page.startPage,page.endPage)}"
+             th:href="@{/cs/qna/list(parentNo=${parentNo},pg=${i})}"
+             th:text="${i}"
+             th:classappend="${i == page.currentPage} ? ' active'">
+          </a>
 
-              <td>
-                [[|[${qna.cateName}] ${qna.title}|]]
-              </td>
+          <a class="page-btn"
+             th:if="${page.currentPage < page.lastPage}"
+             th:href="@{/cs/qna/list(parentNo=${parentNo},pg=${page.currentPage+1})}">
+            <i class="bi bi-chevron-right"></i>
+          </a>
 
-              <td th:class="${qna.status == '검토중'} ? 'status' : 'answer'"
-                  th:text="${qna.status == '검토중'} ? '검토중' : '답변완료'">
-              </td>
+        </div>
 
-              <td>[[${qna.name}]]</td>
-
-              <td>
-                [[${#temporals.format(qna.regDate,'yy.MM.dd')}]]
-              </td>
-
-            </tr>
-
-            </tbody>
-          </table>
-
-          <div class="bottom-area">
-
-            <div class="pagination">
-
-              <a class="page-btn"
-                 th:if="${page.currentPage > 1}"
-                 th:href="@{/cs/qna/list(parentNo=${parentNo},pg=${page.currentPage-1})}">
-                <i class="bi bi-chevron-left"></i>
-              </a>
-
-              <a th:each="i : ${#numbers.sequence(page.startPage,page.endPage)}"
-                 th:href="@{/cs/qna/list(parentNo=${parentNo},pg=${i})}"
-                 th:text="${i}"
-                 th:classappend="${i == page.currentPage} ? ' active'">
-              </a>
-
-              <a class="page-btn"
-                 th:if="${page.currentPage < page.lastPage}"
-                 th:href="@{/cs/qna/list(parentNo=${parentNo},pg=${page.currentPage+1})}">
-                <i class="bi bi-chevron-right"></i>
-              </a>
-
-            </div>
-
-            <a th:href="@{/cs/qna/write(parentNo=${parentNo})}"
-               class="btn-write">
-              문의하기
-            </a>
-
-          </div>
-
-        </section>
+        <a th:href="@{/cs/qna/write(parentNo=${parentNo})}" class="btn-write">
+          문의하기
+        </a>
       </div>
-    </main>
 
-  <th:block th:replace="~{common/_main_footer}"></th:block>
+    </section>
+  </div>
+</main>
 
-  </body>
+<th:block th:replace="~{common/_main_footer}"></th:block>
+</body>
 </html>

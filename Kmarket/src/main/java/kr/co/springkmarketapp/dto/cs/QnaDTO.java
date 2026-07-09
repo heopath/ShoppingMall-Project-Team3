@@ -22,10 +22,11 @@ public class QnaDTO {
     private LocalDateTime regDate;
     private LocalDateTime answerDate;
 
-    // 질문 카테고리 추가 필드
+    // 문의 카테고리 조회용
     private String cateName;
+    private String parentCateName;
+
     // 작성자 추가 필드
     private String name;
-    // 부모 카테고리 추가 필드
-    private String parentCateName;
+
 }
