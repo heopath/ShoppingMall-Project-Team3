@@ -68,76 +68,23 @@
         </div>
 
         <form th:action="${type == 'user'} ? @{/member/register} : @{/member/registerSeller}" method="get">
-          <div class="all-agree-box">
-            <label>
-              <input type="checkbox" id="all-check" />
-              <span>전체 약관에 동의합니다.</span>
-            </label>
-          </div>
-
-          <div class="terms-item">
+          <div class="terms-item" th:each="policy : ${policies}">
             <label class="terms-title">
-              <input type="checkbox" required />
-              <span class="required">[필수]</span>
-              이용약관
+              <input type="checkbox"
+                     th:required="${policy.requiredYn == 'Y'}" />
+
+              <span th:if="${policy.requiredYn == 'Y'}" class="required">[필수]</span>
+              <span th:if="${policy.requiredYn != 'Y'}" class="optional">[선택]</span>
+
+              <span th:text="${policy.title}">약관명</span>
             </label>
 
-            <div class="terms-box">
-              제1조 (목적)<br />
-              본 약관은 케이마켓 쇼핑몰이 제공하는 인터넷 관련 서비스 및
-              전자상거래 서비스를 이용함에 있어 회사와 이용자의 권리, 의무 및
-              책임사항을 규정함을 목적으로 합니다.<br /><br />
-              제2조 (정의)<br />
-              1. "몰"이란 회사가 재화 또는 용역을 이용자에게 제공하기 위하여
-              컴퓨터 등 정보통신설비를 이용하여 재화 등을 거래할 수 있도록
-              설정한 가상의 영업장을 말합니다.
+            <div class="terms-box"
+                 th:text="${policy.content}"
+                 style="white-space: pre-line;">
+              약관 내용
             </div>
           </div>
-
-          <div class="terms-item">
-            <label class="terms-title">
-              <input type="checkbox" required />
-              <span class="required">[필수]</span>
-              전자금융 이용약관
-            </label>
-
-            <div class="terms-box">
-              제1조 (목적)<br />
-              본 약관은 이용자가 케이마켓이 제공하는 전자지급결제대행서비스 및
-              결제대금예치서비스를 이용함에 있어 회사와 이용자 사이의
-              전자금융거래에 관한 기본적인 사항을 정함을 목적으로 합니다.
-            </div>
-          </div>
-
-          <div class="terms-item">
-            <label class="terms-title">
-              <input type="checkbox" required />
-              <span class="required">[필수]</span>
-              개인정보 수집 및 이용동의
-            </label>
-
-            <div class="terms-box">
-              1. 개인정보 수집항목: 성명, 아이디, 비밀번호, 이메일,
-              휴대폰번호.<br />
-              2. 수집 및 이용목적: 회원제 서비스 이용에 따른 본인확인, 구매 및
-              결제, 상품 배송.<br />
-              3. 보유 및 이용기간: 회원 탈퇴 시까지
-            </div>
-          </div>
-
-          <div class="terms-item" th:if="${type=='user'}">
-            <label class="terms-title">
-              <input type="checkbox" />
-              <span class="optional">[선택]</span>
-              위치정보 이용약관
-            </label>
-
-            <div class="terms-box">
-              회사는 이용자가 등록한 위치 정보를 활용하여 맞춤형 상품 추천, 배송
-              정보 안내 등 최적의 서비스를 제공합니다.
-            </div>
-          </div>
-
           <button type="submit" class="submit-btn">동의하기</button>
         </form>
       </div>
