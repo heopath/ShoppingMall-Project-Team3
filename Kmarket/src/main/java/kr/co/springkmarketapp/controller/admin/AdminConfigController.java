@@ -1,9 +1,11 @@
 package kr.co.springkmarketapp.controller.admin;
 
+import kr.co.springkmarketapp.dto.admin.BannerDTO;
 import kr.co.springkmarketapp.dto.product.CategoryDTO;
 import kr.co.springkmarketapp.dto.policy.PolicyDTO;
 import kr.co.springkmarketapp.entity.AppVersion;
 import kr.co.springkmarketapp.service.admin.AppVersionService;
+import kr.co.springkmarketapp.service.admin.BannerService;
 import kr.co.springkmarketapp.service.product.CategoryService;
 import kr.co.springkmarketapp.service.policy.PolicyService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class AdminConfigController {
     private final CategoryService categoryService;
     //약관정책 때문에 추가
     private final PolicyService policyService;
+    private final BannerService bannerService;
 
     @GetMapping("/basic") // /admin/config/basic
     public String basic() {
@@ -36,8 +39,30 @@ public class AdminConfigController {
     }
 
     @GetMapping("/banner")
-    public String banner() {
+    public String bannerList(Model model, @RequestParam(value = "position", defaultValue = "MAIN1") String position) {
+
+        // 1. 전체 조회가 아닌, 파라미터로 넘어온 위치의 배너만 조회합니다.
+        List<BannerDTO> banners = bannerService.selectBannerListByPosition(position);
+
+        // 2. 현재 활성화된 탭 정보를 뷰에 전달합니다.
+        model.addAttribute("banners", banners);
+        model.addAttribute("currentPosition", position);
+
         return "admin/config/banner";
+    }
+
+    // 새 배너 등록 처리 (Form POST)
+    @PostMapping("/banner/register")
+    public String bannerRegister(@ModelAttribute BannerDTO bannerDTO) {
+        bannerService.insertBanner(bannerDTO);
+        return "redirect:/admin/config/banner"; // 등록 후 배너 목록으로 리다이렉트
+    }
+
+    // 배너 단건 삭제 처리
+    @GetMapping("/banner/delete/{id}")
+    public String bannerDelete(@PathVariable("id") Integer bannerNo) {
+        bannerService.deleteBanner(bannerNo);
+        return "redirect:/admin/config/banner"; // 삭제 후 배너 목록으로 리다이렉트
     }
 
     //약관정책
