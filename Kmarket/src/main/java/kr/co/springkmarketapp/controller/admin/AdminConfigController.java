@@ -1,10 +1,11 @@
 package kr.co.springkmarketapp.controller.admin;
 
-import kr.co.springkmarketapp.dto.admin.AppVersionDTO;
 import kr.co.springkmarketapp.dto.product.CategoryDTO;
+import kr.co.springkmarketapp.dto.policy.PolicyDTO;
 import kr.co.springkmarketapp.entity.AppVersion;
 import kr.co.springkmarketapp.service.admin.AppVersionService;
 import kr.co.springkmarketapp.service.product.CategoryService;
+import kr.co.springkmarketapp.service.policy.PolicyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,8 @@ public class AdminConfigController {
 
     private final AppVersionService appVersionService;
     private final CategoryService categoryService;
+    //약관정책 때문에 추가
+    private final PolicyService policyService;
 
     @GetMapping("/basic") // /admin/config/basic
     public String basic() {
@@ -36,9 +40,25 @@ public class AdminConfigController {
         return "admin/config/banner";
     }
 
+    //약관정책
     @GetMapping("/policy")
-    public String policy() {
+    public String policy(Model model) {
+        model.addAttribute("policies", policyService.selectAdminPolicyList());
         return "admin/config/policy";
+    }
+
+    //약관정책 수정
+    @PostMapping("/policy/modify")
+    public String modifyPolicy(PolicyDTO policyDTO, RedirectAttributes redirectAttributes) {
+        int result = policyService.savePolicy(policyDTO);
+
+        if (result > 0) {
+            redirectAttributes.addFlashAttribute("message", "약관이 수정되었습니다.");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "약관 수정에 실패했습니다.");
+        }
+
+        return "redirect:/admin/config/policy";
     }
 
     @GetMapping("/category")

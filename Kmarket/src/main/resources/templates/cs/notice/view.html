@@ -23,21 +23,32 @@
         <!-- 사이드바 -->
         <aside class="cs-sidebar">
           <h3>공지사항</h3>
-
           <ul>
-            <li class="active"><a href="#">전체</a></li>
-            <li><a href="#">고객서비스</a></li>
-            <li><a href="#">안전거래</a></li>
-            <li><a href="#">위해상품</a></li>
-            <li><a href="#">이벤트당첨</a></li>
+            <li th:classappend="${notice.noticeType == null or notice.noticeType == ''} ? 'active'">
+              <a th:href="@{/cs/notice/list}">전체</a>
+            </li>
+            <li th:classappend="${notice.noticeType == '고객서비스'} ? 'active'">
+              <a th:href="@{/cs/notice/list(noticeType='고객서비스')}">고객서비스</a>
+            </li>
+            <li th:classappend="${notice.noticeType == '안전거래'} ? 'active'">
+              <a th:href="@{/cs/notice/list(noticeType='안전거래')}">안전거래</a>
+            </li>
+            <li th:classappend="${notice.noticeType == '위해상품'} ? 'active'">
+              <a th:href="@{/cs/notice/list(noticeType='위해상품')}">위해상품</a>
+            </li>
+            <li th:classappend="${notice.noticeType == '이벤트당첨'} ? 'active'">
+              <a th:href="@{/cs/notice/list(noticeType='이벤트당첨')}">이벤트당첨</a>
+            </li>
           </ul>
         </aside>
 
         <!-- 본문 -->
         <section class="cs-content">
           <div class="content-header">
-            <h2>전체</h2>
-            <p>공지사항 전체 내용 입니다.</p>
+            <h2 th:text="${notice.noticeType}">전체</h2>
+            <p th:text="${notice.noticeType + ' 관련 공지사항입니다.'}">
+              공지사항 내용입니다.
+            </p>
           </div>
 
           <div class="notice-view">
@@ -53,7 +64,7 @@
           </div>
 
           <div class="view-btn-area">
-            <a th:href="@{/cs/notice/list(pg=${pg})}" class="btn-list">
+            <a th:href="@{/cs/notice/list(pg=${pg}, noticeType=${notice.noticeType})}" class="btn-list">
               목록
             </a>
           </div>

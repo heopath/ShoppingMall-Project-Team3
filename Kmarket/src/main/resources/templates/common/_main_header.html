@@ -25,9 +25,16 @@
         <img src="/images/main/header_logo.png" alt="Kmarket 로고" />
     </a>
 
-    <div class="search-box">
-        <input type="text" placeholder="상품, 브랜드를 검색해보세요" />
-        <button aria-label="검색">
+    <form class="search-box"
+          th:action="@{/product/search}"
+          method="get">
+
+        <input type="text"
+               name="keyword"
+               th:value="${keyword}"
+               placeholder="상품, 브랜드를 검색해보세요" />
+
+        <button type="submit" aria-label="검색">
             <svg viewBox="0 0 24 24">
                 <path
                         d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
@@ -38,7 +45,7 @@
                 />
             </svg>
         </button>
-    </div>
+    </form>
 
     <!-- 로그인 -->
     <nav class="header-links" th:if="${#authorization.expression('isAuthenticated()')}">
@@ -46,6 +53,7 @@
         <a th:href="@{/member/logout}">로그아웃</a>
         <a th:href="@{/my/home}">마이페이지</a>
         <a th:href="@{/product/cart}">장바구니</a>
+        <a th:href="@{/cs/index}">고객센터</a>
     </nav>
     <!-- 비로그인 -->
     <nav class="header-links"

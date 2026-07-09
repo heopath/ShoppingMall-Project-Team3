@@ -139,7 +139,7 @@
                         <td th:text="${#temporals.format(o.orderDate, 'yyyy-MM-dd HH:mm:ss')}">0000-00-00</td>
                         <td>
                             <button type="button"
-                                    th:if="${o.orderStatus != '주문취소' and o.orderStatus != '전체배송완료'}"
+                                    th:if="${o.deliveryStatus == '배송준비' or o.deliveryStatus == '배송중'}"
                                     class="delivery-btn js-delivery-btn"
                                     th:data-order-no="${o.orderNo}"
                                     th:data-order-code="${o.orderCode}">
@@ -147,13 +147,8 @@
                             </button>
 
                             <span class="delivery-text"
-                                  th:if="${o.orderStatus == '전체배송완료'}">
-                                배송완료
-                            </span>
-
-                            <span class="delivery-text"
-                                  th:if="${o.orderStatus == '주문취소'}">
-                                주문취소
+                                  th:if="${o.deliveryStatus != '배송준비' and o.deliveryStatus != '배송중'}"
+                                  th:text="${o.deliveryStatus}">
                             </span>
                         </td>
                     </tr>
@@ -500,7 +495,7 @@
                     <button type="button"
                             class="green-submit-btn"
                             onclick="submitDeliveryByDeliveryNo(${d.deliveryNo})">
-                        등록하기
+                        ${d.invoiceNo ? '수정하기' : '등록하기'}
                     </button>
                 </div>
             </div>
