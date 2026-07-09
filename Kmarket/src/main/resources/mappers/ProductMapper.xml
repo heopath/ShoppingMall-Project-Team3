@@ -54,6 +54,9 @@
 
         FROM product p
 
+        JOIN seller_profile sp
+        ON p.seller_no = sp.seller_no
+
         LEFT JOIN product_image pi
         ON p.product_no = pi.product_no
 
@@ -61,6 +64,7 @@
         ON p.product_no = pr.product_no
 
         WHERE p.status = '판매중'
+        AND sp.status = '운영중'
 
         GROUP BY
         p.product_no,
@@ -223,6 +227,7 @@
 
         /*
         판매자 전체 통계
+        판매중 상품 + 운영중 판매자 기준으로만 계산한다.
         판매량과 리뷰 통계를 분리해서 계산한다.
         그래야 리뷰 개수만큼 sold_count가 중복 합산되지 않는다.
         */
@@ -236,22 +241,37 @@
         FROM (
         /* 판매자별 누적 판매량 */
         SELECT
-        seller_no,
-        SUM(sold_count) AS seller_sold_count
-        FROM product
-        GROUP BY seller_no
+        p2.seller_no,
+        SUM(p2.sold_count) AS seller_sold_count
+        FROM product p2
+
+        JOIN seller_profile sp2
+        ON p2.seller_no = sp2.seller_no
+
+        WHERE p2.status = '판매중'
+        AND sp2.status = '운영중'
+
+        GROUP BY p2.seller_no
         ) sales
 
         LEFT JOIN (
         /* 판매자별 전체 리뷰 평균 / 리뷰 수 */
         SELECT
-        p.seller_no,
+        p3.seller_no,
         ROUND(AVG(pr.rating), 1) AS seller_avg_rating,
         COUNT(pr.review_no) AS seller_review_count
-        FROM product p
+        FROM product p3
+
+        JOIN seller_profile sp3
+        ON p3.seller_no = sp3.seller_no
+
         JOIN product_review pr
-        ON p.product_no = pr.product_no
-        GROUP BY p.seller_no
+        ON p3.product_no = pr.product_no
+
+        WHERE p3.status = '판매중'
+        AND sp3.status = '운영중'
+
+        GROUP BY p3.seller_no
         ) review
         ON sales.seller_no = review.seller_no
 
@@ -260,6 +280,7 @@
 
         WHERE p.cate_no = #{cateNo}
         AND p.status = '판매중'
+        AND sp.status = '운영중'
 
         <choose>
             <when test="sort == 'sold'">
@@ -302,9 +323,14 @@
     <select id="selectCountByCategory" resultType="int">
 
         SELECT COUNT(*)
-        FROM product
-        WHERE cate_no = #{cateNo}
-        AND status = '판매중'
+        FROM product p
+
+        JOIN seller_profile sp
+        ON p.seller_no = sp.seller_no
+
+        WHERE p.cate_no = #{cateNo}
+        AND p.status = '판매중'
+        AND sp.status = '운영중'
 
     </select>
 
@@ -376,6 +402,12 @@
         ) rv
         ON p.product_no = rv.product_no
 
+        /*
+        판매자 전체 통계
+        판매중 상품 + 운영중 판매자 기준으로만 계산한다.
+        판매량과 리뷰 통계를 분리해서 계산한다.
+        그래야 리뷰 개수만큼 sold_count가 중복 합산되지 않는다.
+        */
         LEFT JOIN (
         SELECT
         sales.seller_no,
@@ -384,22 +416,39 @@
         IFNULL(review.seller_review_count, 0) AS seller_review_count
 
         FROM (
+        /* 판매자별 누적 판매량 */
         SELECT
-        seller_no,
-        SUM(sold_count) AS seller_sold_count
-        FROM product
-        GROUP BY seller_no
+        p2.seller_no,
+        SUM(p2.sold_count) AS seller_sold_count
+        FROM product p2
+
+        JOIN seller_profile sp2
+        ON p2.seller_no = sp2.seller_no
+
+        WHERE p2.status = '판매중'
+        AND sp2.status = '운영중'
+
+        GROUP BY p2.seller_no
         ) sales
 
         LEFT JOIN (
+        /* 판매자별 전체 리뷰 평균 / 리뷰 수 */
         SELECT
-        p.seller_no,
+        p3.seller_no,
         ROUND(AVG(pr.rating), 1) AS seller_avg_rating,
         COUNT(pr.review_no) AS seller_review_count
-        FROM product p
+        FROM product p3
+
+        JOIN seller_profile sp3
+        ON p3.seller_no = sp3.seller_no
+
         JOIN product_review pr
-        ON p.product_no = pr.product_no
-        GROUP BY p.seller_no
+        ON p3.product_no = pr.product_no
+
+        WHERE p3.status = '판매중'
+        AND sp3.status = '운영중'
+
+        GROUP BY p3.seller_no
         ) review
         ON sales.seller_no = review.seller_no
 
@@ -407,6 +456,7 @@
         ON p.seller_no = ss.seller_no
 
         WHERE p.status = '판매중'
+        AND sp.status = '운영중'
 
         <if test="keyword != null and keyword != ''">
             AND
@@ -479,8 +529,14 @@
     <select id="selectCountBySearch" resultType="int">
 
         SELECT COUNT(*)
+
         FROM product p
+
+        JOIN seller_profile sp
+        ON p.seller_no = sp.seller_no
+
         WHERE p.status = '판매중'
+        AND sp.status = '운영중'
 
         <if test="keyword != null and keyword != ''">
             AND
@@ -578,6 +634,7 @@
 
         WHERE p.product_no = #{productNo}
         AND p.status = '판매중'
+        AND sp.status = '운영중'
 
     </select>
 

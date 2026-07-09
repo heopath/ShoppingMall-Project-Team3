@@ -301,4 +301,81 @@
 
     </update>
 
+    <!-- 판매자 개별상품 할인 쿠폰 원본 조회 -->
+    <select id="selectSellerProductCoupon"
+            resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
+
+        SELECT
+        c.coupon_no AS couponNo,
+        c.coupon_code AS couponCode,
+        c.seller_no AS sellerNo,
+        c.coupon_type AS couponType,
+        c.coupon_name AS couponName,
+        c.benefit_type AS benefitType,
+        c.benefit_value AS benefitValue,
+        c.min_order_price AS minOrderPrice,
+        c.max_discount_price AS maxDiscountPrice,
+        c.issue_limit AS issueLimit,
+        c.start_date AS startDate,
+        c.end_date AS endDate,
+        c.caution AS caution,
+        c.status AS status,
+        c.reg_date AS regDate
+
+        FROM coupon c
+
+        WHERE c.seller_no = #{sellerNo}
+        AND REPLACE(c.coupon_type, ' ', '') = '개별상품할인'
+        AND c.status IN ('사용', 'ACTIVE')
+
+        ORDER BY c.coupon_no ASC
+        LIMIT 1
+
+    </select>
+
+    <!-- 회원이 해당 판매자의 개별상품 할인 쿠폰을 이미 발급받았는지 확인 -->
+    <select id="countIssuedSellerProductCoupon" resultType="int">
+
+        SELECT COUNT(*)
+
+        FROM coupon_issue ci
+
+        JOIN coupon c
+        ON ci.coupon_no = c.coupon_no
+
+        WHERE ci.member_no = #{memberNo}
+        AND c.seller_no = #{sellerNo}
+        AND REPLACE(c.coupon_type, ' ', '') = '개별상품할인'
+        AND ci.status NOT IN ('삭제', 'DELETED')
+
+    </select>
+
+    <!-- 쿠폰 발급 -->
+    <insert id="insertCouponIssue">
+
+        INSERT INTO coupon_issue (
+        issue_code,
+        coupon_no,
+        member_no,
+        status,
+        issue_date
+        )
+        VALUES (
+        #{issueCode},
+        #{couponNo},
+        #{memberNo},
+        '발급',
+        NOW()
+        )
+
+    </insert>
+
+    <select id="selectSellerNameBySellerNo" resultType="string">
+
+        SELECT COALESCE(company_name, CONCAT('판매자', seller_no))
+        FROM seller_profile
+        WHERE seller_no = #{sellerNo}
+
+    </select>
+
 </mapper>

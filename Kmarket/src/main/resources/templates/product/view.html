@@ -103,58 +103,124 @@
                         </div>
 
                         <div class="sale-price"
-                             th:text="${#numbers.formatInteger(product.salePrice, 3, 'COMMA')} + '원'">
+                             th:text="${#numbers.formatInteger(product.salePrice, 1, 'COMMA')} + '원'">
                             27,000원
                         </div>
 
-                        <div class="delivery-info">
+                        <div class="delivery-coupon-row">
 
-                            <span class="delivery-badge"
-                                  th:if="${product.deliveryFee == 0}">
-                                무료배송
-                            </span>
+                            <div class="delivery-origin-box">
+                                <div class="delivery-info">
 
-                            <span class="delivery-badge paid"
-                                  th:unless="${product.deliveryFee == 0}"
-                                  th:text="'배송비 ' + ${#numbers.formatInteger(product.deliveryFee, 3, 'COMMA')} + '원'">
-                                배송비 3,000원
-                            </span>
+                                    <span class="delivery-badge"
+                                          th:if="${product.deliveryFee == 0}">
+                                        무료배송
+                                    </span>
 
-                            <span>배송 예정</span>
+                                    <span class="delivery-badge paid"
+                                          th:unless="${product.deliveryFee == 0}"
+                                          th:text="'배송비 ' + ${#numbers.formatInteger(product.deliveryFee, 3, 'COMMA')} + '원'">
+                                        배송비 3,000원
+                                    </span>
+
+                                    <span>배송 예정</span>
+                                </div>
+
+                                <p class="delivery-note"
+                                   th:text="${product.deliveryFee == 0 ? '무료배송 · 국내배송만 가능합니다.' : '배송비가 부과됩니다.'}">
+                                    무료배송 · 국내배송만 가능합니다.
+                                </p>
+
+                                <p class="origin-note">
+                                    원산지 - 상세설명 참고
+                                </p>
+                            </div>
+
+                            <div class="product-coupon-box"
+                                 th:if="${sellerProductCoupon != null}">
+
+                                <div class="product-coupon-card">
+
+                                    <div class="product-coupon-info">
+                                        <div class="coupon-title">
+                                            <strong th:if="${sellerProductCoupon.benefitType == 'PERCENT'}"
+                                                    th:text="${sellerProductCoupon.benefitValue} + '%'">
+                                                10%
+                                            </strong>
+
+                                            <strong th:if="${sellerProductCoupon.benefitType == 'AMOUNT'}"
+                                                    th:text="${#numbers.formatInteger(sellerProductCoupon.benefitValue, 1, 'COMMA')} + '원'">
+                                                2,000원
+                                            </strong>
+
+                                            <span>할인 쿠폰</span>
+                                        </div>
+
+                                        <em th:if="${sellerProductCoupon.benefitType == 'PERCENT'}"
+                                            th:text="${product.sellerName + ' ' + sellerProductCoupon.benefitValue + '% 할인 쿠폰'}">
+                                            테스트상점01 10% 할인 쿠폰
+                                        </em>
+
+                                        <em th:if="${sellerProductCoupon.benefitType == 'AMOUNT'}"
+                                            th:text="${product.sellerName + ' ' + #numbers.formatInteger(sellerProductCoupon.benefitValue, 1, 'COMMA') + '원 할인 쿠폰'}">
+                                            테스트상점01 2,000원 할인 쿠폰
+                                        </em>
+                                    </div>
+
+                                    <button type="button"
+                                            id="couponIssueBtn"
+                                            class="btn-coupon-issue"
+                                            th:data-seller-no="${product.sellerNo}"
+                                            th:disabled="${sellerCouponIssued}"
+                                            th:text="${sellerCouponIssued ? '발급완료' : '쿠폰받기'}">
+                                        쿠폰받기
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-
-                        <p class="delivery-note"
-                           th:text="${product.deliveryFee == 0 ? '무료배송 · 국내배송만 가능합니다.' : '배송비가 부과됩니다.'}">
-                            무료배송 · 국내배송만 가능합니다.
-                        </p>
-
-                        <p class="origin-note">
-                            원산지 - 상세설명 참고
-                        </p>
                     </div>
+
+
 
                     <div class="option-box"
                          th:if="${!#maps.isEmpty(optionGroups)}">
 
+                        <div class="option-box-title">
+                            <strong>상품 옵션</strong>
+                            <span>옵션을 선택해 주세요.</span>
+                        </div>
+
                         <div class="option-row"
                              th:each="entry : ${optionGroups}">
 
-                            <!-- 같은 그룹의 첫 번째 옵션에서 옵션 이름 가져오기 -->
-                            <label th:text="${entry.value[0].optionName}">
-                                옵션
+                            <label class="option-label"
+                                   th:for="|option-${entry.key}|">
+
+                            <span th:text="${entry.value[0].optionName}">
+                                색상
+                            </span>
+
+                                <em>필수</em>
                             </label>
 
-                            <select class="option-select"
-                                    th:data-group-no="${entry.key}">
+                            <div class="option-select-wrap">
+                                <select class="option-select"
+                                        required
+                                        th:id="|option-${entry.key}|"
+                                        th:data-group-no="${entry.key}">
 
-                                <option value="">선택하세요</option>
+                                    <option value=""
+                                            th:text="|[${entry.value[0].optionName}] 선택하세요|">
+                                        [색상] 선택하세요
+                                    </option>
 
-                                <option th:each="option : ${entry.value}"
-                                        th:value="${option.optionNo}"
-                                        th:text="${option.optionValue}">
-                                    블랙
-                                </option>
-                            </select>
+                                    <option th:each="option : ${entry.value}"
+                                            th:value="${option.optionNo}"
+                                            th:text="${option.optionValue}">
+                                        블랙
+                                    </option>
+                                </select>
+                            </div>
 
                         </div>
                     </div>
