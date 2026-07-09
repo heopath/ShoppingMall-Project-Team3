@@ -21,18 +21,21 @@
     overflow: hidden;
 }
 
-.banner-tabs button {
+.banner-tabs .tab-btn {
     flex: 1;
     min-width: 0;
-    height: 40px;
+    height: 42px;
+    line-height: 40px; /* 세로 정렬 가운대로 맞춤 */
+    text-align: center;
     padding: 0 6px;
-    border: none;
     border-right: 1px solid #b9cbb0;
     background: #e8f3e2;
     color: #222;
     font-size: 11px;
+    text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
+    box-sizing: border-box;
 }
 
 .banner-tabs button.active {

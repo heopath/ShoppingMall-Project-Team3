@@ -4,6 +4,12 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.springkmarketapp.dao.admin.BannerDAO">
 
+    <select id="selectBannerListByPosition" resultType="kr.co.springkmarketapp.dto.admin.BannerDTO">
+        SELECT * FROM banner
+        WHERE banner_position = #{bannerPosition}
+        ORDER BY sort_order ASC, reg_date DESC
+    </select>
+
     <resultMap id="BannerResultMap" type="kr.co.springkmarketapp.dto.admin.BannerDTO">
         <id property="bannerNo" column="banner_no" />
         <result property="bannerName" column="banner_name" />
@@ -19,9 +25,16 @@
         <result property="regDate" column="reg_date" />
     </resultMap>
 
-    <insert id="insertBanner" parameterType="kr.co.springkmarketapp.dto.admin.BannerDTO" useGeneratedKeys="true" keyProperty="bannerNo">
-        INSERT INTO banner (banner_name, banner_size, bg_color, link_url, banner_position, image_path, sort_order, start_datetime, end_datetime, use_yn, reg_date)
-        VALUES (#{bannerName}, #{bannerSize}, #{bgColor}, #{linkUrl}, #{bannerPosition}, #{imagePath}, #{sortOrder}, #{startDatetime}, #{endDatetime}, #{useYn}, #{regDate})
+    <insert id="insertBanner" parameterType="kr.co.springkmarketapp.dto.admin.BannerDTO">
+        INSERT INTO banner (
+        banner_name, banner_size, bg_color, link_url,
+        banner_position, image_path, sort_order,
+        start_datetime, end_datetime, use_yn
+        ) VALUES (
+        #{bannerName}, #{bannerSize}, #{bgColor}, #{linkUrl},
+        #{bannerPosition}, #{imagePath}, #{sortOrder},
+        #{startDatetime}, #{endDatetime}, #{useYn}
+        )
     </insert>
 
     <select id="selectBanner" resultMap="BannerResultMap">
