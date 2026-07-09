@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.springkmarketapp.dao.policy.PolicyDAO">
+
+    <insert id="insertPolicy" parameterType="kr.co.springkmarketapp.dto.policy.PolicyDTO" useGeneratedKeys="true" keyProperty="policyNo">
+        INSERT INTO policy (
+            policy_type,
+            title,
+            content,
+            required_yn,
+            use_yn,
+            update_date
+        ) VALUES (
+            #{policyType},
+            #{title},
+            #{content},
+            #{requiredYn},
+            #{useYn},
+            NOW()
+        )
+    </insert>
+
+    <select id="selectPolicy" parameterType="int" resultType="kr.co.springkmarketapp.dto.policy.PolicyDTO">
+        SELECT
+            policy_no,
+            policy_type,
+            title,
+            content,
+            required_yn,
+            use_yn,
+            update_date
+        FROM policy
+        WHERE policy_no = #{policyNo}
+    </select>
+
+    <select id="selectPolicyByType" parameterType="string" resultType="kr.co.springkmarketapp.dto.policy.PolicyDTO">
+        SELECT
+            policy_no,
+            policy_type,
+            title,
+            content,
+            required_yn,
+            use_yn,
+            update_date
+        FROM policy
+        WHERE policy_type = #{policyType}
+        ORDER BY policy_no DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectPolicyList" resultType="kr.co.springkmarketapp.dto.policy.PolicyDTO">
+        SELECT
+            policy_no,
+            policy_type,
+            title,
+            content,
+            required_yn,
+            use_yn,
+            update_date
+        FROM policy
+        ORDER BY
+            FIELD(policy_type, 'buyer', 'seller', 'finance', 'location', 'privacy'),
+            policy_no ASC
+    </select>
+
+    <update id="updatePolicy" parameterType="kr.co.springkmarketapp.dto.policy.PolicyDTO">
+        UPDATE policy
+        SET
+            title = #{title},
+            content = #{content},
+            required_yn = #{requiredYn},
+            use_yn = #{useYn},
+            update_date = NOW()
+        WHERE policy_no = #{policyNo}
+    </update>
+
+    <delete id="deletePolicy" parameterType="int">
+        DELETE FROM policy
+        WHERE policy_no = #{policyNo}
+    </delete>
+
+</mapper>

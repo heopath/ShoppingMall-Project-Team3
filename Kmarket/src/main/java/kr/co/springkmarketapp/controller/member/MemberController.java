@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import kr.co.springkmarketapp.service.policy.PolicyService;
 
 import java.util.Map;
 
@@ -26,6 +27,9 @@ public class MemberController {
     private final MemberService memberService;
     private final EmailService emailService;
     private final SellerProfileService sellerProfileService;
+
+    //약관 정책
+    private final PolicyService policyService;
 
     @GetMapping("/member/login")
     public String login() {
@@ -77,6 +81,7 @@ public class MemberController {
     @GetMapping("/member/signup")
     public String signup(@RequestParam String type, Model model) {
         model.addAttribute("type", type);
+        model.addAttribute("policies", policyService.selectSignupPolicyList(type));
         return "member/signup";
     }
 
@@ -149,6 +154,9 @@ public class MemberController {
     public int checkTel(String tel) {
         return sellerProfileService.countTel(tel);
     }
+
+
+
 
 
 }

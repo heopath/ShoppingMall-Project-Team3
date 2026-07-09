@@ -9,6 +9,7 @@ import java.util.List;
 public interface PolicyDAO {
     int insertPolicy(PolicyDTO policyDTO);
     PolicyDTO selectPolicy(Integer policyNo);
+    PolicyDTO selectPolicyByType(String policyType);
     List<PolicyDTO> selectPolicyList();
     int updatePolicy(PolicyDTO policyDTO);
     int deletePolicy(Integer policyNo);
