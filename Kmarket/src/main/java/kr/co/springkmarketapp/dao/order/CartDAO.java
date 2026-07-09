@@ -3,6 +3,7 @@ package kr.co.springkmarketapp.dao.order;
 import kr.co.springkmarketapp.dto.order.CartDTO;
 import kr.co.springkmarketapp.dto.order.CartListDTO;
 import kr.co.springkmarketapp.dto.order.CartProductDTO;
+import kr.co.springkmarketapp.dto.order.OrderItemOptionDTO;
 import kr.co.springkmarketapp.dto.product.ProductOptionDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -51,6 +52,9 @@ public interface CartDAO {
     );
 
     // 선택 옵션 저장
+    int insertCartOption(@Param("cartNo") Integer cartNo,
+                         @Param("optionNo") Integer optionNo);
+
     int insertCartOptions(
             @Param("cartNo") Integer cartNo,
             @Param("optionNos") List<Integer> optionNos
@@ -84,5 +88,9 @@ public interface CartDAO {
     List<CartListDTO> selectCartListByMemberNoAndCartNos(
             @Param("memberNo") Integer memberNo,
             @Param("cartNos") List<Integer> cartNos
+    );
+
+    List<OrderItemOptionDTO> selectOrderItemOptionsByCartNo(
+            @Param("cartNo") Integer cartNo
     );
 }

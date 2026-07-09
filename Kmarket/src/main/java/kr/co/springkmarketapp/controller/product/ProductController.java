@@ -404,6 +404,31 @@ public class ProductController {
         }
     }
 
+    // 상품상세 -> 바로구매
+    @PostMapping("/product/order/direct")
+    @ResponseBody
+    public Map<String, Object> directOrder(
+            @RequestBody DirectOrderRequestDTO request,
+            @AuthenticationPrincipal MyUserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return Map.of(
+                    "status", "fail",
+                    "message", "로그인이 필요합니다."
+            );
+        }
+
+        Integer memberNo = userDetails.getMember().getMemberNo();
+
+        Integer cartNo = cartService.createDirectCart(memberNo, request);
+
+        return Map.of(
+                "status", "success",
+                "cartNo", cartNo,
+                "redirectUrl", "/product/order?cartNo=" + cartNo
+        );
+    }
+
     @GetMapping("/product/complete")
     public String complete() {
         return "product/complete";

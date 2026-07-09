@@ -158,4 +158,67 @@
 
     </update>
 
+    <!-- 주문상품 옵션 저장 -->
+    <insert id="insertOrderItemOption"
+            useGeneratedKeys="true"
+            keyProperty="orderItemOptionNo"
+            keyColumn="order_item_option_no">
+
+        INSERT INTO order_item_option (
+        order_item_no,
+        option_group_no,
+        option_name,
+        option_value
+        )
+        VALUES (
+        #{orderItemNo},
+        #{optionGroupNo},
+        #{optionName},
+        #{optionValue}
+        )
+
+    </insert>
+
+    <!-- 포인트 사용 차감 -->
+    <update id="updateMemberPointUse">
+        UPDATE member
+        SET point = point - #{usedPoint}
+        WHERE member_no = #{memberNo}
+        AND point >= #{usedPoint}
+    </update>
+
+    <!-- 포인트 적립 -->
+    <update id="updateMemberPointEarn">
+        UPDATE member
+        SET point = point + #{pointSave}
+        WHERE member_no = #{memberNo}
+    </update>
+
+    <!-- 포인트 이력 저장 -->
+    <insert id="insertMemberPoint"
+            useGeneratedKeys="true"
+            keyProperty="pointNo"
+            keyColumn="point_no">
+        INSERT INTO member_point (
+        member_no,
+        order_no,
+        point_type,
+        point_value,
+        balance_point,
+        reason,
+        expire_date
+        )
+        VALUES (
+        #{memberNo},
+        #{orderNo},
+        #{pointType},
+        #{pointValue},
+        #{balancePoint},
+        #{reason},
+        #{expireDate}
+        )
+    </insert>
+
+
+
 </mapper>

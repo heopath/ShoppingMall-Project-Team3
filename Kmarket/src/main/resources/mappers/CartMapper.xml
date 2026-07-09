@@ -63,6 +63,17 @@
 
     </insert>
 
+    <insert id="insertCartOption">
+        INSERT INTO cart_option (
+        cart_no,
+        option_no
+        )
+        VALUES (
+        #{cartNo},
+        #{optionNo}
+        )
+    </insert>
+
     <!-- 장바구니 수정 : 기본 CRUD용 -->
     <update id="updateCart">
 
@@ -355,5 +366,23 @@
         ORDER BY c.reg_date DESC, c.cart_no DESC
 
     </select>
+
+    <!-- cart_option + product_option 조회 후 주문상품 옵션 DTO로 변환 -->
+    <select id="selectOrderItemOptionsByCartNo"
+            resultType="kr.co.springkmarketapp.dto.order.OrderItemOptionDTO">
+
+        SELECT
+        po.option_group_no AS optionGroupNo,
+        po.option_name     AS optionName,
+        po.option_value    AS optionValue
+        FROM cart_option co
+        JOIN product_option po
+        ON co.option_no = po.option_no
+        WHERE co.cart_no = #{cartNo}
+        ORDER BY po.option_group_no ASC, po.sort_order ASC, po.option_no ASC
+
+    </select>
+
+
 
 </mapper>
