@@ -356,6 +356,24 @@
         document.body.appendChild(form);
         form.submit();
     });
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const start = new Date(document.querySelector('input[name="startDatetime"]').value);
+        const end = new Date(document.querySelector('input[name="endDatetime"]').value);
+        const fileInput = document.querySelector('input[name="bannerFile"]');
+
+        if (start >= end) {
+            alert('종료 일시는 시작 일시보다 이후의 시간이어야 합니다.');
+            e.preventDefault(); // 서브밋 차단
+            return false;
+        }
+
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert('배너 이미지는 필수 첨부 사항입니다.');
+            e.preventDefault();
+            return false;
+        }
+    });
 </script>
 
 </body>
