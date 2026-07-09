@@ -44,34 +44,29 @@
         </div>
 
         <div class="faq-category">
-            <a th:href="@{/cs/faq/list}">
+            <a th:href="@{/cs/faq/list(parentNo=1)}">
                 <div class="icon"><i class="bi bi-person"></i></div>
                 <span>회원</span>
             </a>
 
-            <a href="#">
-                <div class="icon"><i class="bi bi-ticket-perforated"></i></div>
-                <span>쿠폰/이벤트</span>
-            </a>
-
-            <a href="#">
+            <a th:href="@{/cs/faq/list(parentNo=2)}">
                 <div class="icon"><i class="bi bi-credit-card"></i></div>
-                <span>주문/결제</span>
+                <span>주문·결제</span>
             </a>
 
-            <a href="#">
+            <a th:href="@{/cs/faq/list(parentNo=3)}">
                 <div class="icon"><i class="bi bi-truck"></i></div>
                 <span>배송</span>
             </a>
 
-            <a href="#">
+            <a th:href="@{/cs/faq/list(parentNo=4)}">
                 <div class="icon"><i class="bi bi-arrow-counterclockwise"></i></div>
-                <span>취소/반품</span>
+                <span>취소·반품·교환</span>
             </a>
 
-            <a href="#">
-                <div class="icon"><i class="bi bi-shield-check"></i></div>
-                <span>안전거래</span>
+            <a th:href="@{/cs/faq/list(parentNo=5)}">
+                <div class="icon"><i class="bi bi-box-seam"></i></div>
+                <span>상품</span>
             </a>
         </div>
     </section>

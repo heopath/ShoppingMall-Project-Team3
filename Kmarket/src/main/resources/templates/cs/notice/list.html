@@ -26,26 +26,25 @@
         <!-- 사이드 메뉴 -->
         <aside class="cs-sidebar">
             <h3>공지사항</h3>
-
             <ul>
-                <li class="active">
-                    <a href="#">전체</a>
+                <li th:classappend="${noticeType == null or noticeType == ''} ? 'active'">
+                    <a th:href="@{/cs/notice/list}">전체</a>
                 </li>
 
-                <li>
-                    <a href="#">고객서비스</a>
+                <li th:classappend="${noticeType == '고객서비스'} ? 'active'">
+                    <a th:href="@{/cs/notice/list(noticeType='고객서비스')}">고객서비스</a>
                 </li>
 
-                <li>
-                    <a href="#">안전거래</a>
+                <li th:classappend="${noticeType == '안전거래'} ? 'active'">
+                    <a th:href="@{/cs/notice/list(noticeType='안전거래')}">안전거래</a>
                 </li>
 
-                <li>
-                    <a href="#">위해상품</a>
+                <li th:classappend="${noticeType == '위해상품'} ? 'active'">
+                    <a th:href="@{/cs/notice/list(noticeType='위해상품')}">위해상품</a>
                 </li>
 
-                <li>
-                    <a href="#">이벤트당첨</a>
+                <li th:classappend="${noticeType == '이벤트당첨'} ? 'active'">
+                    <a th:href="@{/cs/notice/list(noticeType='이벤트당첨')}">이벤트당첨</a>
                 </li>
             </ul>
         </aside>
@@ -53,8 +52,18 @@
         <!-- 컨텐츠 -->
         <section class="cs-content">
             <div class="content-header">
-                <h2>전체</h2>
-                <p>공지사항 전체 내용입니다.</p>
+                <h2 th:text="${noticeType != null and noticeType != '' ? noticeType : '공지사항'}">
+                    공지사항
+                </h2>
+
+                <p th:if="${noticeType == null or noticeType == ''}">
+                    케이마켓의 새로운 소식과 안내사항을 확인하세요.
+                </p>
+
+                <p th:if="${noticeType != null and noticeType != ''}"
+                   th:text="${noticeType + ' 관련 공지사항입니다.'}">
+                    고객서비스 관련 공지사항입니다.
+                </p>
             </div>
 
             <table class="notice-table">
@@ -81,14 +90,12 @@
 
                 <!-- 이전 -->
                 <a th:if="${page.startPage > 1}"
-                   th:href="@{/cs/notice/list(pg=${page.startPage - 1})}"
-                   class="page-btn">
-                    <i class="bi bi-chevron-left"></i>
-                </a>
+                   th:href="@{/cs/notice/list(pg=${page.startPage - 1}, noticeType=${noticeType})}"
+                   class="page-btn">이전</a>
 
                 <!-- 페이지 번호 -->
                 <th:block th:each="i : ${#numbers.sequence(page.startPage, page.endPage)}">
-                    <a th:href="@{/cs/notice/list(pg=${i})}"
+                    <a th:href="@{/cs/notice/list(pg=${i}, noticeType=${noticeType})}"
                        th:text="${i}"
                        th:classappend="${i == page.currentPage} ? ' active' : ''">
                     </a>
@@ -96,10 +103,8 @@
 
                 <!-- 다음 -->
                 <a th:if="${page.endPage < page.lastPage}"
-                   th:href="@{/cs/notice/list(pg=${page.endPage + 1})}"
-                   class="page-btn">
-                    <i class="bi bi-chevron-right"></i>
-                </a>
+                   th:href="@{/cs/notice/list(pg=${page.endPage + 1}, noticeType=${noticeType})}"
+                   class="page-btn">다음</a>
 
             </div>
         </section>
