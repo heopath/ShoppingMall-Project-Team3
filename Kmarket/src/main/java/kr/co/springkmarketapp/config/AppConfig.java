@@ -12,8 +12,7 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String projectRoot = System.getProperty("user.dir");
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:" + projectRoot + "/src/main/resources/static/uploads/");
+                .addResourceLocations("file:" + uploadDir + "/");
     }
 }

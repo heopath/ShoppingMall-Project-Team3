@@ -6,15 +6,20 @@ import kr.co.springkmarketapp.dto.common.PageResponseDTO;
 import kr.co.springkmarketapp.dto.product.*;
 import kr.co.springkmarketapp.util.FileStorageUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -22,6 +27,9 @@ public class ProductService {
     private final ProductDAO productDAO;
     private final RestClient.Builder builder;
     private final FileStorageUtil fileStorageUtil;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     public int insertProduct(ProductDTO productDTO) {
         return productDAO.insertProduct(productDTO);
@@ -151,10 +159,14 @@ public class ProductService {
             int order = 0;
             for (MultipartFile file : detailImages) {
                 if (file != null && !file.isEmpty()) {
-                    String path = fileStorageUtil.saveFile(file, "product/detail");
+                    String path = saveProductImageFile(file, "detail");
+
                     imageList.add(ProductImageDTO.builder()
-                            .productNo(productNo).imageType("DETAIL")
-                            .imagePath(path).sortOrder(order++).build());
+                            .productNo(productNo)
+                            .imageType("DETAIL")
+                            .imagePath(path)
+                            .sortOrder(order++)
+                            .build());
                 }
             }
         }
@@ -239,7 +251,7 @@ public class ProductService {
             int order = 0;
             for (MultipartFile file : detailImages) {
                 if (file != null && !file.isEmpty()) {
-                    String path = fileStorageUtil.saveFile(file, "product/detail");
+                    String path = saveProductImageFile(file, "detail");
                     imageList.add(ProductImageDTO.builder()
                             .productNo(productNo).imageType("DETAIL")
                             .imagePath(path).sortOrder(order++).build());
@@ -282,10 +294,14 @@ public class ProductService {
 
     private void saveImageIfPresent(MultipartFile file, String type, int productNo, List<ProductImageDTO> list) {
         if (file != null && !file.isEmpty()) {
-            String path = fileStorageUtil.saveFile(file, "product/" + type.toLowerCase());
+            String path = saveProductImageFile(file, type.toLowerCase());
+
             list.add(ProductImageDTO.builder()
-                    .productNo(productNo).imageType(type)
-                    .imagePath(path).sortOrder(0).build());
+                    .productNo(productNo)
+                    .imageType(type)
+                    .imagePath(path)
+                    .sortOrder(0)
+                    .build());
         }
     }
 
@@ -294,7 +310,7 @@ public class ProductService {
             // 해당 타입의 기존 이미지만 삭제 (다른 타입은 보존)
             productDAO.deleteProductImageByType(productNo, type);
 
-            String path = fileStorageUtil.saveFile(file, "product/" + type.toLowerCase());
+            String path = saveProductImageFile(file, type.toLowerCase());
             productDAO.insertProductImages(List.of(
                     ProductImageDTO.builder()
                             .productNo(productNo)
@@ -304,6 +320,33 @@ public class ProductService {
                             .build()
             ));
         }
+    }
+    private String saveProductImageFile(MultipartFile file, String folderName) {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        // 반드시 절대경로로 만들어야 Tomcat이 multipart.location 기준으로 재해석하지 않음
+        String projectRoot = System.getProperty("user.dir");
+        File folder = new File(projectRoot, uploadDir + "/product/" + folderName).getAbsoluteFile();
+
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        String originalFilename = file.getOriginalFilename();
+        String savedFileName = UUID.randomUUID() + "_" + originalFilename;
+
+        try {
+            // dest 자체를 절대경로 File로 명시
+            File dest = new File(folder, savedFileName).getAbsoluteFile();
+            file.transferTo(dest);
+        } catch (IOException e) {
+            log.error("상품 이미지 저장 실패: ", e);
+            throw new RuntimeException("상품 이미지 저장 중 오류가 발생했습니다.");
+        }
+
+        return "/uploads/product/" + folderName + "/" + savedFileName;
     }
 
     // 관리자 상품 삭제(→ 판매중지)

@@ -43,7 +43,7 @@
             <section class="view-summary">
                 <div class="summary-thumb">
                     <div class="product-image">
-                        <img th:src="${product.imagePath != null ? product.imagePath : '/images/common/no-image.png'}"
+                        <img th:src="${product.thumbPath != null ? product.thumbPath : '/images/common/no-image.png'}"
                              th:alt="${product.productName}" />
                     </div>
                 </div>
@@ -197,7 +197,7 @@
 
                     <div class="mini-banner" th:if="${product1Banner != null and !#lists.isEmpty(product1Banner)}">
                         <a th:href="${product1Banner[0].linkUrl != null ? product1Banner[0].linkUrl : '#'}">
-                            <img th:src="${product1Banner[0].imagePath}"
+                            <img th:src="${product1Banner[0].thumbPath}"
                                  th:alt="${product1Banner[0].bannerName}"
                                  style="width: 100%; height: auto;" />
                         </a>
@@ -228,7 +228,7 @@
                          th:if="${!#lists.isEmpty(detailImages)}">
 
                         <img th:each="image : ${detailImages}"
-                             th:src="${image.imagePath}"
+                             th:src="${image.thumbPath}"
                              th:alt="${product.productName}" />
                     </div>
 
@@ -391,11 +391,11 @@
                         <div class="review-body">
 
                             <div class="review-thumb">
-                                <img th:if="${review.imagePath != null}"
-                                     th:src="${review.imagePath}"
+                                <img th:if="${review.thumbPath != null}"
+                                     th:src="${review.thumbPath}"
                                      th:alt="${product.productName}" />
 
-                                <svg th:unless="${review.imagePath != null}"
+                                <svg th:unless="${review.thumbPath != null}"
                                      viewBox="0 0 24 24"
                                      fill="#ccc">
                                     <path d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>

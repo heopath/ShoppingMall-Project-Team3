@@ -26,6 +26,9 @@ public class BannerService {
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath; // application.yml에 지정된 기본 저장소 절대 경로(src/main/resources/static/uploads)
 
+    @Value("${file.upload-dir}")
+    private String uploadDir;   // uploadPath 대신 이걸로 교체
+
     @Transactional // 파일 저장과 DB 삽입을 하나의 트랜잭션으로 묶습니다.
     public int insertBanner(BannerDTO bannerDTO) {
         MultipartFile file = bannerDTO.getBannerFile();
@@ -35,8 +38,7 @@ public class BannerService {
         }
 
         // 1. 저장 경로를 확실하게 지정 (절대 경로 추천)
-        String projectRoot = System.getProperty("user.dir");
-        File folder = new File(projectRoot, "src/main/resources/static/uploads/banner");
+        File folder = new File(uploadDir, "banner");
         if (!folder.exists()) folder.mkdirs();
 
         // 2. 파일 저장
@@ -69,8 +71,7 @@ public class BannerService {
                 deleteImageFile(existing.getImagePath());
             }
 
-            String projectRoot = System.getProperty("user.dir");
-            File folder = new File(projectRoot, "src/main/resources/static/uploads/banner");
+            File folder = new File(uploadDir, "banner");
             if (!folder.exists()) folder.mkdirs();
 
             String savedFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
@@ -141,8 +142,7 @@ public class BannerService {
         try {
             // imagePath는 "/uploads/banner/파일명" 형태 → 앞의 "/uploads/" 를 제거해 실제 물리 경로로 변환
             String relativePath = imagePath.replaceFirst("^/uploads/", "");
-            String projectRoot = System.getProperty("user.dir");
-            File file = new File(projectRoot, "src/main/resources/static/uploads/" + relativePath);
+            File file = new File(uploadDir, relativePath);
 
             if (file.exists()) {
                 boolean deleted = file.delete();
