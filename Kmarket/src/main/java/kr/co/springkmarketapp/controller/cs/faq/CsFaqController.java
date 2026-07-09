@@ -20,13 +20,16 @@ public class CsFaqController {
 
     private final FaqService faqService;
 
+//parentNo=2, parentNo=3을 보내도 무조건 1, 즉 회원 FAQ만 나오던 사항 수정
     @GetMapping("/cs/faq/list")
-    public String faqList(Model model){
+    public String faqList(@RequestParam(defaultValue = "1") int parentNo,
+                          Model model){
 
         Map<String, List<FaqDTO>> faqMap =
-                faqService.selectFaqGroup(1);
+                faqService.selectFaqGroup(parentNo);
 
         model.addAttribute("faqMap", faqMap);
+        model.addAttribute("parentNo", parentNo);
 
         return "cs/faq/list";
     }

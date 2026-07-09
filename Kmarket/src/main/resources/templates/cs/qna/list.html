@@ -29,13 +29,25 @@
           <h3>문의하기</h3>
 
           <ul>
-            <li class="active"><a href="#">회원</a></li>
-            <li><a href="#">쿠폰 / 이벤트</a></li>
-            <li><a href="#">주문 / 결제</a></li>
-            <li><a href="#">배송</a></li>
-            <li><a href="#">취소 / 반품 / 교환</a></li>
-            <li><a href="#">여행 / 숙박 / 항공</a></li>
-            <li><a href="#">안전거래</a></li>
+            <li th:classappend="${parentNo == 1} ? 'active'">
+              <a th:href="@{/cs/qna/list(parentNo=1)}">회원</a>
+            </li>
+
+            <li th:classappend="${parentNo == 2} ? 'active'">
+              <a th:href="@{/cs/qna/list(parentNo=2)}">주문·결제</a>
+            </li>
+
+            <li th:classappend="${parentNo == 3} ? 'active'">
+              <a th:href="@{/cs/qna/list(parentNo=3)}">배송</a>
+            </li>
+
+            <li th:classappend="${parentNo == 4} ? 'active'">
+              <a th:href="@{/cs/qna/list(parentNo=4)}">취소·반품·교환</a>
+            </li>
+
+            <li th:classappend="${parentNo == 5} ? 'active'">
+              <a th:href="@{/cs/qna/list(parentNo=5)}">상품</a>
+            </li>
           </ul>
         </aside>
 
@@ -43,8 +55,23 @@
         <section class="cs-content">
 
           <div class="content-header">
-            <h2>[[${qnaDTOList[0].parentCateName}]]</h2>
-            <p>[[${qnaDTOList[0].parentCateName}]] 관련 문의내용 입니다.</p>
+            <h2 th:switch="${parentNo}">
+              <span th:case="1">회원</span>
+              <span th:case="2">주문·결제</span>
+              <span th:case="3">배송</span>
+              <span th:case="4">취소·반품·교환</span>
+              <span th:case="5">상품</span>
+              <span th:case="*">문의하기</span>
+            </h2>
+
+            <p th:switch="${parentNo}">
+              <span th:case="1">회원 관련 문의내용 입니다.</span>
+              <span th:case="2">주문·결제 관련 문의내용 입니다.</span>
+              <span th:case="3">배송 관련 문의내용 입니다.</span>
+              <span th:case="4">취소·반품·교환 관련 문의내용 입니다.</span>
+              <span th:case="5">상품 관련 문의내용 입니다.</span>
+              <span th:case="*">문의내용 입니다.</span>
+            </p>
           </div>
 
           <table class="inquiry-table">
