@@ -23,41 +23,69 @@ public class BannerService {
 
     private final BannerDAO bannerDAO;
 
-    @Value("${spring.servlet.multipart.location}")
-    private String uploadPath; // application.yml에 지정된 기본 저장소 절대 경로(src/main/resources/static/uploads)
-
     @Value("${file.upload-dir}")
-    private String uploadDir;   // uploadPath 대신 이걸로 교체
+    private String uploadDir; // application.yml 기준: uploads
 
-    @Transactional // 파일 저장과 DB 삽입을 하나의 트랜잭션으로 묶습니다.
-    public int insertBanner(BannerDTO bannerDTO) {
-        MultipartFile file = bannerDTO.getBannerFile();
+    /**
+     * 실제 파일 저장 폴더
+     * 예: C:\Users\GGG\Desktop\새 폴더\ShoppingMall-Project-Team3\Kmarket/uploads\banner
+     */
+    private File getBannerUploadFolder() {
+        File folder = new File(System.getProperty("user.dir"), uploadDir + File.separator + "banner");
 
-        if (file == null || file.isEmpty()) {
-            throw new RuntimeException("배너 이미지는 필수입니다."); // 파일 없으면 저장 중단
-        }
-
-        // 1. 저장 경로를 확실하게 지정 (절대 경로 추천)
-        File folder = new File(System.getProperty("user.dir"), uploadDir + "/banner");
         if (!folder.exists()) {
-            folder.mkdirs();
+            boolean created = folder.mkdirs();
+            log.info(">>> 배너 업로드 폴더 생성 여부: {}, 경로: {}", created, folder.getAbsolutePath());
         }
 
-        // 2. 파일 저장
-        String savedFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        return folder;
+    }
+
+    /**
+     * 배너 이미지 저장
+     * DB에는 웹 접근 경로인 /uploads/banner/파일명 으로 저장
+     */
+    private String saveBannerImage(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("배너 이미지는 필수입니다.");
+        }
+
+        File folder = getBannerUploadFolder();
+
+        String originalFilename = file.getOriginalFilename();
+
+        if (originalFilename == null || originalFilename.isBlank()) {
+            throw new RuntimeException("파일명이 올바르지 않습니다.");
+        }
+
+        String savedFileName = UUID.randomUUID() + "_" + originalFilename;
+        File saveFile = new File(folder, savedFileName);
+
         try {
-            file.transferTo(new File(folder, savedFileName));
+            file.transferTo(saveFile);
+            log.info(">>> 배너 이미지 저장 성공: {}", saveFile.getAbsolutePath());
         } catch (IOException e) {
-            log.error("파일 저장 실패: ", e);
+            log.error("파일 저장 실패: {}", saveFile.getAbsolutePath(), e);
             throw new RuntimeException("파일 저장 중 오류가 발생했습니다.");
         }
 
-        // 3. DB 경로 매핑 (웹 접근 주소)
-        bannerDTO.setImagePath("/uploads/banner/" + savedFileName);
+        return "/uploads/banner/" + savedFileName;
+    }
 
-        // 4. 나머지 데이터 세팅
-        if (bannerDTO.getUseYn() == null) bannerDTO.setUseYn("Y");
-        if (bannerDTO.getSortOrder() == null) bannerDTO.setSortOrder(0);
+    @Transactional
+    public int insertBanner(BannerDTO bannerDTO) {
+        MultipartFile file = bannerDTO.getBannerFile();
+
+        String imagePath = saveBannerImage(file);
+        bannerDTO.setImagePath(imagePath);
+
+        if (bannerDTO.getUseYn() == null) {
+            bannerDTO.setUseYn("Y");
+        }
+
+        if (bannerDTO.getSortOrder() == null) {
+            bannerDTO.setSortOrder(0);
+        }
 
         return bannerDAO.insertBanner(bannerDTO);
     }
@@ -66,29 +94,29 @@ public class BannerService {
     public int modifyBanner(BannerDTO bannerDTO) {
         MultipartFile file = bannerDTO.getBannerFile();
 
+        BannerDTO existing = bannerDAO.selectBanner(bannerDTO.getBannerNo());
+
+        if (existing == null) {
+            throw new RuntimeException("수정할 배너 정보를 찾을 수 없습니다.");
+        }
+
         if (file != null && !file.isEmpty()) {
-            // 새 파일이 첨부된 경우 → 기존 파일 삭제 후 새 파일 저장
-            BannerDTO existing = bannerDAO.selectBanner(bannerDTO.getBannerNo());
-            if (existing != null) {
-                deleteImageFile(existing.getImagePath());
-            }
+            // 새 파일이 있으면 기존 파일 삭제 후 새 파일 저장
+            deleteImageFile(existing.getImagePath());
 
-            File folder = new File(uploadDir, "banner");
-            if (!folder.exists()) folder.mkdirs();
-
-            String savedFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            try {
-                file.transferTo(new File(folder, savedFileName));
-            } catch (IOException e) {
-                log.error("파일 저장 실패: ", e);
-                throw new RuntimeException("파일 저장 중 오류가 발생했습니다.");
-            }
-            bannerDTO.setImagePath("/uploads/banner/" + savedFileName);
-
+            String imagePath = saveBannerImage(file);
+            bannerDTO.setImagePath(imagePath);
         } else {
-            // 파일을 새로 첨부하지 않은 경우 → 기존 imagePath 그대로 유지
-            BannerDTO existing = bannerDAO.selectBanner(bannerDTO.getBannerNo());
+            // 새 파일이 없으면 기존 이미지 유지
             bannerDTO.setImagePath(existing.getImagePath());
+        }
+
+        if (bannerDTO.getUseYn() == null) {
+            bannerDTO.setUseYn(existing.getUseYn());
+        }
+
+        if (bannerDTO.getSortOrder() == null) {
+            bannerDTO.setSortOrder(existing.getSortOrder());
         }
 
         return bannerDAO.updateBanner(bannerDTO);
@@ -124,7 +152,6 @@ public class BannerService {
 
     @Transactional
     public void deleteBanners(List<Integer> bannerNos) {
-        // 삭제 전에 파일 경로들을 먼저 조회
         List<String> imagePaths = bannerNos.stream()
                 .map(bannerDAO::selectBanner)
                 .filter(Objects::nonNull)
@@ -138,13 +165,22 @@ public class BannerService {
         }
     }
 
+    /**
+     * DB imagePath 예:
+     * /uploads/banner/abc.png
+     *
+     * 실제 삭제 경로:
+     * 프로젝트폴더/uploads/banner/abc.png
+     */
     private void deleteImageFile(String imagePath) {
-        if (imagePath == null || imagePath.isBlank()) return;
+        if (imagePath == null || imagePath.isBlank()) {
+            return;
+        }
 
         try {
-            // imagePath는 "/uploads/banner/파일명" 형태 → 앞의 "/uploads/" 를 제거해 실제 물리 경로로 변환
-            String relativePath = imagePath.replaceFirst("^/uploads/", "");
-            File file = new File(uploadDir, relativePath);
+            String fileName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
+            File folder = getBannerUploadFolder();
+            File file = new File(folder, fileName);
 
             if (file.exists()) {
                 boolean deleted = file.delete();
@@ -153,7 +189,6 @@ public class BannerService {
                 log.warn(">>> 삭제할 배너 이미지 파일이 존재하지 않음: {}", file.getAbsolutePath());
             }
         } catch (Exception e) {
-            // 파일 삭제 실패해도 DB 삭제 자체는 이미 끝난 상태이므로, 로그만 남기고 예외를 던지지 않음
             log.error("배너 이미지 파일 삭제 중 오류 발생: {}", imagePath, e);
         }
     }
