@@ -79,6 +79,23 @@ header {
     object-fit: contain;
 }
 
+.footer-logo img {
+    display: block;
+    width: 155px;
+    height: auto;
+    object-fit: contain;
+}
+
+.footer-logo {
+    background: none;
+}
+
+.footer-logo-box {
+    background: none;
+}
+
+
+
 .search-box {
     flex: 1;
     max-width: 620px;
@@ -680,7 +697,6 @@ footer {
     max-width: 126px;
     max-height: 44px;
     object-fit: contain;
-    filter: grayscale(100%);
 }
 
 .footer-info {

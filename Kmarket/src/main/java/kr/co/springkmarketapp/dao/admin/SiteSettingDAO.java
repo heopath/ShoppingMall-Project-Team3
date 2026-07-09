@@ -12,4 +12,8 @@ public interface SiteSettingDAO {
     List<SiteSettingDTO> selectSiteSettingList();
     int updateSiteSetting(SiteSettingDTO siteSettingDTO);
     int deleteSiteSetting(Integer settingNo);
+
+//    관리자 - 기본설정
+    SiteSettingDTO selectSiteSettingByKey(String settingKey);
+    int upsertSiteSetting(SiteSettingDTO siteSettingDTO);
 }

@@ -17,25 +17,83 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import kr.co.springkmarketapp.service.admin.SiteSettingService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import kr.co.springkmarketapp.dto.admin.SiteSettingDTO;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/admin/config") // 클래스 단위 공통 루트 주소
 @RequiredArgsConstructor
 public class AdminConfigController {
-
     private final AppVersionService appVersionService;
     private final CategoryService categoryService;
     //약관정책 때문에 추가
     private final PolicyService policyService;
     private final BannerService bannerService;
+    private final SiteSettingService siteSettingService;
 
-    @GetMapping("/basic") // /admin/config/basic
-    public String basic() {
+    //basic 기본설정쪽 접속 시 DB 설정값을 가져와서 화면에 넘김.
+    @GetMapping("/basic")
+    public String basic(Model model) {
+        model.addAttribute("settings", siteSettingService.getSettingsMap());
+        model.addAttribute("latestVersion", appVersionService.getLatestVersion());
         return "admin/config/basic";
+    }
+
+    // 저장용 post
+    @PostMapping("/basic")
+    public String updateBasic(@RequestParam Map<String, String> params,
+                              RedirectAttributes redirectAttributes) {
+        siteSettingService.saveSettings(params);
+        redirectAttributes.addFlashAttribute("message", "기본설정이 수정되었습니다.");
+        return "redirect:/admin/config/basic";
+    }
+
+    //로고전용  post
+    @PostMapping("/basic/logo")
+    public String updateLogo(@RequestParam(value = "headerLogo", required = false) MultipartFile headerLogo,
+                             @RequestParam(value = "footerLogo", required = false) MultipartFile footerLogo,
+                             @RequestParam(value = "favicon", required = false) MultipartFile favicon,
+                             RedirectAttributes redirectAttributes) throws IOException {
+
+        String uploadDir = System.getProperty("user.dir") + "/uploads/config/";
+        File dir = new File(uploadDir);
+
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        if (headerLogo != null && !headerLogo.isEmpty()) {
+            String fileName = "header_logo_" + System.currentTimeMillis() + "_" + headerLogo.getOriginalFilename();
+            File saveFile = new File(uploadDir + fileName);
+            headerLogo.transferTo(saveFile);
+
+            siteSettingService.saveOneSetting("header_logo", "/uploads/config/" + fileName);
+        }
+
+        if (footerLogo != null && !footerLogo.isEmpty()) {
+            String fileName = "footer_logo_" + System.currentTimeMillis() + "_" + footerLogo.getOriginalFilename();
+            File saveFile = new File(uploadDir + fileName);
+            footerLogo.transferTo(saveFile);
+
+            siteSettingService.saveOneSetting("footer_logo", "/uploads/config/" + fileName);
+        }
+
+        if (favicon != null && !favicon.isEmpty()) {
+            String fileName = "favicon_" + System.currentTimeMillis() + "_" + favicon.getOriginalFilename();
+            File saveFile = new File(uploadDir + fileName);
+            favicon.transferTo(saveFile);
+
+            siteSettingService.saveOneSetting("favicon", "/uploads/config/" + fileName);
+        }
+
+        redirectAttributes.addFlashAttribute("message", "로고 정보가 수정되었습니다.");
+        return "redirect:/admin/config/basic";
     }
 
     @GetMapping("/banner")

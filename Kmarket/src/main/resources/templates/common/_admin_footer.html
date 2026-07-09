@@ -1,3 +1,5 @@
 <footer th:fragment="footer" xmlns:th="http://www.thymeleaf.org">
-    Copyright @Kmarket.co.kr All rights reserved. Kmarket ADMINISTRATOR<span style="margin-left: 10px; color: #888;">Version [[${appVersion}]]</span>
+    <span th:text="${settings.footer_copyright}">Copyright @Kmarket.co.kr All rights reserved.</span>
+    <span> Kmarket ADMINISTRATOR</span>
+    <span style="margin-left: 10px; color: #888;">Version [[${appVersion}]]</span>
 </footer>

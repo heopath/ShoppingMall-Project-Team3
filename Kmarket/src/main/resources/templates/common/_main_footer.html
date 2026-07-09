@@ -1,4 +1,4 @@
-<footer>
+<footer xmlns:th="http://www.thymeleaf.org">
     <div class="footer-inner">
         <nav class="footer-links">
             <a href="#about">회사소개</a>
@@ -9,26 +9,55 @@
 
         <div class="footer-company">
             <div class="footer-logo-box">
-                <img src="/images/main/footer_logo.png" alt="Kmarket 흑백 로고" />
+                <div class="footer-logo">
+                    <img th:if="${settings.footer_logo != null and settings.footer_logo != ''}"
+                         th:src="${settings.footer_logo}"
+                         alt="푸터 로고">
+
+                    <img th:if="${settings.footer_logo == null or settings.footer_logo == ''}"
+                         src="/images/main/footer_logo.png"
+                         alt="Kmarket 기본 푸터 로고">
+                </div>
             </div>
 
             <div class="footer-info">
-                <h4>(주)케이마켓</h4>
-                <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
-                <p>대표이사 : 홍길동</p>
-                <p>사업자등록번호 : 123-45-12345</p>
+                <h4 th:text="${settings.company_name}">Kmarket</h4>
+                <p th:text="${settings.company_addr}">부산광역시</p>
+                <p>
+                    대표이사 :
+                    <span th:text="${settings.company_ceo}">홍길동</span>
+                </p>
+                <p>
+                    사업자등록번호 :
+                    <span th:text="${settings.company_biz_no}">123-45-67890</span>
+                </p>
+                <p>
+                    통신판매업신고 :
+                    <span th:text="${settings.company_sale_no}">2026-부산-0001</span>
+                </p>
             </div>
 
             <div class="footer-cs">
                 <h4>고객센터</h4>
-                <p>Tel : 1234-5678 평일 09:00~18:00</p>
-                <p>전자금융거래 분쟁 담당 : 1234-1234</p>
-                <p>365일 09:00~18:00</p>
+                <p>
+                    Tel :
+                    <span th:text="${settings.customer_tel}">02-1234-5678</span>
+                    <span th:text="${settings.customer_time}">평일 09:00 ~ 18:00</span>
+                </p>
+                <p>
+                    이메일 :
+                    <span th:text="${settings.customer_email}">admin@kmarket.com</span>
+                </p>
+                <p>
+                    전자금융거래 분쟁 담당 :
+                    <span th:text="${settings.finance_manager}">1234-1234</span>
+                </p>
             </div>
-        </div>
 
-        <p class="copyright">Copyright © 2026 Kmarket. All rights reserved.
-            <span style="margin-left: 10px; color: #888;">Version [[${appVersion}]]</span>
-        </p>
+            <p class="copyright">
+                <span th:text="${settings.footer_copyright}">Copyright © 2026 Kmarket. All rights reserved.</span>
+                <span style="margin-left: 10px; color: #888;">Version [[${appVersion}]]</span>
+            </p>
+        </div>
     </div>
 </footer>
