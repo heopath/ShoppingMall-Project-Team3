@@ -74,6 +74,21 @@ public class ProductService {
         );
     }
 
+        public PageResponseDTO<ProductListDTO> getProductsBySearch(PageRequestDTO pageRequestDTO) {
+
+        List<ProductListDTO> dtoList =
+                productDAO.selectProductsBySearch(pageRequestDTO);
+
+        int total =
+                productDAO.selectCountBySearch(pageRequestDTO);
+
+        return new PageResponseDTO<>(
+                dtoList,
+                pageRequestDTO,
+                total
+        );
+    }
+
     // 상품 상세 페이지
     public ProductViewDTO getProductView(int productNo) {
         return productDAO.selectProductView(productNo);
@@ -216,7 +231,6 @@ public class ProductService {
         replaceImageIfPresent(thumb2, "THUMB2", productNo);
         replaceImageIfPresent(thumb3, "THUMB3", productNo);
 
-        // ▼▼▼ 여기 이 블록을 새 코드로 교체 ▼▼▼
         if (detailImages != null && !detailImages.isEmpty() && !detailImages.get(0).isEmpty()) {
             // DETAIL 타입만 삭제 (THUMB1~3은 보존)
             productDAO.deleteProductImageByType(productNo, "DETAIL");
@@ -300,4 +314,5 @@ public class ProductService {
     public void stopSaleProducts(List<Integer> productNos) {
         productDAO.updateProductStatusMulti(productNos, "판매중지");
     }
+
 }

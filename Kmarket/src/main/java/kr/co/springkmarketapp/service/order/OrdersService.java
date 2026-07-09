@@ -4,12 +4,8 @@ import kr.co.springkmarketapp.dao.coupon.CouponDAO;
 import kr.co.springkmarketapp.dao.order.CartDAO;
 import kr.co.springkmarketapp.dao.order.OrdersDAO;
 import kr.co.springkmarketapp.dto.coupon.OrderCouponDTO;
-import kr.co.springkmarketapp.dto.order.CartListDTO;
-import kr.co.springkmarketapp.dto.order.DeliveryDTO;
-import kr.co.springkmarketapp.dto.order.OrderCreateRequestDTO;
-import kr.co.springkmarketapp.dto.order.OrderDiscountDTO;
-import kr.co.springkmarketapp.dto.order.OrderItemDTO;
-import kr.co.springkmarketapp.dto.order.OrderSaveDTO;
+import kr.co.springkmarketapp.dto.my.MemberPointDTO;
+import kr.co.springkmarketapp.dto.order.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +39,22 @@ public class OrdersService {
                 .availablePoint(availablePoint != null ? availablePoint : 0)
                 .coupons(coupons)
                 .build();
+    }
+
+    private String normalizePaymentMethod(String paymentMethod) {
+        if (paymentMethod == null || paymentMethod.isBlank()) {
+            throw new IllegalArgumentException("결제수단을 선택하세요.");
+        }
+
+        return switch (paymentMethod.trim()) {
+            case "credit", "신용카드" -> "신용카드";
+            case "check", "체크카드" -> "체크카드";
+            case "bank", "계좌이체" -> "계좌이체";
+            case "deposit", "무통장입금" -> "무통장입금";
+            case "phone", "휴대폰결제" -> "휴대폰결제";
+            case "kakao", "카카오페이" -> "카카오페이";
+            default -> throw new IllegalArgumentException("지원하지 않는 결제수단입니다.");
+        };
     }
 
     @Transactional
@@ -124,7 +136,7 @@ public class OrdersService {
                 .pointUse(usedPoint)
                 .pointSave(pointSave)
                 .payPrice(payPrice)
-                .paymentMethod(request.getPaymentMethod())
+                .paymentMethod(normalizePaymentMethod(request.getPaymentMethod()))
                 .paymentStatus("결제완료")
                 .orderStatus("주문완료")
                 .build();
@@ -156,6 +168,9 @@ public class OrdersService {
                     orderNo
             );
         }
+
+        // 포인트 차감/적립 + member_point 이력 저장
+        processPoint(memberNo, orderNo, usedPoint, pointSave);
 
         cartDAO.deleteCartOptionsByMemberNo(memberNo, cartNos);
         cartDAO.deleteCartsByMemberNo(memberNo, cartNos);
@@ -336,12 +351,21 @@ public class OrdersService {
             OrderCouponDTO coupon,
             List<CartListDTO> orderItems
     ) {
-        List<CartListDTO> sellerFilteredItems;
+        String couponType = coupon.getCouponType();
 
-        if (coupon.getSellerNo() == null) {
-            sellerFilteredItems = orderItems;
-        } else {
-            sellerFilteredItems = orderItems.stream()
+        // 주문 전체 쿠폰은 seller_no를 보지 않는다.
+        // 회원가입 축하쿠폰도 ORDER로 변환되므로 전체 주문상품에 적용되어야 한다.
+        if ("ORDER".equals(couponType)) {
+            return orderItems;
+        }
+
+        // 개별상품 할인은 seller_no가 있어야 해당 판매자 상품에만 적용한다.
+        if ("PRODUCT".equals(couponType)) {
+            if (coupon.getSellerNo() == null) {
+                return List.of();
+            }
+
+            return orderItems.stream()
                     .filter(item -> Objects.equals(
                             item.getSellerNo(),
                             coupon.getSellerNo()
@@ -349,16 +373,19 @@ public class OrdersService {
                     .toList();
         }
 
-        if ("ORDER".equals(coupon.getCouponType())) {
-            return sellerFilteredItems;
-        }
+        // 배송비 무료는 seller_no가 있으면 해당 판매자 배송비만,
+        // seller_no가 없으면 전체 배송비에 적용한다.
+        if ("FREE_SHIPPING".equals(couponType)) {
+            if (coupon.getSellerNo() == null) {
+                return orderItems;
+            }
 
-        if ("PRODUCT".equals(coupon.getCouponType())) {
-            return sellerFilteredItems;
-        }
-
-        if ("FREE_SHIPPING".equals(coupon.getCouponType())) {
-            return sellerFilteredItems;
+            return orderItems.stream()
+                    .filter(item -> Objects.equals(
+                            item.getSellerNo(),
+                            coupon.getSellerNo()
+                    ))
+                    .toList();
         }
 
         return List.of();
@@ -529,7 +556,77 @@ public class OrdersService {
                             .itemStatus("주문완료")
                             .build();
 
+            // 1. order_item 저장
             ordersDAO.insertOrderItem(orderItemDTO);
+
+            Long orderItemNo = orderItemDTO.getOrderItemNo();
+
+            if (orderItemNo == null) {
+                throw new IllegalArgumentException("주문상품 번호 생성에 실패했습니다.");
+            }
+
+            // 2. cart_option + product_option 조회
+            List<OrderItemOptionDTO> optionList =
+                    cartDAO.selectOrderItemOptionsByCartNo(item.getCartNo());
+
+            // 3. order_item_option 저장
+            for (OrderItemOptionDTO optionDTO : optionList) {
+                optionDTO.setOrderItemNo(orderItemNo);
+                ordersDAO.insertOrderItemOption(optionDTO);
+            }
+        }
+    }
+
+    private void processPoint(
+            Integer memberNo,
+            Long orderNo,
+            int usedPoint,
+            int pointSave
+    ) {
+        // 1. 포인트 사용 처리
+        if (usedPoint > 0) {
+            int useResult = ordersDAO.updateMemberPointUse(memberNo, usedPoint);
+
+            if (useResult != 1) {
+                throw new IllegalArgumentException("포인트 차감에 실패했습니다.");
+            }
+
+            int balancePoint = n(ordersDAO.selectAvailablePoint(memberNo));
+
+            ordersDAO.insertMemberPoint(
+                    MemberPointDTO.builder()
+                            .memberNo(memberNo)
+                            .orderNo(orderNo)
+                            .pointType("REVOKED")
+                            .pointValue(usedPoint)
+                            .balancePoint(balancePoint)
+                            .reason("주문 결제 사용")
+                            .expireDate(null)
+                            .build()
+            );
+        }
+
+        // 2. 포인트 적립 처리
+        if (pointSave > 0) {
+            int earnResult = ordersDAO.updateMemberPointEarn(memberNo, pointSave);
+
+            if (earnResult != 1) {
+                throw new IllegalArgumentException("포인트 적립에 실패했습니다.");
+            }
+
+            int balancePoint = n(ordersDAO.selectAvailablePoint(memberNo));
+
+            ordersDAO.insertMemberPoint(
+                    MemberPointDTO.builder()
+                            .memberNo(memberNo)
+                            .orderNo(orderNo)
+                            .pointType("적립")
+                            .pointValue(pointSave)
+                            .balancePoint(balancePoint)
+                            .reason("주문 적립")
+                            .expireDate(null)
+                            .build()
+            );
         }
     }
 
@@ -591,5 +688,35 @@ public class OrdersService {
         public Map<Integer, Integer> getItemCouponDiscountMap() {
             return itemCouponDiscountMap;
         }
+    }
+
+    @Transactional(readOnly = true)
+    public OrdersDTO selectOrderComplete(Integer memberNo, Long orderNo) {
+
+        if (orderNo == null) {
+            throw new IllegalArgumentException("주문번호가 없습니다.");
+        }
+
+        return ordersDAO.selectOrderComplete(memberNo, orderNo);
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderItemDTO> selectOrderCompleteItems(Long orderNo) {
+
+        if (orderNo == null) {
+            throw new IllegalArgumentException("주문번호가 없습니다.");
+        }
+
+        return ordersDAO.selectOrderCompleteItems(orderNo);
+    }
+
+    @Transactional(readOnly = true)
+    public DeliveryDTO selectOrderCompleteDelivery(Long orderNo) {
+
+        if (orderNo == null) {
+            throw new IllegalArgumentException("주문번호가 없습니다.");
+        }
+
+        return ordersDAO.selectOrderCompleteDelivery(orderNo);
     }
 }

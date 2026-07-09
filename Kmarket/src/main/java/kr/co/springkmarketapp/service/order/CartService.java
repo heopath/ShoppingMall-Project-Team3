@@ -1,21 +1,13 @@
 package kr.co.springkmarketapp.service.order;
 
 import kr.co.springkmarketapp.dao.order.CartDAO;
-import kr.co.springkmarketapp.dto.order.CartAddRequestDTO;
-import kr.co.springkmarketapp.dto.order.CartDTO;
-import kr.co.springkmarketapp.dto.order.CartListDTO;
-import kr.co.springkmarketapp.dto.order.CartProductDTO;
+import kr.co.springkmarketapp.dto.order.*;
 import kr.co.springkmarketapp.dto.product.ProductOptionDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -251,6 +243,58 @@ public class CartService {
                 memberNo,
                 cartNos
         );
+    }
+
+    private String createOptionSignature(List<Integer> optionNos) {
+        if (optionNos == null || optionNos.isEmpty()) {
+            return "NO_OPTION";
+        }
+
+        return optionNos.stream()
+                .filter(Objects::nonNull)
+                .distinct()
+                .sorted()
+                .map(String::valueOf)
+                .collect(Collectors.joining("-"));
+    }
+
+    @Transactional
+    public Integer createDirectCart(Integer memberNo, DirectOrderRequestDTO request) {
+
+        if (request.getProductNo() == null) {
+            throw new IllegalArgumentException("상품번호가 없습니다.");
+        }
+
+        if (request.getQuantity() == null || request.getQuantity() <= 0) {
+            throw new IllegalArgumentException("수량이 올바르지 않습니다.");
+        }
+
+        String optionSignature = createOptionSignature(request.getOptionNos());
+
+        CartDTO cartDTO = CartDTO.builder()
+                .memberNo(memberNo)
+                .productNo(request.getProductNo())
+                .optionSignature(optionSignature)
+                .quantity(request.getQuantity())
+                .build();
+
+        cartDAO.insertCart(cartDTO);
+
+        Integer cartNo = cartDTO.getCartNo();
+
+        if (cartNo == null) {
+            throw new IllegalStateException("장바구니 번호 생성에 실패했습니다.");
+        }
+
+        if (request.getOptionNos() != null) {
+            for (Integer optionNo : request.getOptionNos()) {
+                if (optionNo != null) {
+                    cartDAO.insertCartOption(cartNo, optionNo);
+                }
+            }
+        }
+
+        return cartNo;
     }
 
     public CartDTO selectCart(Integer cartNo) {

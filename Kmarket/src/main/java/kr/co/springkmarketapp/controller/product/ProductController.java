@@ -404,13 +404,114 @@ public class ProductController {
         }
     }
 
+    // 상품상세 -> 바로구매
+    @PostMapping("/product/order/direct")
+    @ResponseBody
+    public Map<String, Object> directOrder(
+            @RequestBody DirectOrderRequestDTO request,
+            @AuthenticationPrincipal MyUserDetails userDetails
+    ) {
+        if (userDetails == null) {
+            return Map.of(
+                    "status", "fail",
+                    "message", "로그인이 필요합니다."
+            );
+        }
+
+        Integer memberNo = userDetails.getMember().getMemberNo();
+
+        Integer cartNo = cartService.createDirectCart(memberNo, request);
+
+        return Map.of(
+                "status", "success",
+                "cartNo", cartNo,
+                "redirectUrl", "/product/order?cartNo=" + cartNo
+        );
+    }
+
     @GetMapping("/product/complete")
-    public String complete() {
+    public String complete(
+            @AuthenticationPrincipal MyUserDetails userDetails,
+            @RequestParam("orderNo") Long orderNo,
+            Model model
+    ) {
+        if (userDetails == null) {
+            return "redirect:/member/login";
+        }
+
+        Integer memberNo = userDetails.getMember().getMemberNo();
+
+        OrdersDTO order = ordersService.selectOrderComplete(memberNo, orderNo);
+
+        if (order == null) {
+            return "redirect:/";
+        }
+
+        List<OrderItemDTO> orderItems =
+                ordersService.selectOrderCompleteItems(orderNo);
+
+        DeliveryDTO delivery =
+                ordersService.selectOrderCompleteDelivery(orderNo);
+
+        addCommonModel(model);
+
+        model.addAttribute("order", order);
+        model.addAttribute("orderItems", orderItems);
+        model.addAttribute("delivery", delivery);
+
         return "product/complete";
     }
 
     @GetMapping("/product/search")
-    public String search() {
+    public String search(PageRequestDTO pageRequestDTO, Model model) {
+
+        String keyword = pageRequestDTO.getKeyword();
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return "redirect:/";
+        }
+
+        pageRequestDTO.setKeyword(keyword.trim());
+
+        // 정렬값 기본값
+        if (pageRequestDTO.getSort() == null || pageRequestDTO.getSort().isBlank()) {
+            pageRequestDTO.setSort("sold");
+        }
+
+        /*
+         * 상품명/상품설명 둘 다 선택 안 한 경우
+         * 기본값은 상품명 검색
+         */
+        boolean searchName = Boolean.TRUE.equals(pageRequestDTO.getSearchName());
+        boolean searchDesc = Boolean.TRUE.equals(pageRequestDTO.getSearchDesc());
+
+        if (!searchName && !searchDesc) {
+            pageRequestDTO.setSearchName(true);
+            pageRequestDTO.setSearchDesc(false);
+        }
+
+        // 음수 가격 방어
+        if (pageRequestDTO.getMinPrice() != null && pageRequestDTO.getMinPrice() < 0) {
+            pageRequestDTO.setMinPrice(null);
+        }
+
+        if (pageRequestDTO.getMaxPrice() != null && pageRequestDTO.getMaxPrice() < 0) {
+            pageRequestDTO.setMaxPrice(null);
+        }
+
+        addCommonModel(model);
+
+        PageResponseDTO<ProductListDTO> pageResponseDTO =
+                productService.getProductsBySearch(pageRequestDTO);
+
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+        model.addAttribute("keyword", pageRequestDTO.getKeyword());
+
+        model.addAttribute("searchName", pageRequestDTO.getSearchName());
+        model.addAttribute("searchDesc", pageRequestDTO.getSearchDesc());
+        model.addAttribute("minPrice", pageRequestDTO.getMinPrice());
+        model.addAttribute("maxPrice", pageRequestDTO.getMaxPrice());
+
         return "product/search";
     }
 }

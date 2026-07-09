@@ -1,9 +1,7 @@
 package kr.co.springkmarketapp.dao.order;
 
-import kr.co.springkmarketapp.dto.order.DeliveryDTO;
-import kr.co.springkmarketapp.dto.order.OrderItemDTO;
-import kr.co.springkmarketapp.dto.order.OrderSaveDTO;
-import kr.co.springkmarketapp.dto.order.OrdersDTO;
+import kr.co.springkmarketapp.dto.my.MemberPointDTO;
+import kr.co.springkmarketapp.dto.order.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,5 +28,28 @@ public interface OrdersDAO {
     int updateProductStock(
             @Param("productNo") Integer productNo,
             @Param("quantity") Integer quantity
+    );
+
+    int insertOrderItemOption(OrderItemOptionDTO orderItemOptionDTO);
+
+    int updateMemberPointUse(@Param("memberNo") Integer memberNo,
+                             @Param("usedPoint") Integer usedPoint);
+
+    int updateMemberPointEarn(@Param("memberNo") Integer memberNo,
+                              @Param("pointSave") Integer pointSave);
+
+    int insertMemberPoint(MemberPointDTO memberPointDTO);
+
+    OrdersDTO selectOrderComplete(
+            @Param("memberNo") Integer memberNo,
+            @Param("orderNo") Long orderNo
+    );
+
+    List<OrderItemDTO> selectOrderCompleteItems(
+            @Param("orderNo") Long orderNo
+    );
+
+    DeliveryDTO selectOrderCompleteDelivery(
+            @Param("orderNo") Long orderNo
     );
 }
