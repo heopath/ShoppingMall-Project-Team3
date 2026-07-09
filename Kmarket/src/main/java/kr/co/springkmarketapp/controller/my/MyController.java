@@ -7,6 +7,7 @@ import kr.co.springkmarketapp.dto.member.SellerProfileDTO;
 import kr.co.springkmarketapp.dto.my.MemberPointDTO;
 import kr.co.springkmarketapp.dto.order.OrderItemDTO;
 import kr.co.springkmarketapp.dto.product.ProductReviewDTO;
+import kr.co.springkmarketapp.service.admin.BannerService;
 import kr.co.springkmarketapp.service.my.MyService;
 import kr.co.springkmarketapp.util.PageHandler;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,16 @@ import java.util.List;
 public class MyController {
 
     private final MyService myService;
+    private final BannerService bannerService;
 
     @GetMapping({"/my", "/my/home"})
     public String home(@AuthenticationPrincipal MyUserDetails user,
                        Model model) {
 
         Integer memberNo = user.getMember().getMemberNo();
+
+        model.addAttribute("topBanner", bannerService.getTopBanner());
+        model.addAttribute("my1Banner", bannerService.selectBannerListByPosition("MY1"));
 
         // 최근 주문내역
         List<OrderItemDTO> orderList =
@@ -51,6 +56,8 @@ public class MyController {
         model.addAttribute("couponCount", myService.selectCouponCount(memberNo));
         model.addAttribute("point", myService.selectPoint(memberNo));
         model.addAttribute("qnaCount", myService.selectQnaCount(memberNo));
+
+        model.addAttribute("topBanner", bannerService.getTopBanner());
 
         return "my/home";
     }

@@ -5,6 +5,7 @@ import kr.co.springkmarketapp.dto.member.MemberCheckDTO;
 import kr.co.springkmarketapp.dto.member.MemberDTO;
 import kr.co.springkmarketapp.dto.member.SellerProfileDTO;
 import kr.co.springkmarketapp.entity.member.Member;
+import kr.co.springkmarketapp.service.admin.BannerService;
 import kr.co.springkmarketapp.service.member.EmailService;
 import kr.co.springkmarketapp.service.member.MemberService;
 import kr.co.springkmarketapp.service.member.SellerProfileService;
@@ -27,12 +28,16 @@ public class MemberController {
     private final MemberService memberService;
     private final EmailService emailService;
     private final SellerProfileService sellerProfileService;
+    private final BannerService bannerService;
 
     //약관 정책
     private final PolicyService policyService;
 
     @GetMapping("/member/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("topBanner", bannerService.getTopBanner());
+        model.addAttribute("member1Banner", bannerService.selectBannerListByPosition("MEMBER1"));
+
         return "member/login";
     }
 
