@@ -56,10 +56,7 @@
   width: 120px;
 }
 
-.coupon-available {
-  color: #3fbf3f;
-  font-weight: 700;
-}
+
 
 .coupon-guide {
   margin-top: 50px;
@@ -80,4 +77,17 @@
   color: #666;
   font-size: 12px;
   line-height: 1.7;
+}
+
+.coupon-available{
+  color:#3cbf32 !important;
+  font-weight:600;
+}
+
+.coupon-used{
+  color:#888 !important;
+}
+
+.coupon-disabled{
+  color:#d9534f !important;
 }

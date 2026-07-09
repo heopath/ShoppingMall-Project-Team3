@@ -9,25 +9,107 @@
     <link rel="stylesheet" href="./../css/my/info.css" />
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // ==========================
         // 이메일 수정
-        document
-          .querySelector(".email-edit-btn")
-          .addEventListener("click", function () {
-            document
-              .querySelectorAll(".email-input, .email-select")
-              .forEach(function (el) {
-                el.disabled = false;
-              });
+        // ==========================
+        const emailEditBtn = document.querySelector(".email-edit-btn");
+
+        emailEditBtn.addEventListener("click", function () {
+
+          document.querySelectorAll(".email-input").forEach(input => {
+            input.disabled = false;
           });
 
+          document.querySelector(".email-select").disabled = false;
+
+        });
+
+
+        // 이메일 선택
+        document.querySelector(".email-select").addEventListener("change", function () {
+
+          const domainInput = document.querySelectorAll(".email-input")[1];
+
+          if (this.value === "직접입력") {
+
+            domainInput.disabled = false;
+            domainInput.value = "";
+            domainInput.focus();
+
+          } else {
+
+            domainInput.disabled = true;
+            domainInput.value = this.value;
+
+          }
+
+        });
+
+
+        // ==========================
         // 휴대폰 수정
-        document
-          .querySelector(".phone-edit-btn")
-          .addEventListener("click", function () {
-            document.querySelectorAll(".phone-input").forEach(function (el) {
-              el.disabled = false;
-            });
+        // ==========================
+        document.querySelector(".phone-edit-btn").addEventListener("click", function () {
+
+          document.querySelectorAll(".phone-input").forEach(input => {
+            input.disabled = false;
           });
+
+        });
+
+
+        // ==========================
+        // 회원정보 수정
+        // ==========================
+        document.querySelector(".setting-submit-btn").addEventListener("click", async function (e) {
+
+          e.preventDefault();
+
+          const emailId = document.querySelectorAll(".email-input")[0].value.trim();
+          const emailDomain = document.querySelectorAll(".email-input")[1].value.trim();
+
+          const hp1 = document.querySelectorAll(".phone-input")[0].value.trim();
+          const hp2 = document.querySelectorAll(".phone-input")[1].value.trim();
+          const hp3 = document.querySelectorAll(".phone-input")[2].value.trim();
+
+          const data = {
+
+            email: emailId + "@" + emailDomain,
+            hp: hp1 + hp2 + hp3,
+
+            zip: document.querySelector(".postcode").value.trim(),
+
+            addr1: document.querySelectorAll(".address-input")[1].value.trim(),
+
+            addr2: document.querySelectorAll(".address-input")[2].value.trim()
+
+          };
+
+          const response = await fetch("/my/setting", {
+
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(data)
+
+          });
+
+          if (response.ok) {
+
+            alert("회원정보가 수정되었습니다.");
+            location.reload();
+
+          } else {
+
+            alert("회원정보 수정에 실패했습니다.");
+
+          }
+
+        });
+
       });
     </script>
   </head>
@@ -41,12 +123,12 @@
           <h3>마이페이지</h3>
 
           <ul>
-            <li><a href="#">전체주문내역</a></li>
-            <li><a href="#">포인트내역</a></li>
-            <li class="active"><a href="#">쿠폰</a></li>
-            <li><a href="#">나의리뷰</a></li>
-            <li><a href="#">문의하기</a></li>
-            <li><a href="#">나의설정</a></li>
+            <li><a th:href="@{/my/order}">전체주문내역</a></li>
+            <li><a th:href="@{/my/point}">포인트내역</a></li>
+            <li><a th:href="@{/my/coupon}">쿠폰</a></li>
+            <li><a th:href="@{/my/review}">나의리뷰</a></li>
+            <li><a th:href="@{/my/qna}">문의하기</a></li>
+            <li class="active"><a th:href="@{/my/info}">나의설정</a></li>
           </ul>
         </aside>
 
@@ -73,12 +155,10 @@
             </div>
           </div>
 
-          <div class="mypage-banner">810 × 86 배너 광고</div>
+          <div class="mypage-banner">
+            <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
+          </div>
 
-          <!-- 배너 -->
-          <!-- <div class="mypage-banner">
-            <img src="../../images/mypage/banner.jpg" alt="광고 배너" />
-          </div> -->
 
           <section class="mypage-section">
             <div class="section-header">
@@ -90,13 +170,13 @@
                 <tbody>
                   <tr>
                     <th>사용자 ID</th>
-                    <td>chh****</td>
+                    <td th:text="${member.maskedMemberId}"></td>
                   </tr>
 
                   <tr>
                     <th>비밀번호</th>
                     <td>
-                      <a href="#" class="setting-btn password-change-btn">
+                      <a th:href="@{/member/find/changePassword}" class="setting-btn password-change-btn">
                         비밀번호 수정
                       </a>
                     </td>
@@ -104,12 +184,12 @@
 
                   <tr>
                     <th>이름</th>
-                    <td>김 * 학</td>
+                    <td th:text="${member.maskedName}"></td>
                   </tr>
 
                   <tr>
                     <th>생년월일</th>
-                    <td>1983년 05월 03일</td>
+                    <td th:text="${#temporals.format(member.birth,'yyyy년 MM월 dd일')}"></td>
                   </tr>
 
                   <tr>
@@ -117,21 +197,17 @@
 
                     <td>
                       <div class="email-wrap">
-                        <input
-                          type="text"
-                          value="chhak0503"
-                          class="email-input"
-                          disabled
-                        />
+                        <input type="text"
+                               th:value="${#strings.arraySplit(member.email,'@')[0]}"
+                               class="email-input"
+                               disabled>
 
                         <span>@</span>
 
-                        <input
-                          type="text"
-                          value="naver.com"
-                          class="email-input"
-                          disabled
-                        />
+                        <input type="text"
+                               th:value="${#strings.arraySplit(member.email,'@')[1]}"
+                               class="email-input"
+                               disabled>
 
                         <select disabled class="email-select">
                           <option>직접입력</option>
@@ -155,26 +231,20 @@
 
                     <td>
                       <div class="phone-wrap">
-                        <input
-                          type="text"
-                          value="010"
-                          class="phone-input"
-                          disabled
-                        />
+                        <input type="text"
+                               th:value="${#strings.substring(member.hp,0,3)}"
+                               class="phone-input"
+                               disabled>
 
-                        <input
-                          type="text"
-                          value="1234"
-                          class="phone-input"
-                          disabled
-                        />
+                        <input type="text"
+                               th:value="${#strings.substring(member.hp,4,8)}"
+                               class="phone-input"
+                               disabled>
 
-                        <input
-                          type="text"
-                          value="5678"
-                          class="phone-input"
-                          disabled
-                        />
+                        <input type="text"
+                               th:value="${#strings.substring(member.hp,9,13)}"
+                               class="phone-input"
+                               disabled>
 
                         <button
                           type="button"
@@ -192,28 +262,17 @@
                     <td>
                       <div class="address-wrap">
                         <div class="address-row">
-                          <input
-                            type="text"
-                            placeholder="우편번호"
-                            class="address-input postcode"
-                          />
+
+                          <input th:value="${member.zip}" type="text"  class="address-input postcode">
 
                           <button type="button" class="setting-btn">
                             주소검색
                           </button>
                         </div>
 
-                        <input
-                          type="text"
-                          placeholder="기본주소입력"
-                          class="address-input"
-                        />
+                        <input th:value="${member.addr1}"  type="text"   class="address-input">
+                        <input th:value="${member.addr2}"   type="text"  class="address-input">
 
-                        <input
-                          type="text"
-                          placeholder="상세주소입력"
-                          class="address-input"
-                        />
                       </div>
                     </td>
                   </tr>
@@ -223,8 +282,7 @@
 
                     <td>
                       <a
-                        href="
-                     #"
+                        href="#"
                         class="withdraw-btn"
                       >
                         탈퇴하기

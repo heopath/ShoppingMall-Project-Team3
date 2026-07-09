@@ -72,3 +72,28 @@
 .review-table tbody tr:hover .review-product-link {
   color: #3fbf3f;
 }
+
+.rating-stars {
+  display: inline-block;
+  position: relative;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #ddd; /* 빈 별 색상 (회색) */
+}
+
+.rating-stars::before {
+  content: "★★★★★";
+}
+
+.rating-stars .fill-stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #ffca08; /* 채워진 별 색상 (노란색) */
+}
+
+.rating-stars .fill-stars::before {
+  content: "★★★★★";
+}

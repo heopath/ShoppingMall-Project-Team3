@@ -22,12 +22,12 @@
           <h3>마이페이지</h3>
 
           <ul>
-            <li><a href="#">전체주문내역</a></li>
-            <li><a href="#">포인트내역</a></li>
-            <li><a href="#">쿠폰</a></li>
-            <li class="active"><a href="#">나의리뷰</a></li>
-            <li><a href="#">문의하기</a></li>
-            <li><a href="#">나의설정</a></li>
+            <li><a th:href="@{/my/order}">전체주문내역</a></li>
+            <li><a th:href="@{/my/point}">포인트내역</a></li>
+            <li><a th:href="@{/my/coupon}">쿠폰</a></li>
+            <li class="active"><a th:href="@{/my/review}">나의리뷰</a></li>
+            <li><a th:href="@{/my/qna}">문의하기</a></li>
+            <li><a th:href="@{/my/info}">나의설정</a></li>
           </ul>
         </aside>
 
@@ -54,12 +54,9 @@
             </div>
           </div>
 
-          <div class="mypage-banner">810 × 86 배너 광고</div>
-
-          <!-- 배너 -->
-          <!-- <div class="mypage-banner">
-            <img src="../../images/mypage/banner.jpg" alt="광고 배너" />
-          </div> -->
+          <div class="mypage-banner">
+            <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
+          </div>
 
           <section class="mypage-section">
             <div class="section-header">
@@ -69,93 +66,72 @@
             <!-- 리뷰 테이블 -->
             <table class="review-table">
               <thead>
-                <tr>
-                  <th>번호</th>
-                  <th>상품명</th>
-                  <th>내용</th>
-                  <th>평점</th>
-                  <th>작성일</th>
-                </tr>
+              <tr>
+                <th>번호</th>
+                <th>상품명</th>
+                <th>내용</th>
+                <th>평점</th>
+                <th>작성일</th>
+              </tr>
               </thead>
 
               <tbody>
-                <tr>
-                  <td>1</td>
 
-                  <td>
-                    <a href="#" class="review-product-link">
-                      상품번호 / 상품명
-                    </a>
-                  </td>
+              <tr th:each="review, iterStat : ${reviewList}">
 
-                  <td class="review-content">
-                    배송이 빠릅니다. 잘 사용하겠습니다.
-                  </td>
+                <td th:text="${page.total - page.offset - iterStat.index}">
+                </td>
 
-                  <td>
-                    <div class="review-star">★★★★★</div>
-                  </td>
+                <td>
+                  <img th:if="${review.imagePath != null}"
+                       th:src="@{'/uploads/' + ${review.imagePath}}"
+                       width="50"
+                       style="vertical-align:middle; margin-right:5px;">
 
-                  <td>2026-06-18</td>
-                </tr>
+                  <span th:text="${review.productName}"></span>
+                </td>
 
-                <tr>
-                  <td>2</td>
+                <td th:text="${review.content}"></td>
 
-                  <td>
-                    <a href="#" class="review-product-link">
-                      상품번호 / 상품명
-                    </a>
-                  </td>
+                <td>
+                  <div class="rating-stars" th:title="${review.rating} + '점'">
+                    <div class="fill-stars" th:style="'width: ' + ${review.getRatingPercent()} + '%'"></div>
+                  </div>
+                </td>
 
-                  <td class="review-content">
-                    배송이 빠릅니다. 잘 사용하겠습니다.
-                  </td>
+                <td th:text="${#temporals.format(review.regDate,'yyyy-MM-dd')}"></td>
 
-                  <td>
-                    <div class="review-star">★★★★☆</div>
-                  </td>
+              </tr>
 
-                  <td>2026-06-15</td>
-                </tr>
+              <tr th:if="${#lists.isEmpty(reviewList)}">
+                <td colspan="5">작성한 상품평이 없습니다.</td>
+              </tr>
 
-                <tr>
-                  <td>3</td>
-
-                  <td>
-                    <a href="#" class="review-product-link">
-                      상품번호 / 상품명
-                    </a>
-                  </td>
-
-                  <td class="review-content">
-                    배송이 빠릅니다. 잘 사용하겠습니다.
-                  </td>
-
-                  <td>
-                    <div class="review-star">★★★★☆</div>
-                  </td>
-
-                  <td>2026-06-10</td>
-                </tr>
               </tbody>
             </table>
 
             <!-- 페이징 -->
             <div class="pagination">
-              <a href="#" class="page-btn"
-                ><i class="bi bi-chevron-left"></i
-              ></a>
 
-              <a href="#" class="active">1</a>
-              <a href="#">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              <a href="#">5</a>
+              <a th:if="${page.startPage > 1}"
+                 th:href="@{/my/qna(pg=${page.startPage-1})}"
+                 class="page-btn">
+                <i class="bi bi-chevron-left"></i>
+              </a>
 
-              <a href="#" class="page-btn"
-                ><i class="bi bi-chevron-right"></i
-              ></a>
+              <th:block th:each="i : ${#numbers.sequence(page.startPage,page.endPage)}">
+                <a th:href="@{/my/qna(pg=${i})}"
+                   th:text="${i}"
+                   th:classappend="${i==page.currentPage} ? 'active'">
+                </a>
+              </th:block>
+
+              <a th:if="${page.endPage < page.lastPage}"
+                 th:href="@{/my/qna(pg=${page.endPage+1})}"
+                 class="page-btn">
+                <i class="bi bi-chevron-right"></i>
+              </a>
+
             </div>
           </section>
         </section>
