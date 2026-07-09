@@ -21,8 +21,13 @@ public class CsMainController {
 
     @GetMapping({"/cs", "/cs/index"})
     public String index(Model model) {
-        List<NoticeDTO> noticeDTOList = noticeService.selectNoticeList();
-        List<QnaDTO> qnaDTOList = qnaService.selectQnaList();
+
+        List<NoticeDTO> noticeDTOList =
+                noticeService.selectNoticeList();
+
+        List<QnaDTO> qnaDTOList =
+                qnaService.selectQnaList();
+
         model.addAttribute("noticeDTOList", noticeDTOList);
         model.addAttribute("qnaDTOList", qnaDTOList);
 
