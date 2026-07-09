@@ -689,4 +689,34 @@ public class OrdersService {
             return itemCouponDiscountMap;
         }
     }
+
+    @Transactional(readOnly = true)
+    public OrdersDTO selectOrderComplete(Integer memberNo, Long orderNo) {
+
+        if (orderNo == null) {
+            throw new IllegalArgumentException("주문번호가 없습니다.");
+        }
+
+        return ordersDAO.selectOrderComplete(memberNo, orderNo);
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderItemDTO> selectOrderCompleteItems(Long orderNo) {
+
+        if (orderNo == null) {
+            throw new IllegalArgumentException("주문번호가 없습니다.");
+        }
+
+        return ordersDAO.selectOrderCompleteItems(orderNo);
+    }
+
+    @Transactional(readOnly = true)
+    public DeliveryDTO selectOrderCompleteDelivery(Long orderNo) {
+
+        if (orderNo == null) {
+            throw new IllegalArgumentException("주문번호가 없습니다.");
+        }
+
+        return ordersDAO.selectOrderCompleteDelivery(orderNo);
+    }
 }

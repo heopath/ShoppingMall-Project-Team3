@@ -219,6 +219,86 @@
         )
     </insert>
 
+    <!-- 주문완료 주문정보 조회 -->
+    <select id="selectOrderComplete"
+            resultType="kr.co.springkmarketapp.dto.order.OrdersDTO">
 
+        SELECT
+        order_no AS orderNo,
+        order_code AS orderCode,
+        member_no AS memberNo,
+        orderer_name AS ordererName,
+        orderer_hp AS ordererHp,
+        total_price AS totalPrice,
+        discount_price AS discountPrice,
+        coupon_discount AS couponDiscount,
+        delivery_fee AS deliveryFee,
+        point_use AS pointUse,
+        point_save AS pointSave,
+        pay_price AS payPrice,
+        payment_method AS paymentMethod,
+        payment_status AS paymentStatus,
+        paid_date AS paidDate,
+        order_status AS orderStatus,
+        order_date AS orderDate
+        FROM orders
+        WHERE order_no = #{orderNo}
+        AND member_no = #{memberNo}
+
+    </select>
+
+    <!-- 주문완료 상품목록 조회 -->
+    <select id="selectOrderCompleteItems"
+            resultType="kr.co.springkmarketapp.dto.order.OrderItemDTO">
+
+        SELECT
+        order_item_no AS orderItemNo,
+        order_no AS orderNo,
+        delivery_no AS deliveryNo,
+        product_no AS productNo,
+        seller_no AS sellerNo,
+        product_name AS productName,
+        product_image AS productImage,
+        price AS price,
+        discount_rate AS discountRate,
+        coupon_discount AS couponDiscount,
+        point AS point,
+        quantity AS quantity,
+        total_price AS totalPrice,
+        item_status AS itemStatus,
+        purchase_confirm_date AS purchaseConfirmDate
+        FROM order_item
+        WHERE order_no = #{orderNo}
+        ORDER BY order_item_no ASC
+
+    </select>
+
+    <!-- 주문완료 배송정보 조회 -->
+    <select id="selectOrderCompleteDelivery"
+            resultType="kr.co.springkmarketapp.dto.order.DeliveryDTO">
+
+        SELECT
+        delivery_no AS deliveryNo,
+        order_no AS orderNo,
+        seller_no AS sellerNo,
+        receiver_name AS receiverName,
+        receiver_hp AS receiverHp,
+        zip AS zip,
+        addr1 AS addr1,
+        addr2 AS addr2,
+        courier AS courier,
+        invoice_no AS invoiceNo,
+        delivery_fee AS deliveryFee,
+        delivery_status AS deliveryStatus,
+        memo AS memo,
+        receipt_date AS receiptDate,
+        shipped_date AS shippedDate,
+        delivered_date AS deliveredDate
+        FROM delivery
+        WHERE order_no = #{orderNo}
+        ORDER BY delivery_no ASC
+        LIMIT 1
+
+    </select>
 
 </mapper>

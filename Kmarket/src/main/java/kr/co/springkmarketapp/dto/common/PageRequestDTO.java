@@ -15,6 +15,15 @@ public class PageRequestDTO {
     private int cateNo;
     private String sort = "sold";
 
+    // 검색어
+    private String keyword;
+
+    // 검색 상세 조건
+    private Boolean searchName;
+    private Boolean searchDesc;
+    private Integer minPrice;
+    private Integer maxPrice;
+
     // MyBatis LIMIT 시작 위치
     public int getOffset() {
         return (page - 1) * size;

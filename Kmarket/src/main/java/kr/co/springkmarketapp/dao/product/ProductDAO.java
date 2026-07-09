@@ -34,6 +34,10 @@ public interface ProductDAO {
     List<ProductListDTO> selectProductsByCategory(PageRequestDTO pageRequestDTO);
     int selectCountByCategory(PageRequestDTO pageRequestDTO);
 
+    // 상품 검색
+    List<ProductListDTO> selectProductsBySearch(PageRequestDTO pageRequestDTO);
+    int selectCountBySearch(PageRequestDTO pageRequestDTO);
+
     // 상품 상세 페이지 정보
     ProductViewDTO selectProductView(int productNo);
     List<ProductOptionDTO> selectProductOptions(int productNo);

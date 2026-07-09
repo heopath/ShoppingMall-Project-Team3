@@ -39,4 +39,17 @@ public interface OrdersDAO {
                               @Param("pointSave") Integer pointSave);
 
     int insertMemberPoint(MemberPointDTO memberPointDTO);
+
+    OrdersDTO selectOrderComplete(
+            @Param("memberNo") Integer memberNo,
+            @Param("orderNo") Long orderNo
+    );
+
+    List<OrderItemDTO> selectOrderCompleteItems(
+            @Param("orderNo") Long orderNo
+    );
+
+    DeliveryDTO selectOrderCompleteDelivery(
+            @Param("orderNo") Long orderNo
+    );
 }
