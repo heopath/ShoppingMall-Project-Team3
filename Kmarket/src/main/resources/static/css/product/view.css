@@ -137,18 +137,112 @@
     font-size: 13px;
 }
 
+/* 상품 옵션 */
 .option-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin-top: 18px;
+    padding: 14px;
+    border: 1px solid #dceee2;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fcf9 100%);
 }
 
-.option-box select {
+.option-box-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e8f2eb;
+}
+
+.option-box-title strong {
+    color: #222;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.option-box-title span {
+    color: #777;
+    font-size: 12px;
+}
+
+.option-row {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    align-items: center;
+    gap: 12px;
+}
+
+.option-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.option-label em {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 4px;
+    background: #eaf8ee;
+    color: var(--green-dark);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 800;
+}
+
+.option-select-wrap {
+    position: relative;
+}
+
+.option-select {
     width: 100%;
-    height: 42px;
-    padding: 0 12px;
-    border: 1px solid #ccc;
+    height: 44px;
+    padding: 0 40px 0 14px;
+    border: 1px solid #cfded4;
+    border-radius: 8px;
     background: #fff;
+    color: #333;
     outline: none;
     font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    appearance: none;
+}
+
+.option-select:required:invalid {
+    color: #888;
+    font-weight: 500;
+}
+
+.option-select:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(0, 194, 66, 0.12);
+}
+
+.option-select-wrap::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #777;
+    border-bottom: 2px solid #777;
+    pointer-events: none;
+    transform: translateY(-65%) rotate(45deg);
+}
+
+.option-select option {
+    color: #333;
+    font-weight: 500;
 }
 
 .selected-item {
@@ -622,4 +716,105 @@
 
 .btn-go-cart:hover {
     background: var(--green-dark);
+}
+
+/* 배송/원산지 + 쿠폰 */
+.delivery-coupon-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.delivery-origin-box {
+    flex: 1;
+    min-width: 0;
+}
+
+/* 기존 delivery-info margin 보정 */
+.delivery-coupon-row .delivery-info {
+    margin-top: 0;
+}
+
+/* 상품상세 미니 쿠폰 */
+.product-coupon-box {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0;
+    padding: 0;
+}
+
+.product-coupon-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 280px;
+    min-height: 56px;
+    padding: 9px 10px 9px 12px;
+    border: 1px solid #cfe8d6;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ffffff 0%, #f5fff7 100%);
+    box-shadow: 0 3px 10px rgba(0, 120, 40, 0.06);
+}
+
+.product-coupon-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.coupon-title {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.coupon-title strong {
+    color: #e60012;
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.coupon-title span {
+    color: #168a2f;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.product-coupon-info em {
+    display: block;
+    overflow: hidden;
+    max-width: 160px;
+    margin-top: 5px;
+    color: #5f6f63;
+    font-size: 11px;
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btn-coupon-issue {
+    flex: 0 0 auto;
+    min-width: 74px;
+    height: 32px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 7px;
+    background: #19b83a;
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.btn-coupon-issue:hover {
+    background: #13942f;
+}
+
+.btn-coupon-issue:disabled {
+    background: #b7b7b7;
+    color: #fff;
+    cursor: default;
 }

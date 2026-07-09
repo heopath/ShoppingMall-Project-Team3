@@ -3,11 +3,14 @@ package kr.co.springkmarketapp.controller.product;
 import kr.co.springkmarketapp.config.MyUserDetails;
 import kr.co.springkmarketapp.dto.common.PageRequestDTO;
 import kr.co.springkmarketapp.dto.common.PageResponseDTO;
+import kr.co.springkmarketapp.dto.coupon.CouponDTO;
+import kr.co.springkmarketapp.dto.coupon.CouponIssueRequestDTO;
 import kr.co.springkmarketapp.dto.order.*;
 import kr.co.springkmarketapp.dto.product.CategoryDTO;
 import kr.co.springkmarketapp.dto.product.ProductListDTO;
 import kr.co.springkmarketapp.dto.product.ProductViewDTO;
 import kr.co.springkmarketapp.service.admin.BannerService;
+import kr.co.springkmarketapp.service.coupon.CouponService;
 import kr.co.springkmarketapp.service.member.SellerProfileService;
 import kr.co.springkmarketapp.service.order.CartService;
 import kr.co.springkmarketapp.service.order.OrdersService;
@@ -34,6 +37,7 @@ public class ProductController {
     private final BannerService bannerService;
     private final SellerProfileService sellerProfileService;
     private final OrdersService ordersService;
+    private final CouponService couponService;
 
     // 장바구니 Service 추가
     private final CartService cartService;
@@ -90,6 +94,7 @@ public class ProductController {
     public String view(
             @RequestParam("productNo") int productNo,
             @RequestParam(value = "reviewPage", defaultValue = "1") int reviewPage,
+            @AuthenticationPrincipal MyUserDetails userDetails,
             Model model
     ) {
 
@@ -100,8 +105,28 @@ public class ProductController {
         ProductViewDTO product =
                 productService.getProductView(productNo);
 
+        if (product == null) {
+            return "redirect:/";
+        }
+
         CategoryDTO currentCategory =
                 addCategoryModel(product.getCateNo(), model);
+
+        CouponDTO sellerProductCoupon =
+                couponService.getSellerProductCouponPreview(product.getSellerNo());
+
+        boolean sellerCouponIssued = false;
+
+        if (userDetails != null && sellerProductCoupon != null) {
+            Integer memberNo = userDetails.getMember().getMemberNo();
+
+            sellerCouponIssued =
+                    couponService.hasIssuedSellerProductCoupon(
+                            memberNo,
+                            product.getSellerNo()
+                    );
+        }
+
 
         if (currentCategory == null) {
             return "redirect:/";
@@ -135,8 +160,51 @@ public class ProductController {
                         reviewPageRequestDTO
                 )
         );
+        model.addAttribute("sellerProductCoupon", sellerProductCoupon);
+        model.addAttribute("sellerCouponIssued", sellerCouponIssued);
 
         return "product/view";
+    }
+
+    // 쿠본 발급 API
+    @PostMapping("/product/coupon/issue")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> issueSellerCoupon(
+            @AuthenticationPrincipal MyUserDetails userDetails,
+            @RequestBody CouponIssueRequestDTO request
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    Map.of(
+                            "result", false,
+                            "message", "로그인이 필요합니다."
+                    )
+            );
+        }
+
+        try {
+            Integer memberNo = userDetails.getMember().getMemberNo();
+
+            couponService.issueSellerProductCoupon(
+                    memberNo,
+                    request.getSellerNo()
+            );
+
+            return ResponseEntity.ok(
+                    Map.of(
+                            "result", true,
+                            "message", "쿠폰이 발급되었습니다."
+                    )
+            );
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of(
+                            "result", false,
+                            "message", e.getMessage()
+                    )
+            );
+        }
     }
 
     /*

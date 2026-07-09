@@ -198,7 +198,25 @@
             <div class="empty-product"
                  th:if="${#lists.isEmpty(pageResponseDTO.dtoList)}">
 
-                해당 카테고리에 등록된 상품이 없습니다.
+                <div class="empty-product-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.2 14h7.45c.75 0 1.41-.41 1.75-1.03L20 6.5 18.25 5.5 14.65 12H7.6L3.3 2H1v2h1l3.6 8.59-1.35 2.45C3.52 16.37 4.48 18 6 18h13v-2H6l1.2-2z"/>
+                    </svg>
+                </div>
+
+                <strong>
+                    <span th:text="${currentCategory.cateName}">카테고리</span>
+                    상품이 없습니다.
+                </strong>
+
+                <p>
+                    현재 판매중인 상품이 없거나, 판매자가 운영중 상태가 아닙니다.<br>
+                    다른 카테고리 상품을 둘러보세요.
+                </p>
+
+                <a th:href="@{/}" class="empty-product-home">
+                    메인으로 이동
+                </a>
 
             </div>
 

@@ -41,4 +41,21 @@ public interface CouponDAO {
     );
   
     int deleteCoupons(@Param("couponNos") List<Integer> couponNos);
+
+    CouponDTO selectSellerProductCoupon(
+            @Param("sellerNo") Integer sellerNo
+    );
+
+    int countIssuedSellerProductCoupon(
+            @Param("memberNo") Integer memberNo,
+            @Param("sellerNo") Integer sellerNo
+    );
+
+    int insertCouponIssue(
+            @Param("issueCode") String issueCode,
+            @Param("memberNo") Integer memberNo,
+            @Param("couponNo") Integer couponNo
+    );
+
+    String selectSellerNameBySellerNo(@Param("sellerNo") Integer sellerNo);
 }

@@ -280,6 +280,61 @@ buyBtn.addEventListener("click", async function (e) {
     }
 });
 
+// 판매자 개별상품 할인 쿠폰 발급
+const couponIssueBtn = document.getElementById("couponIssueBtn");
+
+if (couponIssueBtn) {
+    couponIssueBtn.addEventListener("click", async function () {
+        const sellerNo = Number(couponIssueBtn.dataset.sellerNo);
+
+        if (!sellerNo) {
+            alert("판매자 정보가 없습니다.");
+            return;
+        }
+
+        couponIssueBtn.disabled = true;
+
+        try {
+            const response = await fetch("/product/coupon/issue", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    sellerNo: sellerNo
+                })
+            });
+
+            if (response.redirected) {
+                location.href = response.url;
+                return;
+            }
+
+            const contentType = response.headers.get("content-type") || "";
+
+            const data = contentType.includes("application/json")
+                ? await response.json()
+                : null;
+
+            if (!response.ok || !data || !data.result) {
+                alert(data?.message || "쿠폰 발급에 실패했습니다.");
+                couponIssueBtn.disabled = false;
+                return;
+            }
+
+            alert(data.message || "쿠폰이 발급되었습니다.");
+            couponIssueBtn.textContent = "발급완료";
+            couponIssueBtn.disabled = true;
+
+        } catch (error) {
+            console.error(error);
+            alert("서버 통신 중 오류가 발생했습니다.");
+            couponIssueBtn.disabled = false;
+        }
+    });
+}
+
 // 모달 닫기 버튼
 cartModalClose.addEventListener("click", closeCartModal);
 
