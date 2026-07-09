@@ -18,12 +18,12 @@
           <h3>마이페이지</h3>
 
           <ul>
-            <li><a href="#">전체주문내역</a></li>
-            <li><a href="#">포인트내역</a></li>
-            <li class="active"><a href="#">쿠폰</a></li>
-            <li><a href="#">나의리뷰</a></li>
-            <li><a href="#">문의하기</a></li>
-            <li><a href="#">나의설정</a></li>
+            <li><a th:href="@{/my/order}">전체주문내역</a></li>
+            <li><a th:href="@{/my/point}">포인트내역</a></li>
+            <li class="active"><a th:href="@{/my/coupon}">쿠폰</a></li>
+            <li><a th:href="@{/my/review}">나의리뷰</a></li>
+            <li><a th:href="@{/my/qna}">문의하기</a></li>
+            <li><a th:href="@{/my/info}">나의설정</a></li>
           </ul>
         </aside>
 
@@ -50,12 +50,9 @@
             </div>
           </div>
 
-          <div class="mypage-banner">810 × 86 배너 광고</div>
-
-          <!-- 배너 -->
-          <!-- <div class="mypage-banner">
-            <img src="../../images/mypage/banner.jpg" alt="광고 배너" />
-          </div> -->
+          <div class="mypage-banner">
+            <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
+          </div>
 
           <section class="mypage-section">
             <div class="section-header">
@@ -75,33 +72,35 @@
               </thead>
 
               <tbody>
-                <tr>
-                  <td>
-                    <p>1만원 할인 중복 쿠폰</p>
-                  </td>
 
-                  <td>10,000원</td>
+              <tr th:each="coupon : ${couponList}">
 
-                  <td>10,000원 이상 구매시</td>
+                <td>
+                  <p th:text="${coupon.couponName}"></p>
+                </td>
 
-                  <td class="coupon-available">사용가능</td>
+                <td>
+                  <span th:text="${coupon.benefitValue}"></span>
+                  <span th:text="${coupon.benefitType == 'RATE' ? '%' : '원'}"></span>
+                </td>
 
-                  <td>~ 12/31</td>
-                </tr>
+                <td>
+                  <span th:text="${#numbers.formatInteger(coupon.minOrderPrice,3,'COMMA')}"></span>원 이상 구매
+                </td>
 
-                <tr>
-                  <td>
-                    <p>회원가입 축하 5천원 할인쿠폰</p>
-                  </td>
+                <td th:text="${coupon.status}"
+                    th:classappend="${coupon.status == '발급'} ? 'coupon-available'
+                   : (${coupon.status == '사용'} ? 'coupon-used' : 'coupon-disabled')">
+                </td>
 
-                  <td>5,000원</td>
+                <td th:text="${#temporals.format(coupon.endDate,'yyyy-MM-dd')}"></td>
 
-                  <td>5,000원 이상 구매시</td>
+              </tr>
 
-                  <td class="coupon-available">사용가능</td>
+              <tr th:if="${#lists.isEmpty(couponList)}">
+                <td colspan="5">보유한 쿠폰이 없습니다.</td>
+              </tr>
 
-                  <td>~ 12/31</td>
-                </tr>
               </tbody>
             </table>
 

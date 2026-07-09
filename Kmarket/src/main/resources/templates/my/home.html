@@ -19,12 +19,12 @@
       <h3>마이페이지</h3>
 
       <ul>
-        <li><a href="#">전체주문내역</a></li>
-        <li><a href="#">포인트내역</a></li>
-        <li><a href="#">쿠폰</a></li>
-        <li><a href="#">나의리뷰</a></li>
-        <li><a href="#">문의하기</a></li>
-        <li><a href="#">나의설정</a></li>
+        <li><a th:href="@{/my/order}">전체주문내역</a></li>
+        <li><a th:href="@{/my/point}">포인트내역</a></li>
+        <li><a th:href="@{/my/coupon}">쿠폰</a></li>
+        <li><a th:href="@{/my/review}">나의리뷰</a></li>
+        <li><a th:href="@{/my/qna}">문의하기</a></li>
+        <li><a th:href="@{/my/info}">나의설정</a></li>
       </ul>
     </aside>
 
@@ -53,7 +53,7 @@
       </div>
 
       <div class="mypage-banner">
-        <img src="/images/my/myBanner.png" alt="myBanner">
+        <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
       </div>
 
 
@@ -173,7 +173,7 @@
       <section class="mypage-section point-table">
         <div class="section-header">
           <h3>포인트적립내역</h3>
-          <a href="#">더보기 ></a>
+          <a th:href="@{/my/point}">더보기 ></a>
         </div>
 
         <table class="mypage-table">
@@ -221,7 +221,7 @@
       <section class="mypage-section review-table">
         <div class="section-header">
           <h3>상품평</h3>
-          <a href="#">더보기 ></a>
+          <a th:href="@{/my/review}">더보기 ></a>
         </div>
 
         <table class="mypage-table review-table">
@@ -260,7 +260,7 @@
       <section class="mypage-section inquiry-table">
         <div class="section-header">
           <h3>문의내역</h3>
-          <a href="#">더보기 ></a>
+          <a th:href="@{/my/qna}">더보기 ></a>
         </div>
 
         <table class="mypage-table">

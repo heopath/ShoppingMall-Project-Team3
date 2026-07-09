@@ -22,12 +22,12 @@
           <h3>마이페이지</h3>
 
           <ul>
-            <li><a href="#">전체주문내역</a></li>
-            <li><a href="#">포인트내역</a></li>
-            <li><a href="#">쿠폰</a></li>
-            <li><a href="#">나의리뷰</a></li>
-            <li class="active"><a href="#">문의하기</a></li>
-            <li><a href="#">나의설정</a></li>
+            <li><a th:href="@{/my/order}">전체주문내역</a></li>
+            <li><a th:href="@{/my/point}">포인트내역</a></li>
+            <li><a th:href="@{/my/coupon}">쿠폰</a></li>
+            <li><a th:href="@{/my/review}">나의리뷰</a></li>
+            <li  class="active"><a th:href="@{/my/qna}">문의하기</a></li>
+            <li><a th:href="@{/my/info}">나의설정</a></li>
           </ul>
         </aside>
 
@@ -54,12 +54,9 @@
             </div>
           </div>
 
-          <div class="mypage-banner">810 × 86 배너 광고</div>
-
-          <!-- 배너 -->
-          <!-- <div class="mypage-banner">
-            <img src="../../images/mypage/banner.jpg" alt="광고 배너" />
-          </div> -->
+          <div class="mypage-banner">
+            <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
+          </div>
 
           <section class="mypage-section">
             <div class="section-header">
@@ -80,57 +77,28 @@
               </thead>
 
               <tbody>
-                <tr>
-                  <td>1</td>
+              <tr th:each="qna, stat : ${qnaList}" th:if="${stat.index < 5}">
 
-                  <td>고객센터</td>
+                <td th:text="${qna.qnaNo}"></td>
 
-                  <td>주문 / 결제</td>
+                <td>고객센터</td>
 
-                  <td class="inquiry-title">
-                    <a href="#">
-                      신용카드 결제 중 오류가 난 경우 어떻게 하나요?
-                    </a>
-                  </td>
+                <td th:text="${qna.parentCateName + ' / ' + qna.cateName}"></td>
 
-                  <td>2026-06-18</td>
+                <td th:text="${qna.title}"></td>
 
-                  <td class="status-wait">검토 중</td>
-                </tr>
+                <td th:text="${#temporals.format(qna.regDate,'yyyy-MM-dd')}"></td>
 
-                <tr>
-                  <td>2</td>
+                <td th:text="${qna.status}"
+                    th:classappend="${qna.status=='답변완료'} ? ' answer' : ' pending'">
+                </td>
 
-                  <td>고객센터</td>
+              </tr>
 
-                  <td>주문 / 결제</td>
+              <tr th:if="${#lists.isEmpty(qnaList)}">
+                <td colspan="6">문의내역이 없습니다.</td>
+              </tr>
 
-                  <td class="inquiry-title">
-                    <a href="#">
-                      신용카드 결제 중 오류가 난 경우 어떻게 하나요?
-                    </a>
-                  </td>
-
-                  <td>2026-06-15</td>
-
-                  <td class="status-complete">답변완료</td>
-                </tr>
-
-                <tr>
-                  <td>3</td>
-
-                  <td>판매자 게시판</td>
-
-                  <td>배송</td>
-
-                  <td class="inquiry-title">
-                    <a href="#"> 배송기간이 보통 얼마나 걸리나요? </a>
-                  </td>
-
-                  <td>2026-06-10</td>
-
-                  <td class="status-complete">답변완료</td>
-                </tr>
               </tbody>
             </table>
 

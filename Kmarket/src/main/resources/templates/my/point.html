@@ -23,12 +23,12 @@
           <h3>마이페이지</h3>
 
           <ul>
-            <li><a href="#">전체주문내역</a></li>
-            <li class="active"><a href="#">포인트내역</a></li>
-            <li><a href="#">쿠폰</a></li>
-            <li><a href="#">나의리뷰</a></li>
-            <li><a href="#">문의하기</a></li>
-            <li><a href="#">나의설정</a></li>
+            <li><a th:href="@{/my/order}">전체주문내역</a></li>
+            <li class="active"><a th:href="@{/my/point}">포인트내역</a></li>
+            <li><a th:href="@{/my/coupon}">쿠폰</a></li>
+            <li><a th:href="@{/my/review}">나의리뷰</a></li>
+            <li><a th:href="@{/my/qna}">문의하기</a></li>
+            <li><a th:href="@{/my/info}">나의설정</a></li>
           </ul>
         </aside>
 
@@ -55,12 +55,10 @@
             </div>
           </div>
 
-          <div class="mypage-banner">810 × 86 배너 광고</div>
 
-          <!-- 배너 -->
-          <!-- <div class="mypage-banner">
-            <img src="../../images/mypage/banner.jpg" alt="광고 배너" />
-          </div> -->
+          <div class="mypage-banner">
+            <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
+          </div>
 
           <section class="mypage-section">
             <div class="section-header">
@@ -104,34 +102,41 @@
             <!-- 포인트 테이블 -->
             <table class="point-table">
               <thead>
-                <tr>
-                  <th>날짜</th>
-                  <th>구분</th>
-                  <th>주문번호</th>
-                  <th>적립금액</th>
-                  <th>비고</th>
-                  <th>유효기간</th>
-                </tr>
+              <tr>
+                <th>날짜</th>
+                <th>구분</th>
+                <th>주문번호</th>
+                <th>적립금액</th>
+                <th>비고</th>
+                <th>유효기간</th>
+              </tr>
               </thead>
 
               <tbody>
-                <tr>
-                  <td>2026-06-18</td>
-                  <td>적립</td>
-                  <td>20220618001</td>
-                  <td class="point-plus">340</td>
-                  <td>상품 구매적립</td>
-                  <td>2027-06-18</td>
-                </tr>
 
-                <tr>
-                  <td>2026-06-15</td>
-                  <td>적립</td>
-                  <td>20220615001</td>
-                  <td class="point-plus">120</td>
-                  <td>상품 구매적립</td>
-                  <td>2027-06-15</td>
-                </tr>
+              <tr th:each="point : ${pointList}"
+                 >
+
+                <td th:text="${#temporals.format(point.regDate,'yyyy-MM-dd')}"></td>
+
+                <td th:text="${point.pointType}"></td>
+
+                <td th:text="${point.orderNo}"></td>
+
+                <td class="point  point-plus"
+                    th:text="${#numbers.formatInteger(point.pointValue,3,'COMMA')} + 'P'">
+                </td>
+
+                <td th:text="${point.reason}"></td>
+
+                <td th:text="${point.expireDate}"></td>
+
+              </tr>
+
+              <tr th:if="${#lists.isEmpty(pointList)}">
+                <td colspan="6">포인트 적립내역이 없습니다.</td>
+              </tr>
+
               </tbody>
             </table>
 
