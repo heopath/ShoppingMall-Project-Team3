@@ -95,6 +95,8 @@ public class ProductController {
 
         addCommonModel(model);
 
+        model.addAttribute("product1Banner", bannerService.selectBannerListByPosition("PRODUCT1"));
+
         ProductViewDTO product =
                 productService.getProductView(productNo);
 

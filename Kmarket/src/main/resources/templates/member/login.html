@@ -9,7 +9,11 @@
   </head>
   <body>
   <th:block th:replace="~{common/_main_header}"></th:block>
-
+  <div th:if="${member1Banner != null and !#lists.isEmpty(member1Banner)}" class="member-banner">
+    <a th:href="${member1Banner[0].linkUrl != null ? member1Banner[0].linkUrl : '#'}">
+      <img th:src="${member1Banner[0].imagePath}" th:alt="${member1Banner[0].bannerName}">
+    </a>
+  </div>
 
 
     <main class="container">

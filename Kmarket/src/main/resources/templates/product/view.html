@@ -195,7 +195,15 @@
                         <button type="button" class="btn-buy">구매하기</button>
                     </div>
 
-                    <div class="mini-banner">
+                    <div class="mini-banner" th:if="${product1Banner != null and !#lists.isEmpty(product1Banner)}">
+                        <a th:href="${product1Banner[0].linkUrl != null ? product1Banner[0].linkUrl : '#'}">
+                            <img th:src="${product1Banner[0].imagePath}"
+                                 th:alt="${product1Banner[0].bannerName}"
+                                 style="width: 100%; height: auto;" />
+                        </a>
+                    </div>
+
+                    <div class="mini-banner" th:unless="${product1Banner != null and !#lists.isEmpty(product1Banner)}">
                         <span>550 × 64 배너 광고</span>
                     </div>
                 </div>

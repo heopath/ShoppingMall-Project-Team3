@@ -52,7 +52,13 @@
         </div>
       </div>
 
-      <div class="mypage-banner">
+      <div class="mypage-banner" th:if="${my1Banner != null and !#lists.isEmpty(my1Banner)}">
+        <a th:href="${my1Banner[0].linkUrl != null ? my1Banner[0].linkUrl : '#'}">
+          <img th:src="${my1Banner[0].imagePath}" th:alt="${my1Banner[0].bannerName}">
+        </a>
+      </div>
+
+      <div class="mypage-banner" th:unless="${my1Banner != null and !#lists.isEmpty(my1Banner)}">
         <img src="/images/my/myBanner.png" alt="myBanner">
       </div>
 
