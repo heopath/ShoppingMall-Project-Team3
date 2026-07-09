@@ -4,7 +4,9 @@ import jakarta.transaction.Transactional;
 import kr.co.springkmarketapp.dao.my.MyDAO;
 import kr.co.springkmarketapp.dto.common.PageRequestDTO;
 import kr.co.springkmarketapp.dto.common.PageResponseDTO;
+import kr.co.springkmarketapp.dto.coupon.CouponIssueDTO;
 import kr.co.springkmarketapp.dto.cs.QnaDTO;
+import kr.co.springkmarketapp.dto.member.MemberDTO;
 import kr.co.springkmarketapp.dto.member.SellerProfileDTO;
 import kr.co.springkmarketapp.dto.my.MemberPointDTO;
 import kr.co.springkmarketapp.dto.order.OrderItemDTO;
@@ -92,24 +94,53 @@ public class MyService {
         }
     }
 
-    // 포인트 적립내역 조회
+    // 메인 - 포인트 적립내역 조회
     public List<MemberPointDTO> selectPointList(Integer memberNo) {
         return myDAO.selectPointList(memberNo);
     }
+    // 메뉴 - 포인트 적립내역 조회
+    public List<MemberPointDTO> selectPointList(Integer memberNo, int start) {
+        return myDAO.selectPointListWithPaging(memberNo, start, 10);
+    }
+    public Integer selectPointCount(Integer memberNo){
+        return myDAO.selectPointCount(memberNo);
+    }
 
-    // 상품평 조회
+    // 메인 - 상품평 조회
     public List<ProductReviewDTO> selectReviewList(Integer memberNo) {
         return myDAO.selectReviewList(memberNo);
     }
 
-    // 문의내역 조회
+    // 메뉴 - 상품평 전체조회
+    public List<ProductReviewDTO> selectReviewList(Integer memberNo, int start) {
+        return myDAO.selectReviewListWithPaging(memberNo, start, 10);
+    }
+
+    // 상품평 개수
+    public Integer selectReviewCount(Integer memberNo){
+        return myDAO.selectReviewCount(memberNo);
+    }
+
+    // 메인 - 문의내역 조회
     public List<QnaDTO> selectQnaList(Integer memberNo){
         return myDAO.selectMyQnaList(memberNo);
+    }
+
+    // 메뉴 - 문의내역 전체조회
+    public List<QnaDTO> selectQnaList(Integer memberNo, int start, int size){
+        return myDAO.selectMyQnaListWithPaging(memberNo, start, size);
     }
 
     // 주문내역 갯수 조회
     public Integer selectOrderCount(Integer memberNo){
         return myDAO.selectOrderCount(memberNo);
+    }
+
+    // 기간조건 포함 주문내역 갯수 조회
+    public Integer selectOrderCount(Integer memberNo,
+                                    String startDate,
+                                    String endDate){
+        return myDAO.selectOrderCount(memberNo, startDate, endDate);
     }
 
     // 쿠폰 갯수 조회
@@ -130,6 +161,30 @@ public class MyService {
     // 메뉴1 - 주문내역 전체조회
     public List<OrderItemDTO> selectOrderPage(Integer memberNo, int start){
         return myDAO.selectRecentOrderList(memberNo, start, 10);
+    }
+    // 전체조회(기간검색)
+    public List<OrderItemDTO> selectOrderPage(Integer memberNo,
+                                              String startDate,
+                                              String endDate,
+                                              int start,
+                                              int size){
+        return myDAO.selectOrderPage(memberNo, startDate, endDate, start, size);
+    }
+
+    // 쿠폰 내역 조회
+    public List<CouponIssueDTO> selectCouponList(Integer memberNo, int start, int size){
+        return myDAO.selectCouponList(memberNo, start, size);
+    }
+
+    // 회원정보 조회
+    public MemberDTO selectMemberSetting(Integer memberNo){
+        return myDAO.selectMemberSetting(memberNo);
+    }
+
+    // 회원정보 수정
+    @Transactional
+    public void updateMemberSetting(MemberDTO dto){
+        myDAO.updateMemberSetting(dto);
     }
 
 }
