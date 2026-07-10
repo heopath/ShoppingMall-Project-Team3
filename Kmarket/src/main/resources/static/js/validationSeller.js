@@ -93,7 +93,8 @@ document.addEventListener('DOMContentLoaded', function(){
     btnUserid.addEventListener('click', async function(e){
         e.preventDefault();
 
-        const value = form.memberId.value;
+        // const value = form.memberId.value;
+        const value = document.getElementsByName('memberId')[0].value;
 
         // 아이디 유효성 검사
         if(!value.match(reUserid)){
@@ -128,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function(){
     pass1.addEventListener('focusout', function(e){
         e.preventDefault();
 
-        const value = form.password.value;
+        const value = document.getElementsByName('password')[0].value;
 
         if(!value.match(rePass)){
             passResult.innerText = '비밀번호가 유효하지 않습니다.';
@@ -143,8 +144,8 @@ document.addEventListener('DOMContentLoaded', function(){
     pass2.addEventListener('focusout', function(e){
         e.preventDefault();
 
-        const value1 = form.password.value;
-        const value2 = form.password2.value;
+        const value1 = document.getElementsByName('password')[0].value;
+        const value2 = document.getElementsByName('password2')[0].value;
 
         if(value1 === value2){
             passResult.innerText = '비밀번호가 일치 합니다.';
@@ -168,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     company.addEventListener('focusout', function(){
 
-        const value = company.value;
+        const value = document.getElementsByName('company')[0].value;
 
         if(!reCompany.test(value)){
             companyResult.innerText = '회사명이 유효하지 않습니다.';
@@ -193,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function(){
             isCompanyOk = false;
         }else{
             companyResult.textContent="사용 가능한 상호명입니다.";
-            companyResult.style.color="green";
+            companyResult.style.color="#83d400";
             isCompanyOk = true;
         }
 
@@ -207,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     ceo.addEventListener('focusout', function(){
 
-        const value = ceo.value;
+        const value = document.getElementsByName('ceo')[0].value;
 
         if(!reCeo.test(value)){
             ceoResult.innerText = '대표자명이 유효하지 않습니다.';
@@ -227,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     bizNo.addEventListener('focusout', function(){
 
-        const value = bizNo.value;
+        const value = document.getElementsByName('bizNo')[0].value;
 
         if(!reBizNo.test(value)){
             bizNoResult.innerText = '사업자등록번호 형식이 올바르지 않습니다.';
@@ -262,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function(){
             isBizNoOk = false;
         } else {
             bizNoResult.textContent = "사용 가능한 사업자등록번호입니다.";
-            bizNoResult.style.color = "green";
+            bizNoResult.style.color = "#83d400";
             isBizNoOk = true;
         }
 
@@ -276,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     onlineSaleNo.addEventListener('focusout', function(){
 
-        const value = onlineSaleNo.value;
+        const value = document.getElementsByName('onlineSaleNo')[0].value;
 
         if(!reOnlineSaleNo.test(value)){
             onlineSaleNoResult.innerText = '통신판매업번호 형식이 올바르지 않습니다.';
@@ -300,49 +301,50 @@ document.addEventListener('DOMContentLoaded', function(){
             isOnlineSaleNoOk = false;
         }else{
             onlineSaleNoResult.textContent="사용 가능한 통신판매업번호입니다.";
-            onlineSaleNoResult.style.color="green";
+            onlineSaleNoResult.style.color="#83d400";
             isOnlineSaleNoOk = true;
         }
 
     });
 
     //--------------------------
-    // 7) 전화번호 유효성 검사
-    //--------------------------
-    const tel = document.getElementsByName('tel')[0];
+// 7) 전화번호 유효성 검사
+//--------------------------
     const telInput = document.querySelector('input[name="tel"]');
-    const telResult = document.getElementsByClassName('telResult')[0];
+    const telResult = document.querySelector('.telResult');
 
-    tel.addEventListener('focusout', function(){
-
-        const value = tel.value;
-
-        if(!reTel.test(value)){
-            telResult.innerText = '전화번호 형식이 올바르지 않습니다.';
-            telResult.style.color = 'red';
-            isTelOk = false;
-        }else{
-            telResult.innerText = '';
-            isTelOk = true;
-        }
-    });
-    telInput.addEventListener("blur", async ()=>{
+    telInput.addEventListener('blur', async () => {
 
         const value = telInput.value.trim();
 
-        const res = await fetch(`/member/checkTel?tel=${encodeURIComponent(value)}`);
-        const count = await res.text();
-
-        if(Number(count)>0){
-            telResult.textContent="이미 등록된 전화번호입니다.";
-            telResult.style.color="red";
+        // 입력 여부
+        if (value === '') {
+            telResult.textContent = '';
             isTelOk = false;
-        }else{
-            telResult.textContent="사용 가능한 전화번호입니다.";
-            telResult.style.color="green";
-            isTelOk = true;
+            return;
         }
 
+        // 형식 검사
+        if (!reTel.test(value)) {
+            telResult.textContent = '전화번호 형식이 올바르지 않습니다.';
+            telResult.style.color = 'red';
+            isTelOk = false;
+            return;
+        }
+
+        // 중복 검사
+        const res = await fetch(`/member/checkTel?tel=${encodeURIComponent(value)}`);
+        const count = Number(await res.text());
+
+        if (count > 0) {
+            telResult.textContent = '이미 등록된 전화번호입니다.';
+            telResult.style.color = 'red';
+            isTelOk = false;
+        } else {
+            telResult.textContent = '사용 가능한 전화번호입니다.';
+            telResult.style.color = '#83d400';
+            isTelOk = true;
+        }
     });
 
     //--------------------------
@@ -353,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     fax.addEventListener('focusout', function(){
 
-        const value = fax.value;
+        const value = document.getElementsByName('fax')[0].value;
 
         if(!reFax.test(value)){
             faxResult.innerText = '팩스번호 형식이 올바르지 않습니다.';

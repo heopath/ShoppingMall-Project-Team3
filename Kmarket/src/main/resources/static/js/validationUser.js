@@ -1,3 +1,4 @@
+console.log("validationUser.js loaded");
 // 유효성 검사에 사용할 정규표현식
 const reUserid   = /^[a-z]+[a-z0-9]{4,19}$/g;
 const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
@@ -17,7 +18,7 @@ let isHpOk = false;
 
 document.addEventListener('DOMContentLoaded', function(){
 
-    const form = document.getElementsByTagName('form')[0];
+    const form = document.querySelector('form');
 
     // 최종 폼 전송하기
     form.addEventListener('submit', function(e){
@@ -39,12 +40,6 @@ document.addEventListener('DOMContentLoaded', function(){
             alert('이름를 확인하세요.');
             return;
         }
-
-        // if(!isNickOk){
-        //     e.preventDefault();
-        //     alert('별명을 확인하세요.');
-        //     return;
-        // }
 
         if(!isEmailOk){
             e.preventDefault();
@@ -68,8 +63,8 @@ document.addEventListener('DOMContentLoaded', function(){
     btnUserid.addEventListener('click', async function(e){
         e.preventDefault();
 
-        const value = form.memberId.value;
-
+        // const value = form.memberId.value;
+        const value = document.getElementsByName('memberId')[0].value;
         // 아이디 유효성 검사
         if(!value.match(reUserid)){
             useridResult.innerText = '아이디가 유효하지 않습니다.';
@@ -103,8 +98,8 @@ document.addEventListener('DOMContentLoaded', function(){
     pass1.addEventListener('focusout', function(e){
         e.preventDefault();
 
-        const value = form.password.value;
-
+        // const value = form.password.value;
+        const value = document.getElementsByName('password')[0].value;
         if(!value.match(rePass)){
             passResult.innerText = '비밀번호가 유효하지 않습니다.';
             passResult.style.color = 'red';
@@ -119,8 +114,11 @@ document.addEventListener('DOMContentLoaded', function(){
     pass2.addEventListener('focusout', function(e){
         e.preventDefault();
 
-        const value1 = form.password.value;
-        const value2 = form.password2.value;
+        // const value1 = form.password.value;
+        const value1 = document.getElementsByName('password')[0].value;
+
+        // const value2 = form.password2.value;
+        const value2 = document.getElementsByName('password2')[0].value;
 
         if(!value1.match(rePass)){
             passResult.innerText = '비밀번호가 유효하지 않습니다.';
@@ -149,7 +147,8 @@ document.addEventListener('DOMContentLoaded', function(){
     name.addEventListener('focusout', function(e){
         e.preventDefault();
 
-        const value = form.name.value;
+        // const value = form.name.value;
+        const value = document.getElementsByName('name')[0].value;
 
         if(!value.match(reName)){
             nameResult.innerText = '이름이 유효하지 않습니다.';
@@ -160,39 +159,6 @@ document.addEventListener('DOMContentLoaded', function(){
             isNameOk = true;
         }
     });
-
-    //--------------------------
-    // 4) 별명 유효성 검사(중복 체크 포함)
-    //--------------------------
-    // const btnNick = document.getElementById('btnNick');
-    // const nickResult = document.getElementsByClassName('nickResult')[0];
-    //
-    // btnNick.addEventListener('click', async function(e){
-    //     e.preventDefault();
-    //
-    //     const value = form.nick.value;
-    //
-    //     if(!value.match(reNick)){
-    //         nickResult.innerText = '별명이 유효하지 않습니다.';
-    //         nickResult.style.color = 'red';
-    //         isNickOk = false;
-    //     }
-    //
-    //     // 별명 중복 여부 요청하기
-    //     const response = await fetch('/user/check?type=nick&value=' + value);
-    //     const data = await response.json();
-    //     console.log(data);
-    //
-    //     if(data.count > 0){
-    //         nickResult.innerText = '이미 사용중인 별명 입니다.';
-    //         nickResult.style.color = 'red';
-    //         isNickOk = false;
-    //     }else{
-    //         nickResult.innerText = '사용 가능한 별명 입니다.';
-    //         nickResult.style.color = '#83d400';
-    //         isNickOk = true;
-    //     }
-    // }); // 별명 중복 체크 끝
 
 
     //--------------------------
@@ -215,7 +181,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
         // console.log('이중 클릭 방지!!!');
 
-        const value = form.email.value;
+        // const value = form.email.value;
+        const value = document.getElementsByName('email')[0].value;
 
         if(!value.match(reEmail)){
             emailResult.innerText = '이메일이 유효하지 않습니다.';
@@ -248,7 +215,8 @@ document.addEventListener('DOMContentLoaded', function(){
     btnConfirm.addEventListener('click', async function(e){
         e.preventDefault();
 
-        const value = form.code.value;
+        // const value = form.code.value;
+        const value = document.getElementsByName('code')[0].value;
 
         // JSON 생성
         const jsonData = {
@@ -287,7 +255,8 @@ document.addEventListener('DOMContentLoaded', function(){
         e.preventDefault();
         //console.log('focusout!!');
 
-        const value = form.hp.value;
+        // const value = form.hp.value;
+        const value = document.getElementsByName('hp')[0].value;
 
         if(!value.match(reHp)){
             hpResult.innerText = '휴대폰이 유효하지 않습니다.';

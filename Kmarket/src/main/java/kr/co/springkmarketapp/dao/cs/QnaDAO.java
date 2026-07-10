@@ -1,6 +1,8 @@
 package kr.co.springkmarketapp.dao.cs;
 
+import kr.co.springkmarketapp.dto.cs.CsCategoryDTO;
 import kr.co.springkmarketapp.dto.cs.QnaDTO;
+import kr.co.springkmarketapp.dto.product.CategoryDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +29,9 @@ public interface QnaDAO {
 
     int countQna(int parentNo);
 
+    // 1차 카테고리
+    List<CsCategoryDTO> selectParentCategoryList();
+
+    // 2차 카테고리
+    List<CsCategoryDTO> selectChildCategoryList(int parentNo);
 }
