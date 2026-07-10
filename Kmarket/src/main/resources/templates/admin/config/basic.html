@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${settings.site_title + ' - 관리자 기본설정'}">관리자 기본설정</title>
+    <th:block th:replace="~{common/_site_head :: head('관리자 기본설정')}"></th:block>
     <link rel="icon"
           th:if="${settings.favicon != null and settings.favicon != ''}"
           th:href="${settings.favicon}">

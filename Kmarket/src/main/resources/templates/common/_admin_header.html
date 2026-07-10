@@ -1,9 +1,20 @@
 <header class="admin-header" th:fragment="header" xmlns:th="http://www.thymeleaf.org">
-    <div class="logo">CI ( 로고 )</div>
+    <div class="logo">
+        <a th:href="@{/admin}">
+            <img th:if="${settings.header_logo != null and settings.header_logo != ''}"
+                 th:src="${settings.header_logo}"
+                 alt="관리자 로고"
+                 style="max-height:40px; max-width:180px; object-fit:contain;">
+
+            <span th:if="${settings.header_logo == null or settings.header_logo == ''}">
+                CI ( 로고 )
+            </span>
+        </a>
+    </div>
 
     <div class="top-menu">
-        <a href="/">홈</a>
-        <a href="/logout">로그아웃</a>
-        <a href="/cs">고객센터</a>
+        <a th:href="@{/}">홈</a>
+        <a th:href="@{/member/logout}">로그아웃</a>
+        <a th:href="@{/cs/index}">고객센터</a>
     </div>
 </header>
