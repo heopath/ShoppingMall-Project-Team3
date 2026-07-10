@@ -15,7 +15,7 @@ server:
 spring:
     application:
         name: spring-board-app
-        version: ${version:0.0.8}
+        version: ${version:0.0.9}
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: 1q2w3E4R!
