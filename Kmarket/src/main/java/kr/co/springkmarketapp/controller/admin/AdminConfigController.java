@@ -113,7 +113,7 @@ public class AdminConfigController {
     @PostMapping("/banner/register")
     public String bannerRegister(@ModelAttribute BannerDTO bannerDTO) {
         bannerService.insertBanner(bannerDTO);
-        return "redirect:/admin/config/banner"; // 등록 후 배너 목록으로 리다이렉트
+        return "redirect:/admin/config/banner?position=" + bannerDTO.getBannerPosition(); // 등록 후 배너 목록으로 리다이렉트
     }
 
     // 배너 단건 삭제 처리
@@ -135,7 +135,7 @@ public class AdminConfigController {
     @PostMapping("/banner/modify")
     public String bannerModify(@ModelAttribute BannerDTO bannerDTO) {
         bannerService.modifyBanner(bannerDTO);
-        return "redirect:/admin/config/banner";
+        return "redirect:/admin/config/banner?position=" + bannerDTO.getBannerPosition();
     }
 
     //약관정책

@@ -223,6 +223,25 @@
    배너
 ========================= */
 
+/* Member(로그인) 페이지 배너 */
+.member-banner {
+  width: 100%;
+  text-align: center;
+}
+
+.member-banner a {
+  display: block;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.member-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
 .ad-banner {
   width: 300px;
 
