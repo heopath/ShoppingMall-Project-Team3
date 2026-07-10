@@ -171,7 +171,7 @@
                     <h3>공지사항</h3>
                     <ul class="board-list">
                         <li th:each="notice : ${noticeList}">
-                            <a th:href="@{/admin/cs/notice/view(no=${notice.id})}" th:text="${notice.title}">공지사항 제목</a>
+                            <a th:href="@{/admin/cs/notice/view(noticeNo=${notice.id})}" th:text="${notice.title}">공지사항 제목</a>
                             <span th:text="${notice.regDate}">22.10.31</span>
                         </li>
                     </ul>
@@ -180,7 +180,7 @@
                     <h3>고객문의</h3>
                     <ul class="board-list inquiry-list">
                         <li th:each="qna : ${qnaList}">
-                            <a th:href="@{/admin/cs/qna/view(no=${qna.id})}" th:text="${qna.title}">문의 제목</a>
+                            <a th:href="@{/admin/cs/qna/view(qnaNo=${qna.id})}" th:text="${qna.title}">문의 제목</a>
                             <em th:text="${qna.writer}">chh***</em>
                             <span th:text="${qna.regDate}">22.10.31</span>
                         </li>
