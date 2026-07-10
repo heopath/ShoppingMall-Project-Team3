@@ -136,46 +136,13 @@
                                 </p>
                             </div>
 
-                            <div class="product-coupon-box"
-                                 th:if="${sellerProductCoupon != null}">
-
-                                <div class="product-coupon-card">
-
-                                    <div class="product-coupon-info">
-                                        <div class="coupon-title">
-                                            <strong th:if="${sellerProductCoupon.benefitType == 'PERCENT'}"
-                                                    th:text="${sellerProductCoupon.benefitValue} + '%'">
-                                                10%
-                                            </strong>
-
-                                            <strong th:if="${sellerProductCoupon.benefitType == 'AMOUNT'}"
-                                                    th:text="${#numbers.formatInteger(sellerProductCoupon.benefitValue, 1, 'COMMA')} + '원'">
-                                                2,000원
-                                            </strong>
-
-                                            <span>할인 쿠폰</span>
-                                        </div>
-
-                                        <em th:if="${sellerProductCoupon.benefitType == 'PERCENT'}"
-                                            th:text="${product.sellerName + ' ' + sellerProductCoupon.benefitValue + '% 할인 쿠폰'}">
-                                            테스트상점01 10% 할인 쿠폰
-                                        </em>
-
-                                        <em th:if="${sellerProductCoupon.benefitType == 'AMOUNT'}"
-                                            th:text="${product.sellerName + ' ' + #numbers.formatInteger(sellerProductCoupon.benefitValue, 1, 'COMMA') + '원 할인 쿠폰'}">
-                                            테스트상점01 2,000원 할인 쿠폰
-                                        </em>
-                                    </div>
-
-                                    <button type="button"
-                                            id="couponIssueBtn"
-                                            class="btn-coupon-issue"
-                                            th:data-seller-no="${product.sellerNo}"
-                                            th:disabled="${sellerCouponIssued}"
-                                            th:text="${sellerCouponIssued ? '발급완료' : '쿠폰받기'}">
-                                        쿠폰받기
-                                    </button>
-                                </div>
+                            <div class="product-coupon-box">
+                                <button type="button"
+                                        id="couponModalOpenBtn"
+                                        class="btn-open-coupon-modal"
+                                        th:data-seller-no="${product.sellerNo}">
+                                    쿠폰받기
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -589,6 +556,30 @@
         </div>
     </div>
 </div>
+
+<!-- 쿠폰 모달 -->
+<div id="couponModal" class="coupon-modal" aria-hidden="true">
+    <div class="coupon-modal-dim"></div>
+
+    <div class="coupon-modal-box" role="dialog" aria-modal="true">
+        <div class="coupon-modal-head">
+            <div>
+                <h3>쿠폰받기</h3>
+                <p>사용 가능한 판매자 쿠폰을 확인하세요.</p>
+            </div>
+
+            <button type="button"
+                    id="couponModalClose"
+                    class="coupon-modal-close"
+                    aria-label="닫기">
+                ×
+            </button>
+        </div>
+
+        <div id="couponModalList" class="coupon-modal-list"></div>
+    </div>
+</div>
+
 <script th:src="@{/js/product/view.js}"></script>
 </body>
 </html>

@@ -5,6 +5,7 @@ import kr.co.springkmarketapp.dto.common.PageRequestDTO;
 import kr.co.springkmarketapp.dto.common.PageResponseDTO;
 import kr.co.springkmarketapp.dto.coupon.CouponDTO;
 import kr.co.springkmarketapp.dto.coupon.CouponIssueRequestDTO;
+import kr.co.springkmarketapp.dto.coupon.ProductCouponModalDTO;
 import kr.co.springkmarketapp.dto.order.*;
 import kr.co.springkmarketapp.dto.product.CategoryDTO;
 import kr.co.springkmarketapp.dto.product.ProductListDTO;
@@ -112,21 +113,6 @@ public class ProductController {
         CategoryDTO currentCategory =
                 addCategoryModel(product.getCateNo(), model);
 
-        CouponDTO sellerProductCoupon =
-                couponService.getSellerProductCouponPreview(product.getSellerNo());
-
-        boolean sellerCouponIssued = false;
-
-        if (userDetails != null && sellerProductCoupon != null) {
-            Integer memberNo = userDetails.getMember().getMemberNo();
-
-            sellerCouponIssued =
-                    couponService.hasIssuedSellerProductCoupon(
-                            memberNo,
-                            product.getSellerNo()
-                    );
-        }
-
 
         if (currentCategory == null) {
             return "redirect:/";
@@ -160,16 +146,48 @@ public class ProductController {
                         reviewPageRequestDTO
                 )
         );
-        model.addAttribute("sellerProductCoupon", sellerProductCoupon);
-        model.addAttribute("sellerCouponIssued", sellerCouponIssued);
 
         return "product/view";
     }
 
-    // 쿠본 발급 API
+    // 쿠폰 모달 조회 API
+    @GetMapping("/product/coupon/modal")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> couponModal(
+            @AuthenticationPrincipal MyUserDetails userDetails,
+            @RequestParam("sellerNo") Integer sellerNo
+    ) {
+        Integer memberNo = null;
+
+        if (userDetails != null) {
+            memberNo = userDetails.getMember().getMemberNo();
+        }
+
+        try {
+            List<ProductCouponModalDTO> coupons =
+                    couponService.getProductCouponModal(memberNo, sellerNo);
+
+            return ResponseEntity.ok(
+                    Map.of(
+                            "result", true,
+                            "coupons", coupons
+                    )
+            );
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of(
+                            "result", false,
+                            "message", e.getMessage()
+                    )
+            );
+        }
+    }
+
+    // 실제 쿠폰 발급 API
     @PostMapping("/product/coupon/issue")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> issueSellerCoupon(
+    public ResponseEntity<Map<String, Object>> issueCoupon(
             @AuthenticationPrincipal MyUserDetails userDetails,
             @RequestBody CouponIssueRequestDTO request
     ) {
@@ -183,11 +201,12 @@ public class ProductController {
         }
 
         try {
-            Integer memberNo = userDetails.getMember().getMemberNo();
+            Integer memberNo =
+                    userDetails.getMember().getMemberNo();
 
-            couponService.issueSellerProductCoupon(
+            couponService.issueProductCoupon(
                     memberNo,
-                    request.getSellerNo()
+                    request.getCouponNo()
             );
 
             return ResponseEntity.ok(

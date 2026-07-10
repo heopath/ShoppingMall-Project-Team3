@@ -288,7 +288,7 @@ function calculateCouponDiscount(coupon, eligibleItems) {
             appliedProductName = eligibleItems[0].productName;
             message = `"${appliedProductName}" 상품에 쿠폰이 적용되었습니다.`;
         } else if (coupon.couponType === "PRODUCT") {
-            message = `적용 가능한 상품 ${eligibleItems.length}개에 쿠폰이 적용되었습니다.`;
+            message = "상품 할인 쿠폰이 적용되었습니다.";
         } else {
             message = "주문상품 할인 쿠폰이 적용되었습니다.";
         }
@@ -489,7 +489,7 @@ document.getElementById("couponUseBtn").addEventListener("click", function () {
 
     document.getElementById("couponApplyInfo").textContent =
         couponResult.message
-        + " 할인금액: -"
+        + "\n할인금액: "
         + formatPrice(couponResult.discount);
 
     alert("쿠폰이 적용되었습니다.");
