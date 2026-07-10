@@ -110,9 +110,36 @@
         WHERE q.qna_no = #{qnaNo}
 
     </select>
+
+    <select id="selectAdminQnaList"
+            resultType="kr.co.springkmarketapp.dto.cs.QnaDTO">
+        SELECT
+        q.qna_no AS qnaNo,
+        q.member_no AS memberNo,
+        q.cs_cate_no AS csCateNo,
+        q.title AS title,
+        q.content AS content,
+        q.answer AS answer,
+        q.answer_member_no AS answerMemberNo,
+        COALESCE(q.status, '검토중') AS status,
+        q.reg_date AS regDate,
+        q.answer_date AS answerDate,
+        c.cate_name AS cateName,
+        p.cate_name AS parentCateName,
+        m.name AS name
+        FROM qna q
+        LEFT JOIN cs_category c
+        ON q.cs_cate_no = c.cs_cate_no
+        LEFT JOIN cs_category p
+        ON c.parent_no = p.cs_cate_no
+        LEFT JOIN member m
+        ON q.member_no = m.member_no
+        ORDER BY q.qna_no DESC
+    </select>
+
     <insert id="insertQna" parameterType="kr.co.springkmarketapp.dto.cs.QnaDTO" useGeneratedKeys="true" keyProperty="qnaNo">
         INSERT INTO qna(member_no, cs_cate_no, title, content, answer, answer_member_no, status, reg_date, answer_date)
-        VALUES(#{memberNo}, #{csCateNo}, #{title}, #{content}, #{answer}, #{answerMemberNo}, COALESCE(#{status}, 'WAIT'), NOW(), #{answerDate})
+        VALUES(#{memberNo}, #{csCateNo}, #{title}, #{content}, #{answer}, #{answerMemberNo}, COALESCE(#{status}, '검토중'), NOW(), #{answerDate})
     </insert>
     <update id="updateQna" parameterType="kr.co.springkmarketapp.dto.cs.QnaDTO">
         UPDATE qna SET member_no=#{memberNo}, cs_cate_no=#{csCateNo}, title=#{title}, content=#{content}, answer=#{answer},

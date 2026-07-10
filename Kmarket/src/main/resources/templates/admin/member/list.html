@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>관리자 회원목록</title>
+    <th:block th:replace="~{common/_site_head :: head('관리자 회원목록')}"></th:block>
     <meta name="_csrf" th:content="${_csrf != null ? _csrf.token : ''}">
     <meta name="_csrf_header" th:content="${_csrf != null ? _csrf.headerName : ''}">
     <link rel="stylesheet" href="../../css/admin/admin-common.css">

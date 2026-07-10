@@ -1,0 +1,15 @@
+<th:block th:fragment="head(pageTitle)" xmlns:th="http://www.thymeleaf.org">
+    <title th:text="${settings.site_title + (pageTitle != null and pageTitle != '' ? ' - ' + pageTitle : '')}">
+        K-Market
+    </title>
+
+    <meta name="description" th:content="${settings.site_subtitle}">
+
+    <link rel="icon"
+          th:if="${settings.favicon != null and settings.favicon != ''}"
+          th:href="${settings.favicon}">
+
+    <link rel="icon"
+          th:unless="${settings.favicon != null and settings.favicon != ''}"
+          th:href="@{/images/main/favicon.ico}">
+</th:block>
