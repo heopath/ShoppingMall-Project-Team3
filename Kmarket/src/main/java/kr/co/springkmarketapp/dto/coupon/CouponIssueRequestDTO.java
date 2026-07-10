@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class CouponIssueRequestDTO {
-    private Integer sellerNo;
+    private Integer couponNo;
 }

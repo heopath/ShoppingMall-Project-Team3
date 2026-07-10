@@ -428,3 +428,7 @@
 .payment-btn:hover {
     background: #ca2623;
 }
+
+#couponApplyInfo {
+    white-space: pre-line;
+}
