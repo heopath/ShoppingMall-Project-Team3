@@ -37,6 +37,12 @@ const cartModalClose = document.getElementById("cartModalClose");
 const continueShoppingBtn = document.getElementById("continueShoppingBtn");
 const goCartBtn = document.getElementById("goCartBtn");
 
+// 쿠폰 모달 요소
+const couponModalOpenBtn = document.getElementById("couponModalOpenBtn");
+const couponModal = document.getElementById("couponModal");
+const couponModalClose = document.getElementById("couponModalClose");
+const couponModalList = document.getElementById("couponModalList");
+
 // 가격 표시 형식
 function formatPrice(num) {
     return Number(num).toLocaleString() + "원";
@@ -280,59 +286,246 @@ buyBtn.addEventListener("click", async function (e) {
     }
 });
 
-// 판매자 개별상품 할인 쿠폰 발급
-const couponIssueBtn = document.getElementById("couponIssueBtn");
+// 쿠폰 모달 열기
+function openCouponModal() {
+    couponModal.classList.add("is-open");
+    couponModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
 
-if (couponIssueBtn) {
-    couponIssueBtn.addEventListener("click", async function () {
-        const sellerNo = Number(couponIssueBtn.dataset.sellerNo);
+// 쿠폰 모달 닫기
+function closeCouponModal() {
+    couponModal.classList.remove("is-open");
+    couponModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+}
+
+// 쿠폰 모달 버튼 클릭
+if (couponModalOpenBtn && couponModal && couponModalList) {
+    couponModalOpenBtn.addEventListener("click", async function () {
+        const sellerNo = Number(couponModalOpenBtn.dataset.sellerNo);
 
         if (!sellerNo) {
             alert("판매자 정보가 없습니다.");
             return;
         }
 
-        couponIssueBtn.disabled = true;
+        openCouponModal();
+        await loadCouponModal(sellerNo);
+    });
+}
 
-        try {
-            const response = await fetch("/product/coupon/issue", {
-                method: "POST",
-                credentials: "same-origin",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    sellerNo: sellerNo
-                })
-            });
+// 쿠폰 모달 닫기 버튼
+if (couponModalClose) {
+    couponModalClose.addEventListener("click", closeCouponModal);
+}
 
-            if (response.redirected) {
-                location.href = response.url;
-                return;
-            }
-
-            const contentType = response.headers.get("content-type") || "";
-
-            const data = contentType.includes("application/json")
-                ? await response.json()
-                : null;
-
-            if (!response.ok || !data || !data.result) {
-                alert(data?.message || "쿠폰 발급에 실패했습니다.");
-                couponIssueBtn.disabled = false;
-                return;
-            }
-
-            alert(data.message || "쿠폰이 발급되었습니다.");
-            couponIssueBtn.textContent = "발급완료";
-            couponIssueBtn.disabled = true;
-
-        } catch (error) {
-            console.error(error);
-            alert("서버 통신 중 오류가 발생했습니다.");
-            couponIssueBtn.disabled = false;
+// 쿠폰 모달 검은 배경 클릭 시 닫기
+if (couponModal) {
+    couponModal.addEventListener("click", function (e) {
+        if (e.target.classList.contains("coupon-modal-dim")) {
+            closeCouponModal();
         }
     });
+}
+
+// 쿠폰 목록 불러오기
+async function loadCouponModal(sellerNo) {
+    couponModalList.innerHTML = `
+        <div class="coupon-modal-empty">쿠폰을 불러오는 중입니다.</div>
+    `;
+
+    try {
+        const response = await fetch(`/product/coupon/modal?sellerNo=${encodeURIComponent(sellerNo)}`, {
+            method: "GET",
+            credentials: "same-origin",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+
+        if (response.redirected) {
+            location.href = response.url;
+            return;
+        }
+
+        const contentType = response.headers.get("content-type") || "";
+
+        const data = contentType.includes("application/json")
+            ? await response.json()
+            : null;
+
+        if (!response.ok || !data || !data.result) {
+            couponModalList.innerHTML = `
+                <div class="coupon-modal-error">
+                    ${escapeHtml(data?.message || "쿠폰 목록을 불러오지 못했습니다.")}
+                </div>
+            `;
+            return;
+        }
+
+        renderCouponList(data.coupons || []);
+
+    } catch (error) {
+        console.error(error);
+
+        couponModalList.innerHTML = `
+            <div class="coupon-modal-error">
+                쿠폰 목록을 불러오는 중 오류가 발생했습니다.
+            </div>
+        `;
+    }
+}
+
+// 쿠폰 목록 렌더링
+function renderCouponList(coupons) {
+    if (coupons.length === 0) {
+        couponModalList.innerHTML = `
+            <div class="coupon-modal-empty">현재 받을 수 있는 쿠폰이 없습니다.</div>
+        `;
+        return;
+    }
+
+    const firstCoupons = coupons.filter(coupon => coupon.firstCoupon);
+    const sellerCoupons = coupons.filter(coupon => !coupon.firstCoupon);
+
+    let html = "";
+
+    if (firstCoupons.length > 0) {
+        html += `<div class="coupon-section-title">첫 이용 쿠폰</div>`;
+
+        firstCoupons.forEach(function (coupon) {
+            html += createCouponItemHtml(coupon);
+        });
+    }
+
+    if (sellerCoupons.length > 0) {
+        html += `<div class="coupon-section-title">판매자 등록 쿠폰</div>`;
+
+        sellerCoupons.forEach(function (coupon) {
+            html += createCouponItemHtml(coupon);
+        });
+    }
+
+    couponModalList.innerHTML = html;
+}
+
+// 쿠폰 1개 HTML 생성
+function createCouponItemHtml(coupon) {
+    const issued = coupon.issued === true;
+
+    return `
+        <div class="coupon-modal-item ${coupon.firstCoupon ? "is-first" : ""}">
+            <div class="coupon-modal-info">
+                <div class="coupon-modal-discount">
+                    <strong>${escapeHtml(coupon.discountText || "할인")}</strong>
+                    <span>쿠폰</span>
+                </div>
+
+                <em class="coupon-modal-name">
+                    ${escapeHtml(coupon.couponName || "판매자 쿠폰")}
+                </em>
+
+                <p class="coupon-modal-condition">
+                    ${escapeHtml(coupon.conditionText || "조건 없이 사용 가능")}
+                </p>
+            </div>
+
+            <button type="button"
+                    class="coupon-modal-issue-btn"
+                    data-coupon-no="${coupon.couponNo}"
+                    ${issued ? "disabled" : ""}>
+                ${issued ? "발급완료" : "쿠폰받기"}
+            </button>
+        </div>
+    `;
+}
+
+// 쿠폰받기 버튼 클릭
+if (couponModalList) {
+    couponModalList.addEventListener("click", async function (e) {
+        const issueBtn = e.target.closest(".coupon-modal-issue-btn");
+
+        if (!issueBtn) {
+            return;
+        }
+
+        const couponNo = Number(issueBtn.dataset.couponNo);
+
+        if (!couponNo) {
+            alert("쿠폰 정보를 확인할 수 없습니다.");
+            return;
+        }
+
+        await issueCoupon(couponNo, issueBtn);
+    });
+}
+
+// 쿠폰 발급
+async function issueCoupon(couponNo, issueBtn) {
+    issueBtn.disabled = true;
+    issueBtn.textContent = "발급중";
+
+    try {
+        const response = await fetch("/product/coupon/issue", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                couponNo: couponNo
+            })
+        });
+
+        if (response.redirected) {
+            location.href = response.url;
+            return;
+        }
+
+        const contentType = response.headers.get("content-type") || "";
+
+        const data = contentType.includes("application/json")
+            ? await response.json()
+            : null;
+
+        if (response.status === 401) {
+            alert(data?.message || "로그인이 필요합니다.");
+            issueBtn.disabled = false;
+            issueBtn.textContent = "쿠폰받기";
+            return;
+        }
+
+        if (!response.ok || !data || !data.result) {
+            alert(data?.message || "쿠폰 발급에 실패했습니다.");
+            issueBtn.disabled = false;
+            issueBtn.textContent = "쿠폰받기";
+            return;
+        }
+
+        alert(data.message || "쿠폰이 발급되었습니다.");
+
+        issueBtn.disabled = true;
+        issueBtn.textContent = "발급완료";
+
+    } catch (error) {
+        console.error(error);
+        alert("쿠폰 발급 중 오류가 발생했습니다.");
+
+        issueBtn.disabled = false;
+        issueBtn.textContent = "쿠폰받기";
+    }
+}
+
+// HTML escape
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }
 
 // 모달 닫기 버튼

@@ -179,7 +179,7 @@
 
     <update id="changePassword">
         UPDATE member
-        SET password = #{password}
+        SET password = #{encoded}
         WHERE member_id = #{memberId}
     </update>
 

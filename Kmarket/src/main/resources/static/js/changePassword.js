@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: new URLSearchParams({
                 memberId: form.memberId.value,
-                password: password.value
+                password: form.password.value
             })
 
         });

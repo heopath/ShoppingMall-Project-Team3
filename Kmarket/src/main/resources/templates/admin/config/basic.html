@@ -12,17 +12,7 @@
 <body>
 
 <div id="admin-wrapper">
-
-    <header class="admin-header">
-        <div class="logo">CI ( 로고 )</div>
-
-        <div class="top-menu">
-            <a href="/">홈</a>
-            <a href="/logout">로그아웃</a>
-            <a href="/cs">고객센터</a>
-        </div>
-    </header>
-
+    <th:block th:replace="~{common/_admin_header :: header}"></th:block>
     <div class="admin-body">
 
         <aside class="sidebar">

@@ -10,15 +10,7 @@
 
 <div id="admin-wrapper">
 
-    <header class="admin-header">
-        <div class="logo">CI ( 로고 )</div>
-
-        <div class="top-menu">
-            <a th:href="@{/}">홈</a>
-            <a th:href="@{/logout}">로그아웃</a>
-            <a th:href="@{/cs/index}">고객센터</a>
-        </div>
-    </header>
+    <th:block th:replace="~{common/_admin_header :: header}"></th:block>
 
     <div class="admin-body">
 

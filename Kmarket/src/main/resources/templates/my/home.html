@@ -1,660 +1,676 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <th:block th:replace="~{common/_site_head :: head('마이페이지 홈')}"></th:block>
-  <link rel="stylesheet" href="./../css/main.css" />
-  <link rel="stylesheet" href="./../css/my/common.css" />
-  <link rel="stylesheet" href="./../css/my/home.css" />
-  <script th:src="@{/js/my/popup.js}"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <th:block th:replace="~{common/_site_head :: head('마이페이지 홈')}"></th:block>
+    <link rel="stylesheet" href="./../css/main.css" />
+    <link rel="stylesheet" href="./../css/my/common.css" />
+    <link rel="stylesheet" href="./../css/my/home.css" />
+    <script th:src="@{/js/my/popup.js}"></script>
 </head>
 <body>
 <th:block th:replace="~{common/_main_header}"></th:block>
 
 <main class="main-layout">
-  <div class="mypage-layout">
-    <aside class="mypage-sidebar">
-      <h3>마이페이지</h3>
+    <div class="mypage-layout">
+        <aside class="mypage-sidebar">
+            <h3>마이페이지</h3>
 
-      <ul>
-        <li><a th:href="@{/my/order}">전체주문내역</a></li>
-        <li><a th:href="@{/my/point}">포인트내역</a></li>
-        <li><a th:href="@{/my/coupon}">쿠폰</a></li>
-        <li><a th:href="@{/my/review}">나의리뷰</a></li>
-        <li><a th:href="@{/my/qna}">문의하기</a></li>
-        <li><a th:href="@{/my/info}">나의설정</a></li>
-      </ul>
-    </aside>
+            <ul>
+                <li><a th:href="@{/my/order}">전체주문내역</a></li>
+                <li><a th:href="@{/my/point}">포인트내역</a></li>
+                <li><a th:href="@{/my/coupon}">쿠폰</a></li>
+                <li><a th:href="@{/my/review}">나의리뷰</a></li>
+                <li><a th:href="@{/my/qna}">문의하기</a></li>
+                <li><a th:href="@{/my/info}">나의설정</a></li>
+            </ul>
+        </aside>
 
-    <section class="mypage-content">
-      <div class="mypage-summary">
-        <div class="summary-card">
-          <strong>주문</strong>
-          <span th:text="${orderCount}"></span>
-        </div>
-
-        <div class="summary-card">
-          <strong>쿠폰</strong>
-          <span th:text="${couponCount}"></span>
-        </div>
-
-        <div class="summary-card">
-          <strong>포인트</strong>
-          <span th:text="${#numbers.formatInteger(point,3,'COMMA')}"></span>
-        </div>
-
-        <div class="summary-card">
-          <strong>문의</strong>
-          <span th:text="${qnaCount}"></span>
-        </div>
-      </div>
-
-      <div class="mypage-banner" th:if="${my1Banner != null and !#lists.isEmpty(my1Banner)}">
-        <a th:href="${my1Banner[0].linkUrl != null ? my1Banner[0].linkUrl : '#'}">
-          <img th:src="${my1Banner[0].imagePath}" th:alt="${my1Banner[0].bannerName}" style="width: 100%">
-        </a>
-      </div>
-
-      <div class="mypage-banner" th:unless="${my1Banner != null and !#lists.isEmpty(my1Banner)}">
-        <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
-      </div>
-
-      <section class="mypage-section">
-        <div class="section-header">
-          <h3>최근주문내역</h3>
-          <a th:href="@{/my/order}">더보기 ></a>
-        </div>
-
-        <table class="order-table">
-          <thead>
-          <tr>
-            <th>날짜</th>
-            <th>상품정보</th>
-            <th>상태</th>
-            <th>확인 / 신청</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <tr th:each="order : ${orderList}">
-            <td th:text="${#temporals.format(order.orderDate,'yyyy-MM-dd')}"></td>
-            <td>
-              <div class="order-info">
-                <img th:src="@{${order.productImage}}" alt="상품이미지">
-                <div class="order-detail">
-                  <a href="javascript:void(0)"
-                     class="order-link"
-                     th:data-order-no="${order.orderNo}"
-                     th:text="'주문번호 : ' + ${order.orderCode}">
-                  </a>
-                  <a href="javascript:void(0)"
-                     class="seller-link"
-                     th:data-seller-no="${order.sellerNo}"
-                     th:text="${order.companyName}">
-                  </a>
-                  <p class="product-name" th:text="${order.productName}"></p>
-                  <p>수량 : <span th:text="${order.quantity}"></span>개</p>
-                  <strong th:text="${#numbers.formatInteger(order.totalPrice,3,'COMMA')} + '원'"></strong>
+        <section class="mypage-content">
+            <div class="mypage-summary">
+                <div class="summary-card">
+                    <strong>주문</strong>
+                    <span th:text="${orderCount}"></span>
                 </div>
-              </div>
-            </td>
-            <td th:text="${order.deliveryStatus}"></td>
-            <td>
-              <div class="order-btns">
-                <th:block th:if="${order.deliveryStatus != '배송완료'}">
-                  <a href="javascript:void(0)" class="disabled-btn">구매확정</a>
-                  <a href="javascript:void(0)" class="disabled-btn">반품신청</a>
-                  <a href="javascript:void(0)" class="disabled-btn">교환신청</a>
-                </th:block>
 
-                <th:block th:if="${order.deliveryStatus == '배송완료' and order.itemStatus == '주문완료'}">
-                  <a href="#" class="confirm-link" th:data-order-item-no="${order.orderItemNo}">구매확정</a>
-                  <a href="#" class="return-link">반품신청</a>
-                  <a href="#" class="exchange-link">교환신청</a>
-                </th:block>
+                <div class="summary-card">
+                    <strong>쿠폰</strong>
+                    <span th:text="${couponCount}"></span>
+                </div>
 
-                <th:block th:if="${order.itemStatus == '구매확정' and order.reviewNo == null}">
-                  <a href="#" class="review-link" th:data-order-item-no="${order.orderItemNo}">상품평쓰기</a>
-                </th:block>
+                <div class="summary-card">
+                    <strong>포인트</strong>
+                    <span th:text="${#numbers.formatInteger(point,3,'COMMA')}"></span>
+                </div>
 
-                <th:block th:if="${order.itemStatus == '구매확정' and order.reviewNo != null}">
-                  <a href="javascript:void(0)" class="review-link disabled">리뷰 등록완료</a>
-                </th:block>
-              </div>
-            </td>
-          </tr>
-          <tr th:if="${#lists.isEmpty(orderList)}">
-            <td colspan="4">최근 주문내역이 없습니다.</td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="mypage-section point-table">
-        <div class="section-header">
-          <h3>포인트적립내역</h3>
-          <a th:href="@{/my/point}">더보기 ></a>
-        </div>
-
-        <table class="mypage-table">
-          <thead>
-          <tr>
-            <th>날짜</th>
-            <th>구분</th>
-            <th>주문번호</th>
-            <th>적립금액</th>
-            <th>비고</th>
-            <th>유효기간</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <tr th:each="point, stat : ${pointList}" th:if="${stat.index < 5}">
-            <td th:text="${#temporals.format(point.regDate,'yyyy-MM-dd')}"></td>
-            <td th:text="${point.pointType}"></td>
-            <td th:text="${point.orderNo}"></td>
-            <td class="point" th:text="${#numbers.formatInteger(point.pointValue,3,'COMMA')} + 'P'"></td>
-            <td th:text="${point.reason}"></td>
-            <td th:text="${point.expireDate}"></td>
-          </tr>
-          <tr th:if="${#lists.isEmpty(pointList)}">
-            <td colspan="6">포인트 적립내역이 없습니다.</td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="mypage-section review-table">
-        <div class="section-header">
-          <h3>상품평</h3>
-          <a th:href="@{/my/review}">더보기 ></a>
-        </div>
-
-        <table class="mypage-table review-table">
-          <thead>
-          <tr>
-            <th>번호</th>
-            <th>상품명</th>
-            <th>내용</th>
-            <th>평점</th>
-            <th>작성일</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <tr th:each="review, iterStat : ${reviewList}">
-            <td th:text="${iterStat.count}">1</td>
-            <td>
-              <img th:if="${review.imagePath != null}" th:src="@{'/uploads/' + ${review.imagePath}}" width="50" style="vertical-align: middle; margin-right: 5px;">
-              <span th:text="${review.productName}">상품명</span>
-            </td>
-            <td th:text="${review.content}">내용</td>
-            <td>
-              <div class="rating-stars" th:title="${review.rating} + '점'">
-                <div class="fill-stars" th:style="'width: ' + ${review.getRatingPercent()} + '%'"></div>
-              </div>
-            </td>
-            <td th:text="${#temporals.format(review.regDate, 'yyyy-MM-dd')}">2026-07-09</td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="mypage-section inquiry-table">
-        <div class="section-header">
-          <h3>문의내역</h3>
-          <a th:href="@{/my/qna}">더보기 ></a>
-        </div>
-
-        <table class="mypage-table">
-          <thead>
-          <tr>
-            <th>번호</th>
-            <th>문의채널</th>
-            <th>문의유형</th>
-            <th>제목</th>
-            <th>작성일</th>
-            <th>상태</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <tr th:each="qna, stat : ${qnaList}" th:if="${stat.index < 5}">
-            <td th:text="${qna.qnaNo}"></td>
-            <td>고객센터</td>
-            <td th:text="${qna.parentCateName + ' / ' + qna.cateName}"></td>
-            <td th:text="${qna.title}"></td>
-            <td th:text="${#temporals.format(qna.regDate,'yyyy-MM-dd')}"></td>
-            <td th:text="${qna.status}" th:classappend="${qna.status=='답변완료'} ? ' answer' : ' pending'"></td>
-          </tr>
-          <tr th:if="${#lists.isEmpty(qnaList)}">
-            <td colspan="6">문의내역이 없습니다.</td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="mypage-section">
-        <h3 class="setting-title">나의설정</h3>
-        <div class="setting-grid">
-          <div class="setting-card">
-            <div class="setting-header">
-              <h4>기본배송지설정</h4>
-              <a href="#">변경</a>
+                <div class="summary-card">
+                    <strong>문의</strong>
+                    <span th:text="${qnaCount}"></span>
+                </div>
             </div>
-            <p th:text="${#authentication.principal.member.addr1}"></p>
-            <p th:text="${#authentication.principal.member.addr2}"></p>
-          </div>
 
-          <div class="setting-card">
-            <div class="setting-header">
-              <h4>Email 설정</h4>
-              <a href="#">변경</a>
+            <div class="mypage-banner" th:if="${my1Banner != null and !#lists.isEmpty(my1Banner)}">
+                <a th:href="${my1Banner[0].linkUrl != null ? my1Banner[0].linkUrl : '#'}">
+                    <img th:src="${my1Banner[0].imagePath}" th:alt="${my1Banner[0].bannerName}" style="width: 100%">
+                </a>
             </div>
-            <p th:text="${#authentication.principal.member.email}"></p>
-            <p>최종수정일 : -</p>
-          </div>
 
-          <div class="setting-card">
-            <div class="setting-header">
-              <h4>휴대폰 설정</h4>
-              <a href="#">변경</a>
+            <div class="mypage-banner" th:unless="${my1Banner != null and !#lists.isEmpty(my1Banner)}">
+                <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
             </div>
-            <p th:text="${#authentication.principal.member.hp}"></p>
-            <p>최종수정일 : -</p>
-          </div>
-        </div>
-      </section>
-    </section>
-  </div>
+
+            <section class="mypage-section">
+                <div class="section-header">
+                    <h3>최근주문내역</h3>
+                    <a th:href="@{/my/order}">더보기 ></a>
+                </div>
+
+                <table class="order-table">
+                    <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>상품정보</th>
+                        <th>상태</th>
+                        <th>확인 / 신청</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="order : ${orderList}">
+                        <td th:text="${#temporals.format(order.orderDate,'yyyy-MM-dd')}"></td>
+                        <td>
+                            <div class="order-info">
+                                <img th:src="@{${order.productImage}}" alt="상품이미지">
+                                <div class="order-detail">
+                                    <a href="javascript:void(0)"
+                                       class="order-link"
+                                       th:data-order-no="${order.orderNo}"
+                                       th:text="'주문번호 : ' + ${order.orderCode}">
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                       class="seller-link"
+                                       th:data-seller-no="${order.sellerNo}"
+                                       th:text="${order.companyName}">
+                                    </a>
+                                    <p class="product-name" th:text="${order.productName}"></p>
+                                    <p>수량 : <span th:text="${order.quantity}"></span>개</p>
+                                    <strong th:text="${#numbers.formatInteger(order.totalPrice,3,'COMMA')} + '원'"></strong>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:text="${order.deliveryStatus}"></td>
+                        <td>
+                            <div class="order-btns">
+                                <th:block th:if="${order.deliveryStatus != '배송완료'}">
+                                    <a href="javascript:void(0)" class="disabled-btn">구매확정</a>
+                                    <a href="javascript:void(0)" class="disabled-btn">반품신청</a>
+                                    <a href="javascript:void(0)" class="disabled-btn">교환신청</a>
+                                </th:block>
+
+                                <th:block th:if="${order.deliveryStatus == '배송완료' and order.itemStatus == '주문완료'}">
+                                    <a href="#" class="confirm-link"
+                                       th:data-order-item-no="${order.orderItemNo}">구매확정</a>
+                                    <a href="#" class="return-link">반품신청</a>
+                                    <a href="#" class="exchange-link">교환신청</a>
+                                </th:block>
+
+                                <th:block th:if="${order.itemStatus == '구매확정' and order.reviewNo == null}">
+                                    <a href="#" class="review-link"
+                                       th:data-order-item-no="${order.orderItemNo}">상품평쓰기</a>
+                                </th:block>
+
+                                <th:block th:if="${order.itemStatus == '구매확정' and order.reviewNo != null}">
+                                    <a href="javascript:void(0)" class="review-link disabled">리뷰 등록완료</a>
+                                </th:block>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(orderList)}">
+                        <td colspan="4">최근 주문내역이 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="mypage-section point-table">
+                <div class="section-header">
+                    <h3>포인트적립내역</h3>
+                    <a th:href="@{/my/point}">더보기 ></a>
+                </div>
+
+                <table class="mypage-table">
+                    <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>구분</th>
+                        <th>주문번호</th>
+                        <th>적립금액</th>
+                        <th>비고</th>
+                        <th>유효기간</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="point, stat : ${pointList}" th:if="${stat.index < 5}">
+                        <td th:text="${#temporals.format(point.regDate,'yyyy-MM-dd')}"></td>
+                        <td th:text="${point.pointType}"></td>
+                        <td th:text="${point.orderNo}"></td>
+                        <td class="point" th:text="${#numbers.formatInteger(point.pointValue,3,'COMMA')} + 'P'"></td>
+                        <td th:text="${point.reason}"></td>
+                        <td th:text="${point.expireDate}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(pointList)}">
+                        <td colspan="6">포인트 적립내역이 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="mypage-section review-table">
+                <div class="section-header">
+                    <h3>상품평</h3>
+                    <a th:href="@{/my/review}">더보기 ></a>
+                </div>
+
+                <table class="mypage-table review-table">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>상품명</th>
+                        <th>내용</th>
+                        <th>평점</th>
+                        <th>작성일</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="review, iterStat : ${reviewList}">
+                        <td th:text="${iterStat.count}">1</td>
+                        <td>
+                            <img th:if="${review.imagePath != null}" th:src="@{'/uploads/' + ${review.imagePath}}"
+                                 width="50" style="vertical-align: middle; margin-right: 5px;">
+                            <span th:text="${review.productName}">상품명</span>
+                        </td>
+                        <td th:text="${review.content}">내용</td>
+                        <td>
+                            <div class="rating-stars" th:title="${review.rating} + '점'">
+                                <div class="fill-stars" th:style="'width: ' + ${review.getRatingPercent()} + '%'"></div>
+                            </div>
+                        </td>
+                        <td th:text="${#temporals.format(review.regDate, 'yyyy-MM-dd')}">2026-07-09</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="mypage-section inquiry-table">
+                <div class="section-header">
+                    <h3>문의내역</h3>
+                    <a th:href="@{/my/qna}">더보기 ></a>
+                </div>
+
+                <table class="mypage-table">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>문의채널</th>
+                        <th>문의유형</th>
+                        <th>제목</th>
+                        <th>작성일</th>
+                        <th>상태</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="qna, stat : ${qnaList}" th:if="${stat.index < 5}">
+                        <td th:text="${qna.qnaNo}"></td>
+                        <td>고객센터</td>
+                        <td th:text="${qna.parentCateName + ' / ' + qna.cateName}"></td>
+                        <td th:text="${qna.title}"></td>
+                        <td th:text="${#temporals.format(qna.regDate,'yyyy-MM-dd')}"></td>
+                        <td th:text="${qna.status}"
+                            th:classappend="${qna.status=='답변완료'} ? ' answer' : ' pending'"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(qnaList)}">
+                        <td colspan="6">문의내역이 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="mypage-section">
+                <h3 class="setting-title">나의설정</h3>
+                <div class="setting-grid">
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h4>기본배송지설정</h4>
+                            <a href="#">변경</a>
+                        </div>
+                        <p th:text="${#authentication.principal.member.addr1}"></p>
+                        <p th:text="${#authentication.principal.member.addr2}"></p>
+                    </div>
+
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h4>Email 설정</h4>
+                            <a href="#">변경</a>
+                        </div>
+                        <p th:text="${#authentication.principal.member.email}"></p>
+                        <p>최종수정일 : -</p>
+                    </div>
+
+                    <div class="setting-card">
+                        <div class="setting-header">
+                            <h4>휴대폰 설정</h4>
+                            <a href="#">변경</a>
+                        </div>
+                        <p th:text="${#authentication.principal.member.hp}"></p>
+                        <p>최종수정일 : -</p>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
 </main>
 
 <th:block th:replace="~{common/_admin_footer}"></th:block>
 
 <div class="order-modal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <div>
-        <strong>주문상세</strong>
-        <span id="modalOrderDate"></span>
-      </div>
-      <button class="modal-close">✕</button>
-    </div>
-    <div class="modal-body">
-      <section class="modal-section">
-        <h3>주문정보</h3>
-        <table class="modal-order-table">
-          <thead>
-          <tr>
-            <th>날짜</th>
-            <th>상품정보</th>
-            <th>결제금액</th>
-            <th>상태</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td id="detailOrderDate"></td>
-            <td>
-              <div class="modal-product">
-                <img id="detailProductImage" src="" alt="상품">
-                <div>
-                  <p id="detailOrderCode"></p>
-                  <p id="detailCompanyName"></p>
-                  <p id="detailProductName"></p>
-                  <p>수량 : <span id="detailQuantity"></span></p>
-                  <strong id="detailTotalPrice"></strong>
-                </div>
-              </div>
-            </td>
-            <td class="td_payment">
-              <div class="payment-info">
-                <p><span>판매가</span><strong id="detailPrice"></strong></p>
-                <p><span>할인</span><strong id="detailDiscount"></strong></p>
-                <p class="final-price"><span>결제금액</span><strong id="detailTotalPrice2"></strong></p>
-              </div>
-            </td>
-            <td id="detailDeliveryStatus"></td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
+    <div class="modal-box">
+        <div class="modal-header">
+            <div>
+                <strong>주문상세</strong>
+                <span id="modalOrderDate"></span>
+            </div>
+            <button class="modal-close">✕</button>
+        </div>
+        <div class="modal-body">
+            <section class="modal-section">
+                <h3>주문정보</h3>
+                <table class="modal-order-table">
+                    <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>상품정보</th>
+                        <th>결제금액</th>
+                        <th>상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td id="detailOrderDate"></td>
+                        <td>
+                            <div class="modal-product">
+                                <img id="detailProductImage" src="" alt="상품">
+                                <div>
+                                    <p id="detailOrderCode"></p>
+                                    <p id="detailCompanyName"></p>
+                                    <p id="detailProductName"></p>
+                                    <p>수량 : <span id="detailQuantity"></span></p>
+                                    <strong id="detailTotalPrice"></strong>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td_payment">
+                            <div class="payment-info">
+                                <p><span>판매가</span><strong id="detailPrice"></strong></p>
+                                <p><span>할인</span><strong id="detailDiscount"></strong></p>
+                                <p class="final-price"><span>결제금액</span><strong id="detailTotalPrice2"></strong></p>
+                            </div>
+                        </td>
+                        <td id="detailDeliveryStatus"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
 
-      <section class="modal-section">
-        <h3>배송정보</h3>
-        <table class="delivery-table">
-          <tbody>
-          <tr>
-            <th>이름</th>
-            <td id="receiverName"></td>
-          </tr>
-          <tr>
-            <th>연락처</th>
-            <td id="receiverHp"></td>
-          </tr>
-          <tr>
-            <th>주소</th>
-            <td id="receiverAddress"></td>
-          </tr>
-          <tr>
-            <th>배송요청사항</th>
-            <td id="receiverMemo"></td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
+            <section class="modal-section">
+                <h3>배송정보</h3>
+                <table class="delivery-table">
+                    <tbody>
+                    <tr>
+                        <th>이름</th>
+                        <td id="receiverName"></td>
+                    </tr>
+                    <tr>
+                        <th>연락처</th>
+                        <td id="receiverHp"></td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td id="receiverAddress"></td>
+                    </tr>
+                    <tr>
+                        <th>배송요청사항</th>
+                        <td id="receiverMemo"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="seller-modal">
-  <div class="seller-modal-box">
-    <div class="seller-modal-header">
-      <h3>판매자정보</h3>
-      <button type="button" class="modal-close">✕</button>
+    <div class="seller-modal-box">
+        <div class="seller-modal-header">
+            <h3>판매자정보</h3>
+            <button type="button" class="modal-close">✕</button>
+        </div>
+        <div class="seller-modal-body">
+            <table class="seller-info-table">
+                <tbody>
+                <tr>
+                    <th>판매자 등급</th>
+                    <td id="sellerGrade"></td>
+                </tr>
+                <tr>
+                    <th>상호</th>
+                    <td id="sellerCompanyName"></td>
+                </tr>
+                <tr>
+                    <th>대표자</th>
+                    <td id="sellerCeo"></td>
+                </tr>
+                <tr>
+                    <th>전화번호</th>
+                    <td id="sellerHp"></td>
+                </tr>
+                <tr>
+                    <th>FAX</th>
+                    <td id="sellerFax"></td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td id="sellerEmail"></td>
+                </tr>
+                <tr>
+                    <th>사업자번호</th>
+                    <td id="sellerBizNo"></td>
+                </tr>
+                <tr>
+                    <th>영업소재지</th>
+                    <td id="sellerAddress"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="seller-notice">
+                ※ 위 정보는 전자상거래법 제20조 제2항 및 동법 시행령 제25조 제2항에 의거하여 소비자보호에 의거 공개합니다.
+            </div>
+            <div class="seller-btn-area">
+                <button class="seller-inquiry-btn">문의하기</button>
+            </div>
+        </div>
     </div>
-    <div class="seller-modal-body">
-      <table class="seller-info-table">
-        <tbody>
-        <tr>
-          <th>판매자 등급</th>
-          <td id="sellerGrade"></td>
-        </tr>
-        <tr>
-          <th>상호</th>
-          <td id="sellerCompanyName"></td>
-        </tr>
-        <tr>
-          <th>대표자</th>
-          <td id="sellerCeo"></td>
-        </tr>
-        <tr>
-          <th>전화번호</th>
-          <td id="sellerHp"></td>
-        </tr>
-        <tr>
-          <th>FAX</th>
-          <td id="sellerFax"></td>
-        </tr>
-        <tr>
-          <th>Email</th>
-          <td id="sellerEmail"></td>
-        </tr>
-        <tr>
-          <th>사업자번호</th>
-          <td id="sellerBizNo"></td>
-        </tr>
-        <tr>
-          <th>영업소재지</th>
-          <td id="sellerAddress"></td>
-        </tr>
-        </tbody>
-      </table>
-      <div class="seller-notice">
-        ※ 위 정보는 전자상거래법 제20조 제2항 및 동법 시행령 제25조 제2항에 의거하여 소비자보호에 의거 공개합니다.
-      </div>
-      <div class="seller-btn-area">
-        <button class="seller-inquiry-btn">문의하기</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <div class="inquiry-modal">
-  <div class="inquiry-modal-box">
-    <div class="inquiry-modal-header">
-      <h3>문의하기</h3>
-      <button type="button" class="modal-close">✕</button>
+    <div class="inquiry-modal-box">
+        <div class="inquiry-modal-header">
+            <h3>문의하기</h3>
+            <button type="button" class="modal-close">✕</button>
+        </div>
+        <div class="inquiry-modal-body">
+            <table class="inquiry-form-table">
+                <tbody>
+                <tr>
+                    <th>문의종류</th>
+                    <td>
+                        <div class="inquiry-type"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        <input type="email" id="qnaEmail" class="form-input"
+                               th:value="${#authentication.principal.member.email}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <th>제목</th>
+                    <td><input type="text" id="qnaTitle" class="form-input"></td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td><textarea id="qnaContent" class="form-textarea"></textarea></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="inquiry-btns">
+                <button type="button" class="btn-submit">등록하기</button>
+                <button type="button" class="btn-cancel inquiry-cancel">취소</button>
+            </div>
+        </div>
     </div>
-    <div class="inquiry-modal-body">
-      <table class="inquiry-form-table">
-        <tbody>
-        <tr>
-          <th>문의종류</th>
-          <td><div class="inquiry-type"></div></td>
-        </tr>
-        <tr>
-          <th>Email</th>
-          <td>
-            <input type="email" id="qnaEmail" class="form-input" th:value="${#authentication.principal.member.email}" readonly>
-          </td>
-        </tr>
-        <tr>
-          <th>제목</th>
-          <td><input type="text" id="qnaTitle" class="form-input"></td>
-        </tr>
-        <tr>
-          <th>내용</th>
-          <td><textarea id="qnaContent" class="form-textarea"></textarea></td>
-        </tr>
-        </tbody>
-      </table>
-      <div class="inquiry-btns">
-        <button type="button" class="btn-submit">등록하기</button>
-        <button type="button" class="btn-cancel inquiry-cancel">취소</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <div class="confirm-modal">
-  <div class="confirm-modal-box">
-    <div class="confirm-modal-header">
-      <strong>구매확정</strong>
-      <button type="button" class="modal-close">✕</button>
+    <div class="confirm-modal-box">
+        <div class="confirm-modal-header">
+            <strong>구매확정</strong>
+            <button type="button" class="modal-close">✕</button>
+        </div>
+        <div class="confirm-modal-body">
+            <p>상품을 받으셨나요?</p>
+            <p>상품을 받으신 분만 구매확정을 해주세요.</p>
+            <div class="confirm-btn-area">
+                <button type="button" class="confirm-ok-btn">확인</button>
+                <button type="button" class="confirm-cancel-btn">취소</button>
+            </div>
+        </div>
     </div>
-    <div class="confirm-modal-body">
-      <p>상품을 받으셨나요?</p>
-      <p>상품을 받으신 분만 구매확정을 해주세요.</p>
-      <div class="confirm-btn-area">
-        <button type="button" class="confirm-ok-btn">확인</button>
-        <button type="button" class="confirm-cancel-btn">취소</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <div class="review-modal">
-  <div class="modal-box review-modal-box">
-    <div class="modal-header">
-      <div><strong>상품평 작성하기</strong></div>
-      <button class="modal-close">✕</button>
-    </div>
-    <div class="modal-body">
-      <form class="review-form" id="reviewForm" enctype="multipart/form-data">
-        <table class="review-write-table">
-          <tbody>
-          <input type="hidden" id="reviewOrderItemNo" name="orderItemNo">
-          <input type="hidden" id="reviewProductNo" name="productNo">
-          <tr>
-            <td colspan="2" class="review-product-row">
-              <div class="review-product-name" id="reviewProductName"></div>
-            </td>
-          </tr>
-          <tr>
-            <th>만족도<span class="required">*</span></th>
-            <td>
-              <div class="review-rating">
-                <input type="radio" name="rating" id="star5" value="5"><label for="star5">★</label>
-                <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
-                <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
-                <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
-                <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>내용<span class="required">*</span></th>
-            <td><textarea id="reviewContent" name="content" placeholder="최소 10자 이상 200자 내외로 작성해주세요."></textarea></td>
-          </tr>
-          <tr>
-            <th>사진</th>
-            <td>
-              <div class="review-file-list">
-                <input type="file" name="images" accept="image/*">
-                <input type="file" name="images" accept="image/*">
-                <input type="file" name="images" accept="image/*">
-              </div>
-              <p class="file-guide">사진 첨부는 선택사항입니다.</p>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <div class="review-btn-area">
-          <button type="button" class="review-submit-btn">작성완료</button>
-          <button type="button" class="confirm-cancel-btn">취소</button>
+    <div class="modal-box review-modal-box">
+        <div class="modal-header">
+            <div><strong>상품평 작성하기</strong></div>
+            <button class="modal-close">✕</button>
         </div>
-      </form>
+        <div class="modal-body">
+            <form class="review-form" id="reviewForm" enctype="multipart/form-data">
+                <table class="review-write-table">
+                    <tbody>
+                    <input type="hidden" id="reviewOrderItemNo" name="orderItemNo">
+                    <input type="hidden" id="reviewProductNo" name="productNo">
+                    <tr>
+                        <td colspan="2" class="review-product-row">
+                            <div class="review-product-name" id="reviewProductName"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>만족도<span class="required">*</span></th>
+                        <td>
+                            <div class="review-rating">
+                                <input type="radio" name="rating" id="star5" value="5"><label for="star5">★</label>
+                                <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+                                <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+                                <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+                                <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>내용<span class="required">*</span></th>
+                        <td><textarea id="reviewContent" name="content"
+                                      placeholder="최소 10자 이상 200자 내외로 작성해주세요."></textarea></td>
+                    </tr>
+                    <tr>
+                        <th>사진</th>
+                        <td>
+                            <div class="review-file-list">
+                                <input type="file" name="images" accept="image/*">
+                                <input type="file" name="images" accept="image/*">
+                                <input type="file" name="images" accept="image/*">
+                            </div>
+                            <p class="file-guide">사진 첨부는 선택사항입니다.</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="review-btn-area">
+                    <button type="button" class="review-submit-btn">작성완료</button>
+                    <button type="button" class="confirm-cancel-btn">취소</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="return-modal">
-  <div class="modal-box return-modal-box">
-    <div class="modal-header">
-      <strong>반품신청</strong>
-      <button class="modal-close">✕</button>
-    </div>
-    <div class="modal-body">
-      <section class="modal-section">
-        <h3>상품정보</h3>
-        <table class="claim-order-table">
-          <thead>
-          <tr>
-            <th>날짜</th>
-            <th>상품정보</th>
-            <th>결제금액</th>
-            <th>상태</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>2026-06-18</td>
-            <td>
-              <div class="modal-product">
-                <img src="./../images/main/slider_item1.jpg" alt="" />
-                <div>
-                  <p>주문번호 : 1012211341</p>
-                  <p>(주) 상호명</p>
-                  <p>상품명</p>
-                  <p>수량 : 1개</p>
-                  <strong>34,000원</strong>
-                </div>
-              </div>
-            </td>
-            <td>
-              <p>판매가 34,000원</p>
-              <p>할인 -3,000원</p>
-              <strong>결제금액 34,000원</strong>
-            </td>
-            <td>배송완료</td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
-      <section class="modal-section">
-        <h3>반품정보 입력</h3>
-        <table class="claim-form-table">
-          <tbody>
-          <tr>
-            <th>반품유형</th>
-            <td>
-              <div class="inquiry-type">
-                <label><input type="radio" name="returnType" checked /><span>단순 변심</span></label>
-                <label><input type="radio" name="returnType" /><span>파손 및 불량</span></label>
-                <label><input type="radio" name="returnType" /><span>주문 실수</span></label>
-                <label><input type="radio" name="returnType" /><span>기타</span></label>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>사유입력</th>
-            <td><textarea></textarea></td>
-          </tr>
-          <tr>
-            <th>사진첨부(선택)</th>
-            <td><input type="file" /></td>
-          </tr>
-          </tbody>
-        </table>
-        <div class="claim-btn-area">
-          <button class="claim-submit-btn">반품신청</button>
-          <button type="button" class="confirm-cancel-btn">취소</button>
+    <div class="modal-box return-modal-box">
+        <div class="modal-header">
+            <strong>반품신청</strong>
+            <button class="modal-close">✕</button>
         </div>
-      </section>
+        <div class="modal-body">
+            <section class="modal-section">
+                <h3>상품정보</h3>
+                <table class="claim-order-table">
+                    <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>상품정보</th>
+                        <th>결제금액</th>
+                        <th>상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>2026-06-18</td>
+                        <td>
+                            <div class="modal-product">
+                                <img src="./../images/main/slider_item1.jpg" alt=""/>
+                                <div>
+                                    <p>주문번호 : 1012211341</p>
+                                    <p>(주) 상호명</p>
+                                    <p>상품명</p>
+                                    <p>수량 : 1개</p>
+                                    <strong>34,000원</strong>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p>판매가 34,000원</p>
+                            <p>할인 -3,000원</p>
+                            <strong>결제금액 34,000원</strong>
+                        </td>
+                        <td>배송완료</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section class="modal-section">
+                <h3>반품정보 입력</h3>
+                <table class="claim-form-table">
+                    <tbody>
+                    <tr>
+                        <th>반품유형</th>
+                        <td>
+                            <div class="inquiry-type">
+                                <label><input type="radio" name="returnType" checked/><span>단순 변심</span></label>
+                                <label><input type="radio" name="returnType"/><span>파손 및 불량</span></label>
+                                <label><input type="radio" name="returnType"/><span>주문 실수</span></label>
+                                <label><input type="radio" name="returnType"/><span>기타</span></label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>사유입력</th>
+                        <td><textarea></textarea></td>
+                    </tr>
+                    <tr>
+                        <th>사진첨부(선택)</th>
+                        <td><input type="file"/></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="claim-btn-area">
+                    <button class="claim-submit-btn">반품신청</button>
+                    <button type="button" class="confirm-cancel-btn">취소</button>
+                </div>
+            </section>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="exchange-modal">
-  <div class="modal-box return-modal-box">
-    <div class="modal-header">
-      <strong>교환신청</strong>
-      <button class="modal-close">✕</button>
-    </div>
-    <div class="modal-body">
-      <section class="modal-section">
-        <h3>상품정보</h3>
-        <table class="claim-order-table">
-          <thead>
-          <tr>
-            <th>날짜</th>
-            <th>상품정보</th>
-            <th>결제금액</th>
-            <th>상태</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>2026-06-18</td>
-            <td>
-              <div class="modal-product">
-                <img src="./../images/main/slider_item1.jpg" alt="" />
-                <div>
-                  <p>주문번호 : 1012211341</p>
-                  <p>(주) 상호명</p>
-                  <p>상품명</p>
-                  <p>수량 : 1개</p>
-                  <strong>34,000원</strong>
-                </div>
-              </div>
-            </td>
-            <td>
-              <p>판매가 34,000원</p>
-              <p>할인 -3,000원</p>
-              <strong>결제금액 34,000원</strong>
-            </td>
-            <td>배송완료</td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
-      <section class="modal-section">
-        <h3>교환정보 입력</h3>
-        <table class="claim-form-table">
-          <tbody>
-          <tr>
-            <th>교환유형</th>
-            <td>
-              <div class="inquiry-type">
-                <label><input type="radio" name="exchangeType" checked /><span>단순 교환</span></label>
-                <label><input type="radio" name="exchangeType" /><span>파손 및 불량</span></label>
-                <label><input type="radio" name="exchangeType" /><span>주문 실수</span></label>
-                <label><input type="radio" name="exchangeType" /><span>기타</span></label>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>사유입력</th>
-            <td><textarea></textarea></td>
-          </tr>
-          <tr>
-            <th>사진첨부(선택)</th>
-            <td><input type="file" /></td>
-          </tr>
-          </tbody>
-        </table>
-        <div class="claim-btn-box">
-          <a th:href="@{/my/qna}" class="claim-btn">문의하기</a>
+    <div class="modal-box return-modal-box">
+        <div class="modal-header">
+            <strong>교환신청</strong>
+            <button class="modal-close">✕</button>
         </div>
+
+        <div class="modal-body">
+            <section class="modal-section">
+                <h3>상품정보</h3>
+                <table class="claim-order-table">
+                    <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>상품정보</th>
+                        <th>결제금액</th>
+                        <th>상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>2026-06-18</td>
+                        <td>
+                            <div class="modal-product">
+                                <img src="./../images/main/slider_item1.jpg" alt=""/>
+                                <div>
+                                    <p>주문번호 : 1012211341</p>
+                                    <p>(주) 상호명</p>
+                                    <p>상품명</p>
+                                    <p>수량 : 1개</p>
+                                    <strong>34,000원</strong>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p>판매가 34,000원</p>
+                            <p>할인 -3,000원</p>
+                            <strong>결제금액 34,000원</strong>
+                        </td>
+                        <td>배송완료</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="modal-section">
+                <h3>교환정보 입력</h3>
+                <table class="claim-form-table">
+                    <tbody>
+                    <tr>
+                        <th>교환유형</th>
+                        <td>
+                            <div class="inquiry-type">
+                                <label><input type="radio" name="exchangeType" checked/><span>단순 교환</span></label>
+                                <label><input type="radio" name="exchangeType"/><span>파손 및 불량</span></label>
+                                <label><input type="radio" name="exchangeType"/><span>주문 실수</span></label>
+                                <label><input type="radio" name="exchangeType"/><span>기타</span></label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>사유입력</th>
+                        <td><textarea></textarea></td>
+                    </tr>
+                    <tr>
+                        <th>사진첨부(선택)</th>
+                        <td><input type="file"/></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="claim-btn-box">
+                    <a th:href="@{/my/qna}" class="claim-btn">문의하기</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+</html>
