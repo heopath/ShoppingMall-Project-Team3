@@ -21,8 +21,6 @@
         INNER JOIN cs_category p
         ON c.parent_no = p.cs_cate_no
 
-<!--        WHERE q.member_no = #{memberNo}-->
-
         ORDER BY q.reg_date DESC
 
     </select>
@@ -138,8 +136,28 @@
     </select>
 
     <insert id="insertQna" parameterType="kr.co.springkmarketapp.dto.cs.QnaDTO" useGeneratedKeys="true" keyProperty="qnaNo">
-        INSERT INTO qna(member_no, cs_cate_no, title, content, answer, answer_member_no, status, reg_date, answer_date)
-        VALUES(#{memberNo}, #{csCateNo}, #{title}, #{content}, #{answer}, #{answerMemberNo}, COALESCE(#{status}, '검토중'), NOW(), #{answerDate})
+        INSERT INTO qna(
+        member_no,
+        cs_cate_no,
+        title,
+        content,
+        answer,
+        answer_member_no,
+        status,
+        reg_date,
+        answer_date
+        )
+        VALUES(
+        #{memberNo},
+        #{csCateNo},
+        #{title},
+        #{content},
+        #{answer},
+        #{answerMemberNo},
+        COALESCE(#{status}, '검토중'),
+        NOW(),
+        #{answerDate}
+        )
     </insert>
     <update id="updateQna" parameterType="kr.co.springkmarketapp.dto.cs.QnaDTO">
         UPDATE qna SET member_no=#{memberNo}, cs_cate_no=#{csCateNo}, title=#{title}, content=#{content}, answer=#{answer},
@@ -149,4 +167,29 @@
     <delete id="deleteQna" parameterType="long">
         DELETE FROM qna WHERE qna_no=#{qnaNo}
     </delete>
+
+    <select id="selectParentCategoryList"
+            resultType="kr.co.springkmarketapp.dto.cs.CsCategoryDTO">
+
+        SELECT cs_cate_no,
+        cate_name,
+        parent_no
+        FROM cs_category
+        WHERE parent_no IS NULL
+        ORDER BY cs_cate_no
+
+    </select>
+
+    <select id="selectChildCategoryList"
+            parameterType="int"
+            resultType="kr.co.springkmarketapp.dto.cs.CsCategoryDTO">
+
+        SELECT cs_cate_no,
+        cate_name,
+        parent_no
+        FROM cs_category
+        WHERE parent_no = #{parentNo}
+        ORDER BY cs_cate_no
+
+    </select>
 </mapper>

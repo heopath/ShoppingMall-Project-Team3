@@ -2,7 +2,9 @@ package kr.co.springkmarketapp.service.cs;
 
 import kr.co.springkmarketapp.dao.cs.QnaDAO;
 import kr.co.springkmarketapp.dao.my.MyDAO;
+import kr.co.springkmarketapp.dto.cs.CsCategoryDTO;
 import kr.co.springkmarketapp.dto.cs.QnaDTO;
+import kr.co.springkmarketapp.dto.product.CategoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +55,14 @@ public class QnaService {
 
     public int countQna(int parentNo) {
         return qnaDAO.countQna(parentNo);
+    }
+
+    public List<CsCategoryDTO> selectParentCategoryList() {
+        return qnaDAO.selectParentCategoryList();
+    }
+
+    public List<CsCategoryDTO> selectChildCategoryList(int parentNo) {
+        return qnaDAO.selectChildCategoryList(parentNo);
     }
 
 
