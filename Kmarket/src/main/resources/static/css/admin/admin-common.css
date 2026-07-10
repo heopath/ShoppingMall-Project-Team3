@@ -351,3 +351,31 @@ footer {
     color: #aaa;
     cursor: default;
 }
+
+.admin-header .admin-logo-img {
+    max-width: 130px;
+    max-height: 38px;
+    object-fit: contain;
+    display: block;
+}
+.admin-header .admin-logo {
+    position: absolute;
+    left: 15px;
+    top: 18px;
+    width: 150px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+}
+
+.admin-header .admin-logo a {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    text-decoration: none;
+}
+
+.admin-header .admin-logo::before {
+    content: none;
+    display: none;
+}
