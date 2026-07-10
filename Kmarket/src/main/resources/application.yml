@@ -1,26 +1,32 @@
 file:
     upload-dir: uploads
+
 logging:
     file:
         name: /logs/spring-board-app.log
     level:
         root: info
+
 mybatis:
     configuration:
         map-underscore-to-camel-case: true
     mapper-locations: classpath:mappers/**/*.xml
+
 server:
     servlet:
         context-path: /
+
 spring:
     application:
         name: spring-board-app
         version: ${version:0.0.9}
+
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        password: 1q2w3E4R!
-        url: jdbc:mysql://3.35.24.141:3306/kmarket?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
-        username: kmarket_user
+        url: jdbc:mysql://${DB_HOST:3.35.24.141}:3306/kmarket?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+        username: ${DB_USERNAME:kmarket_user}
+        password: ${DB_PASSWORD}
+
     jpa:
         database: mysql
         hibernate:
@@ -31,9 +37,12 @@ spring:
             hibernate:
                 format_sql: true
                 show_sql: true
+
+    # 메일 설정도 독립시켜 spring 하위로 정렬했습니다.
     mail:
         host: smtp.gmail.com
-        password: ncnebtboedkqgncn
+        username: ${MAIL_USERNAME:heocoding@gmail.com}
+        password: ${MAIL_PASSWORD}
         port: 587
         properties:
             mail:
@@ -45,13 +54,14 @@ spring:
                         enable: true
                         required: true
                     timeout: 3000
-        username: heocoding@gmail.com
+
     servlet:
         multipart:
             enabled: true
             location: src/main/resources/static/uploads
             max-file-size: 10MB
             max-request-size: 50MB
+
     thymeleaf:
         cache: false
         prefix: classpath:/templates/
