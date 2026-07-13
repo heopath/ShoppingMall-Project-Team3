@@ -9,16 +9,20 @@ import kr.co.springkmarketapp.dto.my.MemberPointDTO;
 import kr.co.springkmarketapp.dto.order.OrderItemDTO;
 import kr.co.springkmarketapp.dto.product.ProductReviewDTO;
 import kr.co.springkmarketapp.service.admin.BannerService;
+import kr.co.springkmarketapp.service.cs.QnaService;
 import kr.co.springkmarketapp.service.my.MyService;
 import kr.co.springkmarketapp.util.PageHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class MyController {
 
     private final MyService myService;
     private final BannerService bannerService;
+    private final QnaService qnaService;
 
     @GetMapping({"/my", "/my/home"})
     public String home(@AuthenticationPrincipal MyUserDetails user,
@@ -53,13 +58,10 @@ public class MyController {
         model.addAttribute("reviewList", reviewList);
         model.addAttribute("qnaList",
                 myService.selectQnaList(memberNo));
-        model.addAttribute("orderCount", myService.selectOrderCount(memberNo));
-        model.addAttribute("couponCount", myService.selectCouponCount(memberNo));
-        model.addAttribute("point", myService.selectPoint(memberNo));
-        model.addAttribute("qnaCount", myService.selectQnaCount(memberNo));
 
         model.addAttribute("topBanner", bannerService.getTopBanner());
 
+        model.addAttribute("summary", myService.getMyPageSummary(memberNo));
         return "my/home";
     }
 
@@ -147,6 +149,9 @@ public class MyController {
 
         PageHandler page = new PageHandler(pg, total, 10);
 
+        Map<String, Integer> summary = myService.getMyPageSummary(memberNo);
+        model.addAttribute("summary", summary);
+
         model.addAttribute("page", page);
 
         model.addAttribute("orderList",
@@ -160,12 +165,6 @@ public class MyController {
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
 
-        model.addAttribute("orderCount", myService.selectOrderCount(memberNo));
-        model.addAttribute("couponCount", myService.selectCouponCount(memberNo));
-        model.addAttribute("point", myService.selectPoint(memberNo));
-        model.addAttribute("qnaCount", myService.selectQnaCount(memberNo));
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
 
         return "my/order";
     }
@@ -174,17 +173,24 @@ public class MyController {
     @GetMapping("/my/point")
     public String point(@AuthenticationPrincipal MyUserDetails user,
                         @RequestParam(defaultValue = "1") int pg,
+                        @RequestParam(required = false) String startDate,
+                        @RequestParam(required = false) String endDate,
                         Model model) {
 
         Integer memberNo = user.getMember().getMemberNo();
 
-        int total = myService.selectPointCount(memberNo);
-
+        // 1. 기간 조건이 포함된 개수 조회
+        int total = myService.selectPointCount(memberNo, startDate, endDate);
         PageHandler page = new PageHandler(pg, total, 10);
 
+        Map<String, Integer> summary = myService.getMyPageSummary(memberNo);
+        model.addAttribute("summary", summary);
         model.addAttribute("page", page);
-        model.addAttribute("pointList",
-                myService.selectPointList(memberNo, page.getOffset()));
+
+        // 2. 기간 조건이 포함된 리스트 조회
+        model.addAttribute("pointList", myService.selectPointList(memberNo, startDate, endDate, page.getOffset()));
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
 
         return "my/point";
     }
@@ -199,6 +205,9 @@ public class MyController {
         int total = myService.selectCouponCount(memberNo);
 
         PageHandler page = new PageHandler(pg, total, 10);
+
+        Map<String, Integer> summary = myService.getMyPageSummary(memberNo);
+        model.addAttribute("summary", summary);
 
         model.addAttribute("page", page);
         model.addAttribute("couponList",
@@ -218,6 +227,9 @@ public class MyController {
 
         PageHandler page = new PageHandler(pg, total, 10);
 
+        Map<String, Integer> summary = myService.getMyPageSummary(memberNo);
+        model.addAttribute("summary", summary);
+
         model.addAttribute("page", page);
         model.addAttribute("reviewList",
                 myService.selectReviewList(memberNo, page.getOffset()));
@@ -232,24 +244,34 @@ public class MyController {
 
         Integer memberNo = user.getMember().getMemberNo();
 
+        // 1. 전체 문의 개수 조회
         int total = myService.selectQnaCount(memberNo);
-
         PageHandler page = new PageHandler(pg, total, 10);
 
+        model.addAttribute("summary", myService.getMyPageSummary(memberNo));
         model.addAttribute("page", page);
-        model.addAttribute("qnaList",
-                myService.selectQnaList(memberNo, page.getOffset(), 10));
+
+        // 2. 페이징된 문의 리스트 조회
+        model.addAttribute("qnaList", myService.selectQnaList(memberNo, page.getOffset(), 10));
 
         return "my/qna";
     }
 
+    @GetMapping("/my/qna/detail")
+    @ResponseBody
+    public QnaDTO qnaDetail(@RequestParam Long qnaNo) {
+        return qnaService.selectQna(qnaNo);
+    }
 
-
+    // 나의 설정 - 회원 정보 가져오기
     @GetMapping("/my/info")
     public String setting(@AuthenticationPrincipal MyUserDetails user,
                           Model model){
 
         Integer memberNo = user.getMember().getMemberNo();
+
+        Map<String, Integer> summary = myService.getMyPageSummary(memberNo);
+        model.addAttribute("summary", summary);
 
         model.addAttribute("member",
                 myService.selectMemberSetting(memberNo));
@@ -257,6 +279,7 @@ public class MyController {
         return "my/info";
     }
 
+    // 나의 설정 - 회원정보 수정하기
     @PostMapping("/my/setting")
     @ResponseBody
     public String updateSetting(@AuthenticationPrincipal MyUserDetails user,
@@ -267,6 +290,34 @@ public class MyController {
         myService.updateMemberSetting(dto);
 
         return "success";
+    }
+
+    // 나의 설정 - 탈퇴하기
+    @PostMapping("/my/withdraw")
+    @ResponseBody
+    public String withdraw(@AuthenticationPrincipal MyUserDetails user) {
+        myService.deleteMember(user.getMember().getMemberNo());
+        // 탈퇴 후에는 세션을 무효화하거나 로그인 페이지로 리다이렉트하는 처리가 필요합니다.
+        return "success";
+    }
+
+    // 나의 설정 - 회원정보 수정 시 중복체크
+    @GetMapping("/my/check")
+    @ResponseBody
+    public Map<String, Object> check(@RequestParam String type,
+                                     @RequestParam String value,
+                                     @AuthenticationPrincipal MyUserDetails user) {
+
+        // 본인 제외하고 검색하기 위해 현재 로그인한 사용자의 번호 가져옴
+        Integer memberNo = user.getMember().getMemberNo();
+
+        // 이 메서드 내부에서 DB 쿼리 수행:
+        // SELECT COUNT(*) FROM member WHERE (email = #{value} OR hp = #{value}) AND member_no != #{memberNo}
+        int count = myService.countMemberByValue(type, value, memberNo);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        return result;
     }
 
 }

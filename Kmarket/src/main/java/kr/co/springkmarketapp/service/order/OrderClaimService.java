@@ -1,9 +1,15 @@
 package kr.co.springkmarketapp.service.order;
 
+import jakarta.transaction.Transactional;
+import kr.co.springkmarketapp.dao.order.ClaimFileDAO;
 import kr.co.springkmarketapp.dao.order.OrderClaimDAO;
+import kr.co.springkmarketapp.dao.order.OrderItemDAO;
+import kr.co.springkmarketapp.dto.order.ClaimFileDTO;
 import kr.co.springkmarketapp.dto.order.OrderClaimDTO;
+import kr.co.springkmarketapp.util.FileStorageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,6 +18,11 @@ import java.util.List;
 public class OrderClaimService {
 
     private final OrderClaimDAO orderClaimDAO;
+    // 주문 상품 상태 변경을 위해 필요한 DAO
+    private final OrderItemDAO orderItemDAO;
+    private final ClaimFileDAO claimFileDAO; // 1. ClaimFileDAO 주입
+    private final FileStorageUtil fileStorageUtil; // 2. 유틸리티 주입
+
 
     public int insertOrderClaim(OrderClaimDTO orderClaimDTO) {
         return orderClaimDAO.insertOrderClaim(orderClaimDTO);
@@ -31,5 +42,26 @@ public class OrderClaimService {
 
     public int deleteOrderClaim(Long claimNo) {
         return orderClaimDAO.deleteOrderClaim(claimNo);
+    }
+
+    @Transactional
+    public void registerClaimWithFile(OrderClaimDTO claimDTO, String itemStatus, MultipartFile file) throws Exception {
+        // 클레임 저장 (PK가 claimDTO에 주입됨)
+        orderClaimDAO.insertOrderClaim(claimDTO);
+
+        // 주문 상품 상태 변경
+        orderItemDAO.updateItemStatus(claimDTO.getOrderItemNo(), itemStatus);
+
+        // 파일 처리
+        if (file != null && !file.isEmpty()) {
+            String filePath = fileStorageUtil.saveFile(file, "claims");
+
+            ClaimFileDTO fileDTO = new ClaimFileDTO();
+            fileDTO.setClaimNo(claimDTO.getClaimNo()); // 생성된 클레임 PK 사용
+            fileDTO.setOriName(file.getOriginalFilename());
+            fileDTO.setNewName(filePath);
+
+            claimFileDAO.insertClaimFile(fileDTO);
+        }
     }
 }

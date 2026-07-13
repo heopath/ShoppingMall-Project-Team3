@@ -52,7 +52,7 @@
   border-radius: 6px;
   overflow: hidden;
 
-  margin-bottom: 12px;
+  /*margin-bottom: 12px;*/
 }
 
 .input-row {
@@ -103,6 +103,7 @@
   justify-content: space-between;
   align-items: center;
 
+  margin-top: 15px;
   margin-bottom: 14px;
 
   font-size: 12px;

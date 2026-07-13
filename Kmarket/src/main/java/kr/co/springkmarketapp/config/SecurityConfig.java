@@ -18,7 +18,7 @@ public class SecurityConfig {
     private final MyUserDetailsService myUserDetailsService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginFailureHandler loginFailureHandler) throws Exception {
 
         http
                 /*
@@ -101,7 +101,7 @@ public class SecurityConfig {
 
                         .defaultSuccessUrl("/", true)
 
-                        .failureUrl("/member/login?login=fail")
+                        .failureHandler(loginFailureHandler) // 변경된 핸들러 등록
 
                         .permitAll()
                 )

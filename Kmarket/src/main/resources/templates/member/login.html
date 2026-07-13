@@ -48,6 +48,10 @@
                 />
               </div>
             </div>
+            <div th:if="${param.error != null}" class="login-error-msg" style="color: red;  font-size: 12px; margin-block: 5px 0;">
+              <span th:if="${param.error[0] == 'leave'}">탈퇴한 회원입니다.</span>
+              <span th:if="${param.error[0] == 'fail'}">아이디 또는 비밀번호가 잘못되었습니다.</span>
+            </div>
 
             <div class="form-util">
               <label>

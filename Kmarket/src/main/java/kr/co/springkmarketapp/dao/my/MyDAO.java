@@ -47,11 +47,15 @@ public interface MyDAO {
     // 메뉴 - 포인트 적립 내역 조회
     List<MemberPointDTO> selectPointListWithPaging(
             @Param("memberNo") Integer memberNo,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate,
             @Param("start") int start,
             @Param("size") int size
     );
     // 메뉴 - 포인트 적립 내역 갯수
-    Integer selectPointCount(Integer memberNo);
+    Integer selectPointCount(@Param("memberNo") Integer memberNo,
+                             @Param("startDate") String startDate,
+                             @Param("endDate") String endDate);
 
     // 메인 - 상품평 조회
     List<ProductReviewDTO> selectReviewList(Integer memberNo);
@@ -66,18 +70,18 @@ public interface MyDAO {
 
     // 메인 - 문의내역 조회
     List<QnaDTO> selectMyQnaList(Integer memberNo);
-   // 메뉴 - 문의내역 조회
+    // 메뉴 - 문의내역 조회
     List<QnaDTO> selectMyQnaListWithPaging(
             @Param("memberNo") Integer memberNo,
             @Param("start") int start,
             @Param("size") int size
     );
     // 주문내역 갯수 조회
-    Integer selectOrderCount(Integer memberNo);
-    Integer selectOrderCount(
-            @Param("memberNo") Integer memberNo,
-            @Param("startDate") String startDate,
-            @Param("endDate") String endDate);
+    Integer selectOrderCount(@Param("memberNo") Integer memberNo);
+    // 기간 검색용
+    Integer selectOrderCountWithDate(@Param("memberNo") Integer memberNo,
+                                     @Param("startDate") String startDate,
+                                     @Param("endDate") String endDate);
 
     // 쿠폰 갯수 조회
     Integer selectCouponCount(Integer memberNo);
@@ -113,4 +117,12 @@ public interface MyDAO {
 
     // 회원정보 수정
     void updateMemberSetting(MemberDTO dto);
+    
+    // 회원 정보 중복 체크
+    int countMemberByValue(@Param("type") String type,
+                           @Param("value") String value,
+                           @Param("memberNo") Integer memberNo);
+
+    // 회원 탈퇴
+    void deleteMember(Integer memberNo);
 }
