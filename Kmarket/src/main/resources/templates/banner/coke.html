@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="K마켓과 함께 만나는 코카-콜라 브랜드 스페셜">
+    <title>COKE PLAYGROUND | K-Market</title>
+    <link rel="stylesheet" th:href="@{/css/banner/coke.css}">
+    <script th:src="@{/js/banner/coke.js}" defer></script>
+</head>
+<body>
+<div class="page-progress" id="pageProgress" aria-hidden="true"></div>
+
+<header class="campaign-header" id="campaignHeader">
+    <a class="campaign-logo" th:href="@{/}">
+        <span class="k-logo">K</span>
+        <span class="logo-divider"></span>
+        <strong>COKE<br>PLAYGROUND</strong>
+    </a>
+    <nav aria-label="이벤트 페이지 메뉴">
+        <a href="#brands">BRANDS</a>
+        <a href="#gallery">MOMENTS</a>
+        <a href="#gacha">EVENT</a>
+    </nav>
+    <a class="home-link" th:href="@{/}">K마켓으로 <span>↗</span></a>
+</header>
+
+<main>
+    <section class="intro" id="top">
+        <div class="intro-noise" aria-hidden="true"></div>
+        <p class="intro-kicker reveal">K-MARKET × COCA-COLA</p>
+        <h1 aria-label="Refresh your world">
+            <span class="reveal">REFRESH</span>
+            <span class="outline reveal">YOUR WORLD</span>
+        </h1>
+        <p class="intro-copy reveal">스크롤을 내리고 다섯 가지 짜릿함을 만나보세요.</p>
+        <a class="scroll-button reveal" href="#brands"><span>SCROLL</span><i>↓</i></a>
+        <div class="intro-bubbles" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+    </section>
+
+    <section class="brand-journey" id="brands">
+        <div class="brand-sticky">
+            <div class="brand-progress" aria-hidden="true"><span id="brandProgress"></span></div>
+            <div class="brand-index" aria-hidden="true">
+                <strong id="brandCurrent">01</strong><span>/ 05</span>
+            </div>
+
+            <div class="brand-track" id="brandTrack">
+                <article class="brand-slide brand-coke" data-label="COKE TIME">
+                    <img th:src="@{/images/banner/coke/thumb_browse.png}" alt="코카콜라 제로 브랜드 비주얼">
+                    <div class="slide-caption"><span>01</span><p>짜릿하게 즐길 시간</p><strong>COKE TIME</strong></div>
+                </article>
+                <article class="brand-slide brand-sprite" data-label="SPRITE">
+                    <img th:src="@{/images/banner/coke/thumb_browse2.png}" alt="스프라이트 브랜드 비주얼">
+                    <div class="slide-caption"><span>02</span><p>터지는 매콤함, 터지는 상쾌함</p><strong>SPRITE</strong></div>
+                </article>
+                <article class="brand-slide brand-fanta" data-label="FANTA">
+                    <img th:src="@{/images/banner/coke/thumb_browse3.png}" alt="환타 브랜드 비주얼">
+                    <div class="slide-caption"><span>03</span><p>달콤한 과일향의 즐거움</p><strong>FANTA</strong></div>
+                </article>
+                <article class="brand-slide brand-power" data-label="POWERADE">
+                    <img th:src="@{/images/banner/coke/thumb_browse4.png}" alt="파워에이드 브랜드 비주얼">
+                    <div class="slide-caption"><span>04</span><p>결정적 순간을 위한 파워</p><strong>POWERADE</strong></div>
+                </article>
+                <article class="brand-slide brand-toreta" data-label="TORETA">
+                    <img th:src="@{/images/banner/coke/thumb_browse5.png}" alt="토레타 브랜드 비주얼">
+                    <div class="slide-caption"><span>05</span><p>가뿐한 일상, 이온 보충</p><strong>TORETA</strong></div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="moment-gallery" id="gallery">
+        <div class="gallery-heading reveal">
+            <p>ICY COLD / EVERY MOMENT</p>
+            <h2>차갑게,<br><em>더 생생하게.</em></h2>
+            <span>일상의 모든 순간에 어울리는 음료를 골라보세요.</span>
+        </div>
+
+        <div class="image-marquee marquee-left" aria-label="브랜드 이미지 모음">
+            <div class="image-track">
+                <figure><img th:src="@{/images/banner/coke/thumb_info.png}" alt="코카콜라 오리지널"><figcaption>COKE / ORIGINAL</figcaption></figure>
+                <figure><img th:src="@{/images/banner/coke/thumb_info2.png}" alt="차가운 스프라이트"><figcaption>SPRITE / ZERO</figcaption></figure>
+                <figure><img th:src="@{/images/banner/coke/thumb_info3.png}" alt="파워에이드"><figcaption>POWERADE / BLUE</figcaption></figure>
+                <figure><img th:src="@{/images/banner/coke/thumb_info4.png}" alt="환타 제로"><figcaption>FANTA / COLOR POP</figcaption></figure>
+                <figure><img th:src="@{/images/banner/coke/thumb_info5.png}" alt="토레타"><figcaption>TORETA / DAILY</figcaption></figure>
+                <figure><img th:src="@{/images/banner/coke/thumb_info6.png}" alt="조지아 커피"><figcaption>GEORGIA / COFFEE</figcaption></figure>
+                <figure><img th:src="@{/images/banner/coke/thumb_info7.png}" alt="닥터페퍼"><figcaption>DR PEPPER / ZERO</figcaption></figure>
+
+                <figure aria-hidden="true"><img th:src="@{/images/banner/coke/thumb_info.png}" alt=""><figcaption>COKE / ORIGINAL</figcaption></figure>
+                <figure aria-hidden="true"><img th:src="@{/images/banner/coke/thumb_info2.png}" alt=""><figcaption>SPRITE / ZERO</figcaption></figure>
+                <figure aria-hidden="true"><img th:src="@{/images/banner/coke/thumb_info3.png}" alt=""><figcaption>POWERADE / BLUE</figcaption></figure>
+                <figure aria-hidden="true"><img th:src="@{/images/banner/coke/thumb_info4.png}" alt=""><figcaption>FANTA / COLOR POP</figcaption></figure>
+                <figure aria-hidden="true"><img th:src="@{/images/banner/coke/thumb_info5.png}" alt=""><figcaption>TORETA / DAILY</figcaption></figure>
+                <figure aria-hidden="true"><img th:src="@{/images/banner/coke/thumb_info6.png}" alt=""><figcaption>GEORGIA / COFFEE</figcaption></figure>
+                <figure aria-hidden="true"><img th:src="@{/images/banner/coke/thumb_info7.png}" alt=""><figcaption>DR PEPPER / ZERO</figcaption></figure>
+            </div>
+        </div>
+
+        <div class="text-marquee" aria-hidden="true">
+            <div><span>OPEN</span><i>●</i><span>REFRESH</span><i>●</i><span>ENJOY</span><i>●</i><span>REPEAT</span><i>●</i><span>OPEN</span><i>●</i><span>REFRESH</span><i>●</i><span>ENJOY</span><i>●</i><span>REPEAT</span><i>●</i></div>
+        </div>
+    </section>
+
+    <section class="gacha-section" id="gacha">
+        <div class="gacha-copy reveal">
+            <p>LUCKY CAPSULE EVENT</p>
+            <h2>오늘의<br><span>짜릿한 행운</span></h2>
+            <div class="gacha-description">버튼을 눌러 캡슐 머신을 돌려보세요.<br>이 페이지에서는 인터랙션 예시로 동작합니다.</div>
+            <button type="button" class="gacha-button" id="gachaButton"><span>캡슐 돌리기</span><b>→</b></button>
+            <p class="gacha-result" id="gachaResult" aria-live="polite"></p>
+        </div>
+        <div class="gacha-visual reveal" id="gachaVisual">
+            <span class="floating-cap cap-one" aria-hidden="true"></span>
+            <span class="floating-cap cap-two" aria-hidden="true"></span>
+            <img th:src="@{/images/banner/coke/thumb_gacha.png}" alt="코카콜라 캡슐 머신">
+        </div>
+    </section>
+
+    <section class="closing">
+        <div class="closing-circle" aria-hidden="true"></div>
+        <p class="reveal">FIND YOUR REFRESHMENT</p>
+        <h2 class="reveal">마시는 순간,<br><span>즐거움이 시작돼.</span></h2>
+        <a class="shop-cta reveal" th:href="@{/}"><span>K마켓 둘러보기</span><b>↗</b></a>
+    </section>
+</main>
+
+<footer>
+    <div class="campaign-logo"><span class="k-logo">K</span><span class="logo-divider"></span><strong>COKE<br>PLAYGROUND</strong></div>
+    <p>본 페이지는 K-Market 프로젝트용 프로모션 예시입니다.</p>
+    <a href="#top">BACK TO TOP ↑</a>
+</footer>
+</body>
+</html>
