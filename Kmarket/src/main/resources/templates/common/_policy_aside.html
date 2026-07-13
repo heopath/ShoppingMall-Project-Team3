@@ -2,60 +2,28 @@
     <div class="category-box">
         <h3>카테고리</h3>
         <ul class="category-list">
-            <li class="category-item">
-                <div class="category-title">
-                    <span><span class="icon">👕</span> 패션·의류·뷰티</span>
-                    <span class="arrow">+</span>
-                </div>
+            <li class="category-item" th:each="category : ${categoryTree}">
+                <button type="button" class="category-title"
+                        th:attr="aria-expanded=false"
+                        th:disabled="${#lists.isEmpty(category.children)}">
+                    <span th:text="${category.cateName}">카테고리명</span>
+                    <span class="arrow" th:if="${!#lists.isEmpty(category.children)}">+</span>
+                </button>
 
-                <ul class="sub-category close">
-                    <li><a href="#">여성의류</a></li>
-                    <li><a href="#">남성의류</a></li>
-                    <li><a href="#">신발</a></li>
-                    <li><a href="#">가방</a></li>
+                <ul class="sub-category"
+                    th:if="${!#lists.isEmpty(category.children)}"
+                    hidden>
+                    <li th:each="sub : ${category.children}">
+                        <a th:href="@{/product/list(cateNo=${sub.cateNo})}"
+                           th:text="${sub.cateName}">하위 카테고리</a>
+                    </li>
                 </ul>
             </li>
-            <li class="category-item">
 
-                <div class="category-title">
-                    <span><span class="icon">💻</span> 가전·디지털</span>
-                    <span class="arrow">+</span>
-                </div>
-                <ul class="sub-category close">
-                    <li><a href="#">노트북</a></li>
-                    <li><a href="#">모니터</a></li>
-                    <li><a href="#">스마트폰</a></li>
-                    <li><a href="#">이어폰</a></li>
-                </ul>
-            </li>
-            <li class="category-item">
-
-                <div class="category-title">
-                    <span><span class="icon">🍎</span> 식품·생필품</span>
-                    <span class="arrow">+</span>
-                </div>
-
-                <ul class="sub-category close">
-                    <li><a href="#">과일</a></li>
-                    <li><a href="#">채소</a></li>
-                    <li><a href="#">정육</a></li>
-                    <li><a href="#">음료</a></li>
-                </ul>
-
-            </li>
-
-            <li class="category-item">
-                <div class="category-title">
-                    <span><span class="icon">🏠</span> 홈·문구·취미</span>
-                    <span class="arrow">+</span>
-                </div>
-                <ul class="sub-category close">
-                    <li><a href="#">생활용품</a></li>
-                    <li><a href="#">주방용품</a></li>
-                    <li><a href="#">인테리어</a></li>
-                    <li><a href="#">문구</a></li>
-                </ul>
+            <li class="category-empty" th:if="${#lists.isEmpty(categoryTree)}">
+                등록된 카테고리가 없습니다.
             </li>
         </ul>
     </div>
+    <script th:src="@{/js/policy-category.js}" defer></script>
 </aside>

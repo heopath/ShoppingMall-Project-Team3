@@ -15,14 +15,14 @@
     <body id="top">
         <!-- Top ad banner -->
         <div class="top-bar">
-            <a href="#" class="top-ad">
+            <a th:href="@{/}" class="top-ad">
                 <img src="../images/main/vip_plcc_banner.png" alt="Kmarket 최상단 광고 배너" />
             </a>
         </div>
 
         <!-- Header -->
         <header>
-            <a href="#" class="logo-img">
+            <a th:href="@{/}" class="logo-img">
                 <img src="../images/main/header_logo.png" alt="Kmarket 로고" />
             </a>
 
@@ -42,47 +42,28 @@
             </div>
 
             <nav class="header-links">
-                <a href="#login">로그인</a>
-                <a href="#join">회원가입</a>
-                <a href="#mypage">마이페이지</a>
-                <a href="#cart">🛒 장바구니</a>
+                <a th:href="@{/member/login}">로그인</a>
+                <a th:href="@{/member/join}">회원가입</a>
+                <a th:href="@{/my}">마이페이지</a>
+                <a th:href="@{/product/cart}">🛒 장바구니</a>
             </nav>
         </header>
 
         <!-- GNB -->
         <nav class="gnb">
             <div class="gnb-inner">
-                <a href="#hit" class="active">히트상품</a>
-                <a href="#recommend">추천상품</a>
-                <a href="#new">최신상품</a>
-                <a href="#popular">인기상품</a>
-                <a href="#discount">할인상품</a>
+                <a href="/#hit">히트상품</a>
+                <a href="/#recommend">추천상품</a>
+                <a href="/#new">최신상품</a>
+                <a href="/#popular">인기상품</a>
+                <a href="/#discount">할인상품</a>
             </div>
         </nav>
 
         <!-- Page layout : aside + right content -->
         <div class="page-layout">
-            <!-- Left aside -->
-            <aside class="side-cat">
-                <!-- Category: 일반 영역, sticky 아님 -->
-                <div class="category-box">
-                    <h3>카테고리</h3>
-                    <ul class="category-list">
-                        <li>
-                            <a href="#"><span class="icon">👕</span> 패션·의류·뷰티</a>
-                        </li>
-                        <li>
-                            <a href="#"><span class="icon">💻</span> 가전·디지털</a>
-                        </li>
-                        <li>
-                            <a href="#"><span class="icon">🍎</span> 식품·생필품</a>
-                        </li>
-                        <li>
-                            <a href="#"><span class="icon">🏠</span> 홈·문구·취미</a>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
+            <!-- DB category aside -->
+            <th:block th:replace="~{common/_policy_aside}"></th:block>
 
             <!-- Right content -->
             <main class="content-area">
@@ -90,52 +71,25 @@
                     <div class="policy-title">
                         <h2>Kmarket 서비스 이용약관</h2>
 
-                        <button class="btn-print">🖨 인쇄</button>
+                        <button type="button" class="btn-print" onclick="window.print()" aria-label="전자금융거래 약관 인쇄">🖨 인쇄</button>
                     </div>
 
                     <div class="policy-tabs">
-                        <a href="#">구매회원 약관</a>
-                        <a href="#">판매회원 약관</a>
-                        <a href="#" class="active">전자금융거래</a>
-                        <a href="#">위치정보 약관</a>
-                        <a href="#">개인정보처리방침</a>
+                        <a th:href="@{/policy/buyer}">구매회원 약관</a>
+                        <a th:href="@{/policy/seller}">판매회원 약관</a>
+                        <a th:href="@{/policy/finance}" class="active">전자금융거래</a>
+                        <a th:href="@{/policy/location}">위치정보 약관</a>
+                        <a th:href="@{/policy/privacy}">개인정보처리방침</a>
                     </div>
 
                     <h2>전자금융거래 이용약관</h2>
 
                     <div class="policy-content">
-                        <article class="policy-article">
-                            <h3>제 1 조 (목적)</h3>
-
-                            <p>
-                                이 약관은 케이마켓이 제공하는 전자상거래 서비스의 이용조건 및 절차, 회사와 회원의 권리와
-                                의무를 규정함을 목적으로 합니다.
-                            </p>
-                        </article>
-
-                        <article class="policy-article">
-                            <h3>제 2 조 (약관의 효력 및 변경)</h3>
-
-                            <p>회사는 필요한 경우 관련 법령을 위배하지 않는 범위에서 본 약관을 개정할 수 있습니다.</p>
-                        </article>
-
-                        <article class="policy-article">
-                            <h3>제 3 조 (용어의 정의)</h3>
-
-                            <p>본 약관에서 사용하는 용어의 정의는 관계 법령 및 서비스 안내에서 정하는 바에 따릅니다.</p>
-                        </article>
-
-                        <article class="policy-article">
-                            <h3>제 4 조 (서비스의 제공)</h3>
-
-                            <p>회사는 회원에게 상품 검색, 구매, 결제 및 기타 관련 서비스를 제공합니다.</p>
-                        </article>
-
-                        <article class="policy-article">
-                            <h3>제 5 조 (회원가입)</h3>
-
-                            <p>회원은 회사가 정한 가입 절차에 따라 회원가입을 신청할 수 있습니다.</p>
-                        </article>
+                        <article class="policy-article"><h3>제1조 (목적)</h3><p>본 약관은 Kmarket에서 상품 주문과 관련하여 제공되는 결제, 결제상태 확인, 취소 및 할인처리 등 전자금융거래 서비스의 이용조건을 정합니다.</p></article>
+                        <article class="policy-article"><h3>제2조 (거래정보의 생성)</h3><p>주문 시 주문코드, 총 상품금액, 할인금액, 쿠폰할인, 배송비, 사용·적립 포인트, 최종 결제금액, 결제수단, 결제상태 및 결제일시가 기록됩니다. 카드번호나 계좌 비밀번호와 같은 결제수단의 인증정보는 결제기관의 정책에 따라 처리됩니다.</p></article>
+                        <article class="policy-article"><h3>제3조 (결제 및 거래 완료)</h3><p>이용자가 선택한 결제수단의 승인이 완료되어야 결제가 완료됩니다. 통신 장애, 잔액 부족, 한도 초과 또는 결제기관의 거절로 승인되지 않은 주문은 결제대기 또는 실패 상태로 남을 수 있습니다.</p></article>
+                        <article class="policy-article"><h3>제4조 (취소 및 환급)</h3><p>주문 취소 시 취소일시와 주문·결제상태가 갱신됩니다. 환급 시점과 방법은 결제수단 및 결제기관의 처리기준에 따르며, 이미 사용된 쿠폰·포인트나 적립 예정 포인트는 거래 결과에 따라 회수 또는 복원될 수 있습니다.</p></article>
+                        <article class="policy-article"><h3>제5조 (오류 및 책임)</h3><p>이용자는 주문내역과 결제금액을 확인하고 오류를 발견하면 고객센터에 알려야 합니다. 회사는 시스템 장애나 중복 처리 사실을 확인한 경우 거래내역을 정정하며, 이용자의 고의·중대한 과실 또는 결제기관의 귀책으로 발생한 손해는 관련 법령과 각 기관의 약관에 따라 처리합니다.</p></article>
                     </div>
                 </section>
             </main>
@@ -145,10 +99,10 @@
         <footer>
             <div class="footer-inner">
                 <nav class="footer-links">
-                    <a href="#about">회사소개</a>
-                    <a href="#terms">서비스이용약관</a>
-                    <a href="#privacy">개인정보처리방침</a>
-                    <a href="#finance">전자금융거래약관</a>
+                    <a th:href="@{/company}">회사소개</a>
+                    <a th:href="@{/policy/buyer}">서비스이용약관</a>
+                    <a th:href="@{/policy/privacy}">개인정보처리방침</a>
+                    <a th:href="@{/policy/finance}">전자금융거래약관</a>
                 </nav>
 
                 <div class="footer-company">
