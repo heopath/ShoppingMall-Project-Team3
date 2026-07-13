@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.co.springkmarketapp.dao.my.MyDAO"><!-- 주문 개수 -->
-    <select id="selectOrderCount"
-            parameterType="int"
-            resultType="int">
+<mapper namespace="kr.co.springkmarketapp.dao.my.MyDAO">
+    <!-- 주문 개수 -->
+    <select id="selectOrderCount" resultType="int">
         SELECT COUNT(*)
         FROM orders
         WHERE member_no = #{memberNo}
+    </select>
 
+    <select id="selectOrderCountWithDate" resultType="int">
+        SELECT COUNT(*)
+        FROM orders o
+        INNER JOIN order_item oi ON o.order_no = oi.order_no
+        WHERE o.member_no = #{memberNo}
         <!-- 기간 조회 -->
         <if test="startDate != null and startDate != ''">
-            AND order_date <![CDATA[>=]]> #{startDate}
+            AND DATE(o.order_date) <![CDATA[>=]]> #{startDate}
         </if>
-
         <if test="endDate != null and endDate != ''">
-            AND order_date <![CDATA[<=]]> #{endDate}
+            AND DATE(o.order_date) <![CDATA[<=]]> #{endDate}
         </if>
     </select>
 
@@ -277,6 +281,14 @@
         reg_date AS regDate
         FROM member_point
         WHERE member_no = #{memberNo}
+
+        <if test="startDate != null and startDate != ''">
+            AND DATE(reg_date) <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND DATE(reg_date) <![CDATA[<=]]> #{endDate}
+        </if>
+
         ORDER BY reg_date DESC
         LIMIT #{start}, #{size}
     </select>
@@ -289,6 +301,13 @@
         SELECT COUNT(*)
         FROM member_point
         WHERE member_no = #{memberNo}
+
+        <if test="startDate != null and startDate != ''">
+            AND DATE(reg_date) <![CDATA[>=]]> #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND DATE(reg_date) <![CDATA[<=]]> #{endDate}
+        </if>
 
     </select>
 
@@ -352,6 +371,8 @@
 
         SELECT
         q.qna_no      AS qnaNo,
+        q.cs_cate_no  AS csCateNo,
+        c.parent_no   AS parentNo,
         c.cate_name   AS cateName,
         p.cate_name   AS parentCateName,
         q.title       AS title,
@@ -379,6 +400,8 @@
 
         SELECT
         q.qna_no      AS qnaNo,
+        q.cs_cate_no  AS csCateNo,
+        c.parent_no   AS parentNo,
         c.cate_name   AS cateName,
         p.cate_name   AS parentCateName,
         q.title       AS title,
@@ -595,5 +618,26 @@
         WHERE member_no = #{memberNo}
 
     </update>
+
+    <!-- 탈퇴 -->
+    <update id="deleteMember" parameterType="int">
+        UPDATE member
+        SET status = 'leave',
+        leave_date = NOW()
+        WHERE member_no = #{memberNo}
+    </update>
+
+    <!-- 회원정보 중복 체크 -->
+    <select id="countMemberByValue" resultType="int">
+        SELECT COUNT(*) FROM member
+        WHERE
+        <if test="type == 'email'">
+            email = #{value}
+        </if>
+        <if test="type == 'hp'">
+            hp = #{value}
+        </if>
+        AND member_no != #{memberNo}
+    </select>
 
 </mapper>

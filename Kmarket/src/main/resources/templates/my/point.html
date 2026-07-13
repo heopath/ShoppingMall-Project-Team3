@@ -1,167 +1,169 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <th:block th:replace="~{common/_site_head :: head('마이페이지 포인트내역')}"></th:block>
-    <link rel="stylesheet" href="../css/main.css" />
-    <link rel="stylesheet" href="../css/my/common.css" />
-    <link rel="stylesheet" href="../css/my/point.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    />
-    <script src="../js/my/searchDate.js"></script>
-  </head>
-  <body>
-  <th:block th:replace="~{common/_main_header}"></th:block>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <th:block th:replace="~{common/_site_head :: head('마이페이지 포인트내역')}"></th:block>
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/my/common.css" />
+  <link rel="stylesheet" href="../css/my/point.css" />
+  <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+  <script src="../js/my/searchDate.js"></script>
+</head>
+<body>
+<th:block th:replace="~{common/_main_header}"></th:block>
 
 
-  <main class="main-layout">
-      <div class="mypage-layout">
-        <aside class="mypage-sidebar">
-          <h3>마이페이지</h3>
+<main class="main-layout">
+  <div class="mypage-layout">
+    <aside class="mypage-sidebar">
+      <h3>마이페이지</h3>
 
-          <ul>
-            <li><a th:href="@{/my/order}">전체주문내역</a></li>
-            <li class="active"><a th:href="@{/my/point}">포인트내역</a></li>
-            <li><a th:href="@{/my/coupon}">쿠폰</a></li>
-            <li><a th:href="@{/my/review}">나의리뷰</a></li>
-            <li><a th:href="@{/my/qna}">문의하기</a></li>
-            <li><a th:href="@{/my/info}">나의설정</a></li>
-          </ul>
-        </aside>
+      <ul>
+        <li><a th:href="@{/my/order}">전체주문내역</a></li>
+        <li class="active"><a th:href="@{/my/point}">포인트내역</a></li>
+        <li><a th:href="@{/my/coupon}">쿠폰</a></li>
+        <li><a th:href="@{/my/review}">나의리뷰</a></li>
+        <li><a th:href="@{/my/qna}">문의하기</a></li>
+        <li><a th:href="@{/my/info}">나의설정</a></li>
+      </ul>
+    </aside>
 
-        <section class="mypage-content">
-          <div class="mypage-summary">
-            <div class="summary-card">
-              <strong>주문</strong>
-              <span>2</span>
-            </div>
-
-            <div class="summary-card">
-              <strong>쿠폰</strong>
-              <span>1</span>
-            </div>
-
-            <div class="summary-card">
-              <strong>포인트</strong>
-              <span>1,000</span>
-            </div>
-
-            <div class="summary-card">
-              <strong>문의</strong>
-              <span>1</span>
-            </div>
-          </div>
-
-
-          <div class="mypage-banner">
-            <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
-          </div>
-
-          <section class="mypage-section">
-            <div class="section-header">
-              <h3>포인트 내역</h3>
-            </div>
-
-            <!-- 기간 조회 -->
-            <div class="period-search-wrap">
-              <div class="period-search-title">기간별조회</div>
-
-              <div class="period-search-content">
-                <!-- 단기조회 -->
-                <div class="period-btn-group quick-period">
-                  <button type="button">1주일</button>
-                  <button type="button">15일</button>
-                  <button type="button">1개월</button>
-                </div>
-
-                <!-- 최근 5개월 -->
-                <div class="period-btn-group month-period">
-                  <button type="button">10월</button>
-                  <button type="button">9월</button>
-                  <button type="button">8월</button>
-                  <button type="button">7월</button>
-                  <button type="button">6월</button>
-                </div>
-
-                <!-- 직접조회 -->
-                <div class="period-date-group">
-                  <input type="date" id="startDate" />
-
-                  <span>~</span>
-
-                  <input type="date" id="endDate" />
-
-                  <button type="button" class="period-search-btn">조회</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- 포인트 테이블 -->
-            <table class="point-table">
-              <thead>
-              <tr>
-                <th>날짜</th>
-                <th>구분</th>
-                <th>주문번호</th>
-                <th>적립금액</th>
-                <th>비고</th>
-                <th>유효기간</th>
-              </tr>
-              </thead>
-
-              <tbody>
-
-              <tr th:each="point : ${pointList}"
-                 >
-
-                <td th:text="${#temporals.format(point.regDate,'yyyy-MM-dd')}"></td>
-
-                <td th:text="${point.pointType}"></td>
-
-                <td th:text="${point.orderNo}"></td>
-
-                <td class="point  point-plus"
-                    th:text="${#numbers.formatInteger(point.pointValue,3,'COMMA')} + 'P'">
-                </td>
-
-                <td th:text="${point.reason}"></td>
-
-                <td th:text="${point.expireDate}"></td>
-
-              </tr>
-
-              <tr th:if="${#lists.isEmpty(pointList)}">
-                <td colspan="6">포인트 적립내역이 없습니다.</td>
-              </tr>
-
-              </tbody>
-            </table>
-
-            <!-- 페이징 -->
-            <div class="pagination">
-              <a href="#" class="page-btn"
-                ><i class="bi bi-chevron-left"></i
-              ></a>
-
-              <a href="#" class="active">1</a>
-              <a href="#">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              <a href="#">5</a>
-
-              <a href="#" class="page-btn"
-                ><i class="bi bi-chevron-right"></i
-              ></a>
-            </div>
-          </section>
-        </section>
+    <section class="mypage-content">
+      <div class="mypage-summary">
+        <div class="summary-card">
+          <strong>주문</strong>
+          <span th:text="${summary.orderCount}">0</span>
+        </div>
+        <div class="summary-card">
+          <strong>쿠폰</strong>
+          <span th:text="${summary.couponCount}">0</span>
+        </div>
+        <div class="summary-card">
+          <strong>포인트</strong>
+          <span th:text="${#numbers.formatInteger(summary.point ?: 0, 3, 'COMMA')}">0</span>
+        </div>
+        <div class="summary-card">
+          <strong>문의</strong>
+          <span th:text="${summary.qnaCount}">0</span>
+        </div>
       </div>
-    </main>
 
-  <th:block th:replace="~{common/_admin_footer}"></th:block>
 
-  </body>
+      <div class="mypage-banner">
+        <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
+      </div>
+
+      <section class="mypage-section">
+        <div class="section-header">
+          <h3>포인트 내역</h3>
+        </div>
+
+        <!-- 기간 조회 -->
+        <div class="period-search-wrap">
+          <div class="period-search-title">기간별조회</div>
+
+          <div class="period-search-content">
+            <!-- 단기조회 -->
+            <div class="period-btn-group quick-period">
+              <button type="button">1주일</button>
+              <button type="button">15일</button>
+              <button type="button">1개월</button>
+            </div>
+
+            <!-- 최근 5개월 -->
+            <div class="period-btn-group month-period">
+              <button type="button">10월</button>
+              <button type="button">9월</button>
+              <button type="button">8월</button>
+              <button type="button">7월</button>
+              <button type="button">6월</button>
+            </div>
+
+            <!-- 직접조회 -->
+            <div class="period-date-group">
+              <input type="date" id="startDate"  name="startDate"   th:value="${startDate}"/>
+
+              <span>~</span>
+
+              <input type="date" id="endDate" name="endDate"  th:value="${endDate}"/>
+
+              <button type="button" class="period-search-btn">조회</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 포인트 테이블 -->
+        <table class="point-table">
+          <thead>
+          <tr>
+            <th>날짜</th>
+            <th>구분</th>
+            <th>주문번호</th>
+            <th>적립금액</th>
+            <th>비고</th>
+            <th>유효기간</th>
+          </tr>
+          </thead>
+
+          <tbody>
+
+          <tr th:each="point : ${pointList}"
+          >
+
+            <td th:text="${#temporals.format(point.regDate,'yyyy-MM-dd')}"></td>
+
+            <td th:text="${point.pointType}"></td>
+
+            <td th:text="${point.orderNo}"></td>
+
+            <td class="point  point-plus"
+                th:text="${#numbers.formatInteger(point.pointValue,3,'COMMA')} + 'P'">
+            </td>
+
+            <td th:text="${point.reason}"></td>
+
+            <td th:text="${point.expireDate}"></td>
+
+          </tr>
+
+          <tr th:if="${#lists.isEmpty(pointList)}">
+            <td colspan="6">포인트 적립내역이 없습니다.</td>
+          </tr>
+
+          </tbody>
+        </table>
+
+        <!-- 페이징 -->
+        <div class="pagination" th:if="${not #lists.isEmpty(pointList)}">
+          <a th:if="${page.startPage > 1}"
+             th:href="@{/my/point(pg=${page.startPage - 1}, period=${param.period}, startDate=${startDate}, endDate=${endDate})}"
+             class="page-btn">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+
+          <th:block th:each="i : ${#numbers.sequence(page.startPage, page.endPage)}">
+            <a th:href="@{/my/point(pg=${i}, period=${param.period}, startDate=${startDate}, endDate=${endDate})}"
+               th:text="${i}"
+               th:classappend="${i == page.currentPage} ? 'active'">
+            </a>
+          </th:block>
+
+          <a th:if="${page.endPage < page.lastPage}"
+             th:href="@{/my/point(pg=${page.endPage + 1}, period=${param.period}, startDate=${startDate}, endDate=${endDate})}"
+             class="page-btn">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </div>
+      </section>
+    </section>
+  </div>
+</main>
+
+<th:block th:replace="~{common/_admin_footer}"></th:block>
+
+</body>
 </html>

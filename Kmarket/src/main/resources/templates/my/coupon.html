@@ -1,143 +1,140 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <th:block th:replace="~{common/_site_head :: head('마이페이지 쿠폰내역')}"></th:block>
-    <link rel="stylesheet" href="./../css/main.css" />
-    <link rel="stylesheet" href="./../css/my/common.css" />
-    <link rel="stylesheet" href="./../css/my/coupon.css" />
-  </head>
-  <body>
-  <th:block th:replace="~{common/_main_header}"></th:block>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <th:block th:replace="~{common/_site_head :: head('마이페이지 쿠폰내역')}"></th:block>
+  <link rel="stylesheet" href="./../css/main.css" />
+  <link rel="stylesheet" href="./../css/my/common.css" />
+  <link rel="stylesheet" href="./../css/my/coupon.css" />
+</head>
+<body>
+<th:block th:replace="~{common/_main_header}"></th:block>
 
 
-  <main class="main-layout">
-      <div class="mypage-layout">
-        <aside class="mypage-sidebar">
-          <h3>마이페이지</h3>
+<main class="main-layout">
+  <div class="mypage-layout">
+    <aside class="mypage-sidebar">
+      <h3>마이페이지</h3>
 
-          <ul>
-            <li><a th:href="@{/my/order}">전체주문내역</a></li>
-            <li><a th:href="@{/my/point}">포인트내역</a></li>
-            <li class="active"><a th:href="@{/my/coupon}">쿠폰</a></li>
-            <li><a th:href="@{/my/review}">나의리뷰</a></li>
-            <li><a th:href="@{/my/qna}">문의하기</a></li>
-            <li><a th:href="@{/my/info}">나의설정</a></li>
-          </ul>
-        </aside>
+      <ul>
+        <li><a th:href="@{/my/order}">전체주문내역</a></li>
+        <li><a th:href="@{/my/point}">포인트내역</a></li>
+        <li class="active"><a th:href="@{/my/coupon}">쿠폰</a></li>
+        <li><a th:href="@{/my/review}">나의리뷰</a></li>
+        <li><a th:href="@{/my/qna}">문의하기</a></li>
+        <li><a th:href="@{/my/info}">나의설정</a></li>
+      </ul>
+    </aside>
 
-        <section class="mypage-content">
-          <div class="mypage-summary">
-            <div class="summary-card">
-              <strong>주문</strong>
-              <span>2</span>
-            </div>
-
-            <div class="summary-card">
-              <strong>쿠폰</strong>
-              <span>1</span>
-            </div>
-
-            <div class="summary-card">
-              <strong>포인트</strong>
-              <span>1,000</span>
-            </div>
-
-            <div class="summary-card">
-              <strong>문의</strong>
-              <span>1</span>
-            </div>
-          </div>
-
-          <div class="mypage-banner">
-            <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
-          </div>
-
-          <section class="mypage-section">
-            <div class="section-header">
-              <h3>쿠폰 내역</h3>
-            </div>
-
-            <!-- 쿠폰 테이블 -->
-            <table class="coupon-table">
-              <thead>
-                <tr>
-                  <th>쿠폰명</th>
-                  <th>할인금액</th>
-                  <th>적용기준 / 제한조건</th>
-                  <th>상태</th>
-                  <th>유효기간</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-              <tr th:each="coupon : ${couponList}">
-
-                <td>
-                  <p th:text="${coupon.couponName}"></p>
-                </td>
-
-                <td>
-                  <span th:text="${coupon.benefitValue}"></span>
-                  <span th:text="${coupon.benefitType == 'RATE' ? '%' : '원'}"></span>
-                </td>
-
-                <td>
-                  <span th:text="${#numbers.formatInteger(coupon.minOrderPrice,3,'COMMA')}"></span>원 이상 구매
-                </td>
-
-                <td th:text="${coupon.status}"
-                    th:classappend="${coupon.status == '발급'} ? 'coupon-available'
-                   : (${coupon.status == '사용'} ? 'coupon-used' : 'coupon-disabled')">
-                </td>
-
-                <td th:text="${#temporals.format(coupon.endDate,'yyyy-MM-dd')}"></td>
-
-              </tr>
-
-              <tr th:if="${#lists.isEmpty(couponList)}">
-                <td colspan="5">보유한 쿠폰이 없습니다.</td>
-              </tr>
-
-              </tbody>
-            </table>
-
-            <div class="coupon-guide">
-              <ul>
-                <li>
-                  쇼핑 / 로컬샵 / 출판 / 상품권 등 환금성 카테고리 및 중고상품
-                  및 일부 프로모션 상품에는 쿠폰사용이 제한됩니다.
-                </li>
-
-                <li>
-                  쿠폰 적용 가능한 금액 기준은 판매자 상품별할인과 구매자
-                  추가할인이 모두 포함된 할인적용가입니다.
-                </li>
-
-                <li>
-                  쿠폰쿠폰 할인액 확인 및 구매자 할인과 중복 적용 가능하며
-                  하나의 상품당 한장의 중복쿠폰만 사용 가능합니다.
-                </li>
-
-                <li>
-                  한정 할인은 평균 전일 할인율을 결제시점에 할인 혜택을 받을 수
-                  있습니다.
-                </li>
-
-                <li>
-                  항공권 예약취소 또는 환불 시 적용 받은 항공할인은 id당 1회
-                  한하여 다시 발급됩니다.
-                </li>
-              </ul>
-            </div>
-          </section>
-        </section>
+    <section class="mypage-content">
+      <div class="mypage-summary">
+        <div class="summary-card">
+          <strong>주문</strong>
+          <span th:text="${summary.orderCount}">0</span>
+        </div>
+        <div class="summary-card">
+          <strong>쿠폰</strong>
+          <span th:text="${summary.couponCount}">0</span>
+        </div>
+        <div class="summary-card">
+          <strong>포인트</strong>
+          <span th:text="${#numbers.formatInteger(summary.point ?: 0, 3, 'COMMA')}">0</span>
+        </div>
+        <div class="summary-card">
+          <strong>문의</strong>
+          <span th:text="${summary.qnaCount}">0</span>
+        </div>
       </div>
-    </main>
 
-  <th:block th:replace="~{common/_admin_footer}"></th:block>
+      <div class="mypage-banner">
+        <img src="/images/my/myBanner.png" alt="myBanner" style="width: 100%">
+      </div>
 
-  </body>
+      <section class="mypage-section">
+        <div class="section-header">
+          <h3>쿠폰 내역</h3>
+        </div>
+
+        <!-- 쿠폰 테이블 -->
+        <table class="coupon-table">
+          <thead>
+          <tr>
+            <th>쿠폰명</th>
+            <th>할인금액</th>
+            <th>적용기준 / 제한조건</th>
+            <th>상태</th>
+            <th>유효기간</th>
+          </tr>
+          </thead>
+
+          <tbody>
+
+          <tr th:each="coupon : ${couponList}">
+
+            <td>
+              <p th:text="${coupon.couponName}"></p>
+            </td>
+
+            <td>
+              <span th:text="${coupon.benefitValue}"></span>
+              <span th:text="${coupon.benefitType == 'RATE' ? '%' : '원'}"></span>
+            </td>
+
+            <td>
+              <span th:text="${#numbers.formatInteger(coupon.minOrderPrice,3,'COMMA')}"></span>원 이상 구매
+            </td>
+
+            <td th:text="${coupon.status}"
+                th:classappend="${coupon.status == '발급'} ? 'coupon-available'
+                   : (${coupon.status == '사용'} ? 'coupon-used' : 'coupon-disabled')">
+            </td>
+
+            <td th:text="${#temporals.format(coupon.endDate,'yyyy-MM-dd')}"></td>
+
+          </tr>
+
+          <tr th:if="${#lists.isEmpty(couponList)}">
+            <td colspan="5">보유한 쿠폰이 없습니다.</td>
+          </tr>
+
+          </tbody>
+        </table>
+
+        <div class="coupon-guide">
+          <ul>
+            <li>
+              쇼핑 / 로컬샵 / 출판 / 상품권 등 환금성 카테고리 및 중고상품
+              및 일부 프로모션 상품에는 쿠폰사용이 제한됩니다.
+            </li>
+
+            <li>
+              쿠폰 적용 가능한 금액 기준은 판매자 상품별할인과 구매자
+              추가할인이 모두 포함된 할인적용가입니다.
+            </li>
+
+            <li>
+              쿠폰쿠폰 할인액 확인 및 구매자 할인과 중복 적용 가능하며
+              하나의 상품당 한장의 중복쿠폰만 사용 가능합니다.
+            </li>
+
+            <li>
+              한정 할인은 평균 전일 할인율을 결제시점에 할인 혜택을 받을 수
+              있습니다.
+            </li>
+
+            <li>
+              항공권 예약취소 또는 환불 시 적용 받은 항공할인은 id당 1회
+              한하여 다시 발급됩니다.
+            </li>
+          </ul>
+        </div>
+      </section>
+    </section>
+  </div>
+</main>
+
+<th:block th:replace="~{common/_admin_footer}"></th:block>
+
+</body>
 </html>

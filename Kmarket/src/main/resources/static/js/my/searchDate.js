@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // 현재 경로 가져오기
+  const currentPath = window.location.pathname;
+
   const monthGroup = document.querySelector(".month-period");
 
   // 최근 5개월 생성
@@ -78,14 +81,14 @@ document.addEventListener("DOMContentLoaded", function () {
   // 공통 active 처리
   document.addEventListener("click", function (e) {
     if (
-      e.target.matches(".quick-period button") ||
-      e.target.matches(".month-period button")
+        e.target.matches(".quick-period button") ||
+        e.target.matches(".month-period button")
     ) {
       document
-        .querySelectorAll(".period-btn-group button")
-        .forEach(function (btn) {
-          btn.classList.remove("active");
-        });
+          .querySelectorAll(".period-btn-group button")
+          .forEach(function (btn) {
+            btn.classList.remove("active");
+          });
 
       e.target.classList.add("active");
     }
@@ -106,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const endDate = end.toISOString().split("T")[0];
 
     location.href =
-        `/my/order?pg=1&period=month-${month}&startDate=${startDate}&endDate=${endDate}`;
+        `${currentPath}?pg=1&period=month-${month}&startDate=${startDate}&endDate=${endDate}`;
   });
 
   // 1주일 / 15일 / 1개월
@@ -133,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const endDate = today.toISOString().split("T")[0];
 
       location.href =
-          `/my/order?pg=1&period=${period}&startDate=${startDate}&endDate=${endDate}`;
+          `${currentPath}?pg=1&period=${period}&startDate=${startDate}&endDate=${endDate}`;
     });
 
   });
@@ -167,6 +170,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         location.href =
-            `/my/order?pg=1&period=custom&startDate=${startDate}&endDate=${endDate}`;
+            `${currentPath}?pg=1&period=custom&startDate=${startDate}&endDate=${endDate}`;
       });
 });

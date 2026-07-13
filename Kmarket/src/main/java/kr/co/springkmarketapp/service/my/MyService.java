@@ -17,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,16 @@ public class MyService {
     }
     public SellerProfileDTO selectSellerDetail(Integer sellerNo){
         return myDAO.selectSellerDetail(sellerNo);
+    }
+
+
+    public Map<String, Integer> getMyPageSummary(Integer memberNo) {
+        Map<String, Integer> summary = new HashMap<>();
+        summary.put("orderCount", myDAO.selectOrderCount(memberNo));
+        summary.put("couponCount", myDAO.selectCouponCount(memberNo));
+        summary.put("point", myDAO.selectPoint(memberNo));
+        summary.put("qnaCount", myDAO.selectQnaCount(memberNo));
+        return summary;
     }
 
     // 문의하기 - 카테고리 조회
@@ -99,11 +111,12 @@ public class MyService {
         return myDAO.selectPointList(memberNo);
     }
     // 메뉴 - 포인트 적립내역 조회
-    public List<MemberPointDTO> selectPointList(Integer memberNo, int start) {
-        return myDAO.selectPointListWithPaging(memberNo, start, 10);
+    public List<MemberPointDTO> selectPointList(Integer memberNo, String startDate, String endDate, int start) {
+        return myDAO.selectPointListWithPaging(memberNo, startDate, endDate, start, 10);
     }
-    public Integer selectPointCount(Integer memberNo){
-        return myDAO.selectPointCount(memberNo);
+    // 포인트 내역 개수 (기간 조건 포함)
+    public Integer selectPointCount(Integer memberNo, String startDate, String endDate) {
+        return myDAO.selectPointCount(memberNo, startDate, endDate);
     }
 
     // 메인 - 상품평 조회
@@ -127,7 +140,7 @@ public class MyService {
     }
 
     // 메뉴 - 문의내역 전체조회
-    public List<QnaDTO> selectQnaList(Integer memberNo, int start, int size){
+    public List<QnaDTO> selectQnaList(Integer memberNo, int start, int size) {
         return myDAO.selectMyQnaListWithPaging(memberNo, start, size);
     }
 
@@ -140,7 +153,7 @@ public class MyService {
     public Integer selectOrderCount(Integer memberNo,
                                     String startDate,
                                     String endDate){
-        return myDAO.selectOrderCount(memberNo, startDate, endDate);
+        return myDAO.selectOrderCountWithDate(memberNo, startDate, endDate);
     }
 
     // 쿠폰 갯수 조회
@@ -154,7 +167,7 @@ public class MyService {
     }
 
     // 문의내역 갯수 조회
-    public Integer selectQnaCount(Integer memberNo){
+    public Integer selectQnaCount(Integer memberNo) {
         return myDAO.selectQnaCount(memberNo);
     }
 
@@ -185,6 +198,17 @@ public class MyService {
     @Transactional
     public void updateMemberSetting(MemberDTO dto){
         myDAO.updateMemberSetting(dto);
+    }
+
+    // 회원 탈퇴
+    @Transactional
+    public void deleteMember(Integer memberNo) {
+        myDAO.deleteMember(memberNo);
+    }
+
+    // 회원정보 중복 체크
+    public int countMemberByValue(String type, String value, Integer memberNo) {
+        return myDAO.countMemberByValue(type, value, memberNo);
     }
 
 }

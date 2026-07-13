@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.springkmarketapp.dao.order.OrderClaimDAO">
+
+    <insert id="insertOrderClaim" parameterType="kr.co.springkmarketapp.dto.order.OrderClaimDTO"
+            useGeneratedKeys="true" keyProperty="claimNo">
+        INSERT INTO order_claim (
+        order_item_no, member_no, claim_type, claim_reason, detail_reason, status, request_date
+        ) VALUES (
+        #{orderItemNo}, #{memberNo}, #{claimType}, #{claimReason}, #{detailReason}, #{status}, NOW()
+        )
+    </insert>
+</mapper>

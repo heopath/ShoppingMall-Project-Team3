@@ -29,4 +29,7 @@ public class QnaDTO {
     // 작성자 추가 필드
     private String name;
 
+    // 마이페이지 문의내역 상세조회용
+    private Integer parentNo;
+
 }
