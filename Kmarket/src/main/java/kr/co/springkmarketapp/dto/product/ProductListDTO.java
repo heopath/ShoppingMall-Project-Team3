@@ -14,6 +14,7 @@ public class ProductListDTO {
 
     private int price;
     private int discountRate;
+    private int stock;
     private int deliveryFee;
 
     private String imagePath;

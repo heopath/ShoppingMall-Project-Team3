@@ -19,6 +19,7 @@ public class ProductMainDTO {
     private int price;
     private int discountRate;
     private int point;
+    private int stock;
     private int deliveryFee;
 
     private int viewCount;

@@ -269,6 +269,28 @@ public class CartService {
             throw new IllegalArgumentException("수량이 올바르지 않습니다.");
         }
 
+        CartProductDTO product =
+                cartDAO.selectProductForCart(request.getProductNo());
+
+        if (product == null) {
+            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+        }
+
+        if (!"판매중".equals(product.getStatus())) {
+            throw new IllegalArgumentException("현재 판매할 수 없는 상품입니다.");
+        }
+
+        if (product.getStock() == null || product.getStock() <= 0) {
+            throw new IllegalArgumentException("품절된 상품입니다.");
+        }
+
+        if (product.getStock() < request.getQuantity()) {
+            throw new IllegalArgumentException(
+                    "상품 재고가 부족합니다. 현재 재고: "
+                            + product.getStock() + "개"
+            );
+        }
+
         String optionSignature = createOptionSignature(request.getOptionNos());
 
         CartDTO cartDTO = CartDTO.builder()

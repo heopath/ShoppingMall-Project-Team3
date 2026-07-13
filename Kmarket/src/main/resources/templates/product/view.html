@@ -86,8 +86,10 @@
 
                     <div class="price-box">
 
-                        <div class="old-price-row">
-                            <del th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
+                        <div class="old-price-row"
+                             th:if="${product.discountRate > 0}">
+
+                        <del th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
                                 30,000원
                             </del>
 
@@ -96,15 +98,20 @@
                                 10%
                             </span>
 
-                            <span class="coupon-badge"
-                                  th:if="${product.discountRate > 0}">
-                                할인상품
+                            <span class="coupon-badge">
+                                  할인상품
                             </span>
                         </div>
 
                         <div class="sale-price"
                              th:text="${#numbers.formatInteger(product.salePrice, 1, 'COMMA')} + '원'">
                             27,000원
+                        </div>
+
+                        <div class="sold-out-notice"
+                             th:if="${product.stock <= 0}">
+                            <strong>품절</strong>
+                            <span>현재 구매할 수 없는 상품입니다.</span>
                         </div>
 
                         <div class="delivery-coupon-row">
@@ -123,7 +130,9 @@
                                         배송비 3,000원
                                     </span>
 
-                                    <span>배송 예정</span>
+                                    <span th:if="${product.stock > 0}">
+                                        주문 후 평균 3일 이내 배송 예정
+                                    </span>
                                 </div>
 
                                 <p class="delivery-note"
@@ -173,6 +182,7 @@
                             <div class="option-select-wrap">
                                 <select class="option-select"
                                         required
+                                        th:disabled="${product.stock <= 0}"
                                         th:id="|option-${entry.key}|"
                                         th:data-group-no="${entry.key}">
 
@@ -197,6 +207,10 @@
                            th:value="${product.productNo}" />
 
                     <input type="hidden"
+                           id="productStock"
+                           th:value="${product.stock}" />
+
+                    <input type="hidden"
                            id="basePrice"
                            th:value="${product.salePrice}" />
 
@@ -209,9 +223,23 @@
                             </strong>
 
                             <div class="qty-box">
-                                <button type="button" id="minusBtn">-</button>
-                                <input type="text" id="qtyInput" value="1" readonly />
-                                <button type="button" id="plusBtn">+</button>
+                                <button type="button"
+                                        id="minusBtn"
+                                        th:disabled="${product.stock <= 0}">
+                                    -
+                                </button>
+
+                                <input type="text"
+                                       id="qtyInput"
+                                       value="1"
+                                       readonly
+                                       th:disabled="${product.stock <= 0}" />
+
+                                <button type="button"
+                                        id="plusBtn"
+                                        th:disabled="${product.stock <= 0}">
+                                    +
+                                </button>
                             </div>
                         </div>
 
@@ -224,8 +252,18 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button type="button" class="btn-cart">장바구니</button>
-                        <button type="button" class="btn-buy">구매하기</button>
+                        <button type="button"
+                                class="btn-cart"
+                                th:disabled="${product.stock <= 0}">
+                            장바구니
+                        </button>
+
+                        <button type="button"
+                                class="btn-buy"
+                                th:disabled="${product.stock <= 0}"
+                                th:text="${product.stock <= 0 ? '품절' : '구매하기'}">
+                            구매하기
+                        </button>
                     </div>
 
                     <div class="mini-banner" th:if="${product1Banner != null and !#lists.isEmpty(product1Banner)}">
