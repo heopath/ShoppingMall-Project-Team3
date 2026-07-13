@@ -6,6 +6,7 @@ import kr.co.springkmarketapp.dao.order.OrderClaimDAO;
 import kr.co.springkmarketapp.dao.order.OrderItemDAO;
 import kr.co.springkmarketapp.dto.order.ClaimFileDTO;
 import kr.co.springkmarketapp.dto.order.OrderClaimDTO;
+import kr.co.springkmarketapp.service.notification.NotificationService;
 import kr.co.springkmarketapp.util.FileStorageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class OrderClaimService {
     private final OrderItemDAO orderItemDAO;
     private final ClaimFileDAO claimFileDAO; // 1. ClaimFileDAO 주입
     private final FileStorageUtil fileStorageUtil; // 2. 유틸리티 주입
+    private final NotificationService notificationService;
 
 
     public int insertOrderClaim(OrderClaimDTO orderClaimDTO) {
@@ -36,8 +38,15 @@ public class OrderClaimService {
         return orderClaimDAO.selectOrderClaimList();
     }
 
+    @Transactional
     public int updateOrderClaim(OrderClaimDTO orderClaimDTO) {
-        return orderClaimDAO.updateOrderClaim(orderClaimDTO);
+        int result = orderClaimDAO.updateOrderClaim(orderClaimDTO);
+
+        if (result == 1 && "반품완료".equals(orderClaimDTO.getStatus())) {
+            notificationService.createReturnComplete(orderClaimDTO.getClaimNo());
+        }
+
+        return result;
     }
 
     public int deleteOrderClaim(Long claimNo) {

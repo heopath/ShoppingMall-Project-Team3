@@ -74,6 +74,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/my/**",
 
+                                "/api/notifications",
+                                "/api/notifications/**",
+
                                 "/product/cart",
                                 "/product/cart/**",
 

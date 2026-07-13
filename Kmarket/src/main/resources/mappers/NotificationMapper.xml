@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.springkmarketapp.dao.notification.NotificationDAO">
+
+    <insert id="insertNotification" parameterType="kr.co.springkmarketapp.dto.notification.NotificationDTO">
+        INSERT IGNORE INTO notification (
+            member_no, notification_type, title, content, link_url,
+            order_no, delivery_no, event_key, read_yn, reg_date
+        ) VALUES (
+            #{memberNo}, #{notificationType}, #{title}, #{content}, #{linkUrl},
+            #{orderNo}, #{deliveryNo}, #{eventKey}, 'N', NOW()
+        )
+    </insert>
+
+    <select id="selectNotificationsByMemberNo"
+            resultType="kr.co.springkmarketapp.dto.notification.NotificationDTO">
+        SELECT
+            notification_no   AS notificationNo,
+            notification_type AS notificationType,
+            title,
+            content,
+            link_url          AS linkUrl,
+            order_no          AS orderNo,
+            delivery_no       AS deliveryNo,
+            read_yn           AS readYn,
+            reg_date          AS regDate,
+            read_date         AS readDate
+        FROM notification
+        WHERE member_no = #{memberNo}
+        ORDER BY reg_date DESC, notification_no DESC
+        LIMIT 20
+    </select>
+
+    <select id="selectUnreadCount" resultType="int">
+        SELECT COUNT(*)
+        FROM notification
+        WHERE member_no = #{memberNo}
+          AND read_yn = 'N'
+    </select>
+
+    <update id="updateNotificationRead">
+        UPDATE notification
+        SET read_yn = 'Y',
+            read_date = COALESCE(read_date, NOW())
+        WHERE notification_no = #{notificationNo}
+          AND member_no = #{memberNo}
+    </update>
+
+    <delete id="deleteNotification">
+        DELETE FROM notification
+        WHERE notification_no = #{notificationNo}
+          AND member_no = #{memberNo}
+    </delete>
+
+    <select id="selectOrderNotificationTarget"
+            resultType="kr.co.springkmarketapp.dto.notification.NotificationDTO">
+        SELECT
+            o.member_no  AS memberNo,
+            o.order_no   AS orderNo,
+            o.order_code AS orderCode
+        FROM orders o
+        WHERE o.order_no = #{orderNo}
+    </select>
+
+    <select id="selectDeliveryNotificationTarget"
+            resultType="kr.co.springkmarketapp.dto.notification.NotificationDTO">
+        SELECT
+            o.member_no    AS memberNo,
+            o.order_no     AS orderNo,
+            o.order_code   AS orderCode,
+            d.delivery_no  AS deliveryNo
+        FROM delivery d
+        JOIN orders o ON o.order_no = d.order_no
+        WHERE d.delivery_no = #{deliveryNo}
+    </select>
+
+    <select id="selectClaimNotificationTarget"
+            resultType="kr.co.springkmarketapp.dto.notification.NotificationDTO">
+        SELECT
+            oc.member_no  AS memberNo,
+            o.order_no    AS orderNo,
+            o.order_code  AS orderCode,
+            oc.claim_type AS claimType
+        FROM order_claim oc
+        JOIN order_item oi ON oi.order_item_no = oc.order_item_no
+        JOIN orders o ON o.order_no = oi.order_no
+        WHERE oc.claim_no = #{claimNo}
+    </select>
+
+</mapper>
