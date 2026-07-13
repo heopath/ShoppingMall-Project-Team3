@@ -13,16 +13,16 @@
         <!-- Header -->
         <header class="company-header">
             <div class="header-inner">
-                <a href="../index.html" class="logo-img">
+                <a th:href="@{/}" class="logo-img">
                     <img src="../images/main/header_logo.png" alt="Kmarket 로고" />
                 </a>
 
                 <nav class="company-nav">
-                    <a href="./index.html">HOME</a>
-                    <a href="./culture.html" class="active">기업문화</a>
-                    <a href="./story.html">소식과 이야기</a>
-                    <a href="./recruit.html">채용</a>
-                    <a href="./media.html">미디어</a>
+                    <a th:href="@{/company}">HOME</a>
+                    <a th:href="@{/company/culture}" class="active">기업문화</a>
+                    <a th:href="@{/company/story}">소식과 이야기</a>
+                    <a th:href="@{/company/recruit}">채용</a>
+                    <a th:href="@{/company/media}">미디어</a>
                 </nav>
             </div>
         </header>
@@ -160,7 +160,7 @@
                             <p>새로운 쇼핑 경험을 함께 만들고 싶다면 케이마켓과 함께하세요.</p>
                         </div>
 
-                        <a href="./recruit.html" class="cta-btn">채용 페이지 보기</a>
+                        <a th:href="@{/company/recruit}" class="cta-btn">채용 페이지 보기</a>
                     </div>
                 </div>
             </section>
@@ -170,10 +170,10 @@
         <footer class="company-footer">
             <div class="footer-inner">
                 <nav class="footer-links">
-                    <a href="./index.html">HOME</a>
-                    <a href="./culture.html">기업문화</a>
-                    <a href="./news.html">소식과 이야기</a>
-                    <a href="./recruit.html">채용</a>
+                    <a th:href="@{/company}">HOME</a>
+                    <a th:href="@{/company/culture}">기업문화</a>
+                    <a th:href="@{/company/story}">소식과 이야기</a>
+                    <a th:href="@{/company/recruit}">채용</a>
                 </nav>
 
                 <div class="footer-company">

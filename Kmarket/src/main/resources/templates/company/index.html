@@ -17,16 +17,16 @@
         <!-- Header -->
         <header class="company-header">
             <div class="header-inner">
-                <a href="../index.html" class="logo-img">
+                <a th:href="@{/}" class="logo-img">
                     <img src="../images/main/header_logo.png" alt="Kmarket 로고" />
                 </a>
 
                 <nav class="company-nav">
-                    <a href="./index.html" class="active">HOME</a>
-                    <a href="./culture.html">기업문화</a>
-                    <a href="./story.html">소식과 이야기</a>
-                    <a href="./recruit.html">채용</a>
-                    <a href="./media.html">미디어</a>
+                    <a th:href="@{/company}" class="active">HOME</a>
+                    <a th:href="@{/company/culture}">기업문화</a>
+                    <a th:href="@{/company/story}">소식과 이야기</a>
+                    <a th:href="@{/company/recruit}">채용</a>
+                    <a th:href="@{/company/media}">미디어</a>
                 </nav>
             </div>
         </header>
@@ -269,7 +269,7 @@
                                 <h3>케이마켓과 함께 성장할 동료를 기다립니다.</h3>
                                 <p>더 좋은 쇼핑 경험을 만들고 싶은 분이라면 지금 케이마켓과 함께하세요.</p>
                             </div>
-                            <a href="./recruit.html" class="recruit-btn">채용공고 보기</a>
+                            <a th:href="@{/company/recruit}" class="recruit-btn">채용공고 보기</a>
                         </div>
                     </div>
                 </section>
