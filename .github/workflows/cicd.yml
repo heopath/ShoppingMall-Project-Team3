@@ -72,8 +72,8 @@ jobs:
           ssh -i private_key.pem \
             -o StrictHostKeyChecking=no \
             ${{ secrets.AWS_EC2_USER }}@${{ secrets.AWS_EC2_HOST }} << EOF
-            pgrep java | xargs kill -9 2>/dev/null;
-            nohup java -jar /home/${{ secrets.AWS_EC2_USER }}/$JAR_FILE > app.log 2>&1 &
+            ln -sf /home/${{ secrets.AWS_EC2_USER }}/$JAR_FILE /home/${{ secrets.AWS_EC2_USER }}/app.jar
+            sudo systemctl restart spring-kmarket-app
           EOF
 
       - name: Cleanup
