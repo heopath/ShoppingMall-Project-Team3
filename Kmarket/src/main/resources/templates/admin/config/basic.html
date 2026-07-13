@@ -135,21 +135,31 @@
                 <span>HOME &gt; 환경설정 &gt; 기본설정</span>
             </div>
 
-            <section class="config-section">
-                <h3>버전 정보</h3>
+            <form th:action="@{/admin/config/basic}" method="post">
+                <section class="config-section">
+                    <h3>버전 정보</h3>
 
-                <table class="config-table">
-                    <tr>
-                        <th colspan="2">현재 사이트 버전 입니다.</th>
-                    </tr>
-                    <tr>
-                        <td>사이트 버전</td>
-                        <td th:text="${latestVersion != null ? 'Version ' + latestVersion.versionName : 'Version 등록된 버전 없음'}">
-                            Version 등록된 버전 없음
-                        </td>
-                    </tr>
-                </table>
-            </section>
+                    <table class="config-table">
+                        <tr>
+                            <th colspan="2">사이트와 관리자 푸터에 표시할 버전입니다.</th>
+                        </tr>
+                        <tr>
+                            <td>사이트 버전</td>
+                            <td>
+                                <input type="text"
+                                       name="app_version"
+                                       th:value="${appVersion}"
+                                       placeholder="예: 1.0.0"
+                                       required>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="btn-area">
+                        <button type="submit" class="submit-btn">수정하기</button>
+                    </div>
+                </section>
+            </form>
 
             <!-- 사이트 -->
             <form th:action="@{/admin/config/basic}" method="post">
