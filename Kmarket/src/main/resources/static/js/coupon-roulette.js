@@ -20,7 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
             labels.forEach(function (label, index) {
                 const prize = prizes[index % Math.max(prizes.length, 1)];
                 label.textContent = prize ? prize.couponName : "발급 가능한 쿠폰 없음";
-                label.title = prize ? `${prize.couponName} (${prize.discountText})` : "";
+                label.title = prize
+                    ? `${prize.couponName} (${prize.discountText})${prize.alreadyIssued ? " - 이미 받은 쿠폰" : ""}`
+                    : "";
                 label.dataset.couponNo = prize ? String(prize.couponNo) : "";
             });
 
@@ -73,8 +75,13 @@ document.addEventListener("DOMContentLoaded", function () {
             result.textContent = "룰렛이 돌아가는 중...";
 
             window.setTimeout(function () {
-                result.textContent = `🎉 ${data.discountText} · ${data.couponName} 발급 완료!`;
-                button.textContent = "한 번 더 돌리기";
+                if (data.alreadyIssued) {
+                    result.textContent = `이미 받은 쿠폰입니다. (${data.couponName}) 다시 룰렛을 돌려주세요.`;
+                    button.textContent = "다시 돌리기";
+                } else {
+                    result.textContent = `🎉 ${data.discountText} · ${data.couponName} 발급 완료!`;
+                    button.textContent = "한 번 더 돌리기";
+                }
                 loadPrizes();
             }, 4100);
         } catch (error) {
