@@ -81,9 +81,7 @@
         CASE
         WHEN o.order_status = '주문취소' THEN '주문취소'
         WHEN o.order_status IN ('반품진행', '반품완료', '교환진행', '교환완료') THEN o.order_status
-        WHEN DATEDIFF(NOW(), d.receipt_date) >= 3 THEN '배송완료'
-        WHEN DATEDIFF(NOW(), d.receipt_date) >= 1 THEN '배송중'
-        ELSE '배송준비'
+        ELSE d.delivery_status
         END AS deliveryStatus,
         d.receipt_date      AS receiptDate
         FROM delivery d
@@ -161,6 +159,23 @@
         delivery_status = '배송중',
         shipped_date = NOW()
         WHERE delivery_no = #{deliveryNo}
+    </update>
+
+    <select id="selectShippingDeliveryNosForCompletion" resultType="int">
+        SELECT delivery_no
+        FROM delivery
+        WHERE delivery_status = '배송중'
+          AND shipped_date IS NOT NULL
+          AND shipped_date &lt;= DATE_SUB(NOW(), INTERVAL 3 DAY)
+        ORDER BY delivery_no
+    </select>
+
+    <update id="updateDeliveryComplete">
+        UPDATE delivery
+        SET delivery_status = '배송완료',
+            delivered_date = NOW()
+        WHERE delivery_no = #{deliveryNo}
+          AND delivery_status = '배송중'
     </update>
 
 </mapper>

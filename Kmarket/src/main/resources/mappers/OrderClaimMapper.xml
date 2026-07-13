@@ -10,4 +10,11 @@
         #{orderItemNo}, #{memberNo}, #{claimType}, #{claimReason}, #{detailReason}, #{status}, NOW()
         )
     </insert>
+
+    <update id="updateOrderClaim" parameterType="kr.co.springkmarketapp.dto.order.OrderClaimDTO">
+        UPDATE order_claim
+        SET status = #{status},
+            process_date = NOW()
+        WHERE claim_no = #{claimNo}
+    </update>
 </mapper>

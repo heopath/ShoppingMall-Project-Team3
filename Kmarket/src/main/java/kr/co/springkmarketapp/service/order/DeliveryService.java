@@ -4,8 +4,10 @@ import kr.co.springkmarketapp.dao.admin.AdminOrderDAO;
 import kr.co.springkmarketapp.dao.order.DeliveryDAO;
 import kr.co.springkmarketapp.dto.order.DeliveryDTO;
 import kr.co.springkmarketapp.dto.order.DeliveryDetailDTO;
+import kr.co.springkmarketapp.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Map;
 public class DeliveryService {
 
     private final DeliveryDAO deliveryDAO;
+    private final NotificationService notificationService;
 
     public int insertDelivery(DeliveryDTO deliveryDTO) {
         return deliveryDAO.insertDelivery(deliveryDTO);
@@ -68,6 +71,7 @@ public class DeliveryService {
         return deliveries;
     }
 
+    @Transactional
     public void updateInvoiceByDeliveryNo(Integer deliveryNo,
                                           String courier,
                                           String invoiceNo,
@@ -94,6 +98,19 @@ public class DeliveryService {
 
         if (result != 1) {
             throw new IllegalArgumentException("배송정보 수정에 실패했습니다.");
+        }
+
+        notificationService.createDeliveryShipping(deliveryNo);
+    }
+
+    @Transactional
+    public void completeArrivedDeliveries() {
+        List<Integer> deliveryNos = deliveryDAO.selectShippingDeliveryNosForCompletion();
+
+        for (Integer deliveryNo : deliveryNos) {
+            if (deliveryDAO.updateDeliveryComplete(deliveryNo) == 1) {
+                notificationService.createDeliveryComplete(deliveryNo);
+            }
         }
     }
 

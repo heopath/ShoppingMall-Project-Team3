@@ -1,3 +1,6 @@
+<link rel="stylesheet" th:href="@{/css/common/notification.css}" />
+<script th:src="@{/js/common/notification.js}" defer></script>
+
 <!-- Top ad banner -->
 <!-- DB 배너가 있을 때 -->
 <div class="top-bar"
@@ -24,6 +27,7 @@
     <a th:href="@{/}" class="logo-img">
         <img th:if="${settings.header_logo != null and settings.header_logo != ''}"
              th:src="${settings.header_logo}"
+             onerror="this.onerror=null; this.src='/images/main/header_logo.png';"
              alt="Kmarket 로고" />
 
         <img th:if="${settings.header_logo == null or settings.header_logo == ''}"
@@ -56,10 +60,47 @@
     <!-- 로그인 -->
     <nav class="header-links" th:if="${#authorization.expression('isAuthenticated()')}">
         <span class="login-user"> 안녕하세요, <span class="name" th:text="${#authentication.principal.member.name}"></span><span class="suffix">님</span></span>
+        <div class="notification-wrap" id="notificationWrap">
+            <button type="button"
+                    class="notification-button"
+                    id="notificationButton"
+                    aria-label="알림 목록 열기"
+                    aria-expanded="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
+                </svg>
+                <span class="notification-badge" id="notificationBadge" hidden>0</span>
+            </button>
+
+            <section class="notification-panel"
+                     id="notificationPanel"
+                     aria-label="알림 목록"
+                     hidden>
+                <div class="notification-panel-head">
+                    <div>
+                        <strong>알림</strong>
+                        <span id="notificationSummary">새 알림이 없습니다.</span>
+                    </div>
+                    <button type="button"
+                            class="notification-panel-close"
+                            id="notificationPanelClose"
+                            aria-label="알림 목록 닫기">×</button>
+                </div>
+                <div class="notification-list" id="notificationList">
+                    <p class="notification-empty">알림을 불러오는 중입니다.</p>
+                </div>
+            </section>
+        </div>
         <a th:href="@{/member/logout}">로그아웃</a>
         <a th:href="@{/my/home}">마이페이지</a>
         <a th:href="@{/product/cart}">장바구니</a>
         <a th:href="@{/cs/index}">고객센터</a>
+        <a th:if="${#authorization.expression('hasRole(''SELLER'')')}"
+           class="header-role-link"
+           th:href="@{/admin/coupon/list}">쿠폰등록</a>
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+           class="header-role-link"
+           th:href="@{/admin}">관리자</a>
     </nav>
     <!-- 비로그인 -->
     <nav class="header-links"
@@ -67,21 +108,6 @@
         <a th:href="@{/member/login}">로그인</a>
         <a th:href="@{/member/join}">회원가입</a>
     </nav>
-
-
-    <!-- 판매자 전용 빠른 메뉴 -->
-    <nav class="header-links"
-         th:if="${#authorization.expression('hasRole(''SELLER'')')}">
-        <a th:href="@{/admin/coupon/list}">쿠폰등록</a>
-    </nav>
-
-    <!-- 관리자 -->
-    <nav class="header-links"
-         th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-        <a th:href="@{/admin}">관리자</a>
-    </nav>
-
-
 </header>
 
 <!-- GNB -->

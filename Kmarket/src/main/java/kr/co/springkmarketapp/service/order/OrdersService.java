@@ -6,6 +6,7 @@ import kr.co.springkmarketapp.dao.order.OrdersDAO;
 import kr.co.springkmarketapp.dto.coupon.OrderCouponDTO;
 import kr.co.springkmarketapp.dto.my.MemberPointDTO;
 import kr.co.springkmarketapp.dto.order.*;
+import kr.co.springkmarketapp.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class OrdersService {
     private final CouponDAO couponDAO;
     private final CartDAO cartDAO;
     private final OrdersDAO ordersDAO;
+    private final NotificationService notificationService;
 
     public OrderDiscountDTO getOrderDiscountInfo(Integer memberNo) {
 
@@ -178,6 +180,8 @@ public class OrdersService {
 
         cartDAO.deleteCartOptionsByMemberNo(memberNo, cartNos);
         cartDAO.deleteCartsByMemberNo(memberNo, cartNos);
+
+        notificationService.createOrderComplete(orderNo);
 
         return orderNo;
     }
