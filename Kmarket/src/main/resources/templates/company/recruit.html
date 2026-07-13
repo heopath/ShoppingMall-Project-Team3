@@ -66,16 +66,27 @@
                     <div class="section-head appear show">
                         <div>
                             <span>Open Positions</span>
-                            <h2>진행 중인 채용공고</h2>
-                            <p>현재 케이마켓에서 함께할 동료를 찾고 있는 포지션입니다.</p>
+                            <h2>채용공고</h2>
+                            <p>진행 중인 공고와 종료된 공고를 함께 확인할 수 있습니다.</p>
                         </div>
 
                         <div class="recruit-filter">
-                            <button type="button" class="active" data-dept="all">전체</button>
-                            <button type="button" data-dept="기획">기획</button>
-                            <button type="button" data-dept="개발">개발</button>
-                            <button type="button" data-dept="운영">운영</button>
-                            <button type="button" data-dept="마케팅">마케팅</button>
+                            <a th:href="@{/company/recruit}"
+                               th:classappend="${department == null or department == ''} ? 'active'">전체</a>
+                            <a th:href="@{/company/recruit(department='IT')}"
+                               th:classappend="${department == 'IT'} ? 'active'">IT</a>
+                            <a th:href="@{/company/recruit(department='개발')}"
+                               th:classappend="${department == '개발'} ? 'active'">개발</a>
+                            <a th:href="@{/company/recruit(department='기획')}"
+                               th:classappend="${department == '기획'} ? 'active'">기획</a>
+                            <a th:href="@{/company/recruit(department='운영')}"
+                               th:classappend="${department == '운영'} ? 'active'">운영</a>
+                            <a th:href="@{/company/recruit(department='경영지원')}"
+                               th:classappend="${department == '경영지원'} ? 'active'">경영지원</a>
+                            <a th:href="@{/company/recruit(department='영업')}"
+                               th:classappend="${department == '영업'} ? 'active'">영업</a>
+                            <a th:href="@{/company/recruit(department='마케팅')}"
+                               th:classappend="${department == '마케팅'} ? 'active'">마케팅</a>
                         </div>
                     </div>
 
@@ -104,66 +115,50 @@
                             </thead>
 
                             <tbody>
-                                <tr data-dept="마케팅">
-                                    <td>4</td>
-                                    <td>마케팅</td>
-                                    <td>경력 4 ~ 15년</td>
-                                    <td>정규직</td>
-                                    <td>
-                                        <a href="#">광고 플랫폼 기획 담당자 모집</a>
-                                    </td>
-                                    <td><span class="status open">모집중</span></td>
-                                    <td>2025-03-01 ~ 2025-03-31</td>
+                                <tr th:if="${#lists.isEmpty(recruitList)}" class="recruit-empty-row">
+                                    <td colspan="7">현재 진행 중인 채용공고가 없습니다.</td>
                                 </tr>
-
-                                <tr data-dept="개발">
-                                    <td>3</td>
-                                    <td>개발</td>
-                                    <td>경력 2 ~ 15년</td>
-                                    <td>정규직</td>
+                                <tr th:each="recruit : ${recruitList}"
+                                    th:attr="data-dept=${recruit.department}">
+                                    <td th:text="${recruit.recruitNo}">1</td>
+                                    <td th:text="${recruit.department}">개발</td>
+                                    <td th:text="${recruit.career}">경력</td>
+                                    <td th:text="${recruit.recruitType}">정규직</td>
                                     <td>
-                                        <a href="#">IT 인프라 상시 영입</a>
+                                        <a th:href="@{/company/recruit/{recruitNo}(recruitNo=${recruit.recruitNo})}"
+                                           th:text="${recruit.title}">채용공고 제목</a>
                                     </td>
-                                    <td><span class="status open">모집중</span></td>
-                                    <td>2025-03-01 ~ 2025-04-30</td>
-                                </tr>
-
-                                <tr data-dept="운영">
-                                    <td>2</td>
-                                    <td>운영</td>
-                                    <td>무관</td>
-                                    <td>계약직</td>
                                     <td>
-                                        <a href="#">단기 아르바이트 모집</a>
+                                        <span class="status"
+                                              th:classappend="${recruit.open} ? 'open' : (${recruit.upcoming} ? 'upcoming' : 'closed')"
+                                              th:text="${recruit.displayStatus}">모집중</span>
                                     </td>
-                                    <td><span class="status closed">종료</span></td>
-                                    <td>2025-02-01 ~ 2025-02-28</td>
-                                </tr>
-
-                                <tr data-dept="기획">
-                                    <td>1</td>
-                                    <td>기획</td>
-                                    <td>신입</td>
-                                    <td>계약직</td>
                                     <td>
-                                        <a href="#">경영지원 직원 채용 공고</a>
+                                        <span th:text="${recruit.startDate}">2026-01-01</span>
+                                        ~
+                                        <span th:text="${recruit.endDate}">2026-12-31</span>
                                     </td>
-                                    <td><span class="status closed">종료</span></td>
-                                    <td>2025-01-01 ~ 2025-01-31</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="pagination">
-                        <a href="#" class="prev">이전</a>
-                        <a href="#" class="active">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#" class="next">다음</a>
-                    </div>
+                    <nav class="pagination" th:if="${totalCount > 0}" aria-label="채용공고 페이지 이동">
+                        <a th:if="${currentPage > 1}"
+                           th:href="@{/company/recruit(page=${currentPage - 1}, department=${department})}"
+                           class="prev">이전</a>
+                        <span th:unless="${currentPage > 1}" class="prev disabled">이전</span>
+
+                        <a th:each="pageNo : ${#numbers.sequence(startPage, endPage)}"
+                           th:href="@{/company/recruit(page=${pageNo}, department=${department})}"
+                           th:text="${pageNo}"
+                           th:classappend="${pageNo == currentPage} ? 'active'">1</a>
+
+                        <a th:if="${currentPage < totalPages}"
+                           th:href="@{/company/recruit(page=${currentPage + 1}, department=${department})}"
+                           class="next">다음</a>
+                        <span th:unless="${currentPage < totalPages}" class="next disabled">다음</span>
+                    </nav>
                 </div>
             </section>
 
@@ -208,26 +203,5 @@
             <img src="../images/main/top.png" alt="위로 이동" />
         </a>
 
-        <script>
-            const filterButtons = document.querySelectorAll(".recruit-filter button");
-            const recruitRows = document.querySelectorAll(".recruit-table tbody tr");
-
-            filterButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    const dept = button.dataset.dept;
-
-                    filterButtons.forEach((btn) => btn.classList.remove("active"));
-                    button.classList.add("active");
-
-                    recruitRows.forEach((row) => {
-                        if (dept === "all" || row.dataset.dept === dept) {
-                            row.style.display = "";
-                        } else {
-                            row.style.display = "none";
-                        }
-                    });
-                });
-            });
-        </script>
     </body>
 </html>

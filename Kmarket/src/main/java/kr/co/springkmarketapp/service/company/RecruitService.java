@@ -25,6 +25,26 @@ public class RecruitService {
         return recruitDAO.selectRecruitList();
     }
 
+    public List<RecruitDTO> selectPublicRecruitList() {
+        return recruitDAO.selectPublicRecruitList();
+    }
+
+    public RecruitDTO selectPublicRecruit(Integer recruitNo) {
+        return recruitDAO.selectPublicRecruit(recruitNo);
+    }
+
+    public List<RecruitDTO> selectPublicRecruitList(String department, int offset, int limit) {
+        return recruitDAO.selectPublicRecruitListByPage(
+                normalizeKeyword(department),
+                offset,
+                limit
+        );
+    }
+
+    public int countPublicRecruitList(String department) {
+        return recruitDAO.countPublicRecruitList(normalizeKeyword(department));
+    }
+
     public List<RecruitDTO> selectRecruitList(String searchType, String keyword, String status, int offset, int limit) {
         return recruitDAO.selectRecruitListByPage(searchType, normalizeKeyword(keyword), normalizeKeyword(status), offset, limit);
     }

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <th:block th:replace="~{common/_site_head :: head('채용공고 상세')}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/company/company_inc.css}" />
+    <link rel="stylesheet" th:href="@{/css/company/recruit.css}" />
+</head>
+<body id="top">
+<header class="company-header">
+    <div class="header-inner">
+        <a th:href="@{/}" class="logo-img">
+            <img th:src="@{/images/main/header_logo.png}" alt="Kmarket 로고" />
+        </a>
+        <nav class="company-nav">
+            <a th:href="@{/company}">HOME</a>
+            <a th:href="@{/company/culture}">기업문화</a>
+            <a th:href="@{/company/story}">소식과 이야기</a>
+            <a th:href="@{/company/recruit}" class="active">채용</a>
+            <a th:href="@{/company/media}">미디어</a>
+        </nav>
+    </div>
+</header>
+
+<main class="recruit-page">
+    <section class="recruit-section recruit-detail-section">
+        <div class="recruit-inner">
+            <div class="section-head">
+                <div>
+                    <span>Open Position</span>
+                    <h2>채용공고 상세</h2>
+                </div>
+            </div>
+
+            <article class="recruit-detail-card">
+                <header class="recruit-detail-head">
+                    <span class="status"
+                          th:classappend="${recruit.open} ? 'open' : (${recruit.upcoming} ? 'upcoming' : 'closed')"
+                          th:text="${recruit.displayStatus}">모집중</span>
+                    <h1 th:text="${recruit.title}">채용공고 제목</h1>
+                </header>
+
+                <dl class="recruit-detail-meta">
+                    <div>
+                        <dt>채용부서</dt>
+                        <dd th:text="${recruit.department}">개발</dd>
+                    </div>
+                    <div>
+                        <dt>경력사항</dt>
+                        <dd th:text="${recruit.career}">경력</dd>
+                    </div>
+                    <div>
+                        <dt>채용형태</dt>
+                        <dd th:text="${recruit.recruitType}">정규직</dd>
+                    </div>
+                    <div>
+                        <dt>모집기간</dt>
+                        <dd>
+                            <span th:text="${recruit.startDate}">2026-01-01</span>
+                            ~
+                            <span th:text="${recruit.endDate}">2026-12-31</span>
+                        </dd>
+                    </div>
+                </dl>
+
+                <div class="recruit-detail-content" th:text="${recruit.note}">
+                    채용공고 상세 내용
+                </div>
+            </article>
+
+            <div class="recruit-detail-actions">
+                <a th:href="@{/company/recruit}" class="recruit-list-btn">목록으로</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="company-footer">
+    <div class="footer-inner">
+        <nav class="footer-links">
+            <a th:href="@{/company}">HOME</a>
+            <a th:href="@{/company/culture}">기업문화</a>
+            <a th:href="@{/company/story}">소식과 이야기</a>
+            <a th:href="@{/company/recruit}">채용</a>
+            <a th:href="@{/company/media}">미디어</a>
+        </nav>
+        <div class="footer-company">
+            <div class="footer-logo-box">
+                <img th:src="@{/images/main/footer_logo.png}" alt="Kmarket 흑백 로고" />
+            </div>
+            <div class="footer-info">
+                <h4>(주)케이마켓</h4>
+                <p>부산광역시 부산진구 중앙대로 103 그린타워 13층</p>
+                <p>대표이사 : 홍길동</p>
+                <p>사업자등록번호 : 123-45-12345</p>
+            </div>
+            <div class="footer-cs">
+                <h4>고객센터</h4>
+                <p>Tel : 1234-5678 평일 09:00~18:00</p>
+                <p>전자금융거래 분쟁 담당 : 1234-1234</p>
+                <p>365일 09:00~18:00</p>
+            </div>
+        </div>
+        <p class="copyright">Copyright © 2025 Kmarket. All rights reserved.</p>
+    </div>
+</footer>
+
+<a href="#top" class="top-btn">
+    <img th:src="@{/images/main/top.png}" alt="위로 이동" />
+</a>
+</body>
+</html>

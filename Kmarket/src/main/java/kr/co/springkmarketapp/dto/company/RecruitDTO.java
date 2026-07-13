@@ -24,4 +24,30 @@ public class RecruitDTO {
     private String note;
     private String status;
     private LocalDateTime regDate;
+
+    public boolean isOpen() {
+        LocalDate today = LocalDate.now();
+
+        return "모집중".equals(status)
+                && (startDate == null || !startDate.isAfter(today))
+                && (endDate == null || !endDate.isBefore(today));
+    }
+
+    public boolean isUpcoming() {
+        return "모집중".equals(status)
+                && startDate != null
+                && startDate.isAfter(LocalDate.now());
+    }
+
+    public String getDisplayStatus() {
+        if (isOpen()) {
+            return "모집중";
+        }
+
+        if (isUpcoming()) {
+            return "모집예정";
+        }
+
+        return "모집종료";
+    }
 }

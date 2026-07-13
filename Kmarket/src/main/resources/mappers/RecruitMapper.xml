@@ -56,6 +56,57 @@
         ORDER BY r.recruit_no DESC
     </select>
 
+    <select id="selectPublicRecruitList" resultType="kr.co.springkmarketapp.dto.company.RecruitDTO">
+        SELECT <include refid="recruitColumns" />
+        FROM recruit r
+        LEFT JOIN member m ON r.writer_no = m.member_no
+        ORDER BY
+        CASE
+            WHEN r.status = '모집중'
+                AND (r.start_date IS NULL OR r.start_date &lt;= CURDATE())
+                AND (r.end_date IS NULL OR r.end_date &gt;= CURDATE()) THEN 0
+            WHEN r.status = '모집중' AND r.start_date &gt; CURDATE() THEN 1
+            ELSE 2
+        END,
+        r.recruit_no DESC
+    </select>
+
+    <select id="selectPublicRecruit" parameterType="int" resultType="kr.co.springkmarketapp.dto.company.RecruitDTO">
+        SELECT <include refid="recruitColumns" />
+        FROM recruit r
+        LEFT JOIN member m ON r.writer_no = m.member_no
+        WHERE r.recruit_no = #{recruitNo}
+    </select>
+
+    <select id="selectPublicRecruitListByPage" resultType="kr.co.springkmarketapp.dto.company.RecruitDTO">
+        SELECT <include refid="recruitColumns" />
+        FROM recruit r
+        LEFT JOIN member m ON r.writer_no = m.member_no
+        WHERE 1 = 1
+        <if test="department != null and department != ''">
+            AND r.department = #{department}
+        </if>
+        ORDER BY
+        CASE
+            WHEN r.status = '모집중'
+                AND (r.start_date IS NULL OR r.start_date &lt;= CURDATE())
+                AND (r.end_date IS NULL OR r.end_date &gt;= CURDATE()) THEN 0
+            WHEN r.status = '모집중' AND r.start_date &gt; CURDATE() THEN 1
+            ELSE 2
+        END,
+        r.recruit_no DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countPublicRecruitList" resultType="int">
+        SELECT COUNT(*)
+        FROM recruit r
+        WHERE 1 = 1
+        <if test="department != null and department != ''">
+            AND r.department = #{department}
+        </if>
+    </select>
+
     <select id="selectRecruitListByPage" resultType="kr.co.springkmarketapp.dto.company.RecruitDTO">
         SELECT <include refid="recruitColumns" />
         FROM recruit r

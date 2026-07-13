@@ -316,7 +316,7 @@ public class AdminCsController {
                                 @RequestParam(required = false, defaultValue = "1") int page,
                                 @RequestParam(required = false) String searchType,
                                 @RequestParam(required = false) String keyword,
-                                @RequestParam(required = false) String status,
+                                @RequestParam(required = false) String currentStatus,
                                 RedirectAttributes redirectAttributes) {
         RecruitDTO old = recruitService.selectRecruit(recruitDTO.getRecruitNo());
         if (old != null) {
@@ -329,7 +329,7 @@ public class AdminCsController {
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "수정할 채용공고를 찾을 수 없습니다.");
         }
-        return "redirect:" + buildRedirectUrl("/admin/cs/recruit/list", page, searchType, keyword, status);
+        return "redirect:" + buildRedirectUrl("/admin/cs/recruit/list", page, searchType, keyword, currentStatus);
     }
 
     @PostMapping("/admin/cs/recruit/status")

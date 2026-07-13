@@ -11,6 +11,12 @@ public interface RecruitDAO {
     int insertRecruit(RecruitDTO recruitDTO);
     RecruitDTO selectRecruit(Integer recruitNo);
     List<RecruitDTO> selectRecruitList();
+    List<RecruitDTO> selectPublicRecruitList();
+    RecruitDTO selectPublicRecruit(Integer recruitNo);
+    List<RecruitDTO> selectPublicRecruitListByPage(@Param("department") String department,
+                                                    @Param("offset") int offset,
+                                                    @Param("limit") int limit);
+    int countPublicRecruitList(@Param("department") String department);
     List<RecruitDTO> selectRecruitListByPage(@Param("searchType") String searchType,
                                               @Param("keyword") String keyword,
                                               @Param("status") String status,
