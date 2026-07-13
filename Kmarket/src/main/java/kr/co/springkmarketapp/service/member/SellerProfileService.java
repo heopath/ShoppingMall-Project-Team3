@@ -19,6 +19,10 @@ public class SellerProfileService {
         return sellerProfileDAO.selectSellerProfile(sellerNo);
     }
 
+    public SellerProfileDTO selectSellerProfileByMemberNo(Integer memberNo) {
+        return sellerProfileDAO.selectSellerProfileByMemberNo(memberNo);
+    }
+
     public List<SellerProfileDTO> selectSellerProfileList() {
         return sellerProfileDAO.selectSellerProfileList();
     }
@@ -107,4 +111,3 @@ public class SellerProfileService {
         return sellerProfileDAO.countTel(tel);
     }
 }
-

@@ -41,6 +41,28 @@ public interface CouponDAO {
             @Param("keyword") String keyword
     );
 
+    List<CouponDTO> selectCouponListBySellerWithPaging(
+            @Param("sellerNo") Integer sellerNo,
+            @Param("offset") int offset,
+            @Param("limit") int limit
+    );
+
+    List<CouponDTO> selectCouponListBySellerSearchWithPaging(
+            @Param("sellerNo") Integer sellerNo,
+            @Param("searchType") String searchType,
+            @Param("keyword") String keyword,
+            @Param("offset") int offset,
+            @Param("limit") int limit
+    );
+
+    int countCouponListBySeller(@Param("sellerNo") Integer sellerNo);
+
+    int countCouponListBySellerSearch(
+            @Param("sellerNo") Integer sellerNo,
+            @Param("searchType") String searchType,
+            @Param("keyword") String keyword
+    );
+
     int updateCoupon(CouponDTO couponDTO);
 
     int updateCouponStatus(

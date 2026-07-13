@@ -69,6 +69,12 @@
     </nav>
 
 
+    <!-- 판매자 전용 빠른 메뉴 -->
+    <nav class="header-links"
+         th:if="${#authorization.expression('hasRole(''SELLER'')')}">
+        <a th:href="@{/admin/coupon/list}">쿠폰등록</a>
+    </nav>
+
     <!-- 관리자 -->
     <nav class="header-links"
          th:if="${#authorization.expression('hasRole(''ADMIN'')')}">

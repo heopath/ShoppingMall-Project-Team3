@@ -18,7 +18,15 @@
         c.caution,
         c.status,
         c.reg_date AS regDate,
-        sp.company_name AS companyName
+        sp.company_name AS companyName,
+        (SELECT COUNT(*)
+        FROM coupon_issue ci
+        WHERE ci.coupon_no = c.coupon_no
+        AND ci.status NOT IN ('삭제', 'DELETED')) AS issuedCount,
+        (SELECT COUNT(*)
+        FROM coupon_issue ci
+        WHERE ci.coupon_no = c.coupon_no
+        AND (ci.status IN ('사용', 'USED') OR ci.used_date IS NOT NULL)) AS usedCount
     </sql>
 
     <sql id="couponFrom">
@@ -46,10 +54,10 @@
                     </when>
                     <otherwise>
                         (
-                            CAST(c.coupon_no AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
-                            OR c.coupon_code LIKE CONCAT('%', #{keyword}, '%')
-                            OR c.coupon_name LIKE CONCAT('%', #{keyword}, '%')
-                            OR sp.company_name LIKE CONCAT('%', #{keyword}, '%')
+                        CAST(c.coupon_no AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
+                        OR c.coupon_code LIKE CONCAT('%', #{keyword}, '%')
+                        OR c.coupon_name LIKE CONCAT('%', #{keyword}, '%')
+                        OR sp.company_name LIKE CONCAT('%', #{keyword}, '%')
                         )
                     </otherwise>
                 </choose>
@@ -92,6 +100,68 @@
         <include refid="couponWhere" />
     </select>
 
+    <select id="selectCouponListBySellerWithPaging" resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
+        SELECT <include refid="couponColumns" />
+        <include refid="couponFrom" />
+        WHERE c.seller_no = #{sellerNo}
+        AND c.status NOT IN ('DELETED', '삭제')
+        ORDER BY c.coupon_no DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="selectCouponListBySellerSearchWithPaging" resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
+        SELECT <include refid="couponColumns" />
+        <include refid="couponFrom" />
+        WHERE c.seller_no = #{sellerNo}
+        AND c.status NOT IN ('DELETED', '삭제')
+        <if test="keyword != null and keyword != ''">
+            AND
+            <choose>
+                <when test="searchType == 'couponNo'">
+                    CAST(c.coupon_no AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="searchType == 'couponName'">
+                    c.coupon_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <otherwise>
+                    (CAST(c.coupon_no AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
+                    OR c.coupon_name LIKE CONCAT('%', #{keyword}, '%'))
+                </otherwise>
+            </choose>
+        </if>
+        ORDER BY c.coupon_no DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countCouponListBySeller" resultType="int">
+        SELECT COUNT(*)
+        FROM coupon c
+        WHERE c.seller_no = #{sellerNo}
+        AND c.status NOT IN ('DELETED', '삭제')
+    </select>
+
+    <select id="countCouponListBySellerSearch" resultType="int">
+        SELECT COUNT(*)
+        FROM coupon c
+        WHERE c.seller_no = #{sellerNo}
+        AND c.status NOT IN ('DELETED', '삭제')
+        <if test="keyword != null and keyword != ''">
+            AND
+            <choose>
+                <when test="searchType == 'couponNo'">
+                    CAST(c.coupon_no AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="searchType == 'couponName'">
+                    c.coupon_name LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <otherwise>
+                    (CAST(c.coupon_no AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
+                    OR c.coupon_name LIKE CONCAT('%', #{keyword}, '%'))
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
     <select id="selectCoupon" parameterType="int" resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
         SELECT <include refid="couponColumns" />
         <include refid="couponFrom" />
@@ -101,55 +171,55 @@
     <insert id="insertCoupon" parameterType="kr.co.springkmarketapp.dto.coupon.CouponDTO" useGeneratedKeys="true" keyProperty="couponNo">
         INSERT INTO coupon
         (
-            coupon_code,
-            seller_no,
-            coupon_type,
-            coupon_name,
-            benefit_type,
-            benefit_value,
-            min_order_price,
-            max_discount_price,
-            issue_limit,
-            start_date,
-            end_date,
-            caution,
-            status,
-            reg_date
+        coupon_code,
+        seller_no,
+        coupon_type,
+        coupon_name,
+        benefit_type,
+        benefit_value,
+        min_order_price,
+        max_discount_price,
+        issue_limit,
+        start_date,
+        end_date,
+        caution,
+        status,
+        reg_date
         )
         VALUES
         (
-            #{couponCode},
-            #{sellerNo},
-            #{couponType},
-            #{couponName},
-            #{benefitType},
-            COALESCE(#{benefitValue}, 0),
-            COALESCE(#{minOrderPrice}, 0),
-            COALESCE(#{maxDiscountPrice}, 0),
-            #{issueLimit},
-            #{startDate},
-            #{endDate},
-            #{caution},
-            COALESCE(#{status}, '사용'),
-            NOW()
+        #{couponCode},
+        #{sellerNo},
+        #{couponType},
+        #{couponName},
+        #{benefitType},
+        COALESCE(#{benefitValue}, 0),
+        COALESCE(#{minOrderPrice}, 0),
+        COALESCE(#{maxDiscountPrice}, 0),
+        #{issueLimit},
+        #{startDate},
+        #{endDate},
+        #{caution},
+        COALESCE(#{status}, '사용'),
+        NOW()
         )
     </insert>
 
     <update id="updateCoupon" parameterType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
         UPDATE coupon
         SET coupon_code = #{couponCode},
-            seller_no = #{sellerNo},
-            coupon_type = #{couponType},
-            coupon_name = #{couponName},
-            benefit_type = #{benefitType},
-            benefit_value = COALESCE(#{benefitValue}, 0),
-            min_order_price = COALESCE(#{minOrderPrice}, 0),
-            max_discount_price = COALESCE(#{maxDiscountPrice}, 0),
-            issue_limit = #{issueLimit},
-            start_date = #{startDate},
-            end_date = #{endDate},
-            caution = #{caution},
-            status = #{status}
+        seller_no = #{sellerNo},
+        coupon_type = #{couponType},
+        coupon_name = #{couponName},
+        benefit_type = #{benefitType},
+        benefit_value = COALESCE(#{benefitValue}, 0),
+        min_order_price = COALESCE(#{minOrderPrice}, 0),
+        max_discount_price = COALESCE(#{maxDiscountPrice}, 0),
+        issue_limit = #{issueLimit},
+        start_date = #{startDate},
+        end_date = #{endDate},
+        caution = #{caution},
+        status = #{status}
         WHERE coupon_no = #{couponNo}
     </update>
 
@@ -159,11 +229,11 @@
         WHERE coupon_no = #{couponNo}
     </update>
 
-<!--    <update id="deleteCoupon" parameterType="int">-->
-<!--        UPDATE coupon-->
-<!--        SET status = '삭제'-->
-<!--        WHERE coupon_no = #{couponNo}-->
-<!--    </update>-->
+    <!--    <update id="deleteCoupon" parameterType="int">-->
+    <!--        UPDATE coupon-->
+    <!--        SET status = '삭제'-->
+    <!--        WHERE coupon_no = #{couponNo}-->
+    <!--    </update>-->
 
     <update id="deleteCoupons">
         UPDATE coupon
@@ -228,6 +298,15 @@
         AND c.status IN ('ACTIVE', '사용')
         AND (c.start_date IS NULL OR CURDATE() >= c.start_date)
         AND (c.end_date IS NULL OR CURDATE() &lt;= c.end_date)
+        AND (
+        c.issue_limit IS NULL
+        OR c.issue_limit >= (
+        SELECT COUNT(*)
+        FROM coupon_issue limit_ci
+        WHERE limit_ci.coupon_no = c.coupon_no
+        AND limit_ci.status NOT IN ('삭제', 'DELETED')
+        )
+        )
 
         ORDER BY ci.issue_no DESC
 
@@ -284,6 +363,15 @@
         AND c.status IN ('ACTIVE', '사용')
         AND (c.start_date IS NULL OR CURDATE() >= c.start_date)
         AND (c.end_date IS NULL OR CURDATE() &lt;= c.end_date)
+        AND (
+        c.issue_limit IS NULL
+        OR c.issue_limit >= (
+        SELECT COUNT(*)
+        FROM coupon_issue limit_ci
+        WHERE limit_ci.coupon_no = c.coupon_no
+        AND limit_ci.status NOT IN ('삭제', 'DELETED')
+        )
+        )
 
     </select>
 

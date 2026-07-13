@@ -30,4 +30,6 @@ public class CouponDTO {
 
     // 관리자 화면 표시용
     private String companyName;
+    private Integer issuedCount;
+    private Integer usedCount;
 }

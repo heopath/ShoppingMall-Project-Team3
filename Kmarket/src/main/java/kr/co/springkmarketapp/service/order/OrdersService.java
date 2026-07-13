@@ -162,11 +162,15 @@ public class OrdersService {
         decreaseStock(orderItems);
 
         if (request.getCouponIssueNo() != null) {
-            couponDAO.updateCouponUsed(
+            int couponUseResult = couponDAO.updateCouponUsed(
                     memberNo,
                     request.getCouponIssueNo(),
                     orderNo
             );
+
+            if (couponUseResult != 1) {
+                throw new IllegalArgumentException("이미 사용했거나 사용할 수 없는 쿠폰입니다.");
+            }
         }
 
         // 포인트 차감/적립 + member_point 이력 저장

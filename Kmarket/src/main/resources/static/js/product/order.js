@@ -523,9 +523,13 @@ document.getElementById("paymentBtn").addEventListener("click", async function (
         ? deliveryRequestDirect.value.trim()
         : deliveryRequest.value;
 
-    if (deliveryRequest.value === "direct" && !deliveryRequestValue) {
+    if (!deliveryRequestValue) {
         alert("배송 요청사항을 입력하세요.");
-        deliveryRequestDirect.focus();
+        if (deliveryRequest.value === "direct") {
+            deliveryRequestDirect.focus();
+        } else {
+            deliveryRequest.focus();
+        }
         return;
     }
 
