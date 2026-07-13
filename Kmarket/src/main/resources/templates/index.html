@@ -276,8 +276,7 @@
 
                         <div class="price-row">
                                     <span class="old-price"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
+                                          th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
                                     </span>
 
                             <span class="discount"
@@ -328,8 +327,7 @@
 
                         <div class="price-row">
                                     <span class="old-price"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
+                                          th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
                                     </span>
 
                             <span class="discount"
@@ -380,8 +378,7 @@
 
                         <div class="price-row">
                                     <span class="old-price"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
+                                          th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
                                     </span>
 
                             <span class="discount"
@@ -432,9 +429,7 @@
 
                         <div class="price-row">
                                     <span class="old-price"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
-                                    </span>
+                                          th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'"></span>
 
                             <span class="discount"
                                   th:if="${product.discountRate > 0}"
@@ -484,8 +479,7 @@
 
                         <div class="price-row">
                                     <span class="old-price"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
+                                          th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')} + '원'">
                                     </span>
 
                             <span class="discount"

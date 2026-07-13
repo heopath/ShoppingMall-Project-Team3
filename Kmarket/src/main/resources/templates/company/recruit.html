@@ -13,16 +13,16 @@
         <!-- Header -->
         <header class="company-header">
             <div class="header-inner">
-                <a href="../index.html" class="logo-img">
+                <a th:href="@{/}" class="logo-img">
                     <img src="../images/main/header_logo.png" alt="Kmarket 로고" />
                 </a>
 
                 <nav class="company-nav">
-                    <a href="./index.html">HOME</a>
-                    <a href="./culture.html">기업문화</a>
-                    <a href="./story.html">소식과 이야기</a>
-                    <a href="./recruit.html" class="active">채용</a>
-                    <a href="./media.html">미디어</a>
+                    <a th:href="@{/company}">HOME</a>
+                    <a th:href="@{/company/culture}">기업문화</a>
+                    <a th:href="@{/company/story}">소식과 이야기</a>
+                    <a th:href="@{/company/recruit}" class="active">채용</a>
+                    <a th:href="@{/company/media}">미디어</a>
                 </nav>
             </div>
         </header>
@@ -172,11 +172,11 @@
         <footer class="company-footer">
             <div class="footer-inner">
                 <nav class="footer-links">
-                    <a href="./index.html">HOME</a>
-                    <a href="./culture.html">기업문화</a>
-                    <a href="./story.html">소식과 이야기</a>
-                    <a href="./recruit.html">채용</a>
-                    <a href="./media.html">미디어</a>
+                    <a th:href="@{/company}">HOME</a>
+                    <a th:href="@{/company/culture}">기업문화</a>
+                    <a th:href="@{/company/story}">소식과 이야기</a>
+                    <a th:href="@{/company/recruit}">채용</a>
+                    <a th:href="@{/company/media}">미디어</a>
                 </nav>
 
                 <div class="footer-company">

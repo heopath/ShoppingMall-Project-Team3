@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -242,6 +244,63 @@ public class CouponService {
         if (result != 1) {
             throw new IllegalArgumentException("쿠폰 발급에 실패했습니다.");
         }
+    }
+
+    /** 룰렛 후보 중 하나를 추첨하여 즉시 발급한다. */
+    @Transactional
+    public Map<String, Object> spinRoulette(Integer memberNo) {
+        if (memberNo == null) {
+            throw new IllegalArgumentException("로그인이 필요합니다.");
+        }
+
+        List<CouponDTO> candidates =
+                couponDAO.selectIssuableRouletteCoupons(memberNo);
+
+        if (candidates.isEmpty()) {
+            throw new IllegalArgumentException("현재 새로 발급받을 수 있는 쿠폰이 없습니다.");
+        }
+
+        List<CouponDTO> displayedCandidates =
+                candidates.subList(0, Math.min(candidates.size(), 6));
+
+        CouponDTO winner = displayedCandidates.get(
+                ThreadLocalRandom.current().nextInt(displayedCandidates.size())
+        );
+
+        issueProductCoupon(memberNo, winner.getCouponNo());
+
+        String couponType = normalizeCouponType(winner.getCouponType());
+        String benefitType = normalizeBenefitType(winner.getBenefitType());
+
+        return Map.of(
+                "couponNo", winner.getCouponNo(),
+                "couponName", winner.getCouponName(),
+                "discountText", createDiscountText(
+                        couponType,
+                        benefitType,
+                        n(winner.getBenefitValue())
+                )
+        );
+    }
+
+    /** 현재 룰렛 판에 표시할 쿠폰(최대 6개)을 반환한다. */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getRoulettePrizes(Integer memberNo) {
+        List<CouponDTO> candidates =
+                couponDAO.selectIssuableRouletteCoupons(memberNo);
+
+        return candidates.stream()
+                .limit(6)
+                .map(coupon -> Map.<String, Object>of(
+                        "couponNo", coupon.getCouponNo(),
+                        "couponName", coupon.getCouponName(),
+                        "discountText", createDiscountText(
+                                normalizeCouponType(coupon.getCouponType()),
+                                normalizeBenefitType(coupon.getBenefitType()),
+                                n(coupon.getBenefitValue())
+                        )
+                ))
+                .toList();
     }
 
 
