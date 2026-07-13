@@ -874,22 +874,28 @@ footer {
 .roulette-pointer { position: absolute; z-index: 2; top: -9px; left: 50%; width: 0; height: 0; transform: translateX(-50%); border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 28px solid #fff; filter: drop-shadow(0 2px 2px rgba(0,0,0,.2)); }
 .roulette-label {
     position: absolute;
-    width: 70px;
+    display: -webkit-box;
+    width: 64px;
+    max-height: 2.5em;
+    overflow: hidden;
+    box-sizing: border-box;
     font-size: 11px;
     font-weight: 900;
-    line-height: 1;
     color: #234;
     text-align: center;
     line-height: 1.25;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     transform: translate(-50%, -50%);
 }
-.label-1 { top: 15%; left: 70%; }
-.label-2 { top: 50%; left: 86%; }
-.label-3 { top: 82%; left: 70%; }
-.label-4 { top: 82%; left: 30%; }
-.label-5 { top: 50%; left: 14%; }
-.label-6 { top: 15%; left: 30%; }
+.label-1 { top: 20%; left: 68%; }
+.label-2 { top: 50%; left: 78%; }
+.label-3 { top: 78%; left: 68%; }
+.label-4 { top: 78%; left: 32%; }
+.label-5 { top: 50%; left: 22%; }
+.label-6 { top: 20%; left: 32%; }
 .roulette-spin-btn { padding: 12px 28px; border: 0; border-radius: 999px; color: #176f3e; background: #d9ff66; font-size: 15px; font-weight: 900; cursor: pointer; }
 .roulette-spin-btn:disabled { cursor: wait; opacity: .65; }
 .roulette-result { min-height: 24px; margin: 12px 0 0; font-weight: 700; }

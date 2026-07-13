@@ -287,7 +287,14 @@ public class CouponService {
                 ThreadLocalRandom.current().nextInt(displayedCandidates.size())
         );
 
-        issueProductCoupon(memberNo, winner.getCouponNo());
+        boolean alreadyIssued = couponDAO.countIssuedCoupon(
+                memberNo,
+                winner.getCouponNo()
+        ) > 0;
+
+        if (!alreadyIssued) {
+            issueProductCoupon(memberNo, winner.getCouponNo());
+        }
 
         String couponType = normalizeCouponType(winner.getCouponType());
         String benefitType = normalizeBenefitType(winner.getBenefitType());
@@ -295,6 +302,10 @@ public class CouponService {
         return Map.of(
                 "couponNo", winner.getCouponNo(),
                 "couponName", winner.getCouponName(),
+                "alreadyIssued", alreadyIssued,
+                "message", alreadyIssued
+                        ? "이미 받은 쿠폰입니다. 다시 룰렛을 돌려주세요."
+                        : "쿠폰이 발급되었습니다.",
                 "discountText", createDiscountText(
                         couponType,
                         benefitType,
@@ -314,6 +325,11 @@ public class CouponService {
                 .map(coupon -> Map.<String, Object>of(
                         "couponNo", coupon.getCouponNo(),
                         "couponName", coupon.getCouponName(),
+                        "alreadyIssued", memberNo != null
+                                && couponDAO.countIssuedCoupon(
+                                memberNo,
+                                coupon.getCouponNo()
+                        ) > 0,
                         "discountText", createDiscountText(
                                 normalizeCouponType(coupon.getCouponType()),
                                 normalizeBenefitType(coupon.getBenefitType()),

@@ -500,30 +500,45 @@
             </div>
         </section>
 
-        <!-- 비로그인 회원 메뉴 -->
-        <section class="sec"
-                 id="member-menu"
-                 sec:authorize="isAnonymous()">
 
+        <section class="sec roulette-section" aria-labelledby="roulette-title">
+            <div class="roulette-copy">
+                <span class="roulette-kicker">LUCKY COUPON</span>
+                <h3 id="roulette-title">오늘의 행운 쿠폰 룰렛</h3>
+                <p>룰렛을 돌리면 발급 가능한 쿠폰 중 하나가 바로 내 쿠폰함에 들어갑니다.</p>
+                <a th:href="@{/my/coupon}" class="roulette-my-link">내 쿠폰함 보기</a>
+            </div>
+            <div class="roulette-game">
+                <div class="roulette-pointer" aria-hidden="true"></div>
+                <div id="couponRoulette" class="coupon-roulette" aria-hidden="true">
+                    <span class="roulette-label label-1">쿠폰 준비 중</span>
+                    <span class="roulette-label label-2">쿠폰 준비 중</span>
+                    <span class="roulette-label label-3">쿠폰 준비 중</span>
+                    <span class="roulette-label label-4">쿠폰 준비 중</span>
+                    <span class="roulette-label label-5">쿠폰 준비 중</span>
+                    <span class="roulette-label label-6">쿠폰 준비 중</span>
+                </div>
+                <button type="button" id="rouletteSpinBtn" class="roulette-spin-btn">룰렛 돌리기</button>
+                <p id="rouletteResult" class="roulette-result" role="status" aria-live="polite"></p>
+            </div>
+        </section>
+
+        <!-- Member menu -->
+        <section class="sec" id="member-menu">
             <div class="member-box">
                 <div class="member-text">
                     <h3>회원이 되면 더 많은 혜택이 기다려요</h3>
                     <p>로그인하면 맞춤 추천 상품과 쿠폰 혜택을 확인할 수 있어요.</p>
                 </div>
-
                 <div class="member-actions">
-                    <a th:href="@{/member/login}"
-                       class="btn btn-primary">
-                        로그인
-                    </a>
-
-                    <a th:href="@{/member/join}"
-                       class="btn btn-outline">
-                        회원가입
-                    </a>
+                    <a href="#login" class="btn btn-primary">로그인</a>
+                    <a href="#join" class="btn btn-outline">회원가입</a>
+                    <a href="#mypage" class="btn btn-outline">마이페이지</a>
+                    <a href="#admin" class="btn btn-admin">관리자 페이지</a>
                 </div>
             </div>
         </section>
+
     </main>
 </div>
 
@@ -538,7 +553,7 @@
 <!-- jQuery + bxSlider -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
-
+<script th:src="@{/js/coupon-roulette.js}"></script>
 <script>
 
     let mainSlider;

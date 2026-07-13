@@ -500,7 +500,7 @@
 
     </select>
 
-    <!-- 룰렛 발급 후보: 활성/기간/수량 조건을 만족하고 회원이 미보유한 쿠폰 -->
+    <!-- 룰렛 후보: 이미 보유한 쿠폰도 표시하고, 미보유 쿠폰은 발급 수량이 남은 경우만 표시 -->
     <select id="selectIssuableRouletteCoupons"
             resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
         SELECT
@@ -523,15 +523,15 @@
         WHERE c.status IN ('사용', 'ACTIVE')
         AND (c.start_date IS NULL OR CURDATE() >= c.start_date)
         AND (c.end_date IS NULL OR CURDATE() &lt;= c.end_date)
-        AND NOT EXISTS (
+        AND (
+        EXISTS (
         SELECT 1
         FROM coupon_issue mine
         WHERE mine.member_no = #{memberNo}
         AND mine.coupon_no = c.coupon_no
         AND mine.status NOT IN ('삭제', 'DELETED')
         )
-        AND (
-        c.issue_limit IS NULL
+        OR c.issue_limit IS NULL
         OR c.issue_limit > (
         SELECT COUNT(*)
         FROM coupon_issue issued
