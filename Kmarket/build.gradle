@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'kr.co'
-version = '0.0.9-SNAPSHOT'
+version = '0.1.0-SNAPSHOT'
 description = 'spring-kmarket-app'
 
 // Gradle version값을 SpringBoot application.properties 파일에서 참조하기 위한 Gradle 스크립트 코드

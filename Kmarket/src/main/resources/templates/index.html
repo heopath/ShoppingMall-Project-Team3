@@ -2,395 +2,643 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <th:block th:replace="~{common/_site_head :: head('상품메인')}"></th:block>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <th:block th:replace="~{common/_site_head :: head('상품메인')}"></th:block>
 
-        <!-- bxSlider CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css" />
+    <!-- bxSlider CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css" />
 
-        <!-- Custom CSS -->
-        <link rel="stylesheet" th:href="@{/css/main.css}" />
-    </head>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
 
-    <body id="top">
-        <!-- 최상단 광고 배너, 헤더, nav include -->
-        <th:block th:replace="~{common/_main_header}"></th:block>
+    <!--
+        아래 스타일은 참고용으로 이 페이지에 직접 넣어두었습니다.
+        실제 프로젝트에서는 main.css 로 옮겨서 쓰시는 걸 추천드려요.
+    -->
+    <style>
+        /* 슬라이더를 감싸는 영역을 relative 로 잡아서 컨트롤을 절대 위치시킴 */
+        .visual {
+            position: relative;
+        }
 
-        <!-- Page layout : aside + right content -->
-        <div class="page-layout">
-            <!-- Left aside include -->
-            <th:block th:replace="~{common/_main_aside}"></th:block>
+        /* 좌/우 이동 버튼 */
+        .slider-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.35);
+            color: #fff;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slider-nav-btn:hover {
+            background: rgba(0, 0, 0, 0.55);
+        }
+        .slider-prev-btn { left: 20px; }
+        .slider-next-btn { right: 20px; }
 
-            <!-- Right content -->
-            <main class="content-area">
-                <!-- Visual slider -->
-                <!-- DB 슬라이더 배너가 있을 때 -->
-                <div class="visual" th:if="${!#lists.isEmpty(main2Banners)}">
-                    <ul class="main-slider">
+        /* 하단 컨트롤 바 (일시정지/카운터/전체보기) */
+        .slider-bottom-controls {
+            position: absolute;
+            right: 24px;
+            bottom: 20px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 20px;
+            padding: 6px 10px;
+        }
 
-                        <li th:each="banner : ${main2Banners}"
-                            th:style="${banner.bgColor != null ? 'background-color:' + banner.bgColor : ''}">
+        .slider-play-pause-btn,
+        .slider-all-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slider-play-pause-btn:hover,
+        .slider-all-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
 
-                            <a th:href="${banner.linkUrl != null ? banner.linkUrl : '#'}">
-                                <img th:src="${banner.imagePath}"
-                                     th:alt="${banner.bannerName}" />
-                            </a>
+        .slider-counter {
+            color: #fff;
+            font-size: 13px;
+            min-width: 44px;
+            text-align: center;
+        }
 
-                        </li>
+        /* 전체 배너 모달 */
+        .banner-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: none;
+        }
+        .banner-modal.open {
+            display: block;
+        }
+        .banner-modal-dim {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .banner-modal-content {
+            position: relative;
+            width: min(1460px, 94vw);
+            max-height: 90vh;
+            margin: 5vh auto 0;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .banner-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            flex: none;
+        }
+        .banner-modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .banner-modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+        }
 
-                    </ul>
-                </div>
+        /* 배너 이미지 자체에 문구가 포함되어 있으므로
+           여백/테두리 없이 2열로 꽉 채워서 보여줍니다 */
+        .banner-modal-grid {
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .banner-modal-item {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            line-height: 0;
+        }
+        .banner-modal-item img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            aspect-ratio: 730 / 300;
+            object-fit: cover;
+        }
 
-                <!-- DB 배너가 없을 때 -->
-                <div class="visual" th:unless="${!#lists.isEmpty(main2Banners)}">
-                    <ul class="main-slider">
-                        <li>
-                            <a href="#">
-                                <img src="/images/main/slider_item1.jpg" alt="메인 배너" />
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+        @media (max-width: 720px) {
+            .banner-modal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
-                <!-- Hit products -->
-                <section class="sec" id="hit">
-                    <div class="sec-head">
-                        <h2>히트상품</h2>
-                        <span class="more">더보기 ›</span>
-                    </div>
-                    <p class="sec-sub">상품 썸네일 기준, 조회수가 많은 순서로 8건 출력</p>
-                    <div class="hit-grid" id="hitGrid">
-                        <a th:each="product : ${hitProducts}"
-                           th:href="@{/product/view(productNo=${product.productNo})}"
-                           class="card"
-                           th:classappend="${product.stock <= 0} ? ' sold-out' : ''">
+        body.modal-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
 
-                            <div class="thumb">
-                                <img th:src="@{${product.imagePath}}"
-                                     th:alt="${product.productName}" />
+<body id="top">
+<!-- 최상단 광고 배너, 헤더, nav include -->
+<th:block th:replace="~{common/_main_header}"></th:block>
 
-                                <span class="sold-out-overlay"
-                                      th:if="${product.stock <= 0}">
-                                    품절
-                                </span>
-                            </div>
+<!-- Page layout : aside + right content -->
+<div class="page-layout">
+    <!-- Left aside include -->
+    <th:block th:replace="~{common/_main_aside}"></th:block>
 
-                            <div class="info">
-                                <div class="name" th:text="${product.productName}">
-                                    상품명
-                                </div>
+    <!-- Right content -->
+    <main class="content-area">
+        <!-- Visual slider -->
+        <!-- DB 슬라이더 배너가 있을 때 -->
+        <div class="visual" th:if="${!#lists.isEmpty(main2Banners)}">
+            <ul class="main-slider">
 
-                                <div class="price-row">
-                                    <span class="old-price"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
-                                    </span>
+                <li th:each="banner : ${main2Banners}"
+                    th:style="${banner.bgColor != null ? 'background-color:' + banner.bgColor : ''}">
 
-                                    <span class="discount"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${product.discountRate} + '%'">
-                                    </span>
+                    <a th:href="${banner.linkUrl != null ? banner.linkUrl : '#'}">
+                        <img th:src="${banner.imagePath}"
+                             th:alt="${banner.bannerName}" />
+                    </a>
 
-                                    <span class="price"
-                                          th:text="${#numbers.formatInteger(product.discountPrice, 1, 'COMMA')} + '원'">
-                                    </span>
-                                </div>
+                </li>
 
-                                <span class="free-ship"
-                                      th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
-                                 </span>
-                            </div>
-                        </a>
-                    </div>
-                </section>
+            </ul>
 
-                <!-- Recommended products -->
-                <section class="sec" id="recommend">
-                    <div class="sec-head">
-                        <h2>추천상품</h2>
-                        <span class="more">더보기 ›</span>
-                    </div>
-                    <p class="sec-sub">상품평점이 높은 순서로 8건 출력</p>
-                    <div class="hit-grid" id="recommendGrid">
-                        <a th:each="product : ${recommendProducts}"
-                           th:href="@{/product/view(productNo=${product.productNo})}"
-                           class="card"
-                           th:classappend="${product.stock <= 0} ? ' sold-out' : ''">
+            <!-- 좌/우 이동 버튼 -->
+            <button type="button" class="slider-nav-btn slider-prev-btn" aria-label="이전 배너">‹</button>
+            <button type="button" class="slider-nav-btn slider-next-btn" aria-label="다음 배너">›</button>
 
-                            <div class="thumb">
-                                <img th:src="@{${product.imagePath}}"
-                                     th:alt="${product.productName}" />
+            <!-- 일시정지 / 카운터 / 전체보기 -->
+            <div class="slider-bottom-controls">
+                <button type="button" class="slider-play-pause-btn" aria-label="일시정지" data-playing="true">
+                    <span class="icon-pause">❚❚</span>
+                    <span class="icon-play" style="display:none;">►</span>
+                </button>
 
-                                <span class="sold-out-overlay"
-                                      th:if="${product.stock <= 0}">
-                                    품절
-                                </span>
-                            </div>
+                <span class="slider-counter">
+                            <span class="current-slide">1</span> / <span class="total-slide" th:text="${#lists.size(main2Banners)}">1</span>
+                        </span>
 
-                            <div class="info">
-                                <div class="name" th:text="${product.productName}">
-                                    상품명
-                                </div>
-
-                                <div class="price-row">
-                                    <span class="old-price"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
-                                    </span>
-
-                                    <span class="discount"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${product.discountRate} + '%'">
-                                    </span>
-
-                                    <span class="price"
-                                          th:text="${#numbers.formatInteger(product.discountPrice, 1, 'COMMA')} + '원'">
-                                    </span>
-                                </div>
-
-                                <span class="free-ship"
-                                      th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
-                                 </span>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-
-                <!-- New products -->
-                <section class="sec" id="new">
-                    <div class="sec-head">
-                        <h2>최신상품</h2>
-                        <span class="more">더보기 ›</span>
-                    </div>
-                    <p class="sec-sub">상품 등록 날짜가 최신 순서로 8건 출력</p>
-                    <div class="hit-grid" id="newGrid">
-                        <a th:each="product : ${newProducts}"
-                           th:href="@{/product/view(productNo=${product.productNo})}"
-                           class="card"
-                           th:classappend="${product.stock <= 0} ? ' sold-out' : ''">
-
-                            <div class="thumb">
-                                <img th:src="@{${product.imagePath}}"
-                                     th:alt="${product.productName}" />
-
-                                <span class="sold-out-overlay"
-                                      th:if="${product.stock <= 0}">
-                                    품절
-                                </span>
-                            </div>
-
-                            <div class="info">
-                                <div class="name" th:text="${product.productName}">
-                                    상품명
-                                </div>
-
-                                <div class="price-row">
-                                    <span class="old-price"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
-                                    </span>
-
-                                    <span class="discount"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${product.discountRate} + '%'">
-                                    </span>
-
-                                    <span class="price"
-                                          th:text="${#numbers.formatInteger(product.discountPrice, 1, 'COMMA')} + '원'">
-                                    </span>
-                                </div>
-
-                                <span class="free-ship"
-                                      th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-
-                <!-- popular product -->
-                <section class="sec" id="popular">
-                    <div class="sec-head">
-                        <h2>인기상품</h2>
-                        <a href="/product/list?sort=popular" class="more">더보기 ›</a>
-                    </div>
-
-                    <p class="sec-sub">판매량 + 조회수 높은 순서로 8건 출력</p>
-
-                    <div class="hit-grid">
-                        <a th:each="product : ${popularProducts}"
-                           th:href="@{/product/view(productNo=${product.productNo})}"
-                           class="card"
-                           th:classappend="${product.stock <= 0} ? ' sold-out' : ''">
-
-                            <div class="thumb">
-                                <img th:src="@{${product.imagePath}}"
-                                     th:alt="${product.productName}" />
-
-                                <span class="sold-out-overlay"
-                                      th:if="${product.stock <= 0}">
-                                    품절
-                                </span>
-                            </div>
-
-                            <div class="info">
-                                <div class="name" th:text="${product.productName}"></div>
-
-                                <div class="price-row">
-                                    <span class="old-price"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
-                                    </span>
-
-                                    <span class="discount"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${product.discountRate} + '%'">
-                                    </span>
-
-                                    <span class="price"
-                                          th:text="${#numbers.formatInteger(product.discountPrice, 1, 'COMMA')} + '원'">
-                                    </span>
-                                </div>
-
-                                <span class="free-ship"
-                                      th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-
-                <!-- Discount products -->
-                <section class="sec" id="discount">
-                    <div class="sec-head">
-                        <h2>할인상품</h2>
-                        <span class="more">더보기 ›</span>
-                    </div>
-                    <p class="sec-sub">할인율이 높은 순서로 8건 출력</p>
-                    <div class="hit-grid" id="discountGrid">
-                        <a th:each="product : ${discountProducts}"
-                           th:href="@{/product/view(productNo=${product.productNo})}"
-                           class="card"
-                           th:classappend="${product.stock <= 0} ? ' sold-out' : ''">
-
-                            <div class="thumb">
-                                <img th:src="@{${product.imagePath}}"
-                                     th:alt="${product.productName}" />
-
-                                <span class="sold-out-overlay"
-                                      th:if="${product.stock <= 0}">
-                                    품절
-                                </span>
-                            </div>
-
-                            <div class="info">
-                                <div class="name" th:text="${product.productName}">
-                                    상품명
-                                </div>
-
-                                <div class="price-row">
-                                    <span class="old-price"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
-                                    </span>
-
-                                    <span class="discount"
-                                          th:if="${product.discountRate > 0}"
-                                          th:text="${product.discountRate} + '%'">
-                                    </span>
-
-                                    <span class="price"
-                                          th:text="${#numbers.formatInteger(product.discountPrice, 1, 'COMMA')} + '원'">
-                                    </span>
-                                </div>
-
-                                <span class="free-ship"
-                                      th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
-                                 </span>
-                            </div>
-                        </a>
-                    </div>
-                </section>
-
-                <!-- 비로그인 회원 메뉴 -->
-                <section class="sec"
-                         id="member-menu"
-                         sec:authorize="isAnonymous()">
-
-                    <div class="member-box">
-                        <div class="member-text">
-                            <h3>회원이 되면 더 많은 혜택이 기다려요</h3>
-                            <p>로그인하면 맞춤 추천 상품과 쿠폰 혜택을 확인할 수 있어요.</p>
-                        </div>
-
-                        <div class="member-actions">
-                            <a th:href="@{/member/login}"
-                               class="btn btn-primary">
-                                로그인
-                            </a>
-
-                            <a th:href="@{/member/join}"
-                               class="btn btn-outline">
-                                회원가입
-                            </a>
-                        </div>
-                    </div>
-                </section>
-            </main>
+                <button type="button" class="slider-all-btn" aria-label="전체 배너 보기">+</button>
+            </div>
         </div>
 
-        <!-- Footer include -->
-        <th:block th:replace="~{common/_main_footer}"></th:block>
+        <!-- DB 배너가 없을 때 -->
+        <div class="visual" th:unless="${!#lists.isEmpty(main2Banners)}">
+            <ul class="main-slider">
+                <li>
+                    <a href="#">
+                        <img src="/images/main/slider_item1.jpg" alt="메인 배너" />
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-        <!-- TOP button -->
-        <a href="#top" class="top-btn">
-            <img src="./images/main/top.png" alt="위로 이동" />
-        </a>
+        <!-- 전체 배너 모달 (main2Banners 가 있을 때만) -->
+        <div class="banner-modal" id="bannerModal" th:if="${!#lists.isEmpty(main2Banners)}">
+            <div class="banner-modal-dim"></div>
+            <div class="banner-modal-content">
+                <div class="banner-modal-header">
+                    <h3>전체 이벤트 배너</h3>
+                    <button type="button" class="banner-modal-close" aria-label="닫기">×</button>
+                </div>
+                <div class="banner-modal-grid">
+                    <a th:each="banner : ${main2Banners}"
+                       th:href="${banner.linkUrl != null ? banner.linkUrl : '#'}"
+                       class="banner-modal-item">
+                        <img th:src="${banner.imagePath}"
+                             th:alt="${banner.bannerName}" />
+                    </a>
+                </div>
+            </div>
+        </div>
 
-        <!-- jQuery + bxSlider -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+        <!-- Hit products -->
+        <section class="sec" id="hit">
+            <div class="sec-head">
+                <h2>히트상품</h2>
+                <span class="more">더보기 ›</span>
+            </div>
+            <p class="sec-sub">상품 썸네일 기준, 조회수가 많은 순서로 8건 출력</p>
+            <div class="hit-grid" id="hitGrid">
+                <a th:each="product : ${hitProducts}"
+                   th:href="@{/product/view(productNo=${product.productNo})}"
+                   class="card"
+                   th:classappend="${product.stock <= 0} ? ' sold-out' : ''">
 
-        <script>
+                    <div class="thumb">
+                        <img th:src="@{${product.imagePath}}"
+                             th:alt="${product.productName}" />
 
-            let mainSlider;
+                        <span class="sold-out-overlay"
+                              th:if="${product.stock <= 0}">
+                                    품절
+                                </span>
+                    </div>
 
-            $(function () {
+                    <div class="info">
+                        <div class="name" th:text="${product.productName}">
+                            상품명
+                        </div>
 
-                mainSlider = $(".main-slider").bxSlider({
-                    mode: "horizontal",
-                    auto: true,
-                    pause: 3500,
-                    speed: 500,
+                        <div class="price-row">
+                                    <span class="old-price"
+                                          th:if="${product.discountRate > 0}"
+                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
+                                    </span>
 
-                    controls: true,
-                    pager: true,
-                    adaptiveHeight: false,
-                    touchEnabled: true,
+                            <span class="discount"
+                                  th:if="${product.discountRate > 0}"
+                                  th:text="${product.discountRate} + '%'">
+                                    </span>
 
-                    // CSS transition 대신 jQuery 애니메이션 사용
-                    useCSS: false,
-                });
+                            <span class="price"
+                                  th:text="${#numbers.formatInteger(product.discountPrice, 1, 'COMMA')} + '원'">
+                                    </span>
+                        </div>
 
-            });
+                        <span class="free-ship"
+                              th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
+                                 </span>
+                    </div>
+                </a>
+            </div>
+        </section>
 
-            const items = document.querySelectorAll(".category-item");
+        <!-- Recommended products -->
+        <section class="sec" id="recommend">
+            <div class="sec-head">
+                <h2>추천상품</h2>
+                <span class="more">더보기 ›</span>
+            </div>
+            <p class="sec-sub">상품평점이 높은 순서로 8건 출력</p>
+            <div class="hit-grid" id="recommendGrid">
+                <a th:each="product : ${recommendProducts}"
+                   th:href="@{/product/view(productNo=${product.productNo})}"
+                   class="card"
+                   th:classappend="${product.stock <= 0} ? ' sold-out' : ''">
 
-            items.forEach(function(item){
+                    <div class="thumb">
+                        <img th:src="@{${product.imagePath}}"
+                             th:alt="${product.productName}" />
 
-                const title = item.querySelector(".category-title");
-                const sub = item.querySelector(".sub-category");
+                        <span class="sold-out-overlay"
+                              th:if="${product.stock <= 0}">
+                                    품절
+                                </span>
+                    </div>
 
-                title.addEventListener("click", function(){
+                    <div class="info">
+                        <div class="name" th:text="${product.productName}">
+                            상품명
+                        </div>
 
-                    sub.classList.toggle("close");
-                    item.classList.toggle("active");
+                        <div class="price-row">
+                                    <span class="old-price"
+                                          th:if="${product.discountRate > 0}"
+                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
+                                    </span>
 
-                });
+                            <span class="discount"
+                                  th:if="${product.discountRate > 0}"
+                                  th:text="${product.discountRate} + '%'">
+                                    </span>
 
-            });
-        </script>
-    </body>
+                            <span class="price"
+                                  th:text="${#numbers.formatInteger(product.discountPrice, 1, 'COMMA')} + '원'">
+                                    </span>
+                        </div>
+
+                        <span class="free-ship"
+                              th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
+                                 </span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- New products -->
+        <section class="sec" id="new">
+            <div class="sec-head">
+                <h2>최신상품</h2>
+                <span class="more">더보기 ›</span>
+            </div>
+            <p class="sec-sub">상품 등록 날짜가 최신 순서로 8건 출력</p>
+            <div class="hit-grid" id="newGrid">
+                <a th:each="product : ${newProducts}"
+                   th:href="@{/product/view(productNo=${product.productNo})}"
+                   class="card"
+                   th:classappend="${product.stock <= 0} ? ' sold-out' : ''">
+
+                    <div class="thumb">
+                        <img th:src="@{${product.imagePath}}"
+                             th:alt="${product.productName}" />
+
+                        <span class="sold-out-overlay"
+                              th:if="${product.stock <= 0}">
+                                    품절
+                                </span>
+                    </div>
+
+                    <div class="info">
+                        <div class="name" th:text="${product.productName}">
+                            상품명
+                        </div>
+
+                        <div class="price-row">
+                                    <span class="old-price"
+                                          th:if="${product.discountRate > 0}"
+                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
+                                    </span>
+
+                            <span class="discount"
+                                  th:if="${product.discountRate > 0}"
+                                  th:text="${product.discountRate} + '%'">
+                                    </span>
+
+                            <span class="price"
+                                  th:text="${#numbers.formatInteger(product.discountPrice, 1, 'COMMA')} + '원'">
+                                    </span>
+                        </div>
+
+                        <span class="free-ship"
+                              th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
+                                </span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- popular product -->
+        <section class="sec" id="popular">
+            <div class="sec-head">
+                <h2>인기상품</h2>
+                <a href="/product/list?sort=popular" class="more">더보기 ›</a>
+            </div>
+
+            <p class="sec-sub">판매량 + 조회수 높은 순서로 8건 출력</p>
+
+            <div class="hit-grid">
+                <a th:each="product : ${popularProducts}"
+                   th:href="@{/product/view(productNo=${product.productNo})}"
+                   class="card"
+                   th:classappend="${product.stock <= 0} ? ' sold-out' : ''">
+
+                    <div class="thumb">
+                        <img th:src="@{${product.imagePath}}"
+                             th:alt="${product.productName}" />
+
+                        <span class="sold-out-overlay"
+                              th:if="${product.stock <= 0}">
+                                    품절
+                                </span>
+                    </div>
+
+                    <div class="info">
+                        <div class="name" th:text="${product.productName}"></div>
+
+                        <div class="price-row">
+                                    <span class="old-price"
+                                          th:if="${product.discountRate > 0}"
+                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
+                                    </span>
+
+                            <span class="discount"
+                                  th:if="${product.discountRate > 0}"
+                                  th:text="${product.discountRate} + '%'">
+                                    </span>
+
+                            <span class="price"
+                                  th:text="${#numbers.formatInteger(product.discountPrice, 1, 'COMMA')} + '원'">
+                                    </span>
+                        </div>
+
+                        <span class="free-ship"
+                              th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
+                                </span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Discount products -->
+        <section class="sec" id="discount">
+            <div class="sec-head">
+                <h2>할인상품</h2>
+                <span class="more">더보기 ›</span>
+            </div>
+            <p class="sec-sub">할인율이 높은 순서로 8건 출력</p>
+            <div class="hit-grid" id="discountGrid">
+                <a th:each="product : ${discountProducts}"
+                   th:href="@{/product/view(productNo=${product.productNo})}"
+                   class="card"
+                   th:classappend="${product.stock <= 0} ? ' sold-out' : ''">
+
+                    <div class="thumb">
+                        <img th:src="@{${product.imagePath}}"
+                             th:alt="${product.productName}" />
+
+                        <span class="sold-out-overlay"
+                              th:if="${product.stock <= 0}">
+                                    품절
+                                </span>
+                    </div>
+
+                    <div class="info">
+                        <div class="name" th:text="${product.productName}">
+                            상품명
+                        </div>
+
+                        <div class="price-row">
+                                    <span class="old-price"
+                                          th:if="${product.discountRate > 0}"
+                                          th:text="${#numbers.formatInteger(product.price, 1, 'COMMA')} + '원'">
+                                    </span>
+
+                            <span class="discount"
+                                  th:if="${product.discountRate > 0}"
+                                  th:text="${product.discountRate} + '%'">
+                                    </span>
+
+                            <span class="price"
+                                  th:text="${#numbers.formatInteger(product.discountPrice, 1, 'COMMA')} + '원'">
+                                    </span>
+                        </div>
+
+                        <span class="free-ship"
+                              th:text="${product.deliveryFee == 0 ? '무료배송' : '배송비 ' + #numbers.formatInteger(product.deliveryFee, 3, 'COMMA') + '원'}">
+                                 </span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 비로그인 회원 메뉴 -->
+        <section class="sec"
+                 id="member-menu"
+                 sec:authorize="isAnonymous()">
+
+            <div class="member-box">
+                <div class="member-text">
+                    <h3>회원이 되면 더 많은 혜택이 기다려요</h3>
+                    <p>로그인하면 맞춤 추천 상품과 쿠폰 혜택을 확인할 수 있어요.</p>
+                </div>
+
+                <div class="member-actions">
+                    <a th:href="@{/member/login}"
+                       class="btn btn-primary">
+                        로그인
+                    </a>
+
+                    <a th:href="@{/member/join}"
+                       class="btn btn-outline">
+                        회원가입
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Footer include -->
+<th:block th:replace="~{common/_main_footer}"></th:block>
+
+<!-- TOP button -->
+<a href="#top" class="top-btn">
+    <img src="./images/main/top.png" alt="위로 이동" />
+</a>
+
+<!-- jQuery + bxSlider -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+<script>
+
+    let mainSlider;
+
+    $(function () {
+
+        // bxSlider 자체 pager/controls 는 끄고, 아래에서 만든 커스텀 버튼을 사용합니다.
+        mainSlider = $(".main-slider").bxSlider({
+            mode: "horizontal",
+            auto: true,
+            pause: 3500,
+            speed: 500,
+
+            controls: false,
+            pager: false,
+            adaptiveHeight: false,
+            touchEnabled: true,
+
+            // CSS transition 대신 jQuery 애니메이션 사용
+            useCSS: false,
+
+            // 슬라이드가 바뀔 때마다 카운터 갱신
+            onSlideAfter: function ($slideElement, oldIndex, newIndex) {
+                $(".current-slide").text(newIndex + 1);
+            },
+        });
+
+        // ----- 좌/우 이동 -----
+        $(".slider-prev-btn").on("click", function () {
+            mainSlider.goToPrevSlide();
+        });
+
+        $(".slider-next-btn").on("click", function () {
+            mainSlider.goToNextSlide();
+        });
+
+        // ----- 일시정지 / 재생 토글 -----
+        $(".slider-play-pause-btn").on("click", function () {
+            const $btn = $(this);
+            const isPlaying = $btn.data("playing") === true || $btn.data("playing") === "true";
+
+            if (isPlaying) {
+                mainSlider.stopAuto();
+                $btn.find(".icon-pause").hide();
+                $btn.find(".icon-play").show();
+                $btn.attr("aria-label", "재생").data("playing", false);
+            } else {
+                mainSlider.startAuto();
+                $btn.find(".icon-pause").show();
+                $btn.find(".icon-play").hide();
+                $btn.attr("aria-label", "일시정지").data("playing", true);
+            }
+        });
+
+        // ----- 전체 배너 모달 -----
+        $(".slider-all-btn").on("click", function () {
+            mainSlider.stopAuto();
+            $(".slider-play-pause-btn")
+                .find(".icon-pause").hide().end()
+                .find(".icon-play").show().end()
+                .data("playing", false);
+
+            $("#bannerModal").addClass("open");
+            $("body").addClass("modal-open");
+        });
+
+        $("#bannerModal").on("click", ".banner-modal-close, .banner-modal-dim", function () {
+            $("#bannerModal").removeClass("open");
+            $("body").removeClass("modal-open");
+        });
+
+        $(document).on("keydown", function (e) {
+            if (e.key === "Escape") {
+                $("#bannerModal").removeClass("open");
+                $("body").removeClass("modal-open");
+            }
+        });
+    });
+
+    const items = document.querySelectorAll(".category-item");
+
+    items.forEach(function(item){
+
+        const title = item.querySelector(".category-title");
+        const sub = item.querySelector(".sub-category");
+
+        title.addEventListener("click", function(){
+
+            sub.classList.toggle("close");
+            item.classList.toggle("active");
+
+        });
+
+    });
+</script>
+</body>
 </html>
