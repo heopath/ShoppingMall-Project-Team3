@@ -523,21 +523,23 @@
             </div>
         </section>
 
-        <!-- Member menu -->
-        <section class="sec" id="member-menu">
-            <div class="member-box">
-                <div class="member-text">
-                    <h3>회원이 되면 더 많은 혜택이 기다려요</h3>
-                    <p>로그인하면 맞춤 추천 상품과 쿠폰 혜택을 확인할 수 있어요.</p>
+            <!-- 비로그인 회원 메뉴 -->
+            <section class="sec"
+                     id="member-menu"
+                     sec:authorize="isAnonymous()">
+                <div class="member-box">
+                    <div class="member-text">
+                        <h3>회원이 되면 더 많은 혜택이 기다려요</h3>
+                        <p>로그인하면 맞춤 추천 상품과 쿠폰 혜택을 확인할 수 있어요.</p>
                 </div>
                 <div class="member-actions">
-                    <a href="#login" class="btn btn-primary">로그인</a>
-                    <a href="#join" class="btn btn-outline">회원가입</a>
-                    <a href="#mypage" class="btn btn-outline">마이페이지</a>
-                    <a href="#admin" class="btn btn-admin">관리자 페이지</a>
+                    <a th:href="@{/member/login}" class="btn btn-primary">로그인</a>
+                    <a th:href="@{/member/join}" class="btn btn-outline">회원가입</a>
+                    <a th:href="@{/my/home}" class="btn btn-outline">마이페이지</a>
+                    <a th:href="@{/admin}" class="btn btn-admin">관리자 페이지</a>
                 </div>
-            </div>
-        </section>
+</div>
+</section>
 
     </main>
 </div>

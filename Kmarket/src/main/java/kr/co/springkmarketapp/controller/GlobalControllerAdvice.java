@@ -13,18 +13,21 @@ public class GlobalControllerAdvice {
 
     private final SiteSettingService siteSettingService;
 
-    // application.properties의 spring.application.version 값을 읽어옴
-    @Value("${spring.application.version}")
-    private String appVersion;
+    // DB에 저장된 버전이 없을 때 사용할 기본 버전
+    @Value("${spring.application.version:0.0.0}")
+    private String defaultAppVersion;
 
     public GlobalControllerAdvice(SiteSettingService siteSettingService) {
         this.siteSettingService = siteSettingService;
     }
 
-    // 모든 Controller의 뷰(HTML)로 'appVersion'이라는 이름을 항상 전달함
+    // 기본설정에서 저장한 버전을 모든 화면의 푸터에 전달
     @ModelAttribute("appVersion")
     public String getAppVersion() {
-        return appVersion;
+        return siteSettingService.getSettingValue(
+                "app_version",
+                defaultAppVersion
+        );
     }
 
     @ModelAttribute("settings")

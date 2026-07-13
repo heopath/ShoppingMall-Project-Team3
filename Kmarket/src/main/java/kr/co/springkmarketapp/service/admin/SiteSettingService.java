@@ -57,6 +57,7 @@ public class SiteSettingService {
         // 사이트 정보
         DEFAULT_SETTINGS.put("site_title", "케이마켓");
         DEFAULT_SETTINGS.put("site_subtitle", "더 나은 쇼핑의 시작");
+        DEFAULT_SETTINGS.put("app_version", "");
 
 
         // 로고 정보
@@ -77,6 +78,18 @@ public class SiteSettingService {
         }
 
         return settings;
+    }
+
+    public String getSettingValue(String key, String defaultValue) {
+        SiteSettingDTO setting = siteSettingDAO.selectSiteSettingByKey(key);
+
+        if (setting == null
+                || setting.getSettingValue() == null
+                || setting.getSettingValue().isBlank()) {
+            return defaultValue;
+        }
+
+        return setting.getSettingValue().trim();
     }
 
 

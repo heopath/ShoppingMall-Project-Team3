@@ -41,7 +41,6 @@ public class AdminConfigController {
     @GetMapping("/basic")
     public String basic(Model model) {
         model.addAttribute("settings", siteSettingService.getSettingsMap());
-        model.addAttribute("latestVersion", appVersionService.getLatestVersion());
         return "admin/config/basic";
     }
 
