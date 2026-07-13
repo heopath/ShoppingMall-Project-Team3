@@ -103,6 +103,11 @@ public interface CouponDAO {
             @Param("couponNo") Integer couponNo
     );
 
+    // 룰렛에서 발급할 수 있으며 회원이 아직 보유하지 않은 쿠폰
+    List<CouponDTO> selectIssuableRouletteCoupons(
+            @Param("memberNo") Integer memberNo
+    );
+
     // 회원이 특정 쿠폰을 이미 발급받았는지 확인
     int countIssuedCoupon(
             @Param("memberNo") Integer memberNo,

@@ -46,10 +46,10 @@
                     </when>
                     <otherwise>
                         (
-                            CAST(c.coupon_no AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
-                            OR c.coupon_code LIKE CONCAT('%', #{keyword}, '%')
-                            OR c.coupon_name LIKE CONCAT('%', #{keyword}, '%')
-                            OR sp.company_name LIKE CONCAT('%', #{keyword}, '%')
+                        CAST(c.coupon_no AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
+                        OR c.coupon_code LIKE CONCAT('%', #{keyword}, '%')
+                        OR c.coupon_name LIKE CONCAT('%', #{keyword}, '%')
+                        OR sp.company_name LIKE CONCAT('%', #{keyword}, '%')
                         )
                     </otherwise>
                 </choose>
@@ -101,55 +101,55 @@
     <insert id="insertCoupon" parameterType="kr.co.springkmarketapp.dto.coupon.CouponDTO" useGeneratedKeys="true" keyProperty="couponNo">
         INSERT INTO coupon
         (
-            coupon_code,
-            seller_no,
-            coupon_type,
-            coupon_name,
-            benefit_type,
-            benefit_value,
-            min_order_price,
-            max_discount_price,
-            issue_limit,
-            start_date,
-            end_date,
-            caution,
-            status,
-            reg_date
+        coupon_code,
+        seller_no,
+        coupon_type,
+        coupon_name,
+        benefit_type,
+        benefit_value,
+        min_order_price,
+        max_discount_price,
+        issue_limit,
+        start_date,
+        end_date,
+        caution,
+        status,
+        reg_date
         )
         VALUES
         (
-            #{couponCode},
-            #{sellerNo},
-            #{couponType},
-            #{couponName},
-            #{benefitType},
-            COALESCE(#{benefitValue}, 0),
-            COALESCE(#{minOrderPrice}, 0),
-            COALESCE(#{maxDiscountPrice}, 0),
-            #{issueLimit},
-            #{startDate},
-            #{endDate},
-            #{caution},
-            COALESCE(#{status}, '사용'),
-            NOW()
+        #{couponCode},
+        #{sellerNo},
+        #{couponType},
+        #{couponName},
+        #{benefitType},
+        COALESCE(#{benefitValue}, 0),
+        COALESCE(#{minOrderPrice}, 0),
+        COALESCE(#{maxDiscountPrice}, 0),
+        #{issueLimit},
+        #{startDate},
+        #{endDate},
+        #{caution},
+        COALESCE(#{status}, '사용'),
+        NOW()
         )
     </insert>
 
     <update id="updateCoupon" parameterType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
         UPDATE coupon
         SET coupon_code = #{couponCode},
-            seller_no = #{sellerNo},
-            coupon_type = #{couponType},
-            coupon_name = #{couponName},
-            benefit_type = #{benefitType},
-            benefit_value = COALESCE(#{benefitValue}, 0),
-            min_order_price = COALESCE(#{minOrderPrice}, 0),
-            max_discount_price = COALESCE(#{maxDiscountPrice}, 0),
-            issue_limit = #{issueLimit},
-            start_date = #{startDate},
-            end_date = #{endDate},
-            caution = #{caution},
-            status = #{status}
+        seller_no = #{sellerNo},
+        coupon_type = #{couponType},
+        coupon_name = #{couponName},
+        benefit_type = #{benefitType},
+        benefit_value = COALESCE(#{benefitValue}, 0),
+        min_order_price = COALESCE(#{minOrderPrice}, 0),
+        max_discount_price = COALESCE(#{maxDiscountPrice}, 0),
+        issue_limit = #{issueLimit},
+        start_date = #{startDate},
+        end_date = #{endDate},
+        caution = #{caution},
+        status = #{status}
         WHERE coupon_no = #{couponNo}
     </update>
 
@@ -159,11 +159,11 @@
         WHERE coupon_no = #{couponNo}
     </update>
 
-<!--    <update id="deleteCoupon" parameterType="int">-->
-<!--        UPDATE coupon-->
-<!--        SET status = '삭제'-->
-<!--        WHERE coupon_no = #{couponNo}-->
-<!--    </update>-->
+    <!--    <update id="deleteCoupon" parameterType="int">-->
+    <!--        UPDATE coupon-->
+    <!--        SET status = '삭제'-->
+    <!--        WHERE coupon_no = #{couponNo}-->
+    <!--    </update>-->
 
     <update id="deleteCoupons">
         UPDATE coupon
@@ -410,6 +410,48 @@
         )
         )
 
+    </select>
+
+    <!-- 룰렛 발급 후보: 활성/기간/수량 조건을 만족하고 회원이 미보유한 쿠폰 -->
+    <select id="selectIssuableRouletteCoupons"
+            resultType="kr.co.springkmarketapp.dto.coupon.CouponDTO">
+        SELECT
+        c.coupon_no AS couponNo,
+        c.coupon_code AS couponCode,
+        c.seller_no AS sellerNo,
+        c.coupon_type AS couponType,
+        c.coupon_name AS couponName,
+        c.benefit_type AS benefitType,
+        COALESCE(c.benefit_value, 0) AS benefitValue,
+        COALESCE(c.min_order_price, 0) AS minOrderPrice,
+        COALESCE(c.max_discount_price, 0) AS maxDiscountPrice,
+        c.issue_limit AS issueLimit,
+        c.start_date AS startDate,
+        c.end_date AS endDate,
+        c.caution AS caution,
+        c.status AS status,
+        c.reg_date AS regDate
+        FROM coupon c
+        WHERE c.status IN ('사용', 'ACTIVE')
+        AND (c.start_date IS NULL OR CURDATE() >= c.start_date)
+        AND (c.end_date IS NULL OR CURDATE() &lt;= c.end_date)
+        AND NOT EXISTS (
+        SELECT 1
+        FROM coupon_issue mine
+        WHERE mine.member_no = #{memberNo}
+        AND mine.coupon_no = c.coupon_no
+        AND mine.status NOT IN ('삭제', 'DELETED')
+        )
+        AND (
+        c.issue_limit IS NULL
+        OR c.issue_limit > (
+        SELECT COUNT(*)
+        FROM coupon_issue issued
+        WHERE issued.coupon_no = c.coupon_no
+        AND issued.status NOT IN ('삭제', 'DELETED')
+        )
+        )
+        ORDER BY c.coupon_no
     </select>
 
     <!-- 쿠폰별 발급 여부 확인 -->
