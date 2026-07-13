@@ -522,6 +522,11 @@ header {
     object-fit: cover;
 }
 
+.card .thumb,
+.product-thumb {
+    position: relative;
+}
+
 .card .info {
     padding: 11px 12px 12px;
 }
@@ -897,4 +902,22 @@ footer {
     background:#f3fbf6;
     color:var(--green);
     font-weight:bold;
+}
+
+/* 품절 오버레이 */
+.sold-out-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.68);
+    color: #333;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.sold-out .thumb img,
+.product-item.sold-out .product-thumb img {
+    opacity: 0.55;
 }

@@ -43,6 +43,13 @@ const couponModal = document.getElementById("couponModal");
 const couponModalClose = document.getElementById("couponModalClose");
 const couponModalList = document.getElementById("couponModalList");
 
+// 품절 관련 요소
+const productStock = Number(
+    document.getElementById("productStock")?.value || 0
+);
+
+const isSoldOut = productStock <= 0;
+
 // 가격 표시 형식
 function formatPrice(num) {
     return Number(num).toLocaleString() + "원";
@@ -96,7 +103,19 @@ function updatePrice() {
 
 // 수량 증가
 plusBtn.addEventListener("click", function () {
-    qtyInput.value = Number(qtyInput.value) + 1;
+    const current = Number(qtyInput.value);
+
+    if (isSoldOut) {
+        alert("품절된 상품입니다.");
+        return;
+    }
+
+    if (current >= productStock) {
+        alert(`최대 ${productStock}개까지 구매할 수 있습니다.`);
+        return;
+    }
+
+    qtyInput.value = current + 1;
     updatePrice();
 });
 
@@ -153,6 +172,11 @@ function closeCartModal() {
 
 // 장바구니 버튼
 cartBtn.addEventListener("click", async function () {
+    if (isSoldOut) {
+        alert("품절된 상품입니다.");
+        return;
+    }
+
     if (!isAllOptionsSelected()) {
         alert("상품 옵션을 모두 선택해주세요.");
         return;
@@ -209,13 +233,18 @@ cartBtn.addEventListener("click", async function () {
         alert("서버 통신 중 오류가 발생했습니다.");
 
     } finally {
-        cartBtn.disabled = false;
+        cartBtn.disabled = isSoldOut;
     }
 });
 
 // 구매하기 버튼
 buyBtn.addEventListener("click", async function (e) {
     e.preventDefault();
+
+    if (isSoldOut) {
+        alert("품절된 상품입니다.");
+        return;
+    }
 
     if (!isAllOptionsSelected()) {
         alert("상품 옵션을 모두 선택해주세요.");
@@ -282,7 +311,7 @@ buyBtn.addEventListener("click", async function (e) {
         alert("서버 통신 중 오류가 발생했습니다.");
 
     } finally {
-        buyBtn.disabled = false;
+        buyBtn.disabled = isSoldOut;
     }
 });
 

@@ -15,6 +15,7 @@
         p.price          AS price,
         p.discount_rate  AS discountRate,
         p.point          AS point,
+        p.stock          AS stock,
         p.delivery_fee   AS deliveryFee,
         p.view_count     AS viewCount,
         p.sold_count     AS soldCount,
@@ -74,6 +75,7 @@
         p.price,
         p.discount_rate,
         p.point,
+        p.stock,
         p.delivery_fee,
         p.view_count,
         p.sold_count
@@ -162,6 +164,7 @@
 
         p.price AS price,
         p.discount_rate AS discountRate,
+        p.stock AS stock,
         p.delivery_fee AS deliveryFee,
 
         img.image_path AS imagePath,
@@ -345,6 +348,7 @@
 
         p.price AS price,
         p.discount_rate AS discountRate,
+        p.stock AS stock,
         p.delivery_fee AS deliveryFee,
 
         img.image_path AS imagePath,

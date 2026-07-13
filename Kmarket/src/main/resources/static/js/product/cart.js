@@ -247,7 +247,9 @@ function renderCart() {
             </span>
 
             <span class="cart-discount">
-                ${item.discountRate || 0}%
+                ${Number(item.discountRate || 0) > 0
+                    ? item.discountRate + "%"
+                    : "-"}
             </span>
 
             <span class="cart-point">

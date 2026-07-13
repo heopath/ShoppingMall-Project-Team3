@@ -99,8 +99,8 @@
                     </span>
 
                     <span class="discount-text"
-                          th:text="${discountRate} + '%'">
-                        0%
+                          th:text="${discountRate > 0 ? discountRate + '%' : '-'}">
+                        -
                     </span>
 
                     <span th:text="${#numbers.formatInteger(item.point != null ? item.point * quantity : 0, 1, 'COMMA')}">
