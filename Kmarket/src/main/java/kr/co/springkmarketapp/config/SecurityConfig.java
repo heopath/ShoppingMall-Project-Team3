@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -33,6 +34,12 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
 
                 .authorizeHttpRequests(authorize -> authorize
+
+                        // 쿠폰 목록/등록 화면은 관리자와 판매자가 함께 사용한다.
+                        .requestMatchers(HttpMethod.GET, "/admin/coupon/list")
+                        .hasAnyRole("ADMIN", "SELLER")
+                        .requestMatchers(HttpMethod.POST, "/admin/coupon/register")
+                        .hasAnyRole("ADMIN", "SELLER")
 
                         /*
                          * 로그인 없이 접근 가능한 주소

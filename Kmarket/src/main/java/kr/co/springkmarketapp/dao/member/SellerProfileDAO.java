@@ -14,6 +14,8 @@ public interface SellerProfileDAO {
 
     SellerProfileDTO selectSellerProfile(Integer sellerNo);
 
+    SellerProfileDTO selectSellerProfileByMemberNo(@Param("memberNo") Integer memberNo);
+
     List<SellerProfileDTO> selectSellerProfileList();
 
     int updateSellerProfile(SellerProfileDTO sellerProfileDTO);
@@ -59,4 +61,3 @@ public interface SellerProfileDAO {
 
     int countTel(String tel);
 }
-

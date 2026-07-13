@@ -11,7 +11,7 @@
 <div id="admin-wrapper">
     <th:block th:replace="~{common/_admin_header :: header}"></th:block>
     <div class="admin-body">
-        <aside class="sidebar">
+        <aside class="sidebar" th:if="${!isSeller}">
             <ul class="admin-menu">
                 <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">⚙ 환경설정</li>
                 <li class="sub-menu-wrap close" id="configMenu">
@@ -76,9 +76,20 @@
             </ul>
         </aside>
 
+        <aside class="sidebar" th:if="${isSeller}">
+            <ul class="admin-menu">
+                <li class="menu-title active">🎟 판매자 쿠폰관리</li>
+                <li class="sub-menu-wrap">
+                    <ul class="sub-menu-list">
+                        <li class="sub-menu active"><a th:href="@{/admin/coupon/list}">- 쿠폰목록/등록</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
         <main class="content">
             <div class="page-title">
-                <h2>쿠폰목록</h2>
+                <h2 th:text="${isSeller ? '판매자 쿠폰목록' : '쿠폰목록'}">쿠폰목록</h2>
                 <span>HOME &gt; 쿠폰관리 &gt; 쿠폰목록</span>
             </div>
 
@@ -102,24 +113,26 @@
                 <table class="coupon-table">
                     <thead>
                     <tr>
-                        <th><input type="checkbox" id="checkAll"></th>
+                        <th th:if="${!isSeller}"><input type="checkbox" id="checkAll"></th>
                         <th>쿠폰번호</th>
                         <th>발급처</th>
                         <th>쿠폰종류</th>
                         <th>쿠폰명</th>
                         <th>혜택</th>
+                        <th>발급수</th>
+                        <th>사용수</th>
                         <th>사용기간</th>
                         <th>발급일</th>
-                        <th>관리</th>
+                        <th th:if="${!isSeller}">관리</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:if="${#lists.isEmpty(couponList)}">
-                        <td colspan="9">등록된 쿠폰이 없습니다.</td>
+                        <td th:attr="colspan=${isSeller ? 9 : 11}">등록된 쿠폰이 없습니다.</td>
                     </tr>
 
                     <tr th:each="coupon : ${couponList}">
-                        <td>
+                        <td th:if="${!isSeller}">
                             <input type="checkbox" class="coupon-check" th:value="${coupon.couponNo}">
                         </td>
                         <td>
@@ -151,11 +164,18 @@
                                   th:text="${coupon.benefitValue != null ? coupon.benefitValue + ' 할인' : '-'}">-</span>
                         </td>
                         <td>
+                            <span th:text="${coupon.issuedCount}">0</span>
+                            <span th:if="${coupon.issueLimit != null}"
+                                  th:text="| / ${coupon.issueLimit}|"> / 100</span>
+                            <span th:if="${coupon.issueLimit == null}"> / 무제한</span>
+                        </td>
+                        <td th:text="${coupon.usedCount}">0</td>
+                        <td>
                             <span th:text="${coupon.startDate}">0000-00-00</span> ~<br>
                             <span th:text="${coupon.endDate}">0000-00-00</span>
                         </td>
                         <td th:text="${#temporals.format(coupon.regDate, 'yyyy-MM-dd HH:mm:ss')}">0000-00-00 00:00:00</td>
-                        <td>
+                        <td th:if="${!isSeller}">
                             <form th:if="${coupon.status == 'ACTIVE' or coupon.status == '사용'}"
                                   th:action="@{/admin/coupon/status}"
                                   method="post"
@@ -185,7 +205,7 @@
                 </table>
 
                 <div class="coupon-bottom">
-                    <form th:action="@{/admin/coupon/delete}" method="post" id="couponDeleteForm" style="display:inline;">
+                    <form th:if="${!isSeller}" th:action="@{/admin/coupon/delete}" method="post" id="couponDeleteForm" style="display:inline;">
                         <input type="hidden" name="page" th:value="${currentPage}">
                         <input type="hidden" name="searchType" th:value="${searchType}">
                         <input type="hidden" name="keyword" th:value="${keyword}">
@@ -264,26 +284,31 @@
                     <input type="hidden" name="status" value="사용">
 
                     <table class="coupon-form-table">
-                        <tr>
+                        <tr th:if="${!isSeller}">
                             <th>발급처</th>
                             <td>
-                                <select name="sellerNo">
-                                    <option value="">전체 발급</option>
-                                    <option th:each="seller : ${sellerList}"
-                                            th:value="${seller.sellerNo}"
-                                            th:text="${seller.companyName}">발급처</option>
-                                </select>
+                                <input type="hidden" name="sellerNo" value="">
+                                <span>관리자 발급 (전체 회원 대상)</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${isSeller}">
+                            <th>발급처</th>
+                            <td>
+                                <strong th:text="${currentSeller.companyName}">판매자 상점</strong>
+                                <span> (로그인 판매자 자동 적용)</span>
                             </td>
                         </tr>
                         <tr>
                             <th>쿠폰종류</th>
                             <td>
-                                <select name="couponType" required>
+                                <select name="couponType" required th:if="${!isSeller}">
                                     <option value="">종류선택</option>
-                                    <option value="개별상품 할인">개별상품 할인</option>
                                     <option value="배송비 무료">배송비 무료</option>
-                                    <option value="회원가입 축하">회원가입 축하</option>
+                                    <option value="주문상품 할인">주문상품 할인 쿠폰</option>
                                 </select>
+                                <input th:if="${isSeller}" type="hidden" name="couponType" value="개별상품 할인">
+                                <strong th:if="${isSeller}">개별상품 할인</strong>
+                                <span th:if="${isSeller}"> (판매자는 해당 종류만 등록 가능)</span>
                             </td>
                         </tr>
                         <tr>
@@ -303,19 +328,27 @@
                                 <label><input type="radio" name="benefitOption" data-type="PERCENT" data-value="30"> 30% 할인</label>
                                 <label><input type="radio" name="benefitOption" data-type="PERCENT" data-value="40"> 40% 할인</label>
                                 <label><input type="radio" name="benefitOption" data-type="PERCENT" data-value="50"> 50% 할인</label>
-                                <label><input type="radio" name="benefitOption" data-type="FREE_SHIPPING" data-value="0"> 배송비 무료</label>
+                                <label th:if="${!isSeller}"><input type="radio" name="benefitOption" data-type="FREE_SHIPPING" data-value="0"> 배송비 무료</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>총 발급수</th>
+                            <td>
+                                <input type="number" name="issueLimit" min="1"
+                                       placeholder="입력하지 않으면 제한 없음">
                             </td>
                         </tr>
                         <tr>
                             <th>사용기간</th>
                             <td class="period-area">
-                                <input type="date" name="startDate" required>
+                                <input type="date" name="startDate" id="couponStartDate">
                                 <span>~</span>
-                                <input type="date" name="endDate" required>
+                                <input type="date" name="endDate" id="couponEndDate">
                                 <br>
-                                <span>또는 발급일로부터</span>
-                                <input type="text" class="day-input">
-                                <span>이내</span>
+                                <span>또는 등록일로부터</span>
+                                <input type="number" name="registrationValidDays" id="couponValidDays"
+                                       class="day-input" min="1" placeholder="일수">
+                                <span>일간 사용</span>
                             </td>
                         </tr>
                         <tr>
@@ -438,11 +471,42 @@
     if (couponRegisterForm) {
         couponRegisterForm.addEventListener("submit", function (e) {
             const checkedBenefit = document.querySelector("input[name='benefitOption']:checked");
+            const startDateInput = document.getElementById("couponStartDate");
+            const endDateInput = document.getElementById("couponEndDate");
+            const validDaysInput = document.getElementById("couponValidDays");
+            const hasStartDate = Boolean(startDateInput.value);
+            const hasEndDate = Boolean(endDateInput.value);
+            const hasValidDays = Number(validDaysInput.value) > 0;
 
             if (!checkedBenefit) {
                 alert("혜택을 선택하세요.");
                 e.preventDefault();
                 return;
+            }
+
+            if (hasStartDate !== hasEndDate) {
+                alert("사용기간의 시작일과 종료일을 모두 입력하세요.");
+                e.preventDefault();
+                return;
+            }
+
+            if (!hasStartDate && !hasValidDays) {
+                alert("사용기간 또는 발급일 기준 유효일수를 입력하세요.");
+                e.preventDefault();
+                return;
+            }
+
+            if (hasStartDate && endDateInput.value < startDateInput.value) {
+                alert("종료일은 시작일보다 빠를 수 없습니다.");
+                e.preventDefault();
+                return;
+            }
+
+            if (hasStartDate) {
+                validDaysInput.value = "";
+            } else {
+                startDateInput.value = "";
+                endDateInput.value = "";
             }
 
             document.getElementById("benefitTypeInput").value = checkedBenefit.dataset.type;

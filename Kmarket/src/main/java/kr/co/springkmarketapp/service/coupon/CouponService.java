@@ -56,6 +56,26 @@ public class CouponService {
         return couponDAO.countCouponListBySearch(searchType, keyword);
     }
 
+    public List<CouponDTO> selectCouponListBySeller(Integer sellerNo, int offset, int limit) {
+        return couponDAO.selectCouponListBySellerWithPaging(sellerNo, offset, limit);
+    }
+
+    public List<CouponDTO> selectCouponListBySeller(
+            Integer sellerNo, String searchType, String keyword, int offset, int limit
+    ) {
+        return couponDAO.selectCouponListBySellerSearchWithPaging(
+                sellerNo, searchType, keyword, offset, limit
+        );
+    }
+
+    public int countCouponListBySeller(Integer sellerNo) {
+        return couponDAO.countCouponListBySeller(sellerNo);
+    }
+
+    public int countCouponListBySeller(Integer sellerNo, String searchType, String keyword) {
+        return couponDAO.countCouponListBySellerSearch(sellerNo, searchType, keyword);
+    }
+
     public int updateCoupon(CouponDTO couponDTO) {
         return couponDAO.updateCoupon(couponDTO);
     }
