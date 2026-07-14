@@ -4,6 +4,7 @@ import kr.co.springkmarketapp.dao.product.CategoryDAO;
 import kr.co.springkmarketapp.dto.product.CategoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,5 +83,14 @@ public class CategoryService {
             }
         }
         return filteredSubs;
+    }
+    /**
+     * 관리자 카테고리 순서/소속 변경 (드래그앤드롭 후 "수정하기" 클릭 시 일괄 저장)
+     */
+    @Transactional
+    public void updateCategoryOrder(List<CategoryDTO> orderList) {
+        for (CategoryDTO dto : orderList) {
+            categoryDAO.updateOrder(dto);
+        }
     }
 }

@@ -82,4 +82,11 @@
         use_yn = #{useYn}
         WHERE cate_no = #{cateNo}
     </update>
+
+    <update id="updateOrder" parameterType="kr.co.springkmarketapp.dto.product.CategoryDTO">
+        UPDATE category
+        SET sort_order = #{sortOrder},
+        parent_no  = #{parentNo}
+        WHERE cate_no = #{cateNo}
+    </update>
 </mapper>
