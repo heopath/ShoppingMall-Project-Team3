@@ -162,7 +162,9 @@
                                 <!-- 2차 중분류 반복문 시작 -->
                                 <li th:each="sub : ${main.children}" th:data-no="${sub.cateNo}">
                                     <span th:text="${sub.cateName}">브랜드의류</span>
-                                    <button type="button" th:onclick="|deleteCategory(${sub.cateNo})|">삭제</button>
+                                    <button type="button"
+                                            th:data-no="${sub.cateNo}"
+                                            onclick="deleteCategory(this)">삭제</button>
                                 </li>
 
                                 <!-- 2차 카테고리 추가 버튼 (현재 1차 카테고리의 cateNo를 인자로 전달) -->
