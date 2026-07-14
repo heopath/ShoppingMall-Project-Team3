@@ -434,6 +434,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const successModal = document.getElementById("requestSuccessModal");
         const successMsg = successModal.querySelector("#requestSuccessMsg");
         if (successMsg) successMsg.textContent = "신청이 정상적으로 완료되었습니다.";
+
+        // 버튼 클릭 시 UI 변경 로직 추가
+        const okBtn = successModal.querySelector(".confirm-ok-btn");
+        okBtn.onclick = () => {
+          // 새로고침 대신 화면 즉시 변경
+          const targetArea = document.querySelector(`.return-link[data-order-item-no="${selectedOrderItemNo}"]`)?.closest(".order-btns");
+          if (targetArea) {
+            targetArea.innerHTML = `<span class="status-txt">반품신청</span>`;
+          }
+          closeAllModals();
+          // 필요시 window.location.reload(); 를 여기에 넣어 완전 동기화 가능
+        };
+
         openModal(successModal);
       } catch (e) {
         alert("반품 신청 처리 중 오류가 발생했습니다.");
@@ -447,6 +460,7 @@ document.addEventListener("DOMContentLoaded", function () {
     exchangeSubmitBtn.addEventListener("click", async function () {
       if (!selectedOrderItemNo) return;
 
+      // 1. 여기서 선택된 교환 사유(교환 타입)를 가져옵니다.
       const exchangeType = document.querySelector("input[name='exchangeType']:checked")?.value;
       const reason = document.getElementById("exchangeReason")?.value.trim();
       const fileInput = document.getElementById("exchangeFile");
@@ -454,19 +468,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const formData = new FormData();
       formData.append("orderItemNo", selectedOrderItemNo);
-      formData.append("returnType", exchangeType);
-      formData.append("reason", reason);
+
+      // [핵심 수정] 컨트롤러의 @RequestParam("exchangeType")과 이름을 맞춤
+      formData.append("exchangeType", exchangeType);
+
+      formData.append("reason", reason); // 여기는 동일하게 reason
       if (fileInput?.files[0]) formData.append("exchangeFile", fileInput.files[0]);
 
       try {
         const response = await fetch("/my/order/exchange", { method: "POST", body: formData });
         if (!response.ok) throw new Error();
 
-        // 모든 모달 닫기 후 성공 모달 오픈
         closeAllModals();
         const successModal = document.getElementById("requestSuccessModal");
-        const successMsg = successModal.querySelector("#requestSuccessMsg");
-        if (successMsg) successMsg.textContent = "신청이 정상적으로 완료되었습니다.";
+        successModal.querySelector("#requestSuccessMsg").textContent = "교환 신청이 정상적으로 완료되었습니다.";
         openModal(successModal);
       } catch (e) {
         alert("교환 신청 처리 중 오류가 발생했습니다.");
@@ -477,12 +492,19 @@ document.addEventListener("DOMContentLoaded", function () {
   // [성공 모달 확인/닫기 버튼 처리 - 공통]
   const successModal = document.getElementById("requestSuccessModal");
   if (successModal) {
-    successModal.querySelector(".confirm-ok-btn").addEventListener("click", () => {
+    const reloadHandler = () => {
+      // 1. 새로고침하기 전에 모든 버튼 영역을 숨겨버림 (잔상 방지)
+      const allBtnAreas = document.querySelectorAll(".order-btns");
+      allBtnAreas.forEach(area => {
+        area.style.display = 'none';
+      });
+
+      // 2. 페이지 새로고침
       window.location.reload();
-    });
-    successModal.querySelector(".modal-close").addEventListener("click", () => {
-      window.location.reload();
-    });
+    };
+
+    successModal.querySelector(".confirm-ok-btn").addEventListener("click", reloadHandler);
+    successModal.querySelector(".modal-close").addEventListener("click", reloadHandler);
   }
 
   // ========================================================

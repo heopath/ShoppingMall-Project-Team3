@@ -1,6 +1,6 @@
 package kr.co.springkmarketapp.controller.product;
 
-import kr.co.springkmarketapp.config.MyUserDetails;
+import kr.co.springkmarketapp.config.LoginUser;
 import kr.co.springkmarketapp.dto.common.PageRequestDTO;
 import kr.co.springkmarketapp.dto.common.PageResponseDTO;
 import kr.co.springkmarketapp.dto.coupon.CouponDTO;
@@ -95,7 +95,7 @@ public class ProductController {
     public String view(
             @RequestParam("productNo") int productNo,
             @RequestParam(value = "reviewPage", defaultValue = "1") int reviewPage,
-            @AuthenticationPrincipal MyUserDetails userDetails,
+            @AuthenticationPrincipal LoginUser userDetails,
             Model model
     ) {
 
@@ -154,7 +154,7 @@ public class ProductController {
     @GetMapping("/product/coupon/modal")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> couponModal(
-            @AuthenticationPrincipal MyUserDetails userDetails,
+            @AuthenticationPrincipal LoginUser userDetails,
             @RequestParam("sellerNo") Integer sellerNo
     ) {
         Integer memberNo = null;
@@ -188,7 +188,7 @@ public class ProductController {
     @PostMapping("/product/coupon/issue")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> issueCoupon(
-            @AuthenticationPrincipal MyUserDetails userDetails,
+            @AuthenticationPrincipal LoginUser userDetails,
             @RequestBody CouponIssueRequestDTO request
     ) {
         if (userDetails == null) {
@@ -240,7 +240,7 @@ public class ProductController {
 
     @GetMapping("/product/cart/items")
     public ResponseEntity<?> getCartItems(
-            @AuthenticationPrincipal MyUserDetails userDetails
+            @AuthenticationPrincipal LoginUser userDetails
     ) {
 
         if (userDetails == null) {
@@ -263,7 +263,7 @@ public class ProductController {
      */
     @PostMapping("/product/cart")
     public ResponseEntity<Map<String, Object>> addCart(
-            @AuthenticationPrincipal MyUserDetails userDetails,
+            @AuthenticationPrincipal LoginUser userDetails,
             @RequestBody CartAddRequestDTO request
     ) {
 
@@ -314,7 +314,7 @@ public class ProductController {
      */
     @PatchMapping("/product/cart/{cartNo}")
     public ResponseEntity<Map<String, Object>> updateCartQuantity(
-            @AuthenticationPrincipal MyUserDetails userDetails,
+            @AuthenticationPrincipal LoginUser userDetails,
             @PathVariable Integer cartNo,
             @RequestBody CartQuantityUpdateRequestDTO request
     ) {
@@ -359,7 +359,7 @@ public class ProductController {
      */
     @DeleteMapping("/product/cart")
     public ResponseEntity<Map<String, Object>> deleteSelectedCart(
-            @AuthenticationPrincipal MyUserDetails userDetails,
+            @AuthenticationPrincipal LoginUser userDetails,
             @RequestBody CartDeleteRequestDTO request
     ) {
         if (userDetails == null) {
@@ -398,7 +398,7 @@ public class ProductController {
 
     @GetMapping("/product/order")
     public String order(
-            @AuthenticationPrincipal MyUserDetails userDetails,
+            @AuthenticationPrincipal LoginUser userDetails,
             @RequestParam(name = "cartNo", required = false) List<Integer> cartNos,
             Model model
     ) {
@@ -451,7 +451,7 @@ public class ProductController {
 
     @PostMapping("/product/order")
     public ResponseEntity<Map<String, Object>> createOrder(
-            @AuthenticationPrincipal MyUserDetails userDetails,
+            @AuthenticationPrincipal LoginUser userDetails,
             @RequestBody OrderCreateRequestDTO request
     ) {
         if (userDetails == null) {
@@ -498,7 +498,7 @@ public class ProductController {
     @ResponseBody
     public Map<String, Object> directOrder(
             @RequestBody DirectOrderRequestDTO request,
-            @AuthenticationPrincipal MyUserDetails userDetails
+            @AuthenticationPrincipal LoginUser userDetails
     ) {
         if (userDetails == null) {
             return Map.of(
@@ -520,7 +520,7 @@ public class ProductController {
 
     @GetMapping("/product/complete")
     public String complete(
-            @AuthenticationPrincipal MyUserDetails userDetails,
+            @AuthenticationPrincipal LoginUser userDetails,
             @RequestParam("orderNo") Long orderNo,
             Model model
     ) {

@@ -1,6 +1,3 @@
-<link rel="stylesheet" th:href="@{/css/common/notification.css}" />
-<script th:src="@{/js/common/notification.js}" defer></script>
-
 <!-- Top ad banner -->
 <!-- DB 배너가 있을 때 -->
 <div class="top-bar"
@@ -27,7 +24,6 @@
     <a th:href="@{/}" class="logo-img">
         <img th:if="${settings.header_logo != null and settings.header_logo != ''}"
              th:src="${settings.header_logo}"
-             onerror="this.onerror=null; this.src='/images/main/header_logo.png';"
              alt="Kmarket 로고" />
 
         <img th:if="${settings.header_logo == null or settings.header_logo == ''}"
@@ -58,8 +54,13 @@
     </form>
 
     <!-- 로그인 -->
+    <!-- 로그인 -->
     <nav class="header-links" th:if="${#authorization.expression('isAuthenticated()')}">
-        <span class="login-user"> 안녕하세요, <span class="name" th:text="${#authentication.principal.member.name}"></span><span class="suffix">님</span></span>
+        <span class="login-user">
+            안녕하세요, <span class="name" th:text="${#authentication.principal.member.name}"></span><span class="suffix">님</span>
+        </span>
+
+        <!-- 알림 영역 -->
         <div class="notification-wrap" id="notificationWrap">
             <button type="button"
                     class="notification-button"
@@ -91,6 +92,8 @@
                 </div>
             </section>
         </div>
+
+        <!-- 기타 메뉴 -->
         <a th:href="@{/member/logout}">로그아웃</a>
         <a th:href="@{/my/home}">마이페이지</a>
         <a th:href="@{/product/cart}">장바구니</a>
@@ -108,6 +111,21 @@
         <a th:href="@{/member/login}">로그인</a>
         <a th:href="@{/member/join}">회원가입</a>
     </nav>
+
+
+    <!-- 판매자 전용 빠른 메뉴 -->
+    <nav class="header-links"
+         th:if="${#authorization.expression('hasRole(''SELLER'')')}">
+        <a th:href="@{/admin/coupon/list}">쿠폰등록</a>
+    </nav>
+
+    <!-- 관리자 -->
+    <nav class="header-links"
+         th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+        <a th:href="@{/admin}">관리자</a>
+    </nav>
+
+
 </header>
 
 <!-- GNB -->

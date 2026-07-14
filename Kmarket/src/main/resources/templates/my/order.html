@@ -46,7 +46,7 @@
                 </div>
                 <div class="summary-card">
                     <strong>포인트</strong>
-                    <span th:text="${#numbers.formatInteger(summary.point ?: 0, 3, 'COMMA')}">0</span>
+                    <span th:text="${#numbers.formatInteger(summary.point ?: 0, 1, 'COMMA')}">0</span>
                 </div>
                 <div class="summary-card">
                     <strong>문의</strong>

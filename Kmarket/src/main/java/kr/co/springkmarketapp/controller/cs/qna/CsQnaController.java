@@ -1,6 +1,6 @@
 package kr.co.springkmarketapp.controller.cs.qna;
 
-import kr.co.springkmarketapp.config.MyUserDetails;
+import kr.co.springkmarketapp.config.LoginUser;
 import kr.co.springkmarketapp.dto.cs.QnaDTO;
 import kr.co.springkmarketapp.service.cs.QnaService;
 import kr.co.springkmarketapp.util.PageHandler;
@@ -88,7 +88,7 @@ public class CsQnaController {
             return "redirect:/cs/qna/write?parentNo=" + parentNo;
         }
 
-        MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+        LoginUser userDetails = (LoginUser) authentication.getPrincipal();
 
         qnaDTO.setMemberNo(userDetails.getMember().getMemberNo());
 

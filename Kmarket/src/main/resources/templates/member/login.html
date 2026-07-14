@@ -75,16 +75,18 @@
             <span class="sns-title">간편 로그인</span>
 
             <div class="sns-btn-group">
-              <button class="sns-btn naver">N</button>
+<!--              <button class="sns-btn naver">N</button>-->
 
-              <button class="sns-btn kakao">💬</button>
+<!--              <button class="sns-btn kakao">💬</button>-->
 
-              <button class="sns-btn google">
+              <a th:href="@{/oauth2/authorization/google}" class="sns-btn google">
                 <img
                   src="https://www.gstatic.com/images/branding/googleg/1x/googleg_standard_color_128dp.png"
                   alt="Google"
                 />
-              </button>
+                <span>구글 간편 로그인</span>
+
+              </a>
             </div>
           </div>
         </div>

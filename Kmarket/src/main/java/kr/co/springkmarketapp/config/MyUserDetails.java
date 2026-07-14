@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class MyUserDetails implements UserDetails {
+public class MyUserDetails implements UserDetails, LoginUser  {
 
     private Member member;
 

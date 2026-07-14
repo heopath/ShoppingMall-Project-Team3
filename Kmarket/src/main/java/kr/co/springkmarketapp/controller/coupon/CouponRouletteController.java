@@ -1,6 +1,6 @@
 package kr.co.springkmarketapp.controller.coupon;
 
-import kr.co.springkmarketapp.config.MyUserDetails;
+import kr.co.springkmarketapp.config.LoginUser;
 import kr.co.springkmarketapp.service.coupon.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class CouponRouletteController {
 
     @GetMapping("/prizes")
     public Map<String, Object> prizes(
-            @AuthenticationPrincipal MyUserDetails userDetails
+            @AuthenticationPrincipal LoginUser userDetails
     ) {
         Integer memberNo = userDetails == null
                 ? null
@@ -38,7 +38,7 @@ public class CouponRouletteController {
 
     @PostMapping("/spin")
     public ResponseEntity<Map<String, Object>> spin(
-            @AuthenticationPrincipal MyUserDetails userDetails
+            @AuthenticationPrincipal LoginUser userDetails
     ) {
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
