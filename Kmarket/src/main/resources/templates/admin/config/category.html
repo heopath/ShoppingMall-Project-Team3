@@ -5,6 +5,7 @@
     <th:block th:replace="~{common/_site_head :: head('관리자 카테고리')}"></th:block>
     <link rel="stylesheet" href="../../css/admin/admin-common.css">
     <link rel="stylesheet" href="../../css/admin/config/category.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
 </head>
 <body>
 
@@ -146,32 +147,21 @@
                             등록된 카테고리가 없습니다.
                         </li>
 
-                        <!-- 1차 대분류 반복문 시작 -->
                         <li class="category-item" th:each="main : ${categoryTree}" th:data-no="${main.cateNo}">
                             <div class="category-main">
                                 <button type="button" class="category-toggle">▶</button>
-
-                                <span th:text="${main.cateName}">여성패션</span>
+                                <span class="category-name" th:text="${main.cateName}">여성패션</span>
                                 <button type="button" class="category-delete"
-                                        th:data-no="${main.cateNo}"
-                                        onclick="deleteCategory(this)">삭제</button>
+                                        th:data-no="${main.cateNo}" onclick="deleteCategory(this)">삭제</button>
                             </div>
 
-                            <!-- 2차 중분류 리스트 영역 (기본적으로 close 스타일이나 display:none 처리) -->
                             <ul class="category-sub-list" style="display: none;">
-                                <!-- 2차 중분류 반복문 시작 -->
                                 <li th:each="sub : ${main.children}" th:data-no="${sub.cateNo}">
-                                    <span th:text="${sub.cateName}">브랜드의류</span>
-                                    <button type="button"
-                                            th:data-no="${sub.cateNo}"
-                                            onclick="deleteCategory(this)">삭제</button>
+                                    <span class="category-name" th:text="${sub.cateName}">브랜드의류</span>
+                                    <button type="button" th:data-no="${sub.cateNo}" onclick="deleteCategory(this)">삭제</button>
                                 </li>
-
-                                <!-- 2차 카테고리 추가 버튼 (현재 1차 카테고리의 cateNo를 인자로 전달) -->
                                 <li class="add-sub-category">
-                                    <button type="button"
-                                            th:data-no="${main.cateNo}"
-                                            th:data-name="${main.cateName}"
+                                    <button type="button" th:data-no="${main.cateNo}" th:data-name="${main.cateName}"
                                             onclick="openAddSubModal(this)">＋ 2차카테고리추가</button>
                                 </li>
                             </ul>
@@ -312,6 +302,64 @@
             })
             .catch(error => console.error("Error:", error));
     }
+
+    let mainSortable;
+    const subSortables = [];
+
+    function initSortable() {
+        const mainList = document.querySelector('.category-list');
+
+        mainSortable = new Sortable(mainList, {
+            animation: 150,
+            filter: '.category-toggle, .category-delete, button',
+            preventOnFilter: false,
+            onMove: evt => !evt.related.classList.contains('add-main-category')
+        });
+
+        document.querySelectorAll('.category-sub-list').forEach(subList => {
+            const sortable = new Sortable(subList, {
+                group: 'sub-category', // 그룹 공유 -> 다른 1차 카테고리로 이동(부모변경)도 가능
+                animation: 150,
+                filter: 'button',
+                preventOnFilter: false,
+                onMove: evt => !evt.related.classList.contains('add-sub-category')
+            });
+            subSortables.push(sortable);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', initSortable);
+
+    // 순서/부모 변경사항 저장
+    document.querySelector('.category-save-btn').addEventListener('click', function () {
+        const orderList = [];
+
+        document.querySelectorAll('.category-list > .category-item').forEach((mainLi, mainIdx) => {
+            const mainNo = Number(mainLi.dataset.no);
+            orderList.push({ cateNo: mainNo, sortOrder: mainIdx + 1, parentNo: null });
+
+            const subList = mainLi.querySelector('.category-sub-list');
+            subList.querySelectorAll('li:not(.add-sub-category)').forEach((subLi, subIdx) => {
+                orderList.push({
+                    cateNo: Number(subLi.dataset.no),
+                    sortOrder: subIdx + 1,
+                    parentNo: mainNo
+                });
+            });
+        });
+
+        fetch('/admin/config/category/reorder', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderList)
+        })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === 'success') location.reload();
+            })
+            .catch(err => console.error('Error:', err));
+    });
 </script>
 
 </body>

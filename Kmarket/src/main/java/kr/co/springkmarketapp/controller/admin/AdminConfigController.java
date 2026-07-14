@@ -269,4 +269,19 @@ public class AdminConfigController {
     public CategoryDTO getCategoryDetail(@RequestParam("cateNo") int cateNo) {
         return categoryService.getCategory(cateNo);
     }
+
+    @PostMapping("/category/reorder")
+    @ResponseBody
+    public Map<String, Object> reorderCategory(@RequestBody List<CategoryDTO> orderList) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            categoryService.updateCategoryOrder(orderList);
+            result.put("status", "success");
+            result.put("message", "카테고리 순서가 저장되었습니다.");
+        } catch (Exception e) {
+            result.put("status", "fail");
+            result.put("message", "순서 저장 중 오류가 발생했습니다.");
+        }
+        return result;
+    }
 }

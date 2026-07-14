@@ -43,6 +43,12 @@
     border: 1px solid #ccc;
     border-left: none;
     background: #f8f8f8;
+    cursor: grab;
+    user-select: none;
+}
+
+.category-main:active {
+    cursor: grabbing;
 }
 
 .category-main span {
@@ -82,10 +88,16 @@
     align-items: center;
     height: 24px;
     font-size: 12px;
+    cursor: grab;
+    user-select: none;
+}
+
+.category-sub-list li:active {
+    cursor: grabbing;
 }
 
 .category-sub-list li span {
-    width: 95px;
+    flex: 1;
 }
 
 .add-sub-category button,
