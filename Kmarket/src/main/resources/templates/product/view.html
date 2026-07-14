@@ -266,11 +266,12 @@
                         </button>
                     </div>
 
-                    <div class="mini-banner" th:if="${product1Banner != null and !#lists.isEmpty(product1Banner)}">
-                        <a th:href="${product1Banner[0].linkUrl != null ? product1Banner[0].linkUrl : '#'}">
+                    <div class="mini-banner has-image"
+                         th:if="${product1Banner != null and !#lists.isEmpty(product1Banner)}">
+                        <a th:href="${product1Banner[0].linkUrl != null ? product1Banner[0].linkUrl : '#'}"
+                           th:aria-label="${product1Banner[0].bannerName}">
                             <img th:src="${product1Banner[0].imagePath}"
-                                 th:alt="${product1Banner[0].bannerName}"
-                                 style="width: 100%; height: auto;" />
+                                 th:alt="${product1Banner[0].bannerName}" />
                         </a>
                     </div>
 
