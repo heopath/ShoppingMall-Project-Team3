@@ -90,468 +90,564 @@ CREATE DATABASE IF NOT EXISTS kmarket;
 USE kmarket;
 
 -- 1. 회원
-CREATE TABLE member (
-    member_no        INT AUTO_INCREMENT PRIMARY KEY,
-    member_id        VARCHAR(50) UNIQUE,
-    password         VARCHAR(255),
-    name             VARCHAR(50) NOT NULL,
-    gender           CHAR(1),
-    birth            DATE,
-    email            VARCHAR(100) UNIQUE,
-    hp               VARCHAR(20),
-    role             VARCHAR(20) NOT NULL DEFAULT 'USER',
-    grade            VARCHAR(20) NOT NULL DEFAULT 'SILVER',
-    point            INT NOT NULL DEFAULT 0,
-    status           VARCHAR(20) NOT NULL DEFAULT '정상',
-    zip              VARCHAR(10),
-    addr1            VARCHAR(255),
-    addr2            VARCHAR(255),
-    last_login_date  DATETIME,
-    leave_date       DATETIME,
-    reg_date         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE `member` (
+  `member_no` int NOT NULL AUTO_INCREMENT,
+  `member_id` varchar(50) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `name` varchar(50) NOT NULL,
+  `gender` char(1) DEFAULT NULL,
+  `birth` date DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `hp` varchar(20) DEFAULT NULL,
+  `role` varchar(20) NOT NULL DEFAULT 'USER',
+  `grade` varchar(20) NOT NULL DEFAULT 'SILVER',
+  `point` int NOT NULL DEFAULT '0',
+  `status` varchar(20) NOT NULL DEFAULT '정상',
+  `zip` varchar(10) DEFAULT NULL,
+  `addr1` varchar(255) DEFAULT NULL,
+  `addr2` varchar(255) DEFAULT NULL,
+  `last_login_date` datetime DEFAULT NULL,
+  `leave_date` datetime DEFAULT NULL,
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`member_no`),
+  UNIQUE KEY `member_id` (`member_id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 2. 소셜 로그인 연동
-CREATE TABLE member_social (
-    social_no         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    member_no         INT NOT NULL,
-    provider          VARCHAR(20) NOT NULL,
-    provider_user_id  VARCHAR(255) NOT NULL,
-    provider_email    VARCHAR(100),
-    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (provider, provider_user_id),
-    UNIQUE (member_no, provider),
-    FOREIGN KEY (member_no) REFERENCES member(member_no)
-);
+CREATE TABLE `member_social` (
+  `social_no` bigint NOT NULL AUTO_INCREMENT,
+  `member_no` int NOT NULL,
+  `provider` varchar(20) NOT NULL,
+  `provider_user_id` varchar(255) NOT NULL,
+  `provider_email` varchar(100) DEFAULT NULL,
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`social_no`),
+  UNIQUE KEY `provider` (`provider`,`provider_user_id`),
+  UNIQUE KEY `member_no` (`member_no`,`provider`),
+  CONSTRAINT `member_social_ibfk_1` FOREIGN KEY (`member_no`) REFERENCES `member` (`member_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 3. 약관
-CREATE TABLE policy (
-    policy_no         INT AUTO_INCREMENT PRIMARY KEY,
-    policy_type       VARCHAR(50) NOT NULL,
-    title             VARCHAR(100) NOT NULL,
-    content           TEXT NOT NULL,
-    required_yn       CHAR(1) NOT NULL DEFAULT 'Y',
-    use_yn            CHAR(1) NOT NULL DEFAULT 'Y',
-    update_date       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+CREATE TABLE `policy` (
+  `policy_no` int NOT NULL AUTO_INCREMENT,
+  `policy_type` varchar(50) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `content` text NOT NULL,
+  `required_yn` char(1) NOT NULL DEFAULT 'Y',
+  `use_yn` char(1) NOT NULL DEFAULT 'Y',
+  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`policy_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 4. 판매자 상점 정보
-CREATE TABLE seller_profile (
-    seller_no         INT AUTO_INCREMENT PRIMARY KEY,
-    member_no         INT NOT NULL UNIQUE,
-    company_name      VARCHAR(100) NOT NULL,
-    ceo_name          VARCHAR(50) NOT NULL,
-    biz_no            VARCHAR(30) NOT NULL UNIQUE,
-    online_sale_no    VARCHAR(50),
-    tel               VARCHAR(20),
-    fax               VARCHAR(20),
-    zip               VARCHAR(10),
-    addr1             VARCHAR(255),
-    addr2             VARCHAR(255),
-    status            VARCHAR(20) NOT NULL DEFAULT '운영준비',
-    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (member_no) REFERENCES member(member_no)
-);
+CREATE TABLE `seller_profile` (
+  `seller_no` int NOT NULL AUTO_INCREMENT,
+  `member_no` int NOT NULL,
+  `company_name` varchar(100) NOT NULL,
+  `ceo_name` varchar(50) NOT NULL,
+  `biz_no` varchar(30) NOT NULL,
+  `online_sale_no` varchar(50) DEFAULT NULL,
+  `tel` varchar(20) DEFAULT NULL,
+  `fax` varchar(20) DEFAULT NULL,
+  `zip` varchar(10) DEFAULT NULL,
+  `addr1` varchar(255) DEFAULT NULL,
+  `addr2` varchar(255) DEFAULT NULL,
+  `status` varchar(20) NOT NULL DEFAULT '운영준비',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`seller_no`),
+  UNIQUE KEY `member_no` (`member_no`),
+  UNIQUE KEY `biz_no` (`biz_no`),
+  CONSTRAINT `seller_profile_ibfk_1` FOREIGN KEY (`member_no`) REFERENCES `member` (`member_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 5. 상품 카테고리
-CREATE TABLE category (
-    cate_no           INT AUTO_INCREMENT PRIMARY KEY,
-    parent_no         INT DEFAULT NULL,
-    cate_name         VARCHAR(100) NOT NULL,
-    depth             TINYINT NOT NULL DEFAULT 1,
-    sort_order        INT NOT NULL DEFAULT 0,
-    use_yn            CHAR(1) NOT NULL DEFAULT 'Y',
-    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (parent_no) REFERENCES category(cate_no)
-);
+CREATE TABLE `category` (
+  `cate_no` int NOT NULL AUTO_INCREMENT,
+  `parent_no` int DEFAULT NULL,
+  `cate_name` varchar(100) NOT NULL,
+  `depth` tinyint NOT NULL DEFAULT '1',
+  `sort_order` int NOT NULL DEFAULT '0',
+  `use_yn` char(1) NOT NULL DEFAULT 'Y',
+  PRIMARY KEY (`cate_no`),
+  KEY `parent_no` (`parent_no`),
+  CONSTRAINT `category_ibfk_1` FOREIGN KEY (`parent_no`) REFERENCES `category` (`cate_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 6. 상품
-CREATE TABLE product (
-    product_no        INT AUTO_INCREMENT PRIMARY KEY,
-    seller_no         INT NOT NULL,
-    cate_no           INT NOT NULL,
-    product_name      VARCHAR(200) NOT NULL,
-    basic_desc        VARCHAR(255),
-    brand             VARCHAR(100),
-    price             INT NOT NULL DEFAULT 0,
-    discount_rate     INT NOT NULL DEFAULT 0,
-    point             INT NOT NULL DEFAULT 0,
-    stock             INT NOT NULL DEFAULT 0,
-    delivery_fee      INT NOT NULL DEFAULT 0,
-    status            VARCHAR(20) NOT NULL DEFAULT '판매중',
-    view_count        INT NOT NULL DEFAULT 0,
-    sold_count        INT NOT NULL DEFAULT 0,
-    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no),
-    FOREIGN KEY (cate_no) REFERENCES category(cate_no)
-);
+CREATE TABLE `product` (
+  `product_no` int NOT NULL AUTO_INCREMENT,
+  `seller_no` int NOT NULL,
+  `cate_no` int NOT NULL,
+  `product_name` varchar(200) NOT NULL,
+  `basic_desc` varchar(255) DEFAULT NULL,
+  `brand` varchar(100) DEFAULT NULL,
+  `price` int NOT NULL DEFAULT '0',
+  `discount_rate` int NOT NULL DEFAULT '0',
+  `point` int NOT NULL DEFAULT '0',
+  `stock` int NOT NULL DEFAULT '0',
+  `delivery_fee` int NOT NULL DEFAULT '0',
+  `status` varchar(20) NOT NULL DEFAULT '판매중',
+  `view_count` int NOT NULL DEFAULT '0',
+  `sold_count` int NOT NULL DEFAULT '0',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`product_no`),
+  KEY `seller_no` (`seller_no`),
+  KEY `cate_no` (`cate_no`),
+  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`seller_no`) REFERENCES `seller_profile` (`seller_no`),
+  CONSTRAINT `product_ibfk_2` FOREIGN KEY (`cate_no`) REFERENCES `category` (`cate_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 7. 상품 이미지
-CREATE TABLE product_image (
-    image_no          INT AUTO_INCREMENT PRIMARY KEY,
-    product_no        INT NOT NULL,
-    image_type        VARCHAR(30) NOT NULL,
-    image_path        VARCHAR(255) NOT NULL,
-    sort_order        INT NOT NULL DEFAULT 0,
-    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (product_no) REFERENCES product(product_no)
-);
+CREATE TABLE `product_image` (
+  `image_no` int NOT NULL AUTO_INCREMENT,
+  `product_no` int NOT NULL,
+  `image_type` varchar(30) NOT NULL,
+  `image_path` varchar(255) NOT NULL,
+  `sort_order` int NOT NULL DEFAULT '0',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`image_no`),
+  KEY `product_no` (`product_no`),
+  CONSTRAINT `product_image_ibfk_1` FOREIGN KEY (`product_no`) REFERENCES `product` (`product_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 8. 상품 옵션
-CREATE TABLE product_option (
-    option_no         INT AUTO_INCREMENT PRIMARY KEY,
-    product_no        INT NOT NULL,
-    option_group_no   TINYINT NOT NULL,
-    option_name       VARCHAR(100) NOT NULL,
-    option_value      VARCHAR(100) NOT NULL,
-    sort_order        INT NOT NULL DEFAULT 0,
-    UNIQUE KEY uk_product_option_value (product_no, option_group_no, option_value),
-    FOREIGN KEY (product_no) REFERENCES product(product_no)
-);
+CREATE TABLE `product_option` (
+  `option_no` int NOT NULL AUTO_INCREMENT,
+  `product_no` int NOT NULL,
+  `option_group_no` tinyint NOT NULL,
+  `option_name` varchar(100) NOT NULL,
+  `option_value` varchar(100) NOT NULL,
+  `sort_order` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`option_no`),
+  UNIQUE KEY `uk_product_option_value` (`product_no`,`option_group_no`,`option_value`),
+  CONSTRAINT `product_option_ibfk_1` FOREIGN KEY (`product_no`) REFERENCES `product` (`product_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 9. 상품정보 제공고시
-CREATE TABLE product_notice (
-    notice_no         INT AUTO_INCREMENT PRIMARY KEY,
-    product_no        INT NOT NULL UNIQUE,
-    product_status    VARCHAR(100),
-    tax_type          VARCHAR(100),
-    receipt_type      VARCHAR(100),
-    business_type     VARCHAR(100),
-    origin            VARCHAR(100),
-    FOREIGN KEY (product_no) REFERENCES product(product_no)
-);
+CREATE TABLE `product_notice` (
+  `notice_no` int NOT NULL AUTO_INCREMENT,
+  `product_no` int NOT NULL,
+  `product_status` varchar(100) DEFAULT NULL,
+  `tax_type` varchar(100) DEFAULT NULL,
+  `receipt_type` varchar(100) DEFAULT NULL,
+  `business_type` varchar(100) DEFAULT NULL,
+  `origin` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`notice_no`),
+  UNIQUE KEY `product_no` (`product_no`),
+  CONSTRAINT `product_notice_ibfk_1` FOREIGN KEY (`product_no`) REFERENCES `product` (`product_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 10. 장바구니
-CREATE TABLE cart (
-    cart_no           INT AUTO_INCREMENT PRIMARY KEY,
-    member_no         INT NOT NULL,
-    product_no        INT NOT NULL,
-    option_signature  VARCHAR(100) NOT NULL DEFAULT '',
-    quantity          INT NOT NULL DEFAULT 1,
-    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY uk_cart_member_product_option (member_no, product_no, option_signature),
-    FOREIGN KEY (member_no) REFERENCES member(member_no),
-    FOREIGN KEY (product_no) REFERENCES product(product_no)
-);
+CREATE TABLE `cart` (
+  `cart_no` int NOT NULL AUTO_INCREMENT,
+  `member_no` int NOT NULL,
+  `product_no` int NOT NULL,
+  `option_signature` varchar(100) NOT NULL DEFAULT '',
+  `quantity` int NOT NULL DEFAULT '1',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`cart_no`),
+  UNIQUE KEY `uk_cart_member_product_option` (`member_no`,`product_no`,`option_signature`),
+  KEY `product_no` (`product_no`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`member_no`) REFERENCES `member` (`member_no`),
+  CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`product_no`) REFERENCES `product` (`product_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 11. 장바구니 선택 옵션
-CREATE TABLE cart_option (
-    cart_no           INT NOT NULL,
-    option_no         INT NOT NULL,
-    PRIMARY KEY (cart_no, option_no),
-    FOREIGN KEY (cart_no) REFERENCES cart(cart_no),
-    FOREIGN KEY (option_no) REFERENCES product_option(option_no)
-);
+CREATE TABLE `cart_option` (
+  `cart_no` int NOT NULL,
+  `option_no` int NOT NULL,
+  PRIMARY KEY (`cart_no`,`option_no`),
+  KEY `option_no` (`option_no`),
+  CONSTRAINT `cart_option_ibfk_1` FOREIGN KEY (`cart_no`) REFERENCES `cart` (`cart_no`),
+  CONSTRAINT `cart_option_ibfk_2` FOREIGN KEY (`option_no`) REFERENCES `product_option` (`option_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 12. 주문
-CREATE TABLE orders (
-    order_no          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    order_code        VARCHAR(50) NOT NULL UNIQUE,
-    member_no         INT NOT NULL,
-    orderer_name      VARCHAR(50) NOT NULL,
-    orderer_hp        VARCHAR(20) NOT NULL,
-    total_price       INT NOT NULL DEFAULT 0,
-    discount_price    INT NOT NULL DEFAULT 0,
-    coupon_discount   INT NOT NULL DEFAULT 0,
-    delivery_fee      INT NOT NULL DEFAULT 0,
-    point_use         INT NOT NULL DEFAULT 0,
-    point_save        INT NOT NULL DEFAULT 0,
-    pay_price         INT NOT NULL DEFAULT 0,
-    payment_method    VARCHAR(30),
-    payment_status    VARCHAR(30) NOT NULL DEFAULT '결제대기',
-    paid_date         DATETIME,
-    cancel_date       DATETIME,
-    order_status      VARCHAR(30) NOT NULL DEFAULT '주문완료',
-    order_date        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (member_no) REFERENCES member(member_no)
-);
+CREATE TABLE `orders` (
+  `order_no` bigint NOT NULL AUTO_INCREMENT,
+  `order_code` varchar(50) NOT NULL,
+  `member_no` int NOT NULL,
+  `orderer_name` varchar(50) NOT NULL,
+  `orderer_hp` varchar(20) NOT NULL,
+  `total_price` int NOT NULL DEFAULT '0',
+  `discount_price` int NOT NULL DEFAULT '0',
+  `coupon_discount` int NOT NULL DEFAULT '0',
+  `delivery_fee` int NOT NULL DEFAULT '0',
+  `point_use` int NOT NULL DEFAULT '0',
+  `point_save` int NOT NULL DEFAULT '0',
+  `pay_price` int NOT NULL DEFAULT '0',
+  `payment_method` varchar(30) DEFAULT NULL,
+  `payment_status` varchar(30) NOT NULL DEFAULT '결제대기',
+  `paid_date` datetime DEFAULT NULL,
+  `cancel_date` datetime DEFAULT NULL,
+  `order_status` varchar(30) NOT NULL DEFAULT '주문완료',
+  `order_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`order_no`),
+  UNIQUE KEY `order_code` (`order_code`),
+  KEY `member_no` (`member_no`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`member_no`) REFERENCES `member` (`member_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 13. 배송
-CREATE TABLE delivery (
-    delivery_no       INT AUTO_INCREMENT PRIMARY KEY,
-    order_no          BIGINT NOT NULL,
-    seller_no         INT NOT NULL,
-    receiver_name     VARCHAR(50) NOT NULL,
-    receiver_hp       VARCHAR(20) NOT NULL,
-    zip               VARCHAR(10),
-    addr1             VARCHAR(255),
-    addr2             VARCHAR(255),
-    courier           VARCHAR(50),
-    invoice_no        VARCHAR(50),
-    delivery_fee      INT NOT NULL DEFAULT 0,
-    delivery_status   VARCHAR(30) NOT NULL DEFAULT '배송준비',
-    memo              TEXT,
-    receipt_date      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    shipped_date      DATETIME,
-    delivered_date    DATETIME,
-    FOREIGN KEY (order_no) REFERENCES orders(order_no),
-    FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no)
-);
+CREATE TABLE `delivery` (
+  `delivery_no` int NOT NULL AUTO_INCREMENT,
+  `order_no` bigint NOT NULL,
+  `seller_no` int NOT NULL,
+  `receiver_name` varchar(50) NOT NULL,
+  `receiver_hp` varchar(20) NOT NULL,
+  `zip` varchar(10) DEFAULT NULL,
+  `addr1` varchar(255) DEFAULT NULL,
+  `addr2` varchar(255) DEFAULT NULL,
+  `courier` varchar(50) DEFAULT NULL,
+  `invoice_no` varchar(50) DEFAULT NULL,
+  `delivery_fee` int NOT NULL DEFAULT '0',
+  `delivery_status` varchar(30) NOT NULL DEFAULT '배송준비',
+  `memo` text,
+  `receipt_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `shipped_date` datetime DEFAULT NULL,
+  `delivered_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`delivery_no`),
+  KEY `seller_no` (`seller_no`),
+  KEY `idx_delivery_order_no` (`order_no`),
+  CONSTRAINT `delivery_ibfk_1` FOREIGN KEY (`order_no`) REFERENCES `orders` (`order_no`),
+  CONSTRAINT `delivery_ibfk_2` FOREIGN KEY (`seller_no`) REFERENCES `seller_profile` (`seller_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 14. 주문 상품 상세
-CREATE TABLE order_item (
-    order_item_no          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    order_no               BIGINT NOT NULL,
-    delivery_no            INT DEFAULT NULL,
-    product_no             INT NOT NULL,
-    seller_no              INT NOT NULL,
-    product_name           VARCHAR(200) NOT NULL,
-    product_image          VARCHAR(255),
-    price                  INT NOT NULL DEFAULT 0,
-    discount_rate          INT NOT NULL DEFAULT 0,
-    coupon_discount        INT NOT NULL DEFAULT 0,
-    point                  INT NOT NULL DEFAULT 0,
-    quantity               INT NOT NULL DEFAULT 1,
-    total_price            INT NOT NULL DEFAULT 0,
-    item_status            VARCHAR(30) NOT NULL DEFAULT '주문완료',
-    purchase_confirm_date  DATETIME,
-    FOREIGN KEY (order_no) REFERENCES orders(order_no),
-    FOREIGN KEY (delivery_no) REFERENCES delivery(delivery_no),
-    FOREIGN KEY (product_no) REFERENCES product(product_no),
-    FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no)
-);
+CREATE TABLE `order_item` (
+  `order_item_no` bigint NOT NULL AUTO_INCREMENT,
+  `order_no` bigint NOT NULL,
+  `delivery_no` int DEFAULT NULL,
+  `product_no` int NOT NULL,
+  `seller_no` int NOT NULL,
+  `product_name` varchar(200) NOT NULL,
+  `product_image` varchar(255) DEFAULT NULL,
+  `price` int NOT NULL DEFAULT '0',
+  `discount_rate` int NOT NULL DEFAULT '0',
+  `coupon_discount` int NOT NULL DEFAULT '0',
+  `point` int NOT NULL DEFAULT '0',
+  `quantity` int NOT NULL DEFAULT '1',
+  `total_price` int NOT NULL DEFAULT '0',
+  `item_status` varchar(30) NOT NULL DEFAULT '주문완료',
+  `purchase_confirm_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`order_item_no`),
+  KEY `order_no` (`order_no`),
+  KEY `delivery_no` (`delivery_no`),
+  KEY `product_no` (`product_no`),
+  KEY `seller_no` (`seller_no`),
+  CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`order_no`) REFERENCES `orders` (`order_no`),
+  CONSTRAINT `order_item_ibfk_2` FOREIGN KEY (`delivery_no`) REFERENCES `delivery` (`delivery_no`),
+  CONSTRAINT `order_item_ibfk_3` FOREIGN KEY (`product_no`) REFERENCES `product` (`product_no`),
+  CONSTRAINT `order_item_ibfk_4` FOREIGN KEY (`seller_no`) REFERENCES `seller_profile` (`seller_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 15. 주문상품 선택 옵션
-CREATE TABLE order_item_option (
-    order_item_option_no  BIGINT AUTO_INCREMENT PRIMARY KEY,
-    order_item_no         BIGINT NOT NULL,
-    option_group_no       TINYINT NOT NULL,
-    option_name           VARCHAR(100) NOT NULL,
-    option_value          VARCHAR(100) NOT NULL,
-    UNIQUE KEY uk_order_item_option_group (order_item_no, option_group_no),
-    FOREIGN KEY (order_item_no) REFERENCES order_item(order_item_no)
-);
+CREATE TABLE `order_item_option` (
+  `order_item_option_no` bigint NOT NULL AUTO_INCREMENT,
+  `order_item_no` bigint NOT NULL,
+  `option_group_no` tinyint NOT NULL,
+  `option_name` varchar(100) NOT NULL,
+  `option_value` varchar(100) NOT NULL,
+  PRIMARY KEY (`order_item_option_no`),
+  UNIQUE KEY `uk_order_item_option_group` (`order_item_no`,`option_group_no`),
+  CONSTRAINT `order_item_option_ibfk_1` FOREIGN KEY (`order_item_no`) REFERENCES `order_item` (`order_item_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 16. 반품 / 교환 신청
-CREATE TABLE order_claim (
-    claim_no          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    order_item_no     BIGINT NOT NULL,
-    member_no         INT NOT NULL,
-    claim_type        VARCHAR(20) NOT NULL,
-    claim_reason      VARCHAR(100) NOT NULL,
-    detail_reason     TEXT,
-    status            VARCHAR(30) NOT NULL DEFAULT '신청',
-    request_date      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    process_date      DATETIME,
-    FOREIGN KEY (order_item_no) REFERENCES order_item(order_item_no),
-    FOREIGN KEY (member_no) REFERENCES member(member_no)
-);
+CREATE TABLE `order_claim` (
+  `claim_no` bigint NOT NULL AUTO_INCREMENT,
+  `order_item_no` bigint NOT NULL,
+  `member_no` int NOT NULL,
+  `claim_type` varchar(20) NOT NULL,
+  `claim_reason` varchar(100) NOT NULL,
+  `detail_reason` text,
+  `status` varchar(30) NOT NULL DEFAULT '신청',
+  `request_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `process_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`claim_no`),
+  KEY `order_item_no` (`order_item_no`),
+  KEY `member_no` (`member_no`),
+  CONSTRAINT `order_claim_ibfk_1` FOREIGN KEY (`order_item_no`) REFERENCES `order_item` (`order_item_no`),
+  CONSTRAINT `order_claim_ibfk_2` FOREIGN KEY (`member_no`) REFERENCES `member` (`member_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 17. 반품 / 교환 첨부파일
-CREATE TABLE claim_file (
-    claim_file_no     BIGINT AUTO_INCREMENT PRIMARY KEY,
-    claim_no          BIGINT NOT NULL,
-    ori_name          VARCHAR(255) NOT NULL,
-    new_name          VARCHAR(255) NOT NULL,
-    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (claim_no) REFERENCES order_claim(claim_no)
-);
+CREATE TABLE `claim_file` (
+  `claim_file_no` bigint NOT NULL AUTO_INCREMENT,
+  `claim_no` bigint NOT NULL,
+  `ori_name` varchar(255) NOT NULL,
+  `new_name` varchar(255) NOT NULL,
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`claim_file_no`),
+  KEY `claim_no` (`claim_no`),
+  CONSTRAINT `claim_file_ibfk_1` FOREIGN KEY (`claim_no`) REFERENCES `order_claim` (`claim_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 18. 상품 리뷰
-CREATE TABLE product_review (
-    review_no         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    order_item_no     BIGINT NOT NULL UNIQUE,
-    member_no         INT NOT NULL,
-    product_no        INT NOT NULL,
-    rating            TINYINT NOT NULL,
-    content           TEXT NOT NULL,
-    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_item_no) REFERENCES order_item(order_item_no),
-    FOREIGN KEY (member_no) REFERENCES member(member_no),
-    FOREIGN KEY (product_no) REFERENCES product(product_no)
-);
+CREATE TABLE `product_review` (
+  `review_no` bigint NOT NULL AUTO_INCREMENT,
+  `order_item_no` bigint NOT NULL UNIQUE,
+  `member_no` int NOT NULL,
+  `product_no` int NOT NULL,
+  `rating` tinyint NOT NULL,
+  `content` text NOT NULL,
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`review_no`),
+  UNIQUE KEY `order_item_no` (`order_item_no`),
+  KEY `member_no` (`member_no`),
+  KEY `product_no` (`product_no`),
+  CONSTRAINT `product_review_ibfk_1` FOREIGN KEY (`order_item_no`) REFERENCES `order_item` (`order_item_no`),
+  CONSTRAINT `product_review_ibfk_2` FOREIGN KEY (`member_no`) REFERENCES `member` (`member_no`),
+  CONSTRAINT `product_review_ibfk_3` FOREIGN KEY (`product_no`) REFERENCES `product` (`product_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 19. 리뷰 이미지
-CREATE TABLE review_image (
-    review_image_no   BIGINT AUTO_INCREMENT PRIMARY KEY,
-    review_no         BIGINT NOT NULL,
-    image_path        VARCHAR(255) NOT NULL,
-    sort_order        INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (review_no) REFERENCES product_review(review_no)
-);
+CREATE TABLE `review_image` (
+  `review_image_no` bigint NOT NULL AUTO_INCREMENT,
+  `review_no` bigint NOT NULL,
+  `image_path` varchar(255) NOT NULL,
+  `sort_order` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`review_image_no`),
+  KEY `review_no` (`review_no`),
+  CONSTRAINT `review_image_ibfk_1` FOREIGN KEY (`review_no`) REFERENCES `product_review` (`review_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 20. 회원 포인트 이력
-CREATE TABLE member_point (
-    point_no          INT AUTO_INCREMENT PRIMARY KEY,
-    member_no         INT NOT NULL,
-    order_no          BIGINT DEFAULT NULL,
-    point_type        VARCHAR(20) NOT NULL,
-    point_value       INT NOT NULL,
-    balance_point     INT NOT NULL DEFAULT 0,
-    reason            VARCHAR(255),
-    expire_date       DATE,
-    reg_date          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (member_no) REFERENCES member(member_no),
-    FOREIGN KEY (order_no) REFERENCES orders(order_no)
-);
+CREATE TABLE `member_point` (
+  `point_no` int NOT NULL AUTO_INCREMENT,
+  `member_no` int NOT NULL,
+  `order_no` bigint DEFAULT NULL,
+  `point_type` varchar(20) NOT NULL,
+  `point_value` int NOT NULL,
+  `balance_point` int NOT NULL DEFAULT '0',
+  `reason` varchar(255) DEFAULT NULL,
+  `expire_date` date DEFAULT NULL,
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`point_no`),
+  KEY `member_no` (`member_no`),
+  KEY `order_no` (`order_no`),
+  CONSTRAINT `member_point_ibfk_1` FOREIGN KEY (`member_no`) REFERENCES `member` (`member_no`),
+  CONSTRAINT `member_point_ibfk_2` FOREIGN KEY (`order_no`) REFERENCES `orders` (`order_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 21. 쿠폰
-CREATE TABLE coupon (
-    coupon_no          INT AUTO_INCREMENT PRIMARY KEY,
-    coupon_code        VARCHAR(50) NOT NULL UNIQUE,
-    seller_no          INT DEFAULT NULL,
-    coupon_type        VARCHAR(30) NOT NULL,
-    coupon_name        VARCHAR(100) NOT NULL,
-    benefit_type       VARCHAR(20) NOT NULL,
-    benefit_value      INT NOT NULL DEFAULT 0,
-    min_order_price    INT NOT NULL DEFAULT 0,
-    max_discount_price INT NOT NULL DEFAULT 0,
-    issue_limit        INT DEFAULT NULL,
-    start_date         DATE,
-    end_date           DATE,
-    caution            TEXT,
-    status             VARCHAR(20) NOT NULL DEFAULT '사용',
-    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (seller_no) REFERENCES seller_profile(seller_no)
-);
+CREATE TABLE `coupon` (
+  `coupon_no` int NOT NULL AUTO_INCREMENT,
+  `coupon_code` varchar(50) NOT NULL,
+  `seller_no` int DEFAULT NULL,
+  `coupon_type` varchar(30) NOT NULL,
+  `coupon_name` varchar(100) NOT NULL,
+  `benefit_type` varchar(20) NOT NULL,
+  `benefit_value` int NOT NULL DEFAULT '0',
+  `min_order_price` int NOT NULL DEFAULT '0',
+  `max_discount_price` int NOT NULL DEFAULT '0',
+  `issue_limit` int DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `caution` text,
+  `status` varchar(20) NOT NULL DEFAULT '사용',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`coupon_no`),
+  UNIQUE KEY `coupon_code` (`coupon_code`),
+  KEY `seller_no` (`seller_no`),
+  CONSTRAINT `coupon_ibfk_1` FOREIGN KEY (`seller_no`) REFERENCES `seller_profile` (`seller_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 22. 쿠폰 적용 상품
-CREATE TABLE coupon_product (
-    coupon_no          INT NOT NULL,
-    product_no         INT NOT NULL,
-    PRIMARY KEY (coupon_no, product_no),
-    FOREIGN KEY (coupon_no) REFERENCES coupon(coupon_no),
-    FOREIGN KEY (product_no) REFERENCES product(product_no)
-);
+CREATE TABLE `coupon_product` (
+  `coupon_no` int NOT NULL,
+  `product_no` int NOT NULL,
+  PRIMARY KEY (`coupon_no`,`product_no`),
+  KEY `product_no` (`product_no`),
+  CONSTRAINT `coupon_product_ibfk_1` FOREIGN KEY (`coupon_no`) REFERENCES `coupon` (`coupon_no`),
+  CONSTRAINT `coupon_product_ibfk_2` FOREIGN KEY (`product_no`) REFERENCES `product` (`product_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 23. 회원 쿠폰 발급 이력
-CREATE TABLE coupon_issue (
-    issue_no           BIGINT AUTO_INCREMENT PRIMARY KEY,
-    issue_code         VARCHAR(50) NOT NULL UNIQUE,
-    coupon_no          INT NOT NULL,
-    member_no          INT NOT NULL,
-    order_no           BIGINT DEFAULT NULL,
-    status             VARCHAR(20) NOT NULL DEFAULT '발급',
-    used_date          DATETIME,
-    issue_date         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (coupon_no) REFERENCES coupon(coupon_no),
-    FOREIGN KEY (member_no) REFERENCES member(member_no),
-    FOREIGN KEY (order_no) REFERENCES orders(order_no)
-);
+CREATE TABLE `coupon_issue` (
+  `issue_no` bigint NOT NULL AUTO_INCREMENT,
+  `issue_code` varchar(50) NOT NULL,
+  `coupon_no` int NOT NULL,
+  `member_no` int NOT NULL,
+  `order_no` bigint DEFAULT NULL,
+  `status` varchar(20) NOT NULL DEFAULT '발급',
+  `used_date` datetime DEFAULT NULL,
+  `issue_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`issue_no`),
+  UNIQUE KEY `issue_code` (`issue_code`),
+  KEY `coupon_no` (`coupon_no`),
+  KEY `member_no` (`member_no`),
+  KEY `order_no` (`order_no`),
+  CONSTRAINT `coupon_issue_ibfk_1` FOREIGN KEY (`coupon_no`) REFERENCES `coupon` (`coupon_no`),
+  CONSTRAINT `coupon_issue_ibfk_2` FOREIGN KEY (`member_no`) REFERENCES `member` (`member_no`),
+  CONSTRAINT `coupon_issue_ibfk_3` FOREIGN KEY (`order_no`) REFERENCES `orders` (`order_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 24. 배너
-CREATE TABLE banner (
-    banner_no          INT AUTO_INCREMENT PRIMARY KEY,
-    banner_name        VARCHAR(100) NOT NULL,
-    banner_size        VARCHAR(50),
-    bg_color           VARCHAR(20),
-    link_url           VARCHAR(255),
-    banner_position    VARCHAR(50) NOT NULL,
-    image_path         VARCHAR(255) NOT NULL,
-    sort_order         INT NOT NULL DEFAULT 0,
-    start_datetime     DATETIME,
-    end_datetime       DATETIME,
-    use_yn             CHAR(1) NOT NULL DEFAULT 'Y',
-    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE `banner` (
+  `banner_no` int NOT NULL AUTO_INCREMENT,
+  `banner_name` varchar(100) NOT NULL,
+  `banner_size` varchar(50) DEFAULT NULL,
+  `bg_color` varchar(20) DEFAULT NULL,
+  `link_url` varchar(255) DEFAULT NULL,
+  `banner_position` varchar(50) NOT NULL,
+  `image_path` varchar(255) NOT NULL,
+  `sort_order` int NOT NULL DEFAULT '0',
+  `start_datetime` datetime DEFAULT NULL,
+  `end_datetime` datetime DEFAULT NULL,
+  `use_yn` char(1) NOT NULL DEFAULT 'Y',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`banner_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 25. 고객센터 카테고리
-CREATE TABLE cs_category (
-    cs_cate_no         INT AUTO_INCREMENT PRIMARY KEY,
-    parent_no          INT DEFAULT NULL,
-    cate_name          VARCHAR(100) NOT NULL,
-    depth              TINYINT NOT NULL DEFAULT 1,
-    sort_order         INT NOT NULL DEFAULT 0,
-    use_yn             CHAR(1) NOT NULL DEFAULT 'Y',
-    FOREIGN KEY (parent_no) REFERENCES cs_category(cs_cate_no)
-);
+CREATE TABLE `cs_category` (
+  `cs_cate_no` int NOT NULL AUTO_INCREMENT,
+  `parent_no` int DEFAULT NULL,
+  `cate_name` varchar(100) NOT NULL,
+  `depth` tinyint NOT NULL DEFAULT '1',
+  `sort_order` int NOT NULL DEFAULT '0',
+  `use_yn` char(1) NOT NULL DEFAULT 'Y',
+  PRIMARY KEY (`cs_cate_no`),
+  KEY `parent_no` (`parent_no`),
+  CONSTRAINT `cs_category_ibfk_1` FOREIGN KEY (`parent_no`) REFERENCES `cs_category` (`cs_cate_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 26. 공지사항
-CREATE TABLE notice (
-    notice_no          INT AUTO_INCREMENT PRIMARY KEY,
-    writer_no          INT NOT NULL,
-    notice_type        VARCHAR(50) NOT NULL,
-    title              VARCHAR(200) NOT NULL,
-    content            TEXT NOT NULL,
-    hit                INT NOT NULL DEFAULT 0,
-    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_date        DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (writer_no) REFERENCES member(member_no)
-);
+CREATE TABLE `notice` (
+  `notice_no` int NOT NULL AUTO_INCREMENT,
+  `writer_no` int NOT NULL,
+  `notice_type` varchar(50) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `content` text NOT NULL,
+  `hit` int NOT NULL DEFAULT '0',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_date` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`notice_no`),
+  KEY `writer_no` (`writer_no`),
+  CONSTRAINT `notice_ibfk_1` FOREIGN KEY (`writer_no`) REFERENCES `member` (`member_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 27. 자주 묻는 질문
-CREATE TABLE faq (
-    faq_no             INT AUTO_INCREMENT PRIMARY KEY,
-    cs_cate_no         INT NOT NULL,
-    writer_no          INT NOT NULL,
-    title              VARCHAR(200) NOT NULL,
-    content            TEXT NOT NULL,
-    hit                INT NOT NULL DEFAULT 0,
-    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_date        DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (cs_cate_no) REFERENCES cs_category(cs_cate_no),
-    FOREIGN KEY (writer_no) REFERENCES member(member_no)
-);
+CREATE TABLE `faq` (
+  `faq_no` int NOT NULL AUTO_INCREMENT,
+  `cs_cate_no` int NOT NULL,
+  `writer_no` int NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `content` text NOT NULL,
+  `hit` int NOT NULL DEFAULT '0',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_date` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`faq_no`),
+  KEY `cs_cate_no` (`cs_cate_no`),
+  KEY `writer_no` (`writer_no`),
+  CONSTRAINT `faq_ibfk_1` FOREIGN KEY (`cs_cate_no`) REFERENCES `cs_category` (`cs_cate_no`),
+  CONSTRAINT `faq_ibfk_2` FOREIGN KEY (`writer_no`) REFERENCES `member` (`member_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 28. 1:1 문의
-CREATE TABLE qna (
-    qna_no             BIGINT AUTO_INCREMENT PRIMARY KEY,
-    member_no          INT NOT NULL,
-    cs_cate_no         INT NOT NULL,
-    title              VARCHAR(200) NOT NULL,
-    content            TEXT NOT NULL,
-    answer             TEXT,
-    answer_member_no   INT DEFAULT NULL,
-    status             VARCHAR(20) NOT NULL DEFAULT '검토중',
-    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    answer_date        DATETIME,
-    FOREIGN KEY (member_no) REFERENCES member(member_no),
-    FOREIGN KEY (cs_cate_no) REFERENCES cs_category(cs_cate_no),
-    FOREIGN KEY (answer_member_no) REFERENCES member(member_no)
-);
+CREATE TABLE `qna` (
+  `qna_no` bigint NOT NULL AUTO_INCREMENT,
+  `member_no` int NOT NULL,
+  `cs_cate_no` int NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `content` text NOT NULL,
+  `answer` text,
+  `answer_member_no` int DEFAULT NULL,
+  `status` varchar(20) NOT NULL DEFAULT '검토중',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `answer_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`qna_no`),
+  KEY `member_no` (`member_no`),
+  KEY `cs_cate_no` (`cs_cate_no`),
+  KEY `answer_member_no` (`answer_member_no`),
+  CONSTRAINT `qna_ibfk_1` FOREIGN KEY (`member_no`) REFERENCES `member` (`member_no`),
+  CONSTRAINT `qna_ibfk_2` FOREIGN KEY (`cs_cate_no`) REFERENCES `cs_category` (`cs_cate_no`),
+  CONSTRAINT `qna_ibfk_3` FOREIGN KEY (`answer_member_no`) REFERENCES `member` (`member_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 29. 채용 공고
-CREATE TABLE recruit (
-    recruit_no         INT AUTO_INCREMENT PRIMARY KEY,
-    writer_no          INT NOT NULL,
-    title              VARCHAR(200) NOT NULL,
-    department         VARCHAR(50),
-    career             VARCHAR(50),
-    recruit_type       VARCHAR(50),
-    start_date         DATE,
-    end_date           DATE,
-    note               TEXT,
-    status             VARCHAR(20) NOT NULL DEFAULT '모집중',
-    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (writer_no) REFERENCES member(member_no)
-);
+CREATE TABLE `recruit` (
+  `recruit_no` int NOT NULL AUTO_INCREMENT,
+  `writer_no` int NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `department` varchar(50) DEFAULT NULL,
+  `career` varchar(50) DEFAULT NULL,
+  `recruit_type` varchar(50) DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `note` text,
+  `status` varchar(20) NOT NULL DEFAULT '모집중',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`recruit_no`),
+  KEY `writer_no` (`writer_no`),
+  CONSTRAINT `recruit_ibfk_1` FOREIGN KEY (`writer_no`) REFERENCES `member` (`member_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 30. 사이트 기본 설정
-CREATE TABLE site_setting (
-    setting_no         INT AUTO_INCREMENT PRIMARY KEY,
-    setting_key        VARCHAR(100) NOT NULL UNIQUE,
-    setting_value      TEXT,
-    update_date        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+CREATE TABLE `site_setting` (
+  `setting_no` int NOT NULL AUTO_INCREMENT,
+  `setting_key` varchar(100) NOT NULL,
+  `setting_value` text,
+  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`setting_no`),
+  UNIQUE KEY `setting_key` (`setting_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 31. 회사소개 / 문화 / 소식 / 미디어 콘텐츠
-CREATE TABLE company_content (
-    content_no         INT AUTO_INCREMENT PRIMARY KEY,
-    content_type       VARCHAR(30) NOT NULL,
-    title              VARCHAR(200) NOT NULL,
-    content            TEXT,
-    image_path         VARCHAR(255),
-    video_url          VARCHAR(255),
-    category_name      VARCHAR(100),
-    use_yn             CHAR(1) NOT NULL DEFAULT 'Y',
-    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE `company_content` (
+  `content_no` int NOT NULL AUTO_INCREMENT,
+  `content_type` varchar(30) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `content` text,
+  `image_path` varchar(255) DEFAULT NULL,
+  `video_url` varchar(255) DEFAULT NULL,
+  `category_name` varchar(100) DEFAULT NULL,
+  `use_yn` char(1) NOT NULL DEFAULT 'Y',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`content_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 32. 버전 관리
-CREATE TABLE app_version (
-    version_no         INT AUTO_INCREMENT PRIMARY KEY,
-    version_name       VARCHAR(50) NOT NULL,
-    writer_no          INT,
-    change_log         TEXT NOT NULL,
-    reg_date           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (writer_no) REFERENCES member(member_no)
-);
+CREATE TABLE `app_version` (
+  `version_no` int NOT NULL AUTO_INCREMENT,
+  `version_name` varchar(50) NOT NULL,
+  `writer_no` int DEFAULT NULL,
+  `change_log` text NOT NULL,
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`version_no`),
+  KEY `writer_no` (`writer_no`),
+  CONSTRAINT `app_version_ibfk_1` FOREIGN KEY (`writer_no`) REFERENCES `member` (`member_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 33. 방문자수 관리
-CREATE TABLE visit_daily (
-    visit_date   DATE PRIMARY KEY,
-    visit_count  INT NOT NULL DEFAULT 0
-);
+CREATE TABLE `visit_daily` (
+  `visit_date` date NOT NULL,
+  `visit_count` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`visit_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- 34. 고객 알림 관리 (★ 신규 추가)
+CREATE TABLE `notification` (
+  `notification_no` bigint NOT NULL AUTO_INCREMENT,
+  `member_no` int NOT NULL,
+  `notification_type` varchar(30) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `link_url` varchar(255) DEFAULT NULL,
+  `order_no` bigint DEFAULT NULL,
+  `delivery_no` int DEFAULT NULL,
+  `event_key` varchar(100) NOT NULL,
+  `read_yn` char(1) NOT NULL DEFAULT 'N',
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `read_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`notification_no`),
+  UNIQUE KEY `uk_notification_event_key` (`event_key`),
+  KEY `idx_notification_member` (`member_no`,`read_yn`,`reg_date`),
+  KEY `idx_notification_order` (`order_no`),
+  KEY `idx_notification_delivery` (`delivery_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 </details>
 
@@ -584,6 +680,7 @@ CREATE TABLE visit_daily (
 - **company_content**: 회사 소개, 기업 문화, 보도 자료 및 미디어 콘텐츠 아카이빙
 - **app_version**: 플랫폼 시스템 소프트웨어 버전 및 릴리즈 노트 체인지로그 관리
 - **visit_daily**: 통계 분석을 위한 일별 방문자수 데이터 관리
+- **notification**: 주문 진행 현황, 배송 상태 업데이트 등 회원별 동적 맞춤 알림 발송 관리 (★ 신규 추가)
 
 ---
 
@@ -998,6 +1095,23 @@ CREATE TABLE visit_daily (
 |---|---|
 | `visit_date` | 비즈니스 일자 달력 기준 방문 날짜 (PK, DATE 형식 연-월-일) |
 | `visit_count` | 해당 하루 동안 쇼핑몰 전역에 접속 트래픽을 일으킨 유니크 총 방문자 수 수치 카운터 |
+
+#### 34. notification (고객 알림 관리 - ★ 신규 추가)
+| 컬럼명 | 설명 |
+|---|---|
+| `notification_no` | 알림 레코드 PK (BIGINT형 고유 식별 번호) |
+| `member_no` | 알림을 수신하는 대상 회원 번호 (FK) |
+| `notification_type` | 알림의 성격 및 도메인 구분 코드 (ex: ORDER, DELIVERY, PROMOTION, CS 등) |
+| `title` | 푸시 및 알림창에 렌더링될 요약 제목 |
+| `content` | 알림 메시지 상세 본문 안내 문구 |
+| `link_url` | 사용자가 알림 클릭 시 이동할 랜딩 페이지 주소 링크 경로 |
+| `order_no` | 주문 진행 상황 알림일 경우 추적 바인딩되는 주문 번호 (미연관 시 NULL, FK) |
+| `delivery_no` | 배송 정보 업데이트 알림일 경우 추적 바인딩되는 배송 번호 (미연관 시 NULL, FK) |
+| `event_key` | 시스템 내 중복 전송 방지 및 비즈니스 이벤트 매핑용 유니크 룩업 키 (UNIQUE) |
+| `read_yn` | 수신 회원의 알림 읽음 처리 여부 플래그 플래그 (Y: 읽음, N: 안읽음) |
+| `reg_date` | 알림 최초 인입 및 발송 적치 완료 시각 |
+| `read_date` | 회원이 해당 알림을 확인하고 읽은 시각 (미읽음 시 NULL) |
+
 </details>
 
 ---
