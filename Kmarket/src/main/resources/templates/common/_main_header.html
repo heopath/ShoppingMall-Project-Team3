@@ -1,22 +1,35 @@
+<link rel="stylesheet" th:href="@{/css/common/notification.css}" />
+<link rel="stylesheet" th:href="@{/css/common/page-loading.css}" />
+<script th:src="@{/js/common/notification.js}" defer="defer"></script>
+<script th:src="@{/js/common/page-loading.js}" defer="defer"></script>
+
+<!-- 페이지 로딩 화면 -->
+<div class="page-loading" id="pageLoading" role="status" aria-live="polite">
+    <div class="page-loading-card">
+        <div class="page-loading-mark" aria-hidden="true">
+            <span></span><span></span><span></span>
+        </div>
+        <strong>K-Market</strong>
+        <p>즐거운 쇼핑을 준비하고 있어요</p>
+    </div>
+</div>
+
 <!-- Top ad banner -->
-<!-- DB 배너가 있을 때 -->
 <div class="top-bar"
      th:if="${topBanner != null}"
      th:style="${topBanner.bgColor != null ? 'background-color:' + topBanner.bgColor : ''}">
-
     <a th:href="${topBanner.linkUrl != null ? topBanner.linkUrl : '#'}"
        class="top-ad">
-
         <img th:src="${topBanner.imagePath}"
              th:alt="${topBanner.bannerName}" />
     </a>
 </div>
 
-<!-- DB 배너가 없을 때 임시 기본 이미지 -->
+<!-- DB 배너가 없을 때 기본 이미지 -->
 <div class="top-bar" th:unless="${topBanner != null}">
     <a href="#" class="top-ad">
         <img src="/images/main/vip_plcc_banner.png"
-             alt="Kmarket 최상단 광고 배너" />
+             alt="K-Market 최상단 광고 배너" />
     </a>
 </div>
 
@@ -24,43 +37,41 @@
     <a th:href="@{/}" class="logo-img">
         <img th:if="${settings.header_logo != null and settings.header_logo != ''}"
              th:src="${settings.header_logo}"
-             alt="Kmarket 로고" />
+             onerror="this.onerror=null; this.src='/images/main/header_logo.png';"
+             alt="K-Market 로고" />
 
         <img th:if="${settings.header_logo == null or settings.header_logo == ''}"
              src="/images/main/header_logo.png"
-             alt="Kmarket 기본 로고" />
+             alt="K-Market 기본 로고" />
     </a>
 
     <form class="search-box"
           th:action="@{/product/search}"
           method="get">
-
         <input type="text"
                name="keyword"
                th:value="${keyword}"
                placeholder="상품, 브랜드를 검색해보세요" />
 
         <button type="submit" aria-label="검색">
-            <svg viewBox="0 0 24 24">
-                <path
-                        d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
-                        stroke="#fff"
-                        stroke-width="2"
-                        fill="none"
-                        stroke-linecap="round"
-                />
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+                      stroke="#fff"
+                      stroke-width="2"
+                      fill="none"
+                      stroke-linecap="round" />
             </svg>
         </button>
     </form>
 
-    <!-- 로그인 -->
-    <!-- 로그인 -->
-    <nav class="header-links" th:if="${#authorization.expression('isAuthenticated()')}">
+    <!-- 로그인 사용자 메뉴 -->
+    <nav class="header-links"
+         th:if="${#authorization.expression('isAuthenticated()')}">
         <span class="login-user">
-            안녕하세요, <span class="name" th:text="${#authentication.principal.member.name}"></span><span class="suffix">님</span>
+            안녕하세요,
+            <span class="name" th:text="${#authentication.principal.member.name}"></span><span class="suffix">님</span>
         </span>
 
-        <!-- 알림 영역 -->
         <div class="notification-wrap" id="notificationWrap">
             <button type="button"
                     class="notification-button"
@@ -70,13 +81,13 @@
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" />
                 </svg>
-                <span class="notification-badge" id="notificationBadge" hidden>0</span>
+                <span class="notification-badge" id="notificationBadge" hidden="hidden">0</span>
             </button>
 
             <section class="notification-panel"
                      id="notificationPanel"
                      aria-label="알림 목록"
-                     hidden>
+                     hidden="hidden">
                 <div class="notification-panel-head">
                     <div>
                         <strong>알림</strong>
@@ -93,7 +104,6 @@
             </section>
         </div>
 
-        <!-- 기타 메뉴 -->
         <a th:href="@{/member/logout}">로그아웃</a>
         <a th:href="@{/my/home}">마이페이지</a>
         <a th:href="@{/product/cart}">장바구니</a>
@@ -105,20 +115,13 @@
            class="header-role-link"
            th:href="@{/admin}">관리자</a>
     </nav>
-    <!-- 비로그인 -->
+
+    <!-- 비로그인 사용자 메뉴 -->
     <nav class="header-links"
          th:if="${#authorization.expression('isAnonymous()')}">
         <a th:href="@{/member/login}">로그인</a>
         <a th:href="@{/member/join}">회원가입</a>
     </nav>
-
-
-    <!-- 판매자 전용 빠른 메뉴 -->
-    <nav class="header-links"
-         th:if="${#authorization.expression('hasRole(''SELLER'')')}">
-        <a th:href="@{/admin/coupon/list}">쿠폰등록</a>
-    </nav>
-
 </header>
 
 <!-- GNB -->

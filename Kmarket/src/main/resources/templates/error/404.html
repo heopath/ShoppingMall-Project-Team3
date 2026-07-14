@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>페이지를 찾을 수 없습니다 | K-Market</title>
+    <link rel="stylesheet" th:href="@{/css/common/error.css}" href="/css/common/error.css" />
+</head>
+<body>
+<div class="error-page">
+    <header class="error-header">
+        <a class="error-logo" th:href="@{/}" href="/">
+            <img th:src="@{/images/main/header_logo.png}"
+                 src="/images/main/header_logo.png"
+                 alt="K-Market" />
+        </a>
+    </header>
+
+    <main class="error-content">
+        <section class="error-card">
+            <p class="error-code">404</p>
+            <h1>요청하신 페이지를 찾을 수 없어요</h1>
+            <p>
+                주소가 잘못 입력되었거나 페이지가 이동·삭제되었을 수 있습니다.<br />
+                입력한 주소를 다시 확인해 주세요.
+            </p>
+
+            <div class="error-actions">
+                <a class="error-button primary" th:href="@{/}" href="/">K-Market 홈</a>
+                <button class="error-button" type="button" onclick="history.back()">이전 페이지</button>
+            </div>
+
+            <div class="error-help">계속 문제가 발생하면 고객센터를 이용해 주세요.</div>
+        </section>
+    </main>
+</div>
+</body>
+</html>
