@@ -138,10 +138,6 @@
         sp.company_name          AS companyName,
 
         d.delivery_status        AS deliveryStatus,
-        d.courier                AS courier,
-        d.invoice_no             AS invoiceNo,
-        d.receipt_date           AS pickedUpAt,
-        d.shipped_date           AS shippedAt,
 
         pr.review_no             AS reviewNo
 
