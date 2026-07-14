@@ -1,5 +1,6 @@
 package kr.co.springkmarketapp.config;
 
+import kr.co.springkmarketapp.service.auth.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +20,7 @@ public class SecurityConfig {
     private final MyUserDetailsService myUserDetailsService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginFailureHandler loginFailureHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginFailureHandler loginFailureHandler, CustomOAuth2UserService customOAuth2UserService) throws Exception {
 
         http
                 /*
@@ -52,7 +53,9 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/images/**",
                                 "/uploads/**",
-                                "/error"
+                                "/error",
+                                "/oauth2/**", // OAuth 인증 요청과 콜백 경로도 접근이 가능하도록 허용
+                                "/login/oauth2/**"
                         ).permitAll()
 
                         /*
@@ -114,6 +117,15 @@ public class SecurityConfig {
                         .failureHandler(loginFailureHandler) // 변경된 핸들러 등록
 
                         .permitAll()
+                )
+
+                // 구글 소셜로그인
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/member/login") // 로그인 페이지 지정
+                        .defaultSuccessUrl("/", true) // 로그인 성공 시 이동할 주소
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
                 )
 
                 .logout(logout -> logout

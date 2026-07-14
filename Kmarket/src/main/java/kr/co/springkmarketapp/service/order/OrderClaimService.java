@@ -55,11 +55,15 @@ public class OrderClaimService {
 
     @Transactional
     public void registerClaimWithFile(OrderClaimDTO claimDTO, String itemStatus, MultipartFile file) throws Exception {
+        System.out.println(">>> 1. 클레임 삽입 시작");
         // 클레임 저장 (PK가 claimDTO에 주입됨)
         orderClaimDAO.insertOrderClaim(claimDTO);
+        System.out.println(">>> 2. 클레임 삽입 완료, PK: " + claimDTO.getClaimNo());
 
+        System.out.println(">>> 3. 주문 상품 상태 변경 시작: " + claimDTO.getOrderItemNo());
         // 주문 상품 상태 변경
         orderItemDAO.updateItemStatus(claimDTO.getOrderItemNo(), itemStatus);
+        System.out.println(">>> 4. 주문 상품 상태 변경 완료");
 
         // 파일 처리
         if (file != null && !file.isEmpty()) {

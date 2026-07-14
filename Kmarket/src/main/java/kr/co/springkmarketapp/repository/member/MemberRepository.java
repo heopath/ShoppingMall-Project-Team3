@@ -14,4 +14,6 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     // 로그인 시 사용자가 입력한 아이디(memberId)로 회원 조회
     Optional<Member> findByMemberId(String memberId);
+
+    <T> Optional<T> findByEmail(String email);
 }

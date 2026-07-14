@@ -1,6 +1,6 @@
 package kr.co.springkmarketapp.controller.admin;
 
-import kr.co.springkmarketapp.config.MyUserDetails;
+import kr.co.springkmarketapp.config.LoginUser;
 import kr.co.springkmarketapp.dto.coupon.CouponDTO;
 import kr.co.springkmarketapp.dto.coupon.CouponIssueDTO;
 import kr.co.springkmarketapp.dto.member.SellerProfileDTO;
@@ -33,7 +33,7 @@ public class AdminCouponController {
     public String list(@RequestParam(defaultValue = "1") int page,
                        @RequestParam(required = false) String searchType,
                        @RequestParam(required = false) String keyword,
-                       @AuthenticationPrincipal MyUserDetails userDetails,
+                       @AuthenticationPrincipal LoginUser userDetails,
                        Model model) {
 
         int pageSize = 10;
@@ -91,7 +91,7 @@ public class AdminCouponController {
     }
 
     @PostMapping("/admin/coupon/register")
-    public String register(@AuthenticationPrincipal MyUserDetails userDetails,
+    public String register(@AuthenticationPrincipal LoginUser userDetails,
                            CouponDTO couponDTO,
                            @RequestParam(required = false) Integer registrationValidDays,
                            RedirectAttributes redirectAttributes) {
@@ -317,13 +317,13 @@ public class AdminCouponController {
         model.addAttribute("totalCount", totalCount);
     }
 
-    private boolean isSeller(MyUserDetails userDetails) {
+    private boolean isSeller(LoginUser userDetails) {
         return userDetails != null
                 && userDetails.getMember() != null
                 && "SELLER".equalsIgnoreCase(userDetails.getMember().getRole());
     }
 
-    private SellerProfileDTO requireSeller(MyUserDetails userDetails) {
+    private SellerProfileDTO requireSeller(LoginUser userDetails) {
         SellerProfileDTO seller = sellerProfileService.selectSellerProfileByMemberNo(
                 userDetails.getMember().getMemberNo()
         );

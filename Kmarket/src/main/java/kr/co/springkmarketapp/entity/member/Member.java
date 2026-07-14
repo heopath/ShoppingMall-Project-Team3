@@ -60,4 +60,6 @@ public class Member {
     private LocalDateTime leaveDate;
     @Column(name = "reg_date")
     private LocalDateTime regDate;
+    @Column(name = "provider")
+    private String provider; //
 }

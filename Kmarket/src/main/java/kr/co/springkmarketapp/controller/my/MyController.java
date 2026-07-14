@@ -1,16 +1,18 @@
 package kr.co.springkmarketapp.controller.my;
 
-import kr.co.springkmarketapp.config.MyUserDetails;
+import kr.co.springkmarketapp.config.LoginUser;
 import kr.co.springkmarketapp.dto.common.PageResponseDTO;
 import kr.co.springkmarketapp.dto.cs.QnaDTO;
 import kr.co.springkmarketapp.dto.member.MemberDTO;
 import kr.co.springkmarketapp.dto.member.SellerProfileDTO;
 import kr.co.springkmarketapp.dto.my.MemberPointDTO;
+import kr.co.springkmarketapp.dto.order.OrderClaimDTO;
 import kr.co.springkmarketapp.dto.order.OrderItemDTO;
 import kr.co.springkmarketapp.dto.product.ProductReviewDTO;
 import kr.co.springkmarketapp.service.admin.BannerService;
 import kr.co.springkmarketapp.service.cs.QnaService;
 import kr.co.springkmarketapp.service.my.MyService;
+import kr.co.springkmarketapp.service.order.OrderClaimService;
 import kr.co.springkmarketapp.util.PageHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +33,10 @@ public class MyController {
     private final MyService myService;
     private final BannerService bannerService;
     private final QnaService qnaService;
+    private final OrderClaimService orderClaimService;
 
     @GetMapping({"/my", "/my/home"})
-    public String home(@AuthenticationPrincipal MyUserDetails user,
+    public String home(@AuthenticationPrincipal LoginUser user,
                        Model model) {
 
         Integer memberNo = user.getMember().getMemberNo();
@@ -91,7 +94,7 @@ public class MyController {
     // 문의하기 등록
     @PostMapping("/my/qna")
     @ResponseBody
-    public String registerQna(@AuthenticationPrincipal MyUserDetails user,
+    public String registerQna(@AuthenticationPrincipal LoginUser user,
                               @RequestBody QnaDTO dto) {
 
         dto.setMemberNo(user.getMember().getMemberNo());
@@ -115,7 +118,7 @@ public class MyController {
     @PostMapping("/my/review")
     @ResponseBody
     public String registerReview(
-            @AuthenticationPrincipal MyUserDetails user,
+            @AuthenticationPrincipal LoginUser user,
             @ModelAttribute ProductReviewDTO dto,
             @RequestParam(value = "images", required = false) MultipartFile[] images) {
 
@@ -137,7 +140,7 @@ public class MyController {
     // 메뉴1 - 전체 주문 내역
     @GetMapping("/my/order")
     public String order(
-            @AuthenticationPrincipal MyUserDetails user,
+            @AuthenticationPrincipal LoginUser user,
             @RequestParam(defaultValue = "1") int pg,
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
@@ -171,7 +174,7 @@ public class MyController {
 
     // 메뉴2 - 포인트 내역
     @GetMapping("/my/point")
-    public String point(@AuthenticationPrincipal MyUserDetails user,
+    public String point(@AuthenticationPrincipal LoginUser user,
                         @RequestParam(defaultValue = "1") int pg,
                         @RequestParam(required = false) String startDate,
                         @RequestParam(required = false) String endDate,
@@ -196,7 +199,7 @@ public class MyController {
     }
 
     @GetMapping("/my/coupon")
-    public String coupon(@AuthenticationPrincipal MyUserDetails user,
+    public String coupon(@AuthenticationPrincipal LoginUser user,
                          @RequestParam(defaultValue = "1") int pg,
                          Model model){
 
@@ -217,7 +220,7 @@ public class MyController {
     }
 
     @GetMapping("/my/review")
-    public String review(@AuthenticationPrincipal MyUserDetails user,
+    public String review(@AuthenticationPrincipal LoginUser user,
                          @RequestParam(defaultValue = "1") int pg,
                          Model model) {
 
@@ -238,7 +241,7 @@ public class MyController {
     }
 
     @GetMapping("/my/qna")
-    public String qna(@AuthenticationPrincipal MyUserDetails user,
+    public String qna(@AuthenticationPrincipal LoginUser user,
                       @RequestParam(defaultValue = "1") int pg,
                       Model model) {
 
@@ -265,7 +268,7 @@ public class MyController {
 
     // 나의 설정 - 회원 정보 가져오기
     @GetMapping("/my/info")
-    public String setting(@AuthenticationPrincipal MyUserDetails user,
+    public String setting(@AuthenticationPrincipal LoginUser user,
                           Model model){
 
         Integer memberNo = user.getMember().getMemberNo();
@@ -282,7 +285,7 @@ public class MyController {
     // 나의 설정 - 회원정보 수정하기
     @PostMapping("/my/setting")
     @ResponseBody
-    public String updateSetting(@AuthenticationPrincipal MyUserDetails user,
+    public String updateSetting(@AuthenticationPrincipal LoginUser user,
                                 @RequestBody MemberDTO dto){
 
         dto.setMemberNo(user.getMember().getMemberNo());
@@ -295,7 +298,7 @@ public class MyController {
     // 나의 설정 - 탈퇴하기
     @PostMapping("/my/withdraw")
     @ResponseBody
-    public String withdraw(@AuthenticationPrincipal MyUserDetails user) {
+    public String withdraw(@AuthenticationPrincipal LoginUser user) {
         myService.deleteMember(user.getMember().getMemberNo());
         // 탈퇴 후에는 세션을 무효화하거나 로그인 페이지로 리다이렉트하는 처리가 필요합니다.
         return "success";
@@ -306,7 +309,7 @@ public class MyController {
     @ResponseBody
     public Map<String, Object> check(@RequestParam String type,
                                      @RequestParam String value,
-                                     @AuthenticationPrincipal MyUserDetails user) {
+                                     @AuthenticationPrincipal LoginUser user) {
 
         // 본인 제외하고 검색하기 위해 현재 로그인한 사용자의 번호 가져옴
         Integer memberNo = user.getMember().getMemberNo();
@@ -320,4 +323,55 @@ public class MyController {
         return result;
     }
 
+    // 반품 신청 처리
+    @PostMapping("/my/order/return")
+    @ResponseBody
+    public String registerReturn(
+            @AuthenticationPrincipal LoginUser user, // 1. 유저 정보 추가
+            @RequestParam("orderItemNo") int orderItemNo,
+            @RequestParam("returnType") String returnType,
+            @RequestParam("reason") String reason,
+            @RequestParam(value = "returnFile", required = false) MultipartFile file) {
+
+        try {
+            OrderClaimDTO claimDTO = new OrderClaimDTO();
+            claimDTO.setOrderItemNo((long)orderItemNo);
+            claimDTO.setMemberNo(user.getMember().getMemberNo()); // 2. memberNo 세팅
+            claimDTO.setClaimType(returnType);
+            claimDTO.setClaimReason(reason);
+            claimDTO.setStatus("접수완료");
+
+            orderClaimService.registerClaimWithFile(claimDTO, "반품신청", file);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace(); // 에러 확인용
+            return "fail";
+        }
+    }
+
+    // 교환 신청 처리
+    @PostMapping("/my/order/exchange")
+    @ResponseBody
+    public String registerExchange(
+            @AuthenticationPrincipal LoginUser user, // 1. 유저 정보 추가
+            @RequestParam("orderItemNo") int orderItemNo,
+            @RequestParam("exchangeType") String exchangeType,
+            @RequestParam("reason") String reason,
+            @RequestParam(value = "exchangeFile", required = false) MultipartFile file) {
+
+        try {
+            OrderClaimDTO claimDTO = new OrderClaimDTO();
+            claimDTO.setOrderItemNo((long)orderItemNo);
+            claimDTO.setMemberNo(user.getMember().getMemberNo()); // 2. memberNo 세팅
+            claimDTO.setClaimType(exchangeType);
+            claimDTO.setClaimReason(reason);
+            claimDTO.setStatus("접수완료");
+
+            orderClaimService.registerClaimWithFile(claimDTO, "교환신청", file);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace(); // 에러 확인용
+            return "fail";
+        }
+    }
 }
