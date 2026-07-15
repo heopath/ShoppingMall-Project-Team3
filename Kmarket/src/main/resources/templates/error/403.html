@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>접근 권한이 없습니다 | K-Market</title>
+    <link rel="stylesheet" th:href="@{/css/common/error.css}" href="/css/common/error.css" />
+</head>
+<body>
+<div class="error-page">
+    <header class="error-header">
+        <a class="error-logo" th:href="@{/}" href="/">
+            <img th:src="@{/images/main/header_logo.png}" src="/images/main/header_logo.png" alt="K-Market" />
+        </a>
+    </header>
+
+    <main class="error-content">
+        <section class="error-card">
+            <span class="error-kicker">접근 제한</span>
+            <p class="error-code forbidden">403</p>
+            <h1>이 페이지를 이용할 권한이 없어요</h1>
+            <p>
+                현재 로그인한 계정으로는 요청한 메뉴에 접근할 수 없습니다.<br />
+                필요한 권한의 계정인지 확인해 주세요.
+            </p>
+
+            <div class="error-actions">
+                <a class="error-button primary" th:href="@{/}" href="/">K-Market 홈</a>
+                <button class="error-button" type="button" onclick="history.back()">이전 페이지</button>
+            </div>
+
+            <div class="error-help">다른 계정이 필요하다면 <a th:href="@{/member/login}" href="/member/login">로그인 페이지</a>로 이동해 주세요.</div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

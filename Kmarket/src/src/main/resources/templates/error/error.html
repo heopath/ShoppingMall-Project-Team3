@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>요청을 처리할 수 없습니다 | K-Market</title>
+    <link rel="stylesheet" th:href="@{/css/common/error.css}" href="/css/common/error.css" />
+</head>
+<body>
+<div class="error-page">
+    <header class="error-header">
+        <a class="error-logo" th:href="@{/}" href="/">
+            <img th:src="@{/images/main/header_logo.png}" src="/images/main/header_logo.png" alt="K-Market" />
+        </a>
+    </header>
+
+    <main class="error-content">
+        <section class="error-card">
+            <span class="error-kicker">서비스 안내</span>
+            <p class="error-code" th:text="${status != null ? status : '오류'}">오류</p>
+            <h1>요청을 처리하지 못했어요</h1>
+            <p>
+                일시적인 문제이거나 처리할 수 없는 요청입니다.<br />
+                잠시 후 다시 시도해 주세요.
+            </p>
+
+            <div class="error-actions">
+                <a class="error-button primary" th:href="@{/}" href="/">K-Market 홈</a>
+                <button class="error-button" type="button" onclick="history.back()">이전 페이지</button>
+            </div>
+
+            <div class="error-help">문제가 계속되면 <a th:href="@{/cs/qna/list}" href="/cs/qna/list">고객센터</a>로 문의해 주세요.</div>
+        </section>
+    </main>
+</div>
+</body>
+</html>
