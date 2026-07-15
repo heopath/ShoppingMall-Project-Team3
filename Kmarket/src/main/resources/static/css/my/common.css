@@ -150,7 +150,9 @@ a {
 }
 
 .period-search-title {
-  width: 120px;
+  /*width: 120px;*/
+  width: 100px;
+
 
   display: flex;
   justify-content: center;
@@ -170,7 +172,7 @@ a {
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  /*gap: 12px;*/
 
   padding: 8px 12px;
 
@@ -198,7 +200,9 @@ a {
 }
 
 .period-btn-group button {
-  width: 70px;
+  /*width: 70px;*/
+  width: 62px;
+
   height: 34px;
 
   border: 1px solid #d5d5d5;
@@ -227,7 +231,8 @@ a {
 }
 
 .period-date-group input {
-  width: 145px;
+  /*width: 145px;*/
+  width: 120px;
   height: 34px;
 
   padding: 0 10px;
@@ -324,4 +329,19 @@ a {
 
 .section-header a:hover {
   color: #3fbf3f;
+}
+
+
+.hover-link {
+  display: block; /* 줄바꿈을 위해 block 설정 */
+  text-decoration: none;
+  color: #555;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  margin-bottom: 2px;
+}
+
+.hover-link:hover {
+  color: #3fbf3f; /* 모달과 동일한 메인 컬러 */
+  text-decoration: underline;
 }

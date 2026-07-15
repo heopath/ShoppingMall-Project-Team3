@@ -178,4 +178,26 @@
           AND delivery_status = '배송중'
     </update>
 
+    <!-- 마이페이지(배송 조회 모달) - 주문번호 기준 배송상태 조회 -->
+    <select id="selectStatusByOrderNo" resultType="String">
+        SELECT delivery_status
+        FROM delivery
+        WHERE order_no = #{orderNo}
+        LIMIT 1
+    </select>
+
+    <select id="selectDeliveryByOrderNo" resultType="kr.co.springkmarketapp.dto.order.DeliveryDTO">
+        SELECT
+        delivery_no AS deliveryNo,
+        order_no AS orderNo,
+        receipt_date AS receiptDate,
+        shipped_date AS shippedDate,
+        delivered_date AS deliveredDate,
+        delivery_status AS deliveryStatus
+        FROM delivery
+        WHERE order_no = #{orderNo}
+        ORDER BY delivery_no DESC
+        LIMIT 1
+    </select>
+
 </mapper>

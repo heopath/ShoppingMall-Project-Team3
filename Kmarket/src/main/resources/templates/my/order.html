@@ -14,6 +14,71 @@
     />
     <script th:src="@{/js/my/popup.js}"></script>
     <script th:src="@{/js/my/searchDate.js}"></script>
+    <script>
+        // 배송 모달 열기
+        function openDeliveryModal(orderNo) {
+            fetch(`/my/order/deliveryInfo?orderNo=${orderNo}`)
+                .then(res => res.json())
+                .then(data => {
+                    // 1. 데이터가 없을 경우 처리 (안전장치)
+                    if (!data) {
+                        alert("배송 정보를 불러올 수 없습니다.");
+                        return;
+                    }
+
+                    updateProgressBar(data.status);
+                    document.querySelector('#deliveryMessage').innerText = data.message;
+
+                    // 2. 타임라인 데이터가 존재하는지 확인 후 그리기
+                    const container = document.querySelector('#timelineContainer');
+                    if (data.timeline && Array.isArray(data.timeline)) {
+                        container.innerHTML = data.timeline.map(item => `
+                        <div class="timeline-item">
+                            <span class="time-step">${item.step}</span>
+                            <span class="time-value">${item.time}</span>
+                        </div>
+                    `).join('');
+                    } else {
+                        container.innerHTML = '<div class="timeline-item">조회된 이력이 없습니다.</div>';
+                    }
+
+                    document.querySelector('#deliveryModal').style.display = 'flex';
+                })
+                .catch(err => {
+                    console.error("오류 발생:", err);
+                    alert("서버 연결에 실패했습니다.");
+                });
+        }
+
+        // 배송 모달 닫기
+        function closeDeliveryModal() {
+            document.querySelector('#deliveryModal').style.display = 'none';
+        }
+
+        // 상태바 업데이트 로직
+        function updateProgressBar(status) {
+            const steps = ['결제완료', '배송준비', '배송중', '배송완료'];
+            const activeIndex = steps.indexOf(status);
+
+            document.querySelectorAll('.step').forEach((el, idx) => {
+                if (idx <= activeIndex) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+        }
+
+        // 모달 배경 클릭 시 닫기
+        document.addEventListener("DOMContentLoaded", function () {
+            window.onclick = function (event) {
+                const modal = document.querySelector('#deliveryModal');
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
+    </script>
 </head>
 <body>
 <th:block th:replace="~{common/_main_header}"></th:block>
@@ -88,11 +153,11 @@
 
                         <!-- 직접조회 -->
                         <div class="period-date-group">
-                            <input type="date" id="startDate"  name="startDate"   th:value="${startDate}"/>
+                            <input type="date" id="startDate" name="startDate" th:value="${startDate}"/>
 
                             <span>~</span>
 
-                            <input type="date" id="endDate" name="endDate"  th:value="${endDate}"/>
+                            <input type="date" id="endDate" name="endDate" th:value="${endDate}"/>
 
                             <button type="button" class="period-search-btn">조회</button>
                         </div>
@@ -123,13 +188,13 @@
                                 <div class="order-detail">
 
                                     <a href="javascript:void(0)"
-                                       class="order-link"
+                                       class="order-link hover-link"
                                        th:data-order-no="${order.orderNo}"
                                        th:text="'주문번호 : ' + ${order.orderCode}">
                                     </a>
 
                                     <a href="javascript:void(0)"
-                                       class="seller-link"
+                                       class="seller-link hover-link"
                                        th:data-seller-no="${order.sellerNo}"
                                        th:text="${order.companyName}">
                                     </a>
@@ -149,7 +214,15 @@
                             </div>
                         </td>
 
-                        <td th:text="${order.deliveryStatus}"></td>
+                        <!--                        <td th:text="${order.deliveryStatus}"></td>-->
+                        <td>
+                            <a href="javascript:void(0)"
+                               class="delivery-status-link"
+                               th:text="${order.deliveryStatus}"
+                               th:onclick="|openDeliveryModal('${order.orderNo}')|">
+                            </a>
+                        </td>
+
 
                         <td>
                             <div class="order-btns">
@@ -160,7 +233,8 @@
                                     <span class="status-txt">배송중</span>
                                 </th:block>
                                 <th:block th:if="${order.deliveryStatus == '배송완료' and order.itemStatus == '주문완료'}">
-                                    <a href="javascript:void(0)" class="confirm-link" th:data-order-item-no="${order.orderItemNo}">구매확정</a>
+                                    <a href="javascript:void(0)" class="confirm-link"
+                                       th:data-order-item-no="${order.orderItemNo}">구매확정</a>
                                     <a href="javascript:void(0)" class="return-link"
                                        th:data-order-item-no="${order.orderItemNo}"
                                        th:data-order-no="${order.orderNo}"
@@ -376,12 +450,15 @@
                 <tbody>
                 <tr>
                     <th>문의종류</th>
-                    <td><div class="inquiry-type"></div></td>
+                    <td>
+                        <div class="inquiry-type"></div>
+                    </td>
                 </tr>
                 <tr>
                     <th>Email</th>
                     <td>
-                        <input type="email" id="qnaEmail" class="form-input" th:value="${#authentication.principal.member.email}" readonly>
+                        <input type="email" id="qnaEmail" class="form-input"
+                               th:value="${#authentication.principal.member.email}" readonly>
                     </td>
                 </tr>
                 <tr>
@@ -450,7 +527,8 @@
                     </tr>
                     <tr>
                         <th>내용<span class="required">*</span></th>
-                        <td><textarea id="reviewContent" name="content" placeholder="최소 10자 이상 200자 내외로 작성해주세요."></textarea></td>
+                        <td><textarea id="reviewContent" name="content"
+                                      placeholder="최소 10자 이상 200자 내외로 작성해주세요."></textarea></td>
                     </tr>
                     <tr>
                         <th>사진</th>
@@ -524,8 +602,10 @@
                         <th>반품유형</th>
                         <td>
                             <div class="inquiry-type">
-                                <label><input type="radio" name="returnType" value="단순 변심" checked/><span>단순 변심</span></label>
-                                <label><input type="radio" name="returnType" value="파손 및 불량"/><span>파손 및 불량</span></label>
+                                <label><input type="radio" name="returnType" value="단순 변심"
+                                              checked/><span>단순 변심</span></label>
+                                <label><input type="radio" name="returnType"
+                                              value="파손 및 불량"/><span>파손 및 불량</span></label>
                                 <label><input type="radio" name="returnType" value="주문 실수"/><span>주문 실수</span></label>
                                 <label><input type="radio" name="returnType" value="기타"/><span>기타</span></label>
                             </div>
@@ -601,7 +681,8 @@
                         <td>
                             <div class="inquiry-type">
                                 <label><input type="radio" name="exchangeType" value="단순 교환" checked/><span>단순 교환</span></label>
-                                <label><input type="radio" name="exchangeType" value="파손 및 불량"/><span>파손 및 불량</span></label>
+                                <label><input type="radio" name="exchangeType"
+                                              value="파손 및 불량"/><span>파손 및 불량</span></label>
                                 <label><input type="radio" name="exchangeType" value="주문 실수"/><span>주문 실수</span></label>
                                 <label><input type="radio" name="exchangeType" value="기타"/><span>기타</span></label>
                             </div>
@@ -637,6 +718,40 @@
             <div class="confirm-btn-area">
                 <button type="button" class="confirm-ok-btn">확인</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- 배송조회 모달 -->
+<div id="deliveryModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 style="margin:0; font-size: 1.2rem;">배송 조회</h2>
+            <span class="close-btn" onclick="closeDeliveryModal()" style="margin: 0; font-size: 28px">&times;</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="step" data-status="결제완료">
+                <div class="circle"></div>
+                <span>결제완료</span></div>
+            <div class="step" data-status="배송준비">
+                <div class="circle"></div>
+                <span>배송준비</span></div>
+            <div class="step" data-status="배송중">
+                <div class="circle"></div>
+                <span>배송중</span></div>
+            <div class="step" data-status="배송완료">
+                <div class="circle"></div>
+                <span>배송완료</span></div>
+        </div>
+
+        <div class="delivery-body">
+            <p id="deliveryMessage" class="delivery-msg"></p>
+            <div id="timelineContainer" class="timeline-container"></div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="confirm-btn" onclick="closeDeliveryModal()">확인</button>
         </div>
     </div>
 </div>
