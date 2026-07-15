@@ -8,6 +8,71 @@
     <link rel="stylesheet" href="./../css/my/common.css" />
     <link rel="stylesheet" href="./../css/my/home.css" />
     <script th:src="@{/js/my/popup.js}"></script>
+    <script>
+        // 배송 모달 열기
+        function openDeliveryModal(orderNo) {
+            fetch(`/my/order/deliveryInfo?orderNo=${orderNo}`)
+                .then(res => res.json())
+                .then(data => {
+                    // 1. 데이터가 없을 경우 처리 (안전장치)
+                    if (!data) {
+                        alert("배송 정보를 불러올 수 없습니다.");
+                        return;
+                    }
+
+                    updateProgressBar(data.status);
+                    document.querySelector('#deliveryMessage').innerText = data.message;
+
+                    // 2. 타임라인 데이터가 존재하는지 확인 후 그리기
+                    const container = document.querySelector('#timelineContainer');
+                    if (data.timeline && Array.isArray(data.timeline)) {
+                        container.innerHTML = data.timeline.map(item => `
+                        <div class="timeline-item">
+                            <span class="time-step">${item.step}</span>
+                            <span class="time-value">${item.time}</span>
+                        </div>
+                    `).join('');
+                    } else {
+                        container.innerHTML = '<div class="timeline-item">조회된 이력이 없습니다.</div>';
+                    }
+
+                    document.querySelector('#deliveryModal').style.display = 'flex';
+                })
+                .catch(err => {
+                    console.error("오류 발생:", err);
+                    alert("서버 연결에 실패했습니다.");
+                });
+        }
+
+        // 배송 모달 닫기
+        function closeDeliveryModal() {
+            document.querySelector('#deliveryModal').style.display = 'none';
+        }
+
+        // 상태바 업데이트 로직
+        function updateProgressBar(status) {
+            const steps = ['결제완료', '배송준비', '배송중', '배송완료'];
+            const activeIndex = steps.indexOf(status);
+
+            document.querySelectorAll('.step').forEach((el, idx) => {
+                if (idx <= activeIndex) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+        }
+
+        // 모달 배경 클릭 시 닫기
+        document.addEventListener("DOMContentLoaded", function () {
+            window.onclick = function (event) {
+                const modal = document.querySelector('#deliveryModal');
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
+    </script>
 </head>
 <body>
 <th:block th:replace="~{common/_main_header}"></th:block>
@@ -38,7 +103,7 @@
                 </div>
                 <div class="summary-card">
                     <strong>포인트</strong>
-                    <span th:text="${#numbers.formatInteger(summary.point ?: 0, 1, 'COMMA')}">0</span>
+                    <span th:text="${#numbers.formatInteger((summary.point ?: 0), 1, 'COMMA')}">0</span>
                 </div>
                 <div class="summary-card">
                     <strong>문의</strong>
@@ -76,15 +141,21 @@
                             <div class="order-info">
                                 <img th:src="@{${order.productImage}}" alt="상품이미지">
                                 <div class="order-detail">
-                                    <a href="javascript:void(0)" class="order-link" th:data-order-no="${order.orderNo}" th:text="'주문번호 : ' + ${order.orderCode}"></a>
-                                    <a href="javascript:void(0)" class="seller-link" th:data-seller-no="${order.sellerNo}" th:text="${order.companyName}"></a>
+                                    <a href="javascript:void(0)" class="order-link hover-link" th:data-order-no="${order.orderNo}" th:text="'주문번호 : ' + ${order.orderCode}"></a>
+                                    <a href="javascript:void(0)" class="seller-link hover-link" th:data-seller-no="${order.sellerNo}" th:text="${order.companyName}"></a>
                                     <p class="product-name" th:text="${order.productName}"></p>
                                     <p>수량 : <span th:text="${order.quantity}"></span>개</p>
                                     <strong th:text="${#numbers.formatInteger(order.totalPrice,3,'COMMA')} + '원'"></strong>
                                 </div>
                             </div>
                         </td>
-                        <td th:text="${order.deliveryStatus}"></td>
+                        <td>
+                            <a href="javascript:void(0)"
+                               class="delivery-status-link"
+                               th:text="${order.deliveryStatus}"
+                               th:onclick="|openDeliveryModal('${order.orderNo}')|">
+                            </a>
+                        </td>
                         <td>
                             <div class="order-btns">
                                 <th:block th:if="${order.deliveryStatus == '배송준비'}">
@@ -671,6 +742,40 @@
             <div class="confirm-btn-area">
                 <button type="button" class="confirm-ok-btn">확인</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- 배송조회 모달 -->
+<div id="deliveryModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 style="margin:0; font-size: 1.2rem;">배송 조회</h2>
+            <span class="close-btn" onclick="closeDeliveryModal()" style="margin: 0; font-size: 28px">&times;</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="step" data-status="결제완료">
+                <div class="circle"></div>
+                <span>결제완료</span></div>
+            <div class="step" data-status="배송준비">
+                <div class="circle"></div>
+                <span>배송준비</span></div>
+            <div class="step" data-status="배송중">
+                <div class="circle"></div>
+                <span>배송중</span></div>
+            <div class="step" data-status="배송완료">
+                <div class="circle"></div>
+                <span>배송완료</span></div>
+        </div>
+
+        <div class="delivery-body">
+            <p id="deliveryMessage" class="delivery-msg"></p>
+            <div id="timelineContainer" class="timeline-container"></div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="confirm-btn" onclick="closeDeliveryModal()">확인</button>
         </div>
     </div>
 </div>

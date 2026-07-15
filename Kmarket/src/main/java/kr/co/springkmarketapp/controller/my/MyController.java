@@ -9,9 +9,11 @@ import kr.co.springkmarketapp.dto.my.MemberPointDTO;
 import kr.co.springkmarketapp.dto.order.OrderClaimDTO;
 import kr.co.springkmarketapp.dto.order.OrderItemDTO;
 import kr.co.springkmarketapp.dto.product.ProductReviewDTO;
+import kr.co.springkmarketapp.entity.order.Delivery;
 import kr.co.springkmarketapp.service.admin.BannerService;
 import kr.co.springkmarketapp.service.cs.QnaService;
 import kr.co.springkmarketapp.service.my.MyService;
+import kr.co.springkmarketapp.service.order.DeliveryService;
 import kr.co.springkmarketapp.service.order.OrderClaimService;
 import kr.co.springkmarketapp.util.PageHandler;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ public class MyController {
     private final BannerService bannerService;
     private final QnaService qnaService;
     private final OrderClaimService orderClaimService;
+    private final DeliveryService deliveryService;
 
     @GetMapping({"/my", "/my/home"})
     public String home(@AuthenticationPrincipal LoginUser user,
@@ -135,6 +138,14 @@ public class MyController {
     public ProductReviewDTO reviewInfo(@PathVariable Long orderItemNo) {
 
         return myService.selectReviewInfo(orderItemNo);
+    }
+
+    // 배송 조회 보달
+    // 배송 조회 모달 (타임라인 포함)
+    @GetMapping("/my/order/deliveryInfo")
+    @ResponseBody
+    public Map<String, Object> getDeliveryInfo(@RequestParam("orderNo") Long orderNo) {
+        return deliveryService.getDeliveryInfoByOrderNo(orderNo);
     }
 
     // 메뉴1 - 전체 주문 내역

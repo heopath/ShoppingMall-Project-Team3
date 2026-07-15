@@ -39,4 +39,9 @@ public interface DeliveryDAO {
     // 출고 후 3일이 지난 배송의 완료 처리
     List<Integer> selectShippingDeliveryNosForCompletion();
     int updateDeliveryComplete(@Param("deliveryNo") Integer deliveryNo);
+
+    // 마이페이지(배송 조회 모달) - 주문번호 기준 배송상태 조회
+    String selectStatusByOrderNo(@Param("orderNo") Long orderNo);
+    // 주문번호로 배송 객체 전체를 가져오기 (시간 정보 필요)
+    DeliveryDTO selectDeliveryByOrderNo(@Param("orderNo") Long orderNo);
 }
