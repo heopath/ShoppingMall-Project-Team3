@@ -110,7 +110,7 @@
         <a th:href="@{/cs/index}">고객센터</a>
         <a th:if="${#authorization.expression('hasRole(''SELLER'')')}"
            class="header-role-link"
-           th:href="@{/admin/coupon/list}">쿠폰등록</a>
+           th:href="@{/admin/product/list}">판매자</a>
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
            class="header-role-link"
            th:href="@{/admin}">관리자</a>

@@ -1,6 +1,6 @@
 <header class="admin-header" th:fragment="header" xmlns:th="http://www.thymeleaf.org">
     <div class="admin-logo">
-        <a th:href="@{/admin}">
+        <a th:href="${#authorization.expression('hasRole(''SELLER'')')} ? @{/admin/product/list} : @{/admin}">
             <img th:if="${settings.header_logo != null and settings.header_logo != ''}"
                  th:src="${settings.header_logo}"
                  alt="관리자 로고"

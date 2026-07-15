@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside class="sidebar" th:fragment="sidebar(activeMenu)">
+    <ul class="admin-menu">
+        <li class="menu-title"
+            th:classappend="${#strings.startsWith(activeMenu, 'product')} ? 'active'"
+            onclick="toggleMenu(this, 'sellerProductMenu')">📦 상품관리</li>
+        <li class="sub-menu-wrap" id="sellerProductMenu"
+            th:classappend="${#strings.startsWith(activeMenu, 'product')} ? '' : 'close'">
+            <ul class="sub-menu-list">
+                <li class="sub-menu" th:classappend="${activeMenu == 'product-list'} ? 'active'">
+                    <a th:href="@{/admin/product/list}">- 상품목록</a>
+                </li>
+                <li class="sub-menu" th:classappend="${activeMenu == 'product-register'} ? 'active'">
+                    <a th:href="@{/admin/product/register}">- 상품등록</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="menu-title"
+            th:classappend="${activeMenu == 'sales'} ? 'active'"
+            onclick="toggleMenu(this, 'sellerSalesMenu')">📈 상점관리</li>
+        <li class="sub-menu-wrap" id="sellerSalesMenu"
+            th:classappend="${activeMenu == 'sales'} ? '' : 'close'">
+            <ul class="sub-menu-list">
+                <li class="sub-menu" th:classappend="${activeMenu == 'sales'} ? 'active'">
+                    <a th:href="@{/admin/shop/sales}">- 매출현황</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="menu-title"
+            th:classappend="${activeMenu == 'coupon'} ? 'active'"
+            onclick="toggleMenu(this, 'sellerCouponMenu')">🎟 쿠폰관리</li>
+        <li class="sub-menu-wrap" id="sellerCouponMenu"
+            th:classappend="${activeMenu == 'coupon'} ? '' : 'close'">
+            <ul class="sub-menu-list">
+                <li class="sub-menu" th:classappend="${activeMenu == 'coupon'} ? 'active'">
+                    <a th:href="@{/admin/coupon/list}">- 쿠폰목록/등록</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</aside>
+</body>
+</html>

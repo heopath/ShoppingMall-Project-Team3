@@ -43,6 +43,17 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/admin/coupon/register")
                         .hasAnyRole("ADMIN", "SELLER")
 
+                        // 상품관리와 매출현황은 관리자와 판매자가 함께 사용한다.
+                        // 판매자 데이터 범위는 각 컨트롤러에서 로그인 상점 기준으로 제한한다.
+                        .requestMatchers("/admin/product/**")
+                        .hasAnyRole("ADMIN", "SELLER")
+                        .requestMatchers(HttpMethod.GET, "/admin/shop/sales")
+                        .hasAnyRole("ADMIN", "SELLER")
+                        .requestMatchers(HttpMethod.GET,
+                                "/admin/config/category/main-list",
+                                "/admin/config/category/sub-list")
+                        .hasAnyRole("ADMIN", "SELLER")
+
                         /*
                          * 로그인 없이 접근 가능한 주소
                          */

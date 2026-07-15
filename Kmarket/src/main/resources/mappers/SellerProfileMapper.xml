@@ -295,6 +295,9 @@
         SELECT COUNT(*)
         FROM seller_profile
         WHERE status != '삭제'
+        <if test="sellerNo != null">
+            AND seller_no = #{sellerNo}
+        </if>
     </select>
 
     <select id="selectSellerSalesList" resultType="kr.co.springkmarketapp.dto.member.SellerSalesDTO">
@@ -332,6 +335,9 @@
         LEFT JOIN delivery d
         ON oi.delivery_no = d.delivery_no
         WHERE sp.status != '삭제'
+        <if test="sellerNo != null">
+            AND sp.seller_no = #{sellerNo}
+        </if>
         GROUP BY sp.seller_no, sp.company_name, sp.biz_no
         ORDER BY salesTotal DESC, sp.seller_no DESC
         LIMIT #{limit} OFFSET #{offset}

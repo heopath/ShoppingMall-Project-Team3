@@ -87,12 +87,13 @@ public class SellerProfileService {
     }
 
 
-    public List<SellerSalesDTO> selectSellerSalesList(String salesPeriod, int offset, int limit) {
-        return sellerProfileDAO.selectSellerSalesList(salesPeriod, offset, limit);
+    public List<SellerSalesDTO> selectSellerSalesList(String salesPeriod, int offset, int limit,
+                                                      Integer sellerNo) {
+        return sellerProfileDAO.selectSellerSalesList(salesPeriod, offset, limit, sellerNo);
     }
 
-    public int countSellerSalesList(String salesPeriod) {
-        return sellerProfileDAO.countSellerSalesList(salesPeriod);
+    public int countSellerSalesList(String salesPeriod, Integer sellerNo) {
+        return sellerProfileDAO.countSellerSalesList(salesPeriod, sellerNo);
     }
 
     public int countBizNo(String bizNo) {

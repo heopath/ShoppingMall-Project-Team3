@@ -12,7 +12,7 @@
     <th:block th:replace="~{common/_admin_header :: header}"></th:block>
 
     <div class="admin-body">
-        <aside class="sidebar">
+        <aside class="sidebar" th:if="${!isSeller}">
             <ul class="admin-menu">
 
                 <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">
@@ -90,10 +90,13 @@
 
             </ul>
         </aside>
+        <th:block th:if="${isSeller}">
+            <th:block th:replace="~{common/_seller_sidebar :: sidebar('sales')}"></th:block>
+        </th:block>
 
         <main class="content">
             <div class="page-title">
-                <h2>매출현황</h2>
+                <h2 th:text="${isSeller ? currentSeller.companyName + ' 매출현황' : '매출현황'}">매출현황</h2>
                 <span>HOME &gt; 상점관리 &gt; 매출현황</span>
             </div>
 
