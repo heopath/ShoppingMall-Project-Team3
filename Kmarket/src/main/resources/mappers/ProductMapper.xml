@@ -820,6 +820,9 @@
     <!-- 관리자 상품목록 검색 조건 (목록/카운트 공용) -->
     <sql id="adminProductSearchWhere">
         <where>
+            <if test="sellerNo != null">
+                AND p.seller_no = #{sellerNo}
+            </if>
             <if test="searchType != null and keyword != null and keyword != ''">
                 <choose>
                     <when test="searchType == 'productName'">

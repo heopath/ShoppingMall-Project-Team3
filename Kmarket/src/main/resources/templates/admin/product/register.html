@@ -11,7 +11,7 @@
 <div id="admin-wrapper">
     <th:block th:replace="~{common/_admin_header :: header}"></th:block>
     <div class="admin-body">
-        <aside class="sidebar">
+        <aside class="sidebar" th:if="${!isSeller}">
             <ul class="admin-menu">
                 <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">⚙ 환경설정</li>
                 <li class="sub-menu-wrap close" id="configMenu">
@@ -76,6 +76,9 @@
                 </li>
             </ul>
         </aside>
+        <th:block th:if="${isSeller}">
+            <th:block th:replace="~{common/_seller_sidebar :: sidebar('product-register')}"></th:block>
+        </th:block>
 
         <main class="content">
             <div class="page-title">
@@ -85,6 +88,27 @@
 
             <section class="product-register-section">
                 <form id="registerForm" enctype="multipart/form-data">
+
+                    <div class="form-block">
+                        <h3>판매자</h3>
+                        <p class="form-guide" th:text="${isSeller ? '로그인한 판매자 상점으로 상품이 등록됩니다.' : '상품을 등록할 판매자 상점을 선택하세요.'}"></p>
+                        <table class="register-table">
+                            <tr>
+                                <th>판매자 상점</th>
+                                <td>
+                                    <select th:if="${!isSeller}" name="sellerNo" id="sellerNo" class="seller-select" required>
+                                        <option value="">판매자 선택</option>
+                                        <option th:each="seller : ${sellerList}"
+                                                th:value="${seller.sellerNo}"
+                                                th:text="${seller.companyName + ' (' + seller.sellerNo + ')'}"></option>
+                                    </select>
+                                    <input th:if="${isSeller}" type="hidden" name="sellerNo" th:value="${currentSeller.sellerNo}">
+                                    <span th:if="${isSeller}" class="seller-shop-name"
+                                          th:text="${currentSeller.companyName}">상점명</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
 
                     <div class="form-block">
                         <h3>상품분류</h3>
@@ -312,9 +336,14 @@
 
     // 상품 등록 제출
     function submitProduct() {
+        const sellerSelect = document.getElementById('sellerNo');
         const cate2 = document.getElementById('cate2').value;
         const productName = document.querySelector('input[name="productName"]').value;
 
+        if (sellerSelect && !sellerSelect.value) {
+            alert('판매자를 선택하세요.');
+            return;
+        }
         if (!cate2) {
             alert('2차 카테고리를 선택하세요.');
             return;

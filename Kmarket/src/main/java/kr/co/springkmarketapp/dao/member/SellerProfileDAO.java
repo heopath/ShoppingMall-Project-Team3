@@ -51,9 +51,11 @@ public interface SellerProfileDAO {
 
     List<SellerSalesDTO> selectSellerSalesList(@Param("salesPeriod") String salesPeriod,
                                                @Param("offset") int offset,
-                                               @Param("limit") int limit);
+                                               @Param("limit") int limit,
+                                               @Param("sellerNo") Integer sellerNo);
 
-    int countSellerSalesList(@Param("salesPeriod") String salesPeriod);
+    int countSellerSalesList(@Param("salesPeriod") String salesPeriod,
+                             @Param("sellerNo") Integer sellerNo);
 
     int countCompanyName(String companyName);
 

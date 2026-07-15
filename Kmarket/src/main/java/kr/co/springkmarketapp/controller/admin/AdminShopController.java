@@ -1,9 +1,12 @@
 package kr.co.springkmarketapp.controller.admin;
 
+import kr.co.springkmarketapp.config.LoginUser;
 import kr.co.springkmarketapp.dto.member.SellerProfileDTO;
 import kr.co.springkmarketapp.dto.member.SellerSalesDTO;
 import kr.co.springkmarketapp.service.member.SellerProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -65,25 +69,33 @@ public class AdminShopController {
     @GetMapping("/admin/shop/sales")
     public String sales(@RequestParam(defaultValue = "1") int page,
                         @RequestParam(required = false, defaultValue = "day") String salesPeriod,
+                        @AuthenticationPrincipal LoginUser userDetails,
                         Model model) {
 
         int pageSize = 10;
         int pageBlock = 5;
 
         String checkedPeriod = normalizeSalesPeriod(salesPeriod);
+        boolean sellerUser = isSeller(userDetails);
+        SellerProfileDTO seller = sellerUser ? requireSeller(userDetails) : null;
+        Integer sellerNo = seller != null ? seller.getSellerNo() : null;
 
-        int totalCount = sellerProfileService.countSellerSalesList(checkedPeriod);
+        int totalCount = sellerProfileService.countSellerSalesList(checkedPeriod, sellerNo);
         int totalPages = Math.max(1, (int) Math.ceil((double) totalCount / pageSize));
         int currentPage = Math.min(Math.max(page, 1), totalPages);
         int offset = (currentPage - 1) * pageSize;
 
-        List<SellerSalesDTO> salesList = sellerProfileService.selectSellerSalesList(checkedPeriod, offset, pageSize);
+        List<SellerSalesDTO> salesList = sellerProfileService.selectSellerSalesList(
+                checkedPeriod, offset, pageSize, sellerNo
+        );
 
         int startPage = ((currentPage - 1) / pageBlock) * pageBlock + 1;
         int endPage = Math.min(startPage + pageBlock - 1, totalPages);
 
         model.addAttribute("salesList", salesList);
         model.addAttribute("salesPeriod", checkedPeriod);
+        model.addAttribute("isSeller", sellerUser);
+        model.addAttribute("currentSeller", seller);
 
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalPages", totalPages);
@@ -94,6 +106,22 @@ public class AdminShopController {
         model.addAttribute("totalCount", totalCount);
 
         return "admin/shop/sales";
+    }
+
+    private boolean isSeller(LoginUser userDetails) {
+        return userDetails != null
+                && userDetails.getMember() != null
+                && "SELLER".equalsIgnoreCase(userDetails.getMember().getRole());
+    }
+
+    private SellerProfileDTO requireSeller(LoginUser userDetails) {
+        SellerProfileDTO seller = sellerProfileService.selectSellerProfileByMemberNo(
+                userDetails.getMember().getMemberNo()
+        );
+        if (seller == null) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "판매자 프로필을 찾을 수 없습니다.");
+        }
+        return seller;
     }
 
     @PostMapping("/admin/shop/status")

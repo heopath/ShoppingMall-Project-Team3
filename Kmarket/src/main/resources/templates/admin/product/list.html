@@ -12,7 +12,7 @@
     <th:block th:replace="~{common/_admin_header :: header}"></th:block>
 
     <div class="admin-body">
-        <aside class="sidebar">
+        <aside class="sidebar" th:if="${!isSeller}">
             <ul class="admin-menu">
                 <li class="menu-title" onclick="toggleMenu(this, 'configMenu')">⚙ 환경설정</li>
                 <li class="sub-menu-wrap close" id="configMenu">
@@ -78,6 +78,9 @@
                 </li>
             </ul>
         </aside>
+        <th:block th:if="${isSeller}">
+            <th:block th:replace="~{common/_seller_sidebar :: sidebar('product-list')}"></th:block>
+        </th:block>
 
         <main class="content">
             <div class="page-title">

@@ -61,6 +61,21 @@
     font-size: 12px;
 }
 
+.register-table .seller-select {
+    width: 280px;
+}
+
+.seller-shop-name {
+    display: inline-block;
+    min-width: 264px;
+    height: 27px;
+    line-height: 27px;
+    padding: 0 8px;
+    border: 1px solid #c5c5c5;
+    background: #f7f7f7;
+    color: #333;
+}
+
 .text-input {
     width: 230px;
     height: 27px;

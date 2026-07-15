@@ -51,8 +51,10 @@ public interface ProductDAO {
 
     // 관리자 상품 조회
     List<ProductDTO> selectAdminProductList(@Param("offset") int offset, @Param("size") int size,
-                                            @Param("searchType") String searchType, @Param("keyword") String keyword);
-    int selectAdminProductCount(@Param("searchType") String searchType, @Param("keyword") String keyword);
+                                            @Param("searchType") String searchType, @Param("keyword") String keyword,
+                                            @Param("sellerNo") Integer sellerNo);
+    int selectAdminProductCount(@Param("searchType") String searchType, @Param("keyword") String keyword,
+                                @Param("sellerNo") Integer sellerNo);
 
     // 관리자 상품 수정
     void updateProductNotice(ProductNoticeDTO noticeDTO);

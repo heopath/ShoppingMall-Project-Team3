@@ -209,12 +209,13 @@ public class ProductService {
     }
 
     // 관리자 상품 조회 서비스
-    public Map<String, Object> getAdminProductList(int page, String searchType, String keyword) {
+    public Map<String, Object> getAdminProductList(int page, String searchType, String keyword,
+                                                   Integer sellerNo) {
         int size = 10;
         int offset = (page - 1) * size;
 
-        List<ProductDTO> list = productDAO.selectAdminProductList(offset, size, searchType, keyword);
-        int total = productDAO.selectAdminProductCount(searchType, keyword);
+        List<ProductDTO> list = productDAO.selectAdminProductList(offset, size, searchType, keyword, sellerNo);
+        int total = productDAO.selectAdminProductCount(searchType, keyword, sellerNo);
         int totalPages = (int) Math.ceil((double) total / size);
 
         Map<String, Object> result = new HashMap<>();

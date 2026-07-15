@@ -76,16 +76,9 @@
             </ul>
         </aside>
 
-        <aside class="sidebar" th:if="${isSeller}">
-            <ul class="admin-menu">
-                <li class="menu-title active">🎟 판매자 쿠폰관리</li>
-                <li class="sub-menu-wrap">
-                    <ul class="sub-menu-list">
-                        <li class="sub-menu active"><a th:href="@{/admin/coupon/list}">- 쿠폰목록/등록</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </aside>
+        <th:block th:if="${isSeller}">
+            <th:block th:replace="~{common/_seller_sidebar :: sidebar('coupon')}"></th:block>
+        </th:block>
 
         <main class="content">
             <div class="page-title">
