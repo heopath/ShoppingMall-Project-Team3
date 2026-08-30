@@ -86,15 +86,13 @@ ShoppingMall-project/
 ---
 
 ### 🔀 Git 브랜치 전략
-본 프로젝트는 팀원별 작업 폴더를 분리하여 Git 충돌을 최소화합니다.
+팀원별 기능 브랜치에서 작업하고, PR로 main에 병합합니다.
+담당 영역은 위 **팀원 명단 및 담당 영역** 표를 따릅니다.
 
 ```plaintext
 
 main
-├── feature/main-product-company (허민재)
-├── feature/member-my            (양지웅)
-├── feature/cs-policy            (정인길)
-└── feature/admin                (최수빈)
+└── feature/<작업자>   각자 담당 폴더 중심으로 작업
 ```
 
 ### 🗄️ 작업 규칙
