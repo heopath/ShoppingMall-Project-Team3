@@ -1,6 +1,33 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=9ACB34&theme=navy&height=250&section=header&text=ShoppingMall%20Project&fontSize=55&animation=fadeIn&desc=KMarket%20Web%20Application%20Development&descSize=20&descAlignY=65" width="100%" />
 
-# ShoppingMall-project
+# K-Market | Spring Boot 쇼핑몰 프로젝트
+
+상품 등록부터 주문·결제·배송·반품과 관리자 운영까지 연결한 4인 팀 프로젝트입니다.
+
+## 한눈에 보기
+
+- 기간: 2026.06.12 ~ 2026.07.14
+- 기술: Java 21, Spring Boot, Spring Security, Thymeleaf, JPA·MyBatis, MySQL
+- 배포: GitHub Actions 기반 빌드 및 AWS EC2 자동 배포 구성
+- 주요 기능: 회원·상품·주문·결제·배송·반품·고객센터·관리자
+
+## 허민재 담당
+
+- 관리자 메인 대시보드와 사이트 환경설정
+- 상품 등록·목록 및 카테고리 관리
+- 주문 관리와 배송·반품 상태 제어
+- 관리자 운영 화면과 관련 데이터 흐름 구현
+
+## 프로젝트에서 확인할 수 있는 경험
+
+- 일반회원·판매자·관리자 권한과 운영 흐름 분리
+- JPA와 MyBatis를 함께 사용한 도메인별 데이터 처리
+- 상품부터 주문·배송·반품까지 이어지는 쇼핑몰 운영 흐름 구현
+- GitHub Actions에서 Gradle 빌드 후 AWS EC2로 배포하는 파이프라인 구성
+
+> 상세 팀 역할, 화면 구조, 데이터베이스 설계와 기능 명세는 아래 문서에서 확인할 수 있습니다.
+
+---
 
 <details>
 <summary><b>📌 1. 프로젝트 소개 및 사용 기술 </b></summary>
