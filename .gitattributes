@@ -1,0 +1,7 @@
+# GitHub 언어 통계 보정.
+#
+# 이 저장소는 Spring Boot 백엔드인데, Thymeleaf 화면과 CSS의 용량이 Java보다
+# 커서 저장소 언어가 HTML로 표시된다. 백엔드 프로젝트가 첫눈에 프론트엔드처럼
+# 보이므로, 화면 파일을 언어 집계에서 제외한다. 파일은 그대로 두고 통계에서만 뺀다.
+*.html linguist-detectable=false
+*.css  linguist-detectable=false
